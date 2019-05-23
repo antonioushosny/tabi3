@@ -220,6 +220,8 @@
 
                         <li onnasebkseover=" animationHover(this , 'pulse');"><a href="{{ route('deals') }}" <?php echo ($page == 'deals') ? "class='current'" : ""; ?> ><i class="fa fa-plus-square   fa-2x  iconsidebarltr "></i> <span> {{trans('admin.dealsm')}}</span></a></li>
                         
+                        <li onnasebkseover=" animationHover(this , 'pulse');"><a href="{{ route('nowdeals') }}" <?php echo ($page == 'nowdeals') ? "class='current'" : ""; ?> ><i class="fa fa-plus-square   fa-2x  iconsidebarltr "></i> <span> {{trans('admin.nowdealsm')}}</span></a></li>
+                        
                         <li onnasebkseover=" animationHover(this , 'pulse');"><a href="{{ route('last_deals') }}" <?php echo ($page == 'last_deals') ? "class='current'" : ""; ?> ><i class="fa fa-plus-square   fa-2x  iconsidebarltr "></i> <span> {{trans('admin.last_dealsm')}}</span></a></li>
 
                         

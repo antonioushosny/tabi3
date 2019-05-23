@@ -79,8 +79,11 @@
                                 <td>{{ $data->initial_price }}</td>
                                 <td>{{ $data->points }}</td>
                                 <td>{{ $data->tickets }}</td>
-                                <td>{{ date('d-m-Y H:i:s', strtotime($data->expiry_date))}} </td>
-                                @if($data->image)
+                                @if($data->expiry_date)
+                                <td>{{ date('d-m-Y', strtotime($data->expiry_date))}} </td>
+                                @else 
+                                <td> Soon </td>
+                                @endif                                @if($data->image)
                                 <td><img src="{{asset('img/').'/'.$data->image }}" width="50px" height="50px"></td>
                                 @else 
                                 <td><img src="{{asset('images/default.png') }}" width="50px" height="50px"></td>

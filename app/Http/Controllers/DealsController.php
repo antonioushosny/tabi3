@@ -44,12 +44,38 @@ class DealsController extends Controller
         $countries = array_pluck($allcountries,'name_ar', 'id');
         $allcities = City::all();
         $cities = array_pluck($allcities,'name_ar', 'id');
-        $deals = Deal::whereDate('expiry_date','>=',$date)->orderBy('id', 'DESC')->get();
+        $deals = Deal::whereDate('expiry_date','>',$date)->orWhere('expiry_date','')->orWhere('expiry_date',null)->orderBy('id', 'DESC')->get();
         // return $deals ; 
         return view('deals.index',compact('deals','categories','cities','subcategories','countries','title','lang'));
         
     }
-
+    public function nowdeals()
+    {
+        $lang = App::getlocale();
+        if(Auth::user()->role != 'admin' ){
+            $role = 'admin';
+            return view('unauthorized',compact('role','admin'));
+        }
+        $dt = Carbon::now();
+        // $date = $dt->toDateString();
+         $date  = date('Y-m-d', strtotime($dt));
+         $time  = date('H:i:s', strtotime($dt));
+        //  return $time ;
+        $title = 'nowdeals';
+        $allcategories = Category::all();
+        $categories = array_pluck($allcategories,'name_ar', 'id');
+        $allsubcategories = SubCategory::all();
+        $subcategories = array_pluck($allsubcategories,'name_ar', 'id');
+        $allcountries = Country::all();
+        $countries = array_pluck($allcountries,'name_ar', 'id');
+        $allcities = City::all();
+        $cities = array_pluck($allcities,'name_ar', 'id');
+        $deals = Deal::whereDate('expiry_date','=',$date)->whereTime('expiry_time','>=',$time)->orderBy('id', 'DESC')->get();
+        // return $deals ; 
+        return view('deals.now',compact('deals','categories','cities','subcategories','countries','title','lang'));
+        
+    }
+    
     public function last()
     {
         $lang = App::getlocale();
@@ -226,7 +252,7 @@ class DealsController extends Controller
 
         $deal->save();
         $deal = Deal::where('id',$deal->id)->first();
-        $expiry_date = date('d-m-Y H:i:s', strtotime($deal->expiry_date) );
+        $expiry_date = date('d-m-Y', strtotime($deal->expiry_date) );
         // return $deal ;
         return response()->json([
             'deal'=>$deal,

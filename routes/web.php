@@ -90,6 +90,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     // routes for deals management
     Route::get('/deals', 'DealsController@index')->name('deals');
+    Route::get('/nowdeals', 'DealsController@nowdeals')->name('nowdeals');
     Route::get('/last_deals', 'DealsController@last')->name('last_deals');
     Route::get('/tickets/{id}', 'DealsController@tickets')->name('tickets');
     Route::post('/deals/update/', 'DealsController@store')->name('editdeal');

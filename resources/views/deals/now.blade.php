@@ -3,12 +3,12 @@
  @section('content')
     <section class="content-header">
         <h1>
-            {{trans('admin.deals')}}
+            {{trans('admin.nowdeals')}}
         <small>{{trans('admin.Control_panel')}}</small>
         </h1>
         <ol class="breadcrumb">
           <li><a href="{{ route('home') }}"><i class="fa fa-home"></i> {{trans('admin.home')}}</a></li>
-          <li class="active"><a href="{{ route('deals') }}">{{trans('admin.deals')}}</a></li>
+          <li class="active"><a href="{{ route('nowdeals') }}">{{trans('admin.nowdeals')}}</a></li>
         </ol>
     </section>
   
@@ -37,7 +37,7 @@
                     <section class="content-header" style=" !important;">
                         <div class="row" style="display:flex;">
                             <div class="col-md-8" >
-                                <span style="font-size:2em ;"><i class="fa fa-cog"></i> {{trans('admin.deals')}}</span>
+                                <span style="font-size:2em ;"><i class="fa fa-cog"></i> {{trans('admin.nowdeals')}}</span>
 
                             </div>
                             <div class=" col-md-4">
@@ -83,8 +83,7 @@
                                 <td>{{ date('d-m-Y', strtotime($data->expiry_date))}} </td>
                                 @else 
                                 <td> Soon </td>
-                                @endif
-                                @if($data->image)
+                                @endif                                @if($data->image)
                                 <td><img src="{{asset('img/').'/'.$data->image }}" width="50px" height="50px"></td>
                                 @else 
                                 <td><img src="{{asset('images/default.png') }}" width="50px" height="50px"></td>
