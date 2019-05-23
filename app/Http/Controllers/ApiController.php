@@ -2813,7 +2813,7 @@ class ApiController extends Controller
         }
         
     } 
-//////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
 // SaveInterests function by Antonious hosny
     public function SaveInterests(Request $request){
         $token = $request->token;
@@ -2920,9 +2920,7 @@ class ApiController extends Controller
         }
         
     } 
-//////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // send_notification function by Antonious hosny
     public function send_notification(Request $request){
 
@@ -2996,10 +2994,8 @@ class ApiController extends Controller
         }
 
     }
-//////////////////////////////////////////////////////
-
-
-/////////// count_notification function by Antonious hosny
+////////////////////////////////////////////////////////
+// count_notification function by Antonious hosny
     public function count_notification(Request $request){
         
         date_default_timezone_set('Africa/Cairo');
@@ -3041,7 +3037,7 @@ class ApiController extends Controller
         }
 
     }
-//////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
 // get_notification function by Antonious hosny
     public function get_notification(Request $request){
         date_default_timezone_set('Africa/Cairo');
@@ -3085,7 +3081,7 @@ class ApiController extends Controller
         }
 
     }
-//////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
 
 // for test send_notifications
     public function send_notifications(Request $request){
@@ -3119,7 +3115,7 @@ class ApiController extends Controller
         ]);
 
     }
-//////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // for test send_notifications
     public function webnotifications(Request $request){
         // $request->device_id;
@@ -3152,6 +3148,6 @@ class ApiController extends Controller
 
     }
 
-//////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
    
 }

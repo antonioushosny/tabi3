@@ -276,7 +276,10 @@ return [
         'created_at'          => 'التاريخ ',
         'charge'          => 'الشحن ',
         'charges'          => 'الشحنات ',
-        'send_points'          => 'اضافة نقاط/قسائم ',
+        'send_points'          => 'اضافة نقاط / قسائم ',
+        'expiry_time'           => 'وقت الانتهاء',
+        'for_country'           => 'لدول معينة',
+        'for_city'              => 'لمدن معينة',
         
     //end users page
 

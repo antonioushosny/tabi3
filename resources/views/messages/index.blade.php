@@ -135,6 +135,13 @@
                                         {!!Form::label('for',trans('admin.send_spec')) !!}
                                         <input class="form-control" type="radio" name="for" id="send_field" value="not_all">
 
+                                        {!!Form::label('for',trans('admin.for_country')) !!}
+                                        <input class="form-control" type="radio" name="for" id="for_country" value="for_country">
+
+                                        {!!Form::label('for',trans('admin.for_city')) !!}
+                                        <input class="form-control" type="radio" name="for" id="for_city" value="for_city">
+
+
                                   </span>
                                   <span style="color: red " class="message text-center hidden"></span>
                                 </div> <br/>
@@ -147,6 +154,32 @@
                                   {!! Form::label('ids',trans('admin.choose')) !!}*
                                   {!! Form::select('ids[]',[]
                                       ,'',['class'=>'form-control select2' ,'id' => 'selectmulty','multiple'=>true]) !!}
+
+                                      
+                                  </span>
+                                  <span style="color: red " class="status1 text-center hidden"></span>
+                              </div><br/>  
+                        </div>
+                        <div class="row countries hidden" >
+                            <div class="col-md-2"> </div>
+                              <div class="form group col-md-8">
+                                  <span style="color: black "> 
+                                  {!! Form::label('countries',trans('admin.choose')) !!}*
+                                  {!! Form::select('countries[]',[]
+                                      ,'',['class'=>'form-control select2' ,'id' => 'selectcountries','multiple'=>true]) !!}
+
+                                      
+                                  </span>
+                                  <span style="color: red " class="status1 text-center hidden"></span>
+                              </div><br/>  
+                        </div>
+                        <div class="row cities hidden" >
+                            <div class="col-md-2"> </div>
+                              <div class="form group col-md-8">
+                                  <span style="color: black "> 
+                                  {!! Form::label('cities',trans('admin.choose')) !!}*
+                                  {!! Form::select('cities[]',[]
+                                      ,'',['class'=>'form-control select2' ,'id' => 'selectcities','multiple'=>true]) !!}
 
                                       
                                   </span>
@@ -230,6 +263,20 @@
                         text: '{{$client->name}}'
                     }));
             @endforeach
+            @foreach($countries as $country)
+
+                $("#selectcountries").append($('<option>', {
+                        value: {{$country->id}},
+                        text: '{{$country->name_ar}}'
+                    }));
+            @endforeach
+            @foreach($cities as $city)
+
+                $("#selectcities").append($('<option>', {
+                        value: {{$city->id}},
+                        text: '{{$city->name_ar}}'
+                    }));
+            @endforeach
             $('#send_field').on('ifChecked', function(event) {
                 $('.clients').removeClass('hidden'); 
             });
@@ -243,6 +290,19 @@
                 $('.points_field').addClass('hidden');
             });
             
+            $('#for_country').on('ifChecked', function(event) {
+                $('.countries').removeClass('hidden'); 
+            });
+            $('#for_country').on('ifUnchecked', function(event) {
+                $('.countries').addClass('hidden');
+            });
+
+            $('#for_city').on('ifChecked', function(event) {
+                $('.cities').removeClass('hidden'); 
+            });
+            $('#for_city').on('ifUnchecked', function(event) {
+                $('.cities').addClass('hidden');
+            });
       });
       jQuery(function($){
 

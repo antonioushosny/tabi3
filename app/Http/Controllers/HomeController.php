@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 use App\Client;
 use App\User;
-use App\Service;
+use App\Country;
+use App\City;
 use App\Category;
 use App\SubCategory;
 use App\Deal;
@@ -148,8 +149,11 @@ class HomeController extends Controller
         $title = 'messages';
         // $clients = User::where('role','client')->get();
         $clients = User::where('role','<>','admin')->get();
+        $countries = Country::where('id','<>','1')->get();
+        $cities = City::where('id','<>','1')->get();
         // $users = User::where('role','user')->get();
-        return view('messages.index',compact('clients','title'));
+
+        return view('messages.index',compact('clients','cities','countries','title'));
     }
 
     public function send(Request $request)
@@ -169,9 +173,21 @@ class HomeController extends Controller
         
         if($request->for == "all"){
             $clients =  User::where('role','<>','admin')->get();
+        }
+        else if($request->for == "for_country"){
+            $clients =  User::whereIn('country_id',$request->countries)->get();
+        }
+        else if($request->for == "for_city"){
+            $clients =  User::whereIn('city_id',$request->cities)->get();
+        }
+        else{
+            $clients =  User::whereIn('id',$request->ids)->get();
+        }
+        if(sizeof($clients) > 0){
+
             foreach($clients as $client){
                 if($client){
-
+    
                     $type = "message";
                     $msg =  $request->message ;
                     $client->notify(new Notifications($msg,$type ));
@@ -183,50 +199,21 @@ class HomeController extends Controller
                 }
             }
         }
-        else{
-            $clients =  User::whereIn('id',$request->ids)->get();
-            foreach($clients as $client){
-                if($client){
-
-                    $type = "message";
-                    $msg =  $request->message ;
-                    $client->notify(new Notifications($msg,$type ));
-                    $device_id = $client->device_token;
-                    $title = $request->title ;
-                    if($device_id){
-                        $this->notification($device_id,$title,$msg,$id);
-                    }
-                }
-            }
-    
-        }
         if($request->send_points){
             if($request->send_points == 'send_points'){
                 $validatedData = $request->validate([
                     'points' => 'required',
                     'coupons' => 'required',
                 ]);
-                if($request->for == "all"){
-                    $clients =  User::where('role','<>','admin')->get();
+                if(sizeof($clients) > 0){
                     foreach($clients as $client){
                         if($client){
                             $client->points += $request->points ;
                             $client->coupons += $request->coupons ;
                             $client->save();
-                           
+                        
                         }
                     }
-                }
-                else{
-                    $clients =  User::whereIn('id',$request->ids)->get();
-                    foreach($clients as $client){
-                        if($client){
-                            $client->points += $request->points ;
-                            $client->coupons += $request->coupons ;
-                            $client->save();
-                        }
-                    }
-            
                 }
             }
         }
