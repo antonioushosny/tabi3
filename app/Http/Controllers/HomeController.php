@@ -36,6 +36,7 @@ class HomeController extends Controller
            
             $dt = Carbon::now();
             $date = $dt->toDateString();
+            $time  = date('H:i:s', strtotime($dt));
             // return $date ;
 
             
@@ -45,10 +46,13 @@ class HomeController extends Controller
             // $users        = User::where('role','user')->count('id');
             $users      = User::where('role','user')->count('id');
             $categories  = Category::count('id');
-            $deals        = Deal::count('id');
+            $deals        = Deal::whereDate('expiry_date','>',$date)->orWhere('expiry_date','')->orWhere('expiry_date',null)->count('id');
+            $nowdeals        = Deal::whereDate('expiry_date','=',$date)->whereTime('expiry_time','>=',$time)->count('id');
+            $lastdeals        = Deal::whereDate('expiry_date','<',$date)->orwhereDate('expiry_date','=',$date)->whereTime('expiry_time','<',$time)->count('id');
+            
             $subcategories        = SubCategory::count('id');
             $title = 'home' ;
-            return view('home',compact('title','deals','users','categories','subcategories','users'));
+            return view('home',compact('title','deals','nowdeals','lastdeals','users','categories','subcategories','users'));
         
     }
     public function profile($id)

@@ -18,7 +18,7 @@
         <section class="content">
             <!-- Small boxes (Stat box) -->
             <div class="row">
-                <div class="col-lg-3 col-md-6 col-xs-12">
+                <div class="col-lg-4 col-md-6 col-xs-12">
                     <!-- small box -->
                     <div class="small-box bg-aqua">
                     <div class="inner">
@@ -34,7 +34,7 @@
                     </div>
                 </div>
                 <!-- ./col -->
-                <div class="col-lg-3 col-md-6 col-xs-12">
+                <div class="col-lg-4 col-md-6 col-xs-12">
                     <!-- small box -->
                     <div class="small-box bg-green">
                     <div class="inner">
@@ -49,7 +49,7 @@
                     </div>
                 </div>
                 <!-- ./col -->
-                <div class="col-lg-3 col-md-6 col-xs-12">
+                <div class="col-lg-4 col-md-6 col-xs-12">
                     <!-- small box -->
                     <div class="small-box bg-red">
                     <div class="inner">
@@ -64,18 +64,50 @@
                     </div>
                 </div>
                 <!-- ./col -->
-                <div class="col-lg-3 col-md-6 col-xs-12">
+                <div class="col-lg-4 col-md-6 col-xs-12">
                     <!-- small box -->
                     <div class="small-box bg-blue">
                     <div class="inner">
                         <h3 class="count">{{$deals}}</h3>
 
-                        <p>{{trans('admin.dealss')}}</p>
+                        <p>{{trans('admin.deals')}}</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-pie-graph"></i>
                     </div>
                     <a href="{{ route('deals') }}" class="small-box-footer">{{trans('admin.More_info')}}<i class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <!-- ./col -->
+                <div class="col-lg-4 col-md-6 col-xs-12">
+                    <!-- small box -->
+                    <div class="small-box bg-blue">
+                    <div class="inner">
+                        <h3 class="count">{{$nowdeals}}</h3>
+
+                        <p>{{trans('admin.nowdeals')}}</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-pie-graph"></i>
+                    </div>
+                    <a href="{{ route('nowdeals') }}" class="small-box-footer">{{trans('admin.More_info')}}<i class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <!-- ./col -->
+                <div class="col-lg-4 col-md-6 col-xs-12">
+                    <!-- small box -->
+                    <div class="small-box bg-blue">
+                    <div class="inner">
+                        <h3 class="count">{{$lastdeals}}</h3>
+
+                        <p>{{trans('admin.last_deals')}}</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-pie-graph"></i>
+                    </div>
+                    <a href="{{ route('last_deals') }}" class="small-box-footer">{{trans('admin.More_info')}}<i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->

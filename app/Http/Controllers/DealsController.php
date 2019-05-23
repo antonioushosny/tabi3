@@ -23,7 +23,7 @@ class DealsController extends Controller
      */
     public function __construct()
     {
-     
+      
     }
     public function index()
     {
@@ -57,9 +57,8 @@ class DealsController extends Controller
             return view('unauthorized',compact('role','admin'));
         }
         $dt = Carbon::now();
-        // $date = $dt->toDateString();
-         $date  = date('Y-m-d', strtotime($dt));
-         $time  = date('H:i:s', strtotime($dt));
+        $date  = date('Y-m-d', strtotime($dt));
+        $time  = date('H:i:s', strtotime($dt));
         //  return $time ;
         $title = 'nowdeals';
         $allcategories = Category::all();
@@ -85,7 +84,8 @@ class DealsController extends Controller
         }
         $dt = Carbon::now();
         // $date = $dt->toDateString();
-        $date  = date('Y-m-d H:i:s', strtotime($dt));
+        $date  = date('Y-m-d', strtotime($dt));
+        $time  = date('H:i:s', strtotime($dt));
         $title = 'last_deals';
         $allcategories = Category::all();
         $categories = array_pluck($allcategories,'name_ar', 'id');
@@ -93,7 +93,7 @@ class DealsController extends Controller
         $subcategories = array_pluck($allsubcategories,'name_ar', 'id');
         $allcountries = Country::all();
         $countries = array_pluck($allcountries,'name_ar', 'id');
-        $deals = Deal::whereDate('expiry_date','<',$date)->orderBy('id', 'DESC')->get();
+        $deals = Deal::whereDate('expiry_date','<',$date)->orwhereDate('expiry_date','=',$date)->whereTime('expiry_time','<',$time)->orderBy('id', 'DESC')->get();
         // return $deals ; 
         return view('deals.last',compact('deals','categories','subcategories','countries','title','lang'));
         

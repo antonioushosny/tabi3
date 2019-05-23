@@ -792,8 +792,9 @@ class ApiController extends Controller
             $lang = $request->header('lang');
             $dt = Carbon::now();
             $date2 = date('Y-m-d', strtotime($dt));
-            $time = $dt->format('H:i:s');
-            $date  = date('Y-m-d H:i:s', strtotime($dt));
+            $time2 = $dt->format('H:i:s');
+            $date  = date('Y-m-d', strtotime($dt));
+            $time  = date('H:i:s', strtotime($dt));
             $advertisements  = Advertisement::where('status','active')->orderBy('id', 'desc')->get();
             $advertisementss =[];
             $i = 0 ;
@@ -812,11 +813,11 @@ class ApiController extends Controller
             }
             $user = User::where('remember_token',$token)->first();
             // return $user;
-            $now_Deals = Deal::whereDate('expiry_date','=',$date2)->where('status','active')->orderBy('id', 'desc')->limit(10)->get();
+            $now_Deals = Deal::whereDate('expiry_date','=',$date)->whereTime('expiry_time','>=',$time)->where('status','active')->orderBy('id', 'desc')->limit(10)->get();
             $count_now_Deals = 0 ;
-            $coming_Deals = Deal::whereDate('expiry_date','>',$date2)->where('status','active')->orderBy('id', 'desc')->limit(10)->get();
+            $coming_Deals = Deal::whereDate('expiry_date','>',$date)->orWhere('expiry_date','')->orWhere('expiry_date',null)->where('status','active')->orderBy('id', 'desc')->limit(10)->get();
             $count_coming_Deals = 0 ;
-            $pervios_Deals = Deal::whereDate('expiry_date','<',$date2)->where('status','active')->orderBy('id', 'desc')->limit(10)->get();
+            $pervios_Deals = Deal::whereDate('expiry_date','<',$date)->orwhereDate('expiry_date','=',$date)->whereTime('expiry_time','<',$time)->where('status','active')->orderBy('id', 'desc')->limit(10)->get();
             $count_pervios_Deals = 0 ;
             // return $pervios_Deals ;
             $now_Dealss = [] ;
@@ -829,88 +830,47 @@ class ApiController extends Controller
             if(sizeof($now_Deals) > 0 ){
                 foreach($now_Deals as $Deal){
                     $datedeal = strtotime($Deal->expiry_date);
-                    $timedeal = date('H:i:s', $datedeal);
-                    if($time < $timedeal){
-                        // return asset('img/').'/'. $image->image;
-                        $now_Dealss[$i]['Deal_id'] = $Deal->id ;    
-                        if($lang == 'ar'){
-                            $now_Dealss[$i]['title'] = $Deal->title_ar ; 
-                            $now_Dealss[$i]['disc'] = $Deal->disc_ar ; 
-                            $now_Dealss[$i]['info'] = $Deal->info_ar ; 
-                        }else{
-                            $now_Dealss[$i]['title'] = $Deal->title_en ; 
-                            $now_Dealss[$i]['disc'] = $Deal->disc_en ; 
-                            $now_Dealss[$i]['info'] = $Deal->info_en ; 
-                        }
-                        if($Deal->image){
-                            $now_Dealss[$i]['image'] = asset('img/').'/'. $Deal->image;
-                        }else{
-                            $now_Dealss[$i]['image'] = null ;
-                        }
-                        
-                        $now_Dealss[$i]['original_price'] = $Deal->original_price ; 
-                        $now_Dealss[$i]['initial_price'] = $Deal->initial_price ; 
-                        $now_Dealss[$i]['points'] = $Deal->points ; 
-                        $now_Dealss[$i]['tickets'] = $Deal->tickets ; 
-                        $now_Dealss[$i]['tender_cost'] = $Deal->tender_cost ; 
-                        $now_Dealss[$i]['tender_edit_cost'] = $Deal->tender_edit_cost ; 
-                        $now_Dealss[$i]['tender_coupon'] = $Deal->tender_coupon ; 
-                        $now_Dealss[$i]['expiry_date'] = date('d-m-Y H:i:s', strtotime($Deal->expiry_date) );  
-                        $favorite = Favorite::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
-                        if($favorite){
-                            $now_Dealss[$i]['is_favorite'] = 'true' ;
-                        }else{
-                            $now_Dealss[$i]['is_favorite'] = 'false' ;
-                        }
-                        $ticket = Ticket::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
-                        if($ticket){
-                            $now_Dealss[$i]['my_ticket_points'] = $ticket->points ;
-                        }else{
-                            $now_Dealss[$i]['my_ticket_points'] = null ;
-                        }
-                        $i ++ ; 
-                        $count_now_Deals ++ ;
+                    // return asset('img/').'/'. $image->image;
+                    $now_Dealss[$i]['Deal_id'] = $Deal->id ;    
+                    if($lang == 'ar'){
+                        $now_Dealss[$i]['title'] = $Deal->title_ar ; 
+                        $now_Dealss[$i]['disc'] = $Deal->disc_ar ; 
+                        $now_Dealss[$i]['info'] = $Deal->info_ar ; 
+                    }else{
+                        $now_Dealss[$i]['title'] = $Deal->title_en ; 
+                        $now_Dealss[$i]['disc'] = $Deal->disc_en ; 
+                        $now_Dealss[$i]['info'] = $Deal->info_en ; 
                     }
-                    else{
-                         $pervios_Dealss[$y]['Deal_id'] = $Deal->id ;    
-                        if($lang == 'ar'){
-                            $pervios_Dealss[$y]['title'] = $Deal->title_ar ; 
-                            $pervios_Dealss[$y]['disc'] = $Deal->disc_ar ; 
-                            $pervios_Dealss[$y]['info'] = $Deal->info_ar ; 
-                        }else{
-                            $pervios_Dealss[$y]['title'] = $Deal->title_en ; 
-                            $pervios_Dealss[$y]['disc'] = $Deal->disc_en ; 
-                            $pervios_Dealss[$y]['info'] = $Deal->info_en ; 
-                        }
-                        if($Deal->image){
-                            $pervios_Dealss[$y]['image'] = asset('img/').'/'. $Deal->image;
-                        }else{
-                            $pervios_Dealss[$y]['image'] = null ;
-                        }
-                        
-                        $pervios_Dealss[$y]['original_price'] = $Deal->original_price ; 
-                        $pervios_Dealss[$y]['initial_price'] = $Deal->initial_price ; 
-                        $pervios_Dealss[$y]['points'] = $Deal->points ; 
-                        $pervios_Dealss[$y]['tickets'] = $Deal->tickets ; 
-                        $pervios_Dealss[$y]['tender_cost'] = $Deal->tender_cost ; 
-                        $pervios_Dealss[$y]['tender_edit_cost'] = $Deal->tender_edit_cost ; 
-                        $pervios_Dealss[$y]['tender_coupon'] = $Deal->tender_coupon ; 
-                        $pervios_Dealss[$y]['expiry_date'] = date('d-m-Y H:i:s', strtotime($Deal->expiry_date) );  ; 
-                        $favorite = Favorite::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
-                        if($favorite){
-                            $pervios_Dealss[$y]['is_favorite'] = 'true' ;
-                        }else{
-                            $pervios_Dealss[$y]['is_favorite'] = 'false' ;
-                        }
-                        $ticket = Ticket::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
-                        if($ticket){
-                            $pervios_Dealss[$y]['my_ticket_points'] = $ticket->points ;
-                        }else{
-                            $pervios_Dealss[$y]['my_ticket_points'] = null ;
-                        }
-                        $y ++ ; 
-                        $count_pervios_Deals ++ ;
+                    if($Deal->image){
+                        $now_Dealss[$i]['image'] = asset('img/').'/'. $Deal->image;
+                    }else{
+                        $now_Dealss[$i]['image'] = null ;
                     }
+                    
+                    $now_Dealss[$i]['original_price'] = $Deal->original_price ; 
+                    $now_Dealss[$i]['initial_price'] = $Deal->initial_price ; 
+                    $now_Dealss[$i]['points'] = $Deal->points ; 
+                    $now_Dealss[$i]['tickets'] = $Deal->tickets ; 
+                    $now_Dealss[$i]['tender_cost'] = $Deal->tender_cost ; 
+                    $now_Dealss[$i]['tender_edit_cost'] = $Deal->tender_edit_cost ; 
+                    $now_Dealss[$i]['tender_coupon'] = $Deal->tender_coupon ; 
+                    $now_Dealss[$i]['expiry_date'] = $Deal->expiry_date .' '.$Deal->expiry_time;  
+
+                    $favorite = Favorite::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
+                    if($favorite){
+                        $now_Dealss[$i]['is_favorite'] = 'true' ;
+                    }else{
+                        $now_Dealss[$i]['is_favorite'] = 'false' ;
+                    }
+                    $ticket = Ticket::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
+                    if($ticket){
+                        $now_Dealss[$i]['my_ticket_points'] = $ticket->points ;
+                    }else{
+                        $now_Dealss[$i]['my_ticket_points'] = null ;
+                    }
+                    $i ++ ; 
+                    $count_now_Deals ++ ;
+                   
                     
                 }
             }
@@ -940,7 +900,7 @@ class ApiController extends Controller
                     $coming_Dealss[$x]['tender_cost'] = $Deal->tender_cost ; 
                     $coming_Dealss[$x]['tender_edit_cost'] = $Deal->tender_edit_cost ; 
                     $coming_Dealss[$x]['tender_coupon'] = $Deal->tender_coupon ; 
-                    $coming_Dealss[$x]['expiry_date'] = date('d-m-Y H:i:s', strtotime($Deal->expiry_date) );   
+                    $coming_Dealss[$x]['expiry_date'] = $Deal->expiry_date .' '.$Deal->expiry_time; 
                     $favorite = Favorite::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
                     if($favorite){
                         $coming_Dealss[$x]['is_favorite'] = 'true' ;
@@ -983,7 +943,7 @@ class ApiController extends Controller
                     $pervios_Dealss[$y]['tender_cost'] = $Deal->tender_cost ; 
                     $pervios_Dealss[$y]['tender_edit_cost'] = $Deal->tender_edit_cost ; 
                     $pervios_Dealss[$y]['tender_coupon'] = $Deal->tender_coupon ; 
-                    $pervios_Dealss[$y]['expiry_date'] = date('d-m-Y H:i:s', strtotime($Deal->expiry_date) );  ; 
+                    $pervios_Dealss[$y]['expiry_date'] = $Deal->expiry_date .' '.$Deal->expiry_time; 
                     $favorite = Favorite::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
                     if($favorite){
                         $pervios_Dealss[$y]['is_favorite'] = 'true' ;
@@ -1030,7 +990,7 @@ class ApiController extends Controller
                     $my_Dealss[$i]['tender_cost'] = $Deal->tender_cost ; 
                     $my_Dealss[$i]['tender_edit_cost'] = $Deal->tender_edit_cost ; 
                     $my_Dealss[$i]['tender_coupon'] = $Deal->tender_coupon ; 
-                    $my_Dealss[$i]['expiry_date'] = date('d-m-Y H:i:s', strtotime($Deal->expiry_date) );  
+                    $my_Dealss[$i]['expiry_date'] = $Deal->expiry_date .' '.$Deal->expiry_time;  
                     // return $Deal->images ;
                     $favorite = Favorite::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
                     if($favorite){
@@ -1092,12 +1052,13 @@ class ApiController extends Controller
         $lang = $request->header('lang');
         $dt = Carbon::now();
         $date2 = date('Y-m-d', strtotime($dt));
-        $time = $dt->format('H:i:s');
-        $date  = date('Y-m-d H:i:s', strtotime($dt));
+        $time2 = $dt->format('H:i:s');
+        $date  = date('Y-m-d', strtotime($dt));
+        $time  = date('H:i:s', strtotime($dt));
         if($token){
             $user = User::where('remember_token',$token)->first();
             // return $user;
-             $now_Deals = Deal::whereDate('expiry_date','=',$date2)->where('status','active')->orderBy('id', 'desc')->limit(10)->get();
+            $now_Deals = Deal::whereDate('expiry_date','=',$date)->whereTime('expiry_time','>=',$time)->where('status','active')->orderBy('id', 'desc')->limit(10)->get();
             $count_now_Deals = 0 ;
             $now_Dealss = [] ;
             $i =0 ;
@@ -1105,47 +1066,45 @@ class ApiController extends Controller
                 foreach($now_Deals as $Deal){
                     $datedeal = strtotime($Deal->expiry_date);
                     $timedeal = date('H:i:s', $datedeal);
-                    if($time < $timedeal){
-                        // return asset('img/').'/'. $image->image;
-                        $now_Dealss[$i]['Deal_id'] = $Deal->id ;    
-                        if($lang == 'ar'){
-                            $now_Dealss[$i]['title'] = $Deal->title_ar ; 
-                            $now_Dealss[$i]['disc'] = $Deal->disc_ar ; 
-                            $now_Dealss[$i]['info'] = $Deal->info_ar ; 
-                        }else{
-                            $now_Dealss[$i]['title'] = $Deal->title_en ; 
-                            $now_Dealss[$i]['disc'] = $Deal->disc_en ; 
-                            $now_Dealss[$i]['info'] = $Deal->info_en ; 
-                        }
-                        if($Deal->image){
-                            $now_Dealss[$i]['image'] = asset('img/').'/'. $Deal->image;
-                        }else{
-                            $now_Dealss[$i]['image'] = null ;
-                        }
-                        
-                        $now_Dealss[$i]['original_price'] = $Deal->original_price ; 
-                        $now_Dealss[$i]['initial_price'] = $Deal->initial_price ; 
-                        $now_Dealss[$i]['points'] = $Deal->points ; 
-                        $now_Dealss[$i]['tickets'] = $Deal->tickets ; 
-                        $now_Dealss[$i]['tender_cost'] = $Deal->tender_cost ; 
-                        $now_Dealss[$i]['tender_edit_cost'] = $Deal->tender_edit_cost ; 
-                        $now_Dealss[$i]['tender_coupon'] = $Deal->tender_coupon ; 
-                        $now_Dealss[$i]['expiry_date'] = date('d-m-Y H:i:s', strtotime($Deal->expiry_date) );  
-                        $favorite = Favorite::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
-                        if($favorite){
-                            $now_Dealss[$i]['is_favorite'] = 'true' ;
-                        }else{
-                            $now_Dealss[$i]['is_favorite'] = 'false' ;
-                        }
-                        $ticket = Ticket::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
-                        if($ticket){
-                            $now_Dealss[$i]['my_ticket_points'] = $ticket->points ;
-                        }else{
-                            $now_Dealss[$i]['my_ticket_points'] = null ;
-                        }
-                        $i ++ ; 
-                        $count_now_Deals ++ ;
+                    // return asset('img/').'/'. $image->image;
+                    $now_Dealss[$i]['Deal_id'] = $Deal->id ;    
+                    if($lang == 'ar'){
+                        $now_Dealss[$i]['title'] = $Deal->title_ar ; 
+                        $now_Dealss[$i]['disc'] = $Deal->disc_ar ; 
+                        $now_Dealss[$i]['info'] = $Deal->info_ar ; 
+                    }else{
+                        $now_Dealss[$i]['title'] = $Deal->title_en ; 
+                        $now_Dealss[$i]['disc'] = $Deal->disc_en ; 
+                        $now_Dealss[$i]['info'] = $Deal->info_en ; 
                     }
+                    if($Deal->image){
+                        $now_Dealss[$i]['image'] = asset('img/').'/'. $Deal->image;
+                    }else{
+                        $now_Dealss[$i]['image'] = null ;
+                    }
+                    
+                    $now_Dealss[$i]['original_price'] = $Deal->original_price ; 
+                    $now_Dealss[$i]['initial_price'] = $Deal->initial_price ; 
+                    $now_Dealss[$i]['points'] = $Deal->points ; 
+                    $now_Dealss[$i]['tickets'] = $Deal->tickets ; 
+                    $now_Dealss[$i]['tender_cost'] = $Deal->tender_cost ; 
+                    $now_Dealss[$i]['tender_edit_cost'] = $Deal->tender_edit_cost ; 
+                    $now_Dealss[$i]['tender_coupon'] = $Deal->tender_coupon ; 
+                    $now_Dealss[$i]['expiry_date'] = $Deal->expiry_date .' '.$Deal->expiry_time;  
+                    $favorite = Favorite::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
+                    if($favorite){
+                        $now_Dealss[$i]['is_favorite'] = 'true' ;
+                    }else{
+                        $now_Dealss[$i]['is_favorite'] = 'false' ;
+                    }
+                    $ticket = Ticket::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
+                    if($ticket){
+                        $now_Dealss[$i]['my_ticket_points'] = $ticket->points ;
+                    }else{
+                        $now_Dealss[$i]['my_ticket_points'] = null ;
+                    }
+                    $i ++ ; 
+                    $count_now_Deals ++ ;
                
                     
                 }
@@ -1182,14 +1141,14 @@ class ApiController extends Controller
         }
         $lang = $request->header('lang');
         $dt = Carbon::now();
-        $date2 = date('Y-m-d', strtotime($dt));
-        $time = $dt->format('H:i:s');
-        $date  = date('Y-m-d H:i:s', strtotime($dt));
+  
+        $date  = date('Y-m-d', strtotime($dt));
+        $time  = date('H:i:s', strtotime($dt));
         if($token){
 
             $user = User::where('remember_token',$token)->first();
 
-            $coming_Deals = Deal::whereDate('expiry_date','>',$date2)->where('status','active')->orderBy('id', 'desc')->limit(10)->get();
+            $coming_Deals = Deal::whereDate('expiry_date','>',$date)->orWhere('expiry_date','')->orWhere('expiry_date',null)->where('status','active')->orderBy('id', 'desc')->limit(10)->get();
             $count_coming_Deals = 0 ;
             
             $coming_Dealss = [] ;
@@ -1220,7 +1179,7 @@ class ApiController extends Controller
                     $coming_Dealss[$x]['tender_cost'] = $Deal->tender_cost ; 
                     $coming_Dealss[$x]['tender_edit_cost'] = $Deal->tender_edit_cost ; 
                     $coming_Dealss[$x]['tender_coupon'] = $Deal->tender_coupon ; 
-                    $coming_Dealss[$x]['expiry_date'] = date('d-m-Y H:i:s', strtotime($Deal->expiry_date) );   
+                    $coming_Dealss[$x]['expiry_date'] = $Deal->expiry_date .' '.$Deal->expiry_time;  
                     $favorite = Favorite::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
                     if($favorite){
                         $coming_Dealss[$x]['is_favorite'] = 'true' ;
@@ -1271,65 +1230,18 @@ class ApiController extends Controller
         }
         $lang = $request->header('lang');
         $dt = Carbon::now();
-        $date2 = date('Y-m-d', strtotime($dt));
-        $time = $dt->format('H:i:s');
-        $date  = date('Y-m-d H:i:s', strtotime($dt));
+        $date  = date('Y-m-d', strtotime($dt));
+        $time  = date('H:i:s', strtotime($dt));
         if($token){
             
             $user = User::where('remember_token',$token)->first();
-            $now_Deals = Deal::whereDate('expiry_date','=',$date2)->where('status','active')->orderBy('id', 'desc')->limit(10)->get();
-            $pervios_Deals = Deal::whereDate('expiry_date','<',$date2)->where('status','active')->orderBy('id', 'desc')->limit(10)->get();
+            $now_Deals = Deal::whereDate('expiry_date','=',$date)->whereTime('expiry_time','>=',$time)->where('status','active')->orderBy('id', 'desc')->limit(10)->get();
+            $pervios_Deals = Deal::whereDate('expiry_date','<',$date)->orwhereDate('expiry_date','=',$date)->whereTime('expiry_time','<',$time)->orderBy('id', 'desc')->limit(10)->get();
             $count_pervios_Deals = 0 ;
             // return $pervios_Deals ;
             $pervios_Dealss = [] ;
             $y = 0;
-            if(sizeof($now_Deals) > 0 ){
-                foreach($now_Deals as $Deal){
-                    $datedeal = strtotime($Deal->expiry_date);
-                    $timedeal = date('H:i:s', $datedeal);
-                    if($time > $timedeal){
-                          $pervios_Dealss[$y]['Deal_id'] = $Deal->id ;    
-                        if($lang == 'ar'){
-                            $pervios_Dealss[$y]['title'] = $Deal->title_ar ; 
-                            $pervios_Dealss[$y]['disc'] = $Deal->disc_ar ; 
-                            $pervios_Dealss[$y]['info'] = $Deal->info_ar ; 
-                        }else{
-                            $pervios_Dealss[$y]['title'] = $Deal->title_en ; 
-                            $pervios_Dealss[$y]['disc'] = $Deal->disc_en ; 
-                            $pervios_Dealss[$y]['info'] = $Deal->info_en ; 
-                        }
-                        if($Deal->image){
-                            $pervios_Dealss[$y]['image'] = asset('img/').'/'. $Deal->image;
-                        }else{
-                            $pervios_Dealss[$y]['image'] = null ;
-                        }
-                        
-                        $pervios_Dealss[$y]['original_price'] = $Deal->original_price ; 
-                        $pervios_Dealss[$y]['initial_price'] = $Deal->initial_price ; 
-                        $pervios_Dealss[$y]['points'] = $Deal->points ; 
-                        $pervios_Dealss[$y]['tickets'] = $Deal->tickets ; 
-                        $pervios_Dealss[$y]['tender_cost'] = $Deal->tender_cost ; 
-                        $pervios_Dealss[$y]['tender_edit_cost'] = $Deal->tender_edit_cost ; 
-                        $pervios_Dealss[$y]['tender_coupon'] = $Deal->tender_coupon ; 
-                        $pervios_Dealss[$y]['expiry_date'] = date('d-m-Y H:i:s', strtotime($Deal->expiry_date) );  ; 
-                        $favorite = Favorite::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
-                        if($favorite){
-                            $pervios_Dealss[$y]['is_favorite'] = 'true' ;
-                        }else{
-                            $pervios_Dealss[$y]['is_favorite'] = 'false' ;
-                        }
-                        $ticket = Ticket::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
-                        if($ticket){
-                            $pervios_Dealss[$y]['my_ticket_points'] = $ticket->points ;
-                        }else{
-                            $pervios_Dealss[$y]['my_ticket_points'] = null ;
-                        }
-                        $y ++ ; 
-                        $count_pervios_Deals ++ ;
-                    }
-                    
-                }
-            }
+          
             if(sizeof($pervios_Deals) > 0 ){
                 foreach($pervios_Deals as $Deal){
                     // return asset('img/').'/'. $image->image;
@@ -1551,7 +1463,7 @@ class ApiController extends Controller
                     $Dealss[$i]['tender_cost'] = $Deal->tender_cost ; 
                     $Dealss[$i]['tender_edit_cost'] = $Deal->tender_edit_cost ; 
                     $Dealss[$i]['tender_coupon'] = $Deal->tender_coupon ; 
-                    $Dealss[$i]['expiry_date'] = date('d-m-Y H:i:s', strtotime($Deal->expiry_date) );   
+                    $Dealss[$i]['expiry_date'] = $Deal->expiry_date .' '.$Deal->expiry_time;   
                     $favorite = Favorite::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
                     if($favorite){
                         $Dealss[$i]['is_favorite'] = 'true' ;
@@ -1653,7 +1565,7 @@ class ApiController extends Controller
                 $now_Dealss['tender_cost'] = $Deal->tender_cost ; 
                 $now_Dealss['tender_edit_cost'] = $Deal->tender_edit_cost ; 
                 $now_Dealss['tender_coupon'] = $Deal->tender_coupon ; 
-                $now_Dealss['expiry_date'] = date('Y-m-d H:i:s', strtotime($Deal->expiry_date) )  ; 
+                $now_Dealss['expiry_date'] = $Deal->expiry_date.' '.$Deal->expiry_time  ; 
                 // return $Deal->images ;
                 $favorite = Favorite::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
                     if($favorite){
