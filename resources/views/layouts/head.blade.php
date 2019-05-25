@@ -26,7 +26,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ trans('admin.nasebk')}}</title>
     
-    <link rel="shortcut icon" href="{{ asset('images/nasebk.png') }}" >
+    <link rel="shortcut icon" href="{{ asset('images/nasebk.jpeg') }}" >
     
     <link href="{{ asset('css/animate.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -43,6 +43,7 @@
             checkboxes[i].checked = source.checked;
             }
         }
+        var arrayimages = [];
         function animationHover(element, animation){
             element = $(element);
             element.hover(
@@ -60,6 +61,24 @@
         
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
+                src = document.getElementById(imagediv).src;    
+                imag = "{{asset('images/addimage.png')}}" ;
+                if(imag != src){
+                    arrayimages = src ;
+                }
+                console.log(arrayimages);
+                reader.onload = function (e) {
+                    $('#'+imagediv).attr('src', e.target.result);
+                }
+        
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        function readURLs(input,imagediv) {
+
+            {{-- $('#deleted_images').val()=  --}}
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
                 
                 reader.onload = function (e) {
                     $('#'+imagediv).attr('src', e.target.result);
@@ -67,6 +86,7 @@
         
                 reader.readAsDataURL(input.files[0]);
             }
+           
         }
     </script>
    

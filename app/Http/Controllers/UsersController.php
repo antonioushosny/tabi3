@@ -236,7 +236,7 @@ class UsersController extends Controller
         }
 
         $user->save();
-
+        $user = User::where('id',$user->id)->with('country')->with('city')->first();
         return response()->json($user);
 
     }

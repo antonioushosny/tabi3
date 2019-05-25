@@ -60,8 +60,9 @@
                             <th>{{trans('admin.name')}}</th>
                             <th>{{trans('admin.email')}}</th>
                             <th>{{trans('admin.mobile')}}</th>
-                            <th>{{trans('admin.user_name')}}</th>
-                            <th>{{trans('admin.gender')}}</th>
+                            <th>{{trans('admin.country')}}</th>
+                            <th>{{trans('admin.city')}}</th>
+                            <th>{{trans('admin.job')}}</th>
                             {{--  <th>{{trans('admin.image')}}</th>  --}}
                             <th>{{trans('admin.status')}}</th>
                             <th>{{trans('admin.actions')}}</th>
@@ -77,8 +78,18 @@
                                 <td>{{ $data->name }}</td>
                                 <td>{{ $data->email }}</td>
                                 <td>{{ $data->mobile }}</td>
-                                <td>{{ $data->user_name }}</td>
-                                <td>{{ trans('admin.'.$data->gender)}}</td>
+                                @if($data->country)
+                                    <td>{{ $data->country->name_ar }}</td>
+                                @else
+                                    <td></td>
+                                @endif
+                                @if($data->city)
+                                    <td>{{ $data->city->name_ar }}</td>
+                                @else
+                                    <td></td>
+                                @endif
+                                <td>{{ $data->job }}</td>
+                                {{-- <td>{{ trans('admin.'.$data->gender)}}</td> --}}
                                 {{--  @if($data->image)
                                 <td><img src="{{asset('img/').'/'.$data->image }}" width="50px" height="50px"></td>
                                 @else 
@@ -1039,7 +1050,7 @@
                     }
                     
                     toastr.success('{{trans('admin.successfully_added')}}', '{{trans('admin.Success_Alert')}}', {timeOut: 5000});
-                    $('#adminstable').prepend(`<tr class="item` + data.id + `"><td><input type="checkbox" name="ids[]" value="` + data.id + `"class="check icheck"></td><td>` + data.name + `</td><td>` + data.email + `</td><td>` + data.mobile + `</td><td>` + data.user_name + `</td><td>` + gender + `</td><td style="text-align:center"><span  class="badge">` + status + `</span></td><td> <a href="#" class="edit-modal btn btn-success btn-round " title="`+title+`"  data-id=" `+ data.id + `" data-data=\'` + y +`\'><span class="glyphicon glyphicon-edit "></span> </a>    <a href="#" class="delete-modal btn btn-danger btn-round " data-id="` + data.id + `" ><span class="glyphicon glyphicon-trash " title="`+title2+`"></span></a>   <a href="<?php echo url('/')?>/users/deals/` + data.id+`" class=" profile-modal btn btn-warning btn-round" title="`+title3+`" data-data=\'` + y +`\' ><span class="glyphicon glyphicon-exclamation-sign"></span></a> <a href="<?php echo url('/')?>/users/charges/` + data.id+`" class=" profile-modal btn btn-warning btn-round" title="`+title4+`" data-data=\'` + y +`\' ><span class="glyphicon glyphicon glyphicon-eur"></span></a> </td></tr>`);
+                    $('#adminstable').prepend(`<tr class="item` + data.id + `"><td><input type="checkbox" name="ids[]" value="` + data.id + `"class="check icheck"></td><td>` + data.name + `</td><td>` + data.email + `</td><td>` + data.mobile + `</td><td>` + data.country.name_ar + `</td><td>` + data.city.name_ar + `</td><td>` + data.job + `</td><td style="text-align:center"><span  class="badge">` + status + `</span></td><td> <a href="#" class="edit-modal btn btn-success btn-round " title="`+title+`"  data-id=" `+ data.id + `" data-data=\'` + y +`\'><span class="glyphicon glyphicon-edit "></span> </a>    <a href="#" class="delete-modal btn btn-danger btn-round " data-id="` + data.id + `" ><span class="glyphicon glyphicon-trash " title="`+title2+`"></span></a>   <a href="<?php echo url('/')?>/users/deals/` + data.id+`" class=" profile-modal btn btn-warning btn-round" title="`+title3+`" data-data=\'` + y +`\' ><span class="glyphicon glyphicon-exclamation-sign"></span></a> <a href="<?php echo url('/')?>/users/charges/` + data.id+`" class=" profile-modal btn btn-warning btn-round" title="`+title4+`" data-data=\'` + y +`\' ><span class="glyphicon glyphicon glyphicon-eur"></span></a> </td></tr>`);
                     $('#formaddusers')[0].reset();
                     $('#upload-file-success').html('');
                     
@@ -1190,7 +1201,7 @@
                         }
 
                         toastr.success('{{trans('admin.successfully_edited')}}', '{{trans('admin.Success_Alert')}}', {timeOut: 5000});
-                        $('.item' + data.id).replaceWith(`<tr class="item` + data.id + `"><td><input type="checkbox" name="ids[]" value="` + data.id + `"class="check icheck"></td><td>` + data.name + `</td><td>` + data.email + `</td><td>` + data.mobile + `</td><td>` + data.user_name + `</td><td>` + gender + `</td><td style="text-align:center"><span  class="badge">` + status + `</span></td><td>  <a href="#" class="edit-modal btn btn-success btn-round " title="`+title+`"  data-id=" `+ data.id + `" data-data=\'` + y +`\'><span class="glyphicon glyphicon-edit "></span> </a>    <a href="#" class="delete-modal btn btn-danger btn-round " data-id="` + data.id + `" ><span class="glyphicon glyphicon-trash " title="`+title2+`"></span></a>  <a href="<?php echo url('/')?>/users/deals/` + data.id+`" class=" profile-modal btn btn-warning btn-round" title="`+title3+`" data-data=\'` + y +`\' ><span class="glyphicon glyphicon-exclamation-sign"></span></a> <a href="<?php echo url('/')?>/users/charges/` + data.id+`" class=" profile-modal btn btn-warning btn-round" title="`+title4+`" data-data=\'` + y +`\' ><span class="glyphicon glyphicon glyphicon-eur"></span></a> </td></tr>`);
+                        $('.item' + data.id).replaceWith(`<tr class="item` + data.id + `"><td><input type="checkbox" name="ids[]" value="` + data.id + `"class="check icheck"></td><td>` + data.name + `</td><td>` + data.email + `</td><td>` + data.mobile + `</td><td>` + data.country.name_ar + `</td><td>` + data.city.name_ar + `</td><td>` + data.job + `</td><td style="text-align:center"><span  class="badge">` + status + `</span></td><td>  <a href="#" class="edit-modal btn btn-success btn-round " title="`+title+`"  data-id=" `+ data.id + `" data-data=\'` + y +`\'><span class="glyphicon glyphicon-edit "></span> </a>    <a href="#" class="delete-modal btn btn-danger btn-round " data-id="` + data.id + `" ><span class="glyphicon glyphicon-trash " title="`+title2+`"></span></a>  <a href="<?php echo url('/')?>/users/deals/` + data.id+`" class=" profile-modal btn btn-warning btn-round" title="`+title3+`" data-data=\'` + y +`\' ><span class="glyphicon glyphicon-exclamation-sign"></span></a> <a href="<?php echo url('/')?>/users/charges/` + data.id+`" class=" profile-modal btn btn-warning btn-round" title="`+title4+`" data-data=\'` + y +`\' ><span class="glyphicon glyphicon glyphicon-eur"></span></a> </td></tr>`);
                         $('#formeditusers')[0].reset();
                         $('#upload-file-success1').html('');
                         $('#editModal').modal('hide');

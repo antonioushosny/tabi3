@@ -5,7 +5,7 @@
   <head>
     <meta charset="UTF-8">
     <title>{{ trans('admin.nasebk')}}</title>
-    <link rel="shortcut icon" href="{{ asset('images/nasebk.png') }}" >
+    <link rel="shortcut icon" href="{{ asset('images/nasebk.jpeg') }}" >
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="stylesheet" href="{{ asset('rtl/bootstrap/css/bootstrap.min.css') }}">
     {{--  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css') }}">  --}}
@@ -94,7 +94,7 @@
       <div class="login-box-body" >
       <div class="login-logo">
         {{--  <a href="#"><b>{{ trans('admin.nasebk')}}</b></a>  --}}
-        <img src="{{ asset('images/nasebk.png') }}" width="50%" height="50%" alt="">
+        <img src="{{ asset('images/nasebk.jpeg') }}" width="50%" height="50%" alt="">
       </div><!-- /.login-logo -->
 
         <p class="login-box-msg">{{ trans('admin.Sign_session')}}</p>

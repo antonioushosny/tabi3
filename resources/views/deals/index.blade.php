@@ -623,7 +623,7 @@
                                                 <div class="form-group  row" style="display:flex;">
                                                     <div style="position:relative; ">
                                                         <a class='btn btn-primary' href='javascript:;' >
-                                                            {{trans('admin.Choose_File')}}
+                                                            {{trans('admin.Choose_Image')}}
                     
                                                             {!! Form::file('image',['class'=>'form-control','id' => 'image_field', 'accept'=>'image/x-png,image/gif,image/jpeg' ,'style'=>'position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;','size'=> '40' ,'onchange' => 'readURL(this,"changeimage");' ]) !!}
                                                         </a>
@@ -640,7 +640,109 @@
                                             </div>
                                         </div>                                        
                                     </div>
-                                    
+                                    <div class="row"  style="display:flex;">   
+                                        <fieldset>
+                                            <legend>{{ trans('admin.images') }}:</legend>
+                                                <div class= "col-md-1 col-xs-6"> </div>
+                                                <div class= "col-md-2 col-xs-6">
+                                                    <div class="form-group  row" style="display:flex;">
+                                                        
+                                                        <div class="col-xs-3">
+                                                            <div class="form-group  row" style="display:flex;">
+                                                                <div style="position:relative; ">
+                                                                    <a class='btn btn-primary' href='javascript:;' >
+                                                                        +
+                                                                        {!! Form::file('images[]',['class'=>'form-control ','id' => 'images_field', 'accept'=>'image/x-png,image/gif,image/jpeg' ,'style'=>'position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;','size'=> '40' ,'onchange' => 'readURL(this,"changeimagess1");' ]) !!}
+                                                                    </a>
+                                                                    &nbsp;
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-9" >
+                                                            <img id="changeimagess1" src="#" width="100%" height="100%" alt=" {{trans('admin.images')}}" />
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                                <div class= "col-md-2 col-xs-6">
+                                                    <div class="form-group  row" style="display:flex;">
+                                                        
+                                                        <div class="col-xs-3">
+                                                            <div class="form-group  row" style="display:flex;">
+                                                                <div style="position:relative; ">
+                                                                    <a class='btn btn-primary' href='javascript:;' >
+                                                                        +
+                                                                        {!! Form::file('images[]',['class'=>'form-control ','id' => 'images_field', 'accept'=>'image/x-png,image/gif,image/jpeg' ,'style'=>'position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;','size'=> '40' ,'onchange' => 'readURL(this,"changeimagess2");' ]) !!}
+                                                                    </a>
+                                                                    &nbsp;
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-9" >
+                                                            <img id="changeimagess2" src="#" width="100%" height="100%" alt=" {{trans('admin.images')}}" /   >
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                                <div class= "col-md-2 col-xs-6">
+                                                    <div class="form-group  row" style="display:flex;">
+                                                        
+                                                        <div class="col-xs-3">
+                                                            <div class="form-group  row" style="display:flex;">
+                                                                <div style="position:relative; ">
+                                                                    <a class='btn btn-primary' href='javascript:;' >
+                                                                        +
+                                                                        {!! Form::file('images[]',['class'=>'form-control ','id' => 'images_field', 'accept'=>'image/x-png,image/gif,image/jpeg' ,'style'=>'position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;','size'=> '40' ,'onchange' => 'readURL(this,"changeimagess3");' ]) !!}
+                                                                    </a>
+                                                                    &nbsp;
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-9" >
+                                                            <img id="changeimagess3" src="#" width="100%" height="100%" alt=" {{trans('admin.images')}}" />
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                                <div class= "col-md-2 col-xs-6">
+                                                    <div class="form-group  row" style="display:flex;">
+                                                        
+                                                        <div class="col-xs-3">
+                                                            <div class="form-group  row" style="display:flex;">
+                                                                <div style="position:relative; ">
+                                                                    <a class='btn btn-primary' href='javascript:;' >
+                                                                        +
+                                                                        {!! Form::file('images[]',['class'=>'form-control ','id' => 'images_field', 'accept'=>'image/x-png,image/gif,image/jpeg' ,'style'=>'position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;','size'=> '40' ,'onchange' => 'readURL(this,"changeimagess4");' ]) !!}
+                                                                    </a>
+                                                                    &nbsp;
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-9" >
+                                                            <img id="changeimagess4" src="#" width="100%" height="100%" alt=" {{trans('admin.images')}}" />
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                                <div class= "col-md-2 col-xs-6">
+                                                    <div class="form-group  row" style="display:flex;">
+                                                        
+                                                        <div class="col-xs-3">
+                                                            <div class="form-group  row" style="display:flex;">
+                                                                <div style="position:relative; ">
+                                                                    <a class='btn btn-primary' href='javascript:;' >
+                                                                        +
+                                                                        {!! Form::file('images[]',['class'=>'form-control ','id' => 'images_field', 'accept'=>'image/x-png,image/gif,image/jpeg' ,'style'=>'position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;','size'=> '40' ,'onchange' => 'readURL(this,"changeimagess5");' ]) !!}
+                                                                    </a>
+                                                                    &nbsp;
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-9" >
+                                                            <img id="changeimagess5" src="#" width="100%" height="100%" alt=" {{trans('admin.images')}}" />
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                                <div class= "col-md-1 col-xs-6"> </div>
+                                        </fieldset>
+                                                                                
+                                    </div>
                                 </div>
                                 <div class="panel-footer">
                                     <button type="submit" class="btn btn-primary add" >
@@ -1109,7 +1211,7 @@
                                                 <div class="form-group  row" style="display:flex;">
                                                     <div style="position:relative; ">
                                                         <a class='btn btn-primary' href='javascript:;' >
-                                                            {{trans('admin.Choose_File')}}
+                                                            {{trans('admin.Choose_Image')}}
                     
                                                             {!! Form::file('image',['class'=>'form-control','id' => 'image_edit', 'accept'=>'image/x-png,image/gif,image/jpeg' ,'style'=>'position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;','size'=> '40' ,'onchange' => 'readURL(this,"changeimage1");' ]) !!}
                                                         </a>
@@ -1125,6 +1227,109 @@
                                             </div>
                                             </div>
                                         </div>                                        
+                                    </div>
+                                    <div class="row"  style="display:flex;">   
+                                        <fieldset>
+                                            <legend>{{ trans('admin.images') }}:</legend>
+                                                <div class= "col-md-1 col-xs-6"> </div>
+                                                <div class= "col-md-2 col-xs-6">
+                                                    <div class="form-group  row" style="display:flex;">
+                                                        
+                                                        <div class="col-xs-3">
+                                                            <div class="form-group  row" style="display:flex;">
+                                                                <div style="position:relative; ">
+                                                                    <a class='btn btn-primary' href='javascript:;' >
+                                                                        +
+                                                                        {!! Form::file('images[]',['class'=>'form-control ','id' => 'images_edit', 'accept'=>'image/x-png,image/gif,image/jpeg' ,'style'=>'position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;','size'=> '40' ,'onchange' => 'readURL(this,"changeimages1");' ]) !!}
+                                                                    </a>
+                                                                    &nbsp;
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-9" >
+                                                            <img id="changeimages1" src="#" width="100%" height="100%" alt=" {{trans('admin.images')}}" />
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                                <div class= "col-md-2 col-xs-6">
+                                                    <div class="form-group  row" style="display:flex;">
+                                                        
+                                                        <div class="col-xs-3">
+                                                            <div class="form-group  row" style="display:flex;">
+                                                                <div style="position:relative; ">
+                                                                    <a class='btn btn-primary' href='javascript:;' >
+                                                                        +
+                                                                        {!! Form::file('images[]',['class'=>'form-control ','id' => 'images_edit', 'accept'=>'image/x-png,image/gif,image/jpeg' ,'style'=>'position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;','size'=> '40' ,'onchange' => 'readURL(this,"changeimages2");' ]) !!}
+                                                                    </a>
+                                                                    &nbsp;
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-9" >
+                                                            <img id="changeimages2" src="#" width="100%" height="100%" alt=" {{trans('admin.images')}}" /   >
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                                <div class= "col-md-2 col-xs-6">
+                                                    <div class="form-group  row" style="display:flex;">
+                                                        
+                                                        <div class="col-xs-3">
+                                                            <div class="form-group  row" style="display:flex;">
+                                                                <div style="position:relative; ">
+                                                                    <a class='btn btn-primary' href='javascript:;' >
+                                                                        +
+                                                                        {!! Form::file('images[]',['class'=>'form-control ','id' => 'images_edit', 'accept'=>'image/x-png,image/gif,image/jpeg' ,'style'=>'position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;','size'=> '40' ,'onchange' => 'readURL(this,"changeimages3");' ]) !!}
+                                                                    </a>
+                                                                    &nbsp;
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-9" >
+                                                            <img id="changeimages3" src="#" width="100%" height="100%" alt=" {{trans('admin.images')}}" />
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                                <div class= "col-md-2 col-xs-6">
+                                                    <div class="form-group  row" style="display:flex;">
+                                                        
+                                                        <div class="col-xs-3">
+                                                            <div class="form-group  row" style="display:flex;">
+                                                                <div style="position:relative; ">
+                                                                    <a class='btn btn-primary' href='javascript:;' >
+                                                                        +
+                                                                        {!! Form::file('images[]',['class'=>'form-control ','id' => 'images_edit', 'accept'=>'image/x-png,image/gif,image/jpeg' ,'style'=>'position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;','size'=> '40' ,'onchange' => 'readURL(this,"changeimages4");' ]) !!}
+                                                                    </a>
+                                                                    &nbsp;
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-9" >
+                                                            <img id="changeimages4" src="#" width="100%" height="100%" alt=" {{trans('admin.images')}}" />
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                                <div class= "col-md-2 col-xs-6">
+                                                    <div class="form-group  row" style="display:flex;">
+                                                        
+                                                        <div class="col-xs-3">
+                                                            <div class="form-group  row" style="display:flex;">
+                                                                <div style="position:relative; ">
+                                                                    <a class='btn btn-primary' href='javascript:;' >
+                                                                        +
+                                                                        {!! Form::file('images[]',['class'=>'form-control ','id' => 'images_edit', 'accept'=>'image/x-png,image/gif,image/jpeg' ,'style'=>'position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;','size'=> '40' ,'onchange' => 'readURL(this,"changeimages5");' ]) !!}
+                                                                    </a>
+                                                                    &nbsp;
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-9" >
+                                                            <img id="changeimages5" src="#" width="100%" height="100%" alt=" {{trans('admin.images')}}" />
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                                <div class= "col-md-1 col-xs-6"> </div>
+                                        </fieldset>
+                                                                               
                                     </div>
                                     
                                 </div>
@@ -1149,7 +1354,17 @@
 @endsection 
 @section('style')
     <style>
-            
+        fieldset { 
+            display: block;
+            margin-left: 2px;
+            margin-right: 2px;
+            padding-top: 0.35em;
+            padding-bottom: 0.625em;
+            padding-left: 0.75em;
+            padding-right: 0.75em;
+            width:100% ;
+            border: 2px groove (internal value);
+            }
     </style>  
   
 @endsection
@@ -1177,11 +1392,29 @@
 
         $(document).on('click', '.edit-modal', function() {
             data = $(this).data('data');
+            imag = "{{asset('images/addimage.png')}}" ;
+            
+            $('#changeimages1').attr('src', imag); 
+            $('#changeimages2').attr('src', imag); 
+            $('#changeimages3').attr('src', imag); 
+            $('#changeimages4').attr('src', imag); 
+            $('#changeimages5').attr('src', imag); 
+            images = JSON.parse(data.images) ;
+            console.log(images);
+            n = 5 ;
+            var i;
+            for (i = 0; i < images.length; i++) {
+                img = "{{asset('img/')}}" +'/'+ images[i] ;
+                $('#changeimages'+n).attr('src', img); 
+                  n--;
+            } 
+  
+            console.log(images);
             if(data.image){
                 image = "{{asset('img/')}}" +'/'+ data.image ;
             }
             else{
-                image = "{{asset('images/default.png')}}" ;
+                image = "{{asset('images/addimage.png')}}" ;
             }
             
             $('.modal-title').text('{{trans('admin.edit')}}');
@@ -1231,7 +1464,7 @@
             $('#city_id_edit').val(data.city_id);
             $('#expiry_date_edit').val(data.expiry_date);
             $('#expiry_time_edit').val(data.expiry_time);
-            $('#changeimage1').attr('src', image);
+            $('#changeimage1').attr('src', image); 
             $('#status_edit').val(data.status);
             id = $('#id_edit').val();
             {{-- console.log(data.expiry_date); --}}
@@ -1259,7 +1492,14 @@
         
         $(document).on('click', '.add-modal', function() {
             $('.modal-title').text('{{trans('admin.add')}}');
-            image = "{{asset('images/default.png')}}"  ;
+            imag = "{{asset('images/addimage.png')}}" ;
+            
+            $('#changeimagess1').attr('src', imag); 
+            $('#changeimagess2').attr('src', imag); 
+            $('#changeimagess3').attr('src', imag); 
+            $('#changeimagess4').attr('src', imag); 
+            $('#changeimagess5').attr('src', imag); 
+            image = "{{asset('images/addimage.png')}}"  ;
             $('#formadddeals')[0].reset();
             $('#changeimage').attr('src', image );
             $('.title_ar').addClass('hidden');
@@ -1504,7 +1744,7 @@
                         image = "{{asset('img/')}}" +'/'+ data.image ;
                     }
                     else{
-                        image = "{{asset('images/default.png')}}" ;
+                        image = "{{asset('images/addimage.png')}}" ;
                     }
                    
                     
@@ -1687,7 +1927,7 @@
                             image = "{{asset('img/')}}" +'/'+ data.image ;
                         }
                         else{
-                            image = "{{asset('images/default.png')}}" ;
+                            image = "{{asset('images/addimage.png')}}" ;
                         }
                         if( data.tickets == null){
                             data.tickets = '0' ;

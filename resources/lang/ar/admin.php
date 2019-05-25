@@ -124,6 +124,7 @@ return [
         'number'                        => 'رقم الحصة',
         'user_id'                       => ' المستخدم',
         'national_id'                   => ' الرقم القومي   ',
+        'images'                        => 'الصور',
         
          
     //end inputs

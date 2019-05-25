@@ -249,6 +249,20 @@ class DealsController extends Controller
             $image->move($destinationPath, $name);
             $deal->image   = $name;  
         }
+        $imagess = [] ;
+        $i = 0; 
+        if ($request->hasFile('images')) {
+            $images = $request->file('images');
+            foreach($images as $image){
+                // return $image ;
+                $name = md5($image->getClientOriginalName() . time()) . "." . $image->getClientOriginalExtension();
+                $destinationPath = public_path('/img');
+                $image->move($destinationPath, $name);
+                $imagess[$i] = $name;   
+                $i++;
+            }
+            $deal->images   = json_encode($imagess);  
+        }
 
         $deal->save();
         $deal = Deal::where('id',$deal->id)->first();

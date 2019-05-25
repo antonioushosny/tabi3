@@ -7,6 +7,8 @@ use App\Notifications\emailnotify;
 use App\User;
 use App\Doc;
 use App\Subdoc;
+use App\Contact;
+
 use Auth;
 use App;
 class StaticsController extends Controller
@@ -28,12 +30,30 @@ class StaticsController extends Controller
             return view('unauthorized',compact('role','admin'));
         }
         $title = $type;
+        if($title == 'contacts'){
+            $contacts= Contact::first();
+            $title = 'contacts';
+            // return $contacts ;
+            return view('statics.contacts',compact('title','lang','type','contacts'));
+        }
         $statics  = Doc::where('type',$type)->orderBy('id', 'DESC')->get();
-        // return $admins ; 
+        // return $statics ; 
         return view('statics.index',compact('statics','title','type','lang'));
 
     }
 
+    public function contacts()
+    {
+        $lang = App::getlocale();
+        if(Auth::user()->role != 'admin' ){
+            $role = 'admin';
+            return view('unauthorized',compact('role','admin'));
+        }
+        $contacts= Contact::first();
+        $title = 'contacts';
+        return $contacts ;
+        return view('statics.contacts',compact('title','lang','contacts'));
+    }
    
     public function store(Request $request)
     {
@@ -108,7 +128,57 @@ class StaticsController extends Controller
 
     }
 
+    public function social_accounts(Request $request)
+    {
+        // return $request ;   
+        if($request->id ){
+            $rules =
+            [
+                'facebook'  =>'required|url',
+                'youtube'  =>'required|url',
+                'instagram'  =>'required|url',
+                'snapchat'  =>'required|url',
+                'twitter'  =>'required|url',
+           
+            ];
+        }
+        else{
+            $rules =
+            [
+                'facebook'  =>'required|url',
+                'youtube'  =>'required|url',
+                'instagram'  =>'required|url',
+                'snapchat'  =>'required|url',
+                'twitter'  =>'required|url',           
+            ];
+        }
+        
+         $validator = \Validator::make($request->all(), $rules);
+         if ($validator->fails()) {
+             return \Response::json(array('errors' => $validator->getMessageBag()->toArray()));
+         }   
+        $contacts= Contact::first();
+        if($contacts){
+            $contacts->facebook          = $request->facebook ;
+            $contacts->youtube         = $request->youtube ;
+            $contacts->instagram     = $request->instagram ;
+            $contacts->snapchat     = $request->snapchat ;        
+            $contacts->twitter     = $request->twitter ;
+        }
+        else{
+            $contacts= new Contact();
+            $contacts->facebook          = $request->facebook ;
+            $contacts->youtube         = $request->youtube ;
+            $contacts->instagram     = $request->instagram ;
+            $contacts->snapchat     = $request->snapchat ;        
+            $contacts->twitter     = $request->twitter ;
+        }
 
+                  
+   
+        $contacts->save();
+        return response()->json($contacts);
+    }
     public function show($id)
     {
         //

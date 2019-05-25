@@ -99,7 +99,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/deals/deleteall', 'DealsController@deleteall')->name('dealsdeleteall');
 
     Route::get('/statics/{type}', 'StaticsController@index')->name('statics');
+    Route::get('/statics/contacts', 'StaticsController@contacts')->name('contacts');
     Route::post('/statics/update/', 'StaticsController@store')->name('editstatic');
+    Route::post('/statics/contacts/update/', 'StaticsController@social_accounts')->name('editcontacts');
     Route::post('/statics/add', 'StaticsController@store')->name('storestatic');
     Route::get('/statics/delete/{id}', 'StaticsController@destroy')->name('destroystatic');
     Route::post('/statics/deleteall', 'StaticsController@deleteall')->name('staticsdeleteall');

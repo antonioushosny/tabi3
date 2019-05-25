@@ -146,7 +146,7 @@
                                         <img class="card-img-top" src="{{ asset('img/') }}/{{$admin->image}}" alt="Card image" width="100%" height="150px">
                                     @else
 
-                                    <img class="card-img-top" src="{{ asset('images/nasebk.png') }}" alt="Card image" width="80%" height="100px">
+                                    <img class="card-img-top" src="{{ asset('images/nasebk.jpeg') }}" alt="Card image" width="80%" height="100px">
                                     @endif
                                     <div class="card-body " style="padding: 39px 13px 86px 3px;
                                     ">
