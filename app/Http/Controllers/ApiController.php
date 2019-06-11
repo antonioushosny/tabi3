@@ -6,25 +6,21 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Request;
-use App\User;
-use App\SubCategory;
-use App\Category;
-use App\Deal;
-use App\City;
-use App\ContactUs;
-use App\Doc ; 
-use App\Term;
-use App\Country;
+
+use App\Area ;
 use App\Advertisement ;
+use App\CenterContainer;
+use App\City;
+use App\Contact;
+use App\ContactUs;
+use App\Container;
+use App\Country ; 
+use App\Doc;
+use App\Order;
+use App\OrderCenter ; 
+use App\OrderDriver ; 
 use App\PasswordReset ; 
-use App\Package ; 
-use App\Favorite ; 
-use App\Award ; 
-use App\Ticket ; 
-use App\Charge ; 
-use App\Address ; 
-use App\Interest ; 
-use App\UserInterest ; 
+use App\User;
 
 use Carbon\Carbon;
 use App\Notifications\Notifications;
@@ -63,7 +59,7 @@ class ApiController extends Controller
      */
     public function __construct()
     {
-        date_default_timezone_set('Africa/Cairo');
+        date_default_timezone_set('UTC');
         $this->middleware('guest')->except('logout');
     }
 //////////////////////////////////////////////
@@ -76,8 +72,8 @@ class ApiController extends Controller
 
                 foreach($advertisements as $advertisement){
                     if($advertisement){
-                        $advertisementss[$i]['link'] = $advertisement->link;
-                        $advertisementss[$i]['time'] = $advertisement->time;
+                        // $advertisementss[$i]['link'] = $advertisement->link;
+                        // $advertisementss[$i]['time'] = $advertisement->time;
                         if($advertisement->image != null){
                             $advertisementss[$i]['image']   = asset('img/').'/'. $advertisement->image;
                         }
@@ -111,67 +107,13 @@ class ApiController extends Controller
 
     }
 //////////////////////////////////////////////
-// Advertisement function by Antonious hosny
-    public function Countries(Request $request){ 
-        $lang = $request->header('lang');
-        if($lang == 'ar'){
-            $Countries  = Country::where('id','<>','1')->where('status','active')->orderBy('name_ar', 'asc')->get();
-        }else{
-            $Countries  = Country::where('id','<>','1')->where('status','active')->orderBy('name_en', 'asc')->get();
-        }
-            if(sizeof($Countries) > 0){
-                $Countriess =[];
-                $i = 0 ;
-
-                foreach($Countries as $Country){
-                    if($Country){
-                        $Countriess[$i]['country_id']   = $Country->id;
-
-                        if($Country->image != null){
-                            $Countriess[$i]['country_image']   = asset('img/').'/'. $Country->image;
-                        }
-                        else{
-                            $Countriess[$i]['country_image']   = null;
-                        }
-                        if($lang == 'ar'){
-                            $Countriess[$i]['country_name']   = $Country->name_ar;
-                        }else{
-                            $Countriess[$i]['country_name']   =  $Country->name_en;
-                        }
-                        $i ++ ;
-                    
-                    }
-                }
-                return response()->json([
-                    'success' => 'success',
-                    'errors' => null,
-                    'message' => trans('api.fetch'),
-                    'data' => $Countriess
-                ]);
-            }
-            else
-            {
-                $errors=  trans('api.notfound');
-                // $errors[] = trans('api.fail_login');
-                return response()->json([
-                    'success' => 'failed',
-                    'errors' => $errors,
-                    'message' => trans('api.notfound'),
-                    'data' => null,
-
-                ]);
-            }
-
-
-    }
-//////////////////////////////////////////////
-// Advertisement function by Antonious hosny
+// Cities function by Antonious hosny
     public function Cities(Request $request){ 
         $lang = $request->header('lang');
         if($lang == 'ar'){
-            $Cities  = City::where('id','<>','1')->where('status','active')->where('country_id',$request->country_id)->orderBy('name_ar', 'asc')->get();
+            $Cities  = City::where('status','active')->orderBy('name_ar', 'asc')->get();
         }else{
-            $Cities  = City::where('id','<>','1')->where('status','active')->where('country_id',$request->country_id)->orderBy('name_en', 'asc')->get();
+            $Cities  = City::where('status','active')->orderBy('name_en', 'asc')->get();
         }
             if(sizeof($Cities) > 0){
                 $Citiess =[];
@@ -180,13 +122,6 @@ class ApiController extends Controller
                 foreach($Cities as $City){
                     if($City){
                         $Citiess[$i]['city_id']   = $City->id;
-
-                        // if($City->image != null){
-                        //     $Citiess[$i]['city_image']   = asset('img/').'/'. $City->image;
-                        // }
-                        // else{
-                        //     $Citiess[$i]['city_image']   = null;
-                        // }
                         if($lang == 'ar'){
                             $Citiess[$i]['city_name']   = $City->name_ar;
                         }else{
@@ -206,7 +141,75 @@ class ApiController extends Controller
             else
             {
                 $errors=  trans('api.notfound');
-                // $errors[] = trans('api.fail_login');
+                return response()->json([
+                    'success' => 'failed',
+                    'errors' => $errors,
+                    'message' => trans('api.notfound'),
+                    'data' => null,
+
+                ]);
+            }
+
+    }
+//////////////////////////////////////////////
+// Areas function by Antonious hosny
+    public function Areas(Request $request){ 
+        $lang = $request->header('lang');
+        $rules=array(
+            "city_id"=>"required",
+        );
+
+        //check the validator true or not
+        $validator  = \Validator::make($request->all(),$rules);
+        if($validator->fails())
+        {
+            $messages = $validator->messages();
+            $transformed = [];
+
+            foreach ($messages->all() as $field => $message) {
+                $transformed[] = [
+                    'message' => $message
+                ];
+            }
+            return response()->json([
+                'success' => 'failed',
+                'errors'=>$transformed,
+                'message' => trans('api.failed_login'),
+                'data' => null,
+
+            ]);
+        }
+        if($lang == 'ar'){
+            $areas  = Area::where('status','active')->where('city_id',$request->city_id)->orderBy('name_ar', 'asc')->get();
+        }else{
+            $areas  = Area::where('status','active')->where('city_id',$request->city_id)->orderBy('name_en', 'asc')->get();
+        }
+            if(sizeof($areas) > 0){
+                $areass =[];
+                $i = 0 ;
+
+                foreach($areas as $area){
+                    if($area){
+                        $areass[$i]['area_id']   = $area->id;
+                        if($lang == 'ar'){
+                            $areass[$i]['area_name']   = $area->name_ar;
+                        }else{
+                            $areass[$i]['area_name']   =  $area->name_en;
+                        }
+                        $i ++ ;
+                    
+                    }
+                }
+                return response()->json([
+                    'success' => 'success',
+                    'errors' => null,
+                    'message' => trans('api.fetch'),
+                    'data' => $areass
+                ]);
+            }
+            else
+            {
+                $errors=  trans('api.notfound');
                 return response()->json([
                     'success' => 'failed',
                     'errors' => $errors,
@@ -220,26 +223,24 @@ class ApiController extends Controller
 //////////////////////////////////////////////
 
 // login function by Antonious hosny
-    public function login(Request $request){
+    public function Login(Request $request){
         // return $request;
         // print time();
         $lang = $request->header('lang');
         // $this->validateLogin($request);
         $rules=array(
-                    
-            "mobile"=>"required",
+            "email"=>"required",
             "password"=>"required",
             "device_token"=>"required",
-            "device_type" => "required"  //1for ios , 0 for android  
+            "device_type" => "required"  // 1 for ios , 0 for android  
         );
-   
+
         //check the validator true or not
         $validator  = \Validator::make($request->all(),$rules);
         if($validator->fails())
         {
             $messages = $validator->messages();
             $transformed = [];
- 
             foreach ($messages->all() as $field => $message) {
                 $transformed[] = [
                     // 'field' => $field,
@@ -254,15 +255,15 @@ class ApiController extends Controller
 
             ]);
         }
-        $user = User::where('mobile',$request->mobile)->orWhere('user_name',$request->mobile)->first();
+        $user = User::where('email',$request->email)->where('role','user')->orWhere('role','driver')->first();
 
         if(!$user){
 
-            $errors =  trans('api.mobile_notfound');
+            $errors =  trans('admin.email_notfound');
             return response()->json([
                 'success' => 'failed',
                 'errors' => $errors ,
-                'message' => trans('api.mobile_notfound'),
+                'message' => trans('admin.email_notfound'),
                 'data' => null,
 
             ]);
@@ -281,53 +282,43 @@ class ApiController extends Controller
                 $user->device_token = $request->device_token ;
                 $user->type = $request->device_type ;
                 $user->save();
-                $user =  User::where('id',$user->id)->with('country')->with('city')->first();
+                $user =  User::where('id',$user->id)->with('City')->with('Area')->first();
+                $users = [] ;
                 if($user){
-                    $users = [] ;
                     $users['id'] = $user->id ;
                     $users['name'] = $user->name ;
                     $users['email'] = $user->email ;
-                    $users['user_name'] = $user->user_name ;
                     $users['mobile'] = $user->mobile ;
-                    if($user->country){
+                    if($user->City){
                         
                         if($lang == 'ar'){
-                            
-                            $users['country_id'] = $user->country->id ;
-                            $users['country_name']   = $user->country->name_ar;
+                            $users['city_id'] = $user->City->id ;
+                            $users['city_name']   = $user->City->name_ar;
                         }else{
-                            $users['country_id'] = $user->country->id ;
-                            $users['country_name']   = $user->country->name_en;
-                        }
-                    }else{
-                        $users['country_id'] = null ;
-                        $users['country_name']   =  null;
-                    }
-                    if($user->city){
-                        
-                        if($lang == 'ar'){
-                            $users['city_id'] = $user->city->id ;
-                            $users['city_name']   = $user->city->name_ar;
-                        }else{
-                            $users['city_id'] = $user->city->id ;
-                            $users['city_name']   = $user->city->name_en;
+                            $users['city_id'] = $user->City->id ;
+                            $users['city_name']   = $user->City->name_en;
                         }
                     }else{
                         $users['city_id'] = null ;
                         $users['city_name']   =  null;
                     }
-                    $users['job'] = $user->job ;
-                    $users['gender'] = $user->gender ;
-                    if($user->points){
-                        $users['points'] = $user->points ;
+                    if($user->Area){
+                        
+                        if($lang == 'ar'){
+                            $users['area_id'] = $user->Area->id ;
+                            $users['area_name']   = $user->Area->name_ar;
+                        }else{
+                            $users['area_id'] = $user->Area->id ;
+                            $users['area_name']   = $user->Area->name_en;
+                        }
                     }else{
-                        $users['points'] = 0 ;
+                        $users['area_id'] = null ;
+                        $users['area_name']   =  null;
                     }
-                    if($user->coupons){
-                        $users['coupons'] = $user->coupons ;
-                    }else{
-                        $users['coupons'] = 0 ;
-                    }
+                    $users['lat'] = $user->lat ;
+                    $users['lng'] = $user->lng ;
+                    $users['role'] = $user->role ;
+                    
                     $users['remember_token'] = $user->remember_token ;
                     
                 }
@@ -341,7 +332,6 @@ class ApiController extends Controller
             else
             {
                 $errors=  trans('api.password_failed');
-                // $errors[] = trans('api.fail_login');
                 return response()->json([
                     'success' => 'failed',
                     'errors' => $errors,
@@ -362,17 +352,14 @@ class ApiController extends Controller
         $lang = $request->header('lang');
         // $this->validateLogin($request);
         $rules=array(   
-            "name"=>"required|min:3",
-            "user_name"=>"required|unique:users,user_name",
+            "name"=>"required",
             "email"=>"required|unique:users,email",
-            "mobile"=>"required|unique:users,mobile",
-            "password"=>"required|min:3",
-            "country"=>"required",
-            "city"=>"required",
-            "job"=>"required",
-            "gender"=>"required",
-            "birth_date"=>"required",
-            // "role" => "required"     // client ,user
+            "mobile"=>"required|between:8,11|unique:users,mobile", 
+            "password"=>"required|min:6",
+            // "area_id"=>"required",
+            // "city_id"=>"required",
+            // "lat"=>"required",
+            // "lng"=>"required",
         );
         //check the validator true or not
         $validator  = \Validator::make($request->all(),$rules);
@@ -401,20 +388,18 @@ class ApiController extends Controller
             $user->name          = $request->name ;
             $user->email         = $request->email ;
             $user->mobile        = $request->mobile ;
-            $user->user_name        = $request->user_name ;
-            $user->country_id        = $request->country ;
-            $user->city_id        = $request->city ;
-            $user->job        = $request->job ;
-            $user->gender        = $request->gender ;
-            $user->birth_date        = $request->birth_date ;
-            $user->status        = 'not_active';
+            $user->area_id        = $request->area_id ;
+            $user->city_id        = $request->city_id ;
+            $user->lat        = $request->lat ;
+            $user->lng        = $request->lng ;
+            $user->status        = 'active';
             $user->role          = 'user';
             $user->save();
             $user->generateToken();
 
-            $msg = " مستخدم جديد " ;
+            $msg = "  مستخدم جديد قام بالتسجيل" ;
             $type = "user";
-            $title =" مستخدم جديد " ;
+            $title = "  مستخدم جديد قام بالتسجيل" ;
             $admins = User::where('role', 'admin')->get(); 
             if(sizeof($admins) > 0){
                 foreach($admins as $admin){
@@ -425,39 +410,52 @@ class ApiController extends Controller
                     $this->notification($device_token,$title,$msg);
                 }
             }
-            $token = rand(100000,999999);
-            $PasswordReset = PasswordReset::where('email',$user->email)->first();
-            if(!$PasswordReset){
-                $PasswordReset = new PasswordReset ;
-            }
-            $PasswordReset->email = $user->email ;
-            $PasswordReset->token = $token ;
-            $PasswordReset->save();
-            User::find($user->id)->notify(new verify_code($token));
+            /////// this for verify email addreess/////////
+
+            // $token = rand(100000,999999);
+            // $PasswordReset = PasswordReset::where('email',$user->email)->first();
+            // if(!$PasswordReset){
+            //     $PasswordReset = new PasswordReset ;
+            // }
+            // $PasswordReset->email = $user->email ;
+            // $PasswordReset->token = $token ;
+            // $PasswordReset->save();
+            // User::find($user->id)->notify(new verify_code($token));
+            /////// end verify email addreess/////////
             $user =  User::where('id',$user->id)->with('country')->with('city')->first();
             if($user){
                 $users = [] ;
                 $users['id'] = $user->id ;
                 $users['name'] = $user->name ;
                 $users['email'] = $user->email ;
-                $users['user_name'] = $user->user_name ;
                 $users['mobile'] = $user->mobile ;
-                if($lang == 'ar'){
-                    $users['country_id'] = $user->country->id ;
-                    $users['country_name']   = $user->country->name_ar;
+                if($user->City){
+                    if($lang == 'ar'){
+                        $users['city_id'] = $user->City->id ;
+                        $users['city_name']   = $user->City->name_ar;
+                    }else{
+                        $users['city_id'] = $user->City->id ;
+                        $users['city_name']   = $user->City->name_en;
+                    }
                 }else{
-                    $users['country_id'] = $user->country->id ;
-                    $users['country_name']   = $user->country->name_en;
+                    $users['city_id'] = null ;
+                    $users['city_name']   = null ;
                 }
-                if($lang == 'ar'){
-                    $users['city_id'] = $user->city->id ;
-                    $users['city_name']   = $user->city->name_ar;
+                if($user->Area){
+                    if($lang == 'ar'){
+                        $users['area_id'] = $user->Area->id ;
+                        $users['area_name']   = $user->Area->name_ar;
+                    }else{
+                        $users['area_id'] = $user->Area->id ;
+                        $users['area_name']   = $user->Area->name_en;
+                    }
                 }else{
-                    $users['city_id'] = $user->city->id ;
-                    $users['city_name']   = $user->city->name_en;
+                    $users['area_id'] = null ;
+                    $users['area_name']   = null ;
                 }
-                $users['job'] = $user->job ;
-                $users['gender'] = $user->gender ;
+                $users['lat'] = $user->lat ;
+                $users['lng'] = $user->lng ;
+                $users['role'] = $user->role ;
                 $users['remember_token'] = $user->remember_token ;
                 
             }
@@ -471,7 +469,7 @@ class ApiController extends Controller
     }
 //////////////////////////////////////////////
 // editprofile function by Antonious hosny
-    public function editprofile(Request $request){
+    public function EditProfile(Request $request){
         // return $request ;
         $lang = $request->header('lang');
         $token = $request->token;
@@ -541,8 +539,8 @@ class ApiController extends Controller
             if($request->mobile){
                 $user->mobile        = $request->mobile ;
             }
-            if($request->address){
-                $user->address           = $request->address ;
+            if($request->city_id){
+                $user->city_id           = $request->city_id ;
             }
             if($request->lat){
                 $user->lat           = $request->lat ;
@@ -550,26 +548,64 @@ class ApiController extends Controller
             if($request->lng){
                 $user->lng           = $request->lng ;
             }
-            if($request->national_id){
-                $user->national_id           = $request->national_id ;
+            if($request->area_id){
+                $user->area_id           = $request->area_id ;
             }
-            if($request->disc){
-                $user->disc           = $request->disc ;
-            }
-            if ($request->profile_pic){
-                $image = $request->input('profile_pic'); // image base64 encoded
-                $image = str_replace('data:image/png;base64,', '', $image);
-                $image = str_replace(' ', '+', $image);
-                $imageName = str_random(10). time().'.'.'png';
-                \File::put(public_path(). '/img/' . $imageName, base64_decode($image));
-                $user->image = $imageName;
-            }
+            
+            // if ($request->profile_pic){
+            //     $image = $request->input('profile_pic'); // image base64 encoded
+            //     $image = str_replace('data:image/png;base64,', '', $image);
+            //     $image = str_replace(' ', '+', $image);
+            //     $imageName = str_random(10). time().'.'.'png';
+            //     \File::put(public_path(). '/img/' . $imageName, base64_decode($image));
+            //     $user->image = $imageName;
+            // }
             $user->save();
+            $user =  User::where('id',$user->id)->with('City')->with('Area')->first();
+            $users = [] ;
+            if($user){
+                $users['id'] = $user->id ;
+                $users['name'] = $user->name ;
+                $users['email'] = $user->email ;
+                $users['mobile'] = $user->mobile ;
+                if($user->City){
+                    
+                    if($lang == 'ar'){
+                        
+                        $users['city_id'] = $user->City->id ;
+                        $users['city_name']   = $user->City->name_ar;
+                    }else{
+                        $users['city_id'] = $user->City->id ;
+                        $users['city_name']   = $user->City->name_en;
+                    }
+                }else{
+                    $users['city_id'] = null ;
+                    $users['city_name']   =  null;
+                }
+                if($user->Area){
+                    
+                    if($lang == 'ar'){
+                        $users['area_id'] = $user->Area->id ;
+                        $users['area_name']   = $user->Area->name_ar;
+                    }else{
+                        $users['area_id'] = $user->Area->id ;
+                        $users['area_name']   = $user->Area->name_en;
+                    }
+                }else{
+                    $users['area_id'] = null ;
+                    $users['area_name']   =  null;
+                }
+                $users['lat'] = $user->lat ;
+                $users['lng'] = $user->lng ;
+                $users['role'] = $user->role ;
+                $users['remember_token'] = $user->remember_token ;
+                
+            }
             return response()->json([
                 'success' => 'success',
                 'errors'=> null ,
                 'message' => trans('api.save'),
-                'user' => $user ,
+                'user' => $users ,
             ]);
         }
         else{
@@ -589,7 +625,7 @@ class ApiController extends Controller
     }
 ///////////////////////////////////////////////////
 // logout function by Antonious hosny
-    public function logout(Request $request){
+    public function Logout(Request $request){
         $token = $request->token;
         if($token == ''){
         }
@@ -615,7 +651,7 @@ class ApiController extends Controller
     }
 //////////////////////////////////////////////////
 // forget_password function by Antonious hosny
-    public function forget_password(Request $request){
+    public function ForgetPassword(Request $request){
         $rules['email'] = 'required';
         $validator  = \Validator::make($request->all(),$rules);
         if($validator->fails())
@@ -625,7 +661,6 @@ class ApiController extends Controller
 
             foreach ($messages->all() as $field => $message) {
                 $transformed[] = [
-                    // 'field' => $field,
                     'message' => $message
                 ];
             }
@@ -638,9 +673,7 @@ class ApiController extends Controller
         }
         $email = $request->email;
         $user = User::where('email',$email)->first();
-
         if($user){
-
             $token = rand(100000,999999);
             $PasswordReset = PasswordReset::where('email',$user->email)->first();
             if(!$PasswordReset){
@@ -668,7 +701,7 @@ class ApiController extends Controller
     }
 //////////////////////////////////////////////////
 // verify_code function by Antonious hosny
-    public function verify_code(Request $request){
+    public function VerifyCode(Request $request){
         $code = $request->code;
         if($code){
             $PasswordReset = PasswordReset::where('token',$code)->first();
@@ -709,7 +742,7 @@ class ApiController extends Controller
     }
 ///////////////////////////////////////////////////
 // reset_password function by Antonious hosny
-    public function reset_password(Request $request){
+    public function ResetPassword(Request $request){
         $code = $request->code;
         if($code){
             $PasswordReset = PasswordReset::where('token',$code)->first();
@@ -772,10 +805,9 @@ class ApiController extends Controller
         ]);
         
     }
-//////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // request_home function by Antonious hosny
-    public function homePage(Request $request){
+    public function HomePage(Request $request){
         $token = $request->token;
         if($token == ''){
             $errors = trans('api.logged_out');
@@ -1041,1195 +1073,295 @@ class ApiController extends Controller
 
     }
 //////////////////////////////////////////////////
-// NowDeals function by Antonious hosny
-    public function NowDeals(Request $request){
-        $token = $request->token;
-        if($request->skip && $request->skip > 0 ){
+// Containers function by Antonious hosny
+    public function Containers(Request $request){
+         if($request->page && $request->page > 0 ){
             $skip = $request->skip.'0' ;
         }else{
             $skip = 0 ;
         }
-        $lang = $request->header('lang');
-        $dt = Carbon::now();
-        $date2 = date('Y-m-d', strtotime($dt));
-        $time2 = $dt->format('H:i:s');
-        $date  = date('Y-m-d', strtotime($dt));
-        $time  = date('H:i:s', strtotime($dt));
-        if($token){
-            $user = User::where('remember_token',$token)->first();
-            // return $user;
-            $now_Deals = Deal::whereDate('expiry_date','=',$date)->whereTime('expiry_time','>=',$time)->where('status','active')->orderBy('id', 'desc')->limit(10)->get();
-            $count_now_Deals = 0 ;
-            $now_Dealss = [] ;
-            $i =0 ;
-            if(sizeof($now_Deals) > 0 ){
-                foreach($now_Deals as $Deal){
-                    $datedeal = strtotime($Deal->expiry_date);
-                    $timedeal = date('H:i:s', $datedeal);
-                    // return asset('img/').'/'. $image->image;
-                    $now_Dealss[$i]['Deal_id'] = $Deal->id ;    
-                    if($lang == 'ar'){
-                        $now_Dealss[$i]['title'] = $Deal->title_ar ; 
-                        $now_Dealss[$i]['disc'] = $Deal->disc_ar ; 
-                        $now_Dealss[$i]['info'] = $Deal->info_ar ; 
-                    }else{
-                        $now_Dealss[$i]['title'] = $Deal->title_en ; 
-                        $now_Dealss[$i]['disc'] = $Deal->disc_en ; 
-                        $now_Dealss[$i]['info'] = $Deal->info_en ; 
-                    }
-                    if($Deal->image){
-                        $now_Dealss[$i]['image'] = asset('img/').'/'. $Deal->image;
-                    }else{
-                        $now_Dealss[$i]['image'] = null ;
-                    }
-                    
-                    $now_Dealss[$i]['original_price'] = $Deal->original_price ; 
-                    $now_Dealss[$i]['initial_price'] = $Deal->initial_price ; 
-                    $now_Dealss[$i]['points'] = $Deal->points ; 
-                    $now_Dealss[$i]['tickets'] = $Deal->tickets ; 
-                    $now_Dealss[$i]['tender_cost'] = $Deal->tender_cost ; 
-                    $now_Dealss[$i]['tender_edit_cost'] = $Deal->tender_edit_cost ; 
-                    $now_Dealss[$i]['tender_coupon'] = $Deal->tender_coupon ; 
-                    $now_Dealss[$i]['expiry_date'] = $Deal->expiry_date .' '.$Deal->expiry_time;  
-                    $favorite = Favorite::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
-                    if($favorite){
-                        $now_Dealss[$i]['is_favorite'] = 'true' ;
-                    }else{
-                        $now_Dealss[$i]['is_favorite'] = 'false' ;
-                    }
-                    $ticket = Ticket::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
-                    if($ticket){
-                        $now_Dealss[$i]['my_ticket_points'] = $ticket->points ;
-                    }else{
-                        $now_Dealss[$i]['my_ticket_points'] = null ;
-                    }
-                    $i ++ ; 
-                    $count_now_Deals ++ ;
-               
-                    
-                }
-            }
-            return response()->json([
-                'success' => 'success',
-                'errors' => null ,
-                'message' => trans('api.fetch'),
-                'data' => [
-                    'now_Deals' => $now_Dealss,
-                    'count_now_Deals' => $count_now_Deals,
-                    ],
-
-            ]);
-            
-        }else{
-            return response()->json([
-                'success' => 'logged',
-                'errors' => trans('api.logout'),
-                "message"=>trans('api.logout'),
-                ]);
-        }
-
-
-    }
-//////////////////////////////////////////////////
-// ComingDeals function by Antonious hosny
-    public function ComingDeals(Request $request){
         $token = $request->token;
-        if($request->skip && $request->skip > 0 ){
-            $skip = $request->skip.'0' ;
-        }else{
-            $skip = 0 ;
-        }
-        $lang = $request->header('lang');
-        $dt = Carbon::now();
-  
-        $date  = date('Y-m-d', strtotime($dt));
-        $time  = date('H:i:s', strtotime($dt));
-        if($token){
-
-            $user = User::where('remember_token',$token)->first();
-
-            $coming_Deals = Deal::whereDate('expiry_date','>',$date)->orWhere('expiry_date','')->orWhere('expiry_date',null)->where('status','active')->orderBy('id', 'desc')->limit(10)->get();
-            $count_coming_Deals = 0 ;
-            
-            $coming_Dealss = [] ;
-            $x = 0;
-           if(sizeof($coming_Deals) > 0 ){
-                foreach($coming_Deals as $Deal){
-                    // return asset('img/').'/'. $image->image;
-                    $coming_Dealss[$x]['Deal_id'] = $Deal->id ;    
-                    if($lang == 'ar'){
-                        $coming_Dealss[$x]['title'] = $Deal->title_ar ; 
-                        $coming_Dealss[$x]['disc'] = $Deal->disc_ar ; 
-                        $coming_Dealss[$x]['info'] = $Deal->info_ar ; 
-                    }else{
-                        $coming_Dealss[$x]['title'] = $Deal->title_en ; 
-                        $coming_Dealss[$x]['disc'] = $Deal->disc_en ; 
-                        $coming_Dealss[$x]['info'] = $Deal->info_en ; 
-                    }
-                    if($Deal->image){
-                        $coming_Dealss[$x]['image'] = asset('img/').'/'. $Deal->image;
-                    }else{
-                        $coming_Dealss[$x]['image'] = null ;
-                    }
-                    
-                    $coming_Dealss[$x]['original_price'] = $Deal->original_price ; 
-                    $coming_Dealss[$x]['initial_price'] = $Deal->initial_price ; 
-                    $coming_Dealss[$x]['points'] = $Deal->points ; 
-                    $coming_Dealss[$x]['tickets'] = $Deal->tickets ; 
-                    $coming_Dealss[$x]['tender_cost'] = $Deal->tender_cost ; 
-                    $coming_Dealss[$x]['tender_edit_cost'] = $Deal->tender_edit_cost ; 
-                    $coming_Dealss[$x]['tender_coupon'] = $Deal->tender_coupon ; 
-                    $coming_Dealss[$x]['expiry_date'] = $Deal->expiry_date .' '.$Deal->expiry_time;  
-                    $favorite = Favorite::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
-                    if($favorite){
-                        $coming_Dealss[$x]['is_favorite'] = 'true' ;
-                    }else{
-                        $coming_Dealss[$x]['is_favorite'] = 'false' ;
-                    }
-                    $ticket = Ticket::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
-                    if($ticket){
-                        $coming_Dealss[$x]['my_ticket_points'] = $ticket->points ;
-                    }else{
-                        $coming_Dealss[$x]['my_ticket_points'] = null ;
-                    }
-                    $x ++ ; 
-                    $count_coming_Deals ++ ;
-                }
-            }
-            
-            return response()->json([
-                'success' => 'success',
-                'errors' => null ,
-                'message' => trans('api.fetch'),
-                'data' => [
-                    'coming_Deals'         => $coming_Dealss ,
-                    'count_coming_Deals' => $count_coming_Deals,
-
-                    ],
-
-            ]);
-            
-        }else{
-            return response()->json([
-                'success' => 'logged',
-                'errors' => trans('api.logout'),
-                "message"=>trans('api.logout'),
-                ]);
-        }
-
-
-    }
-//////////////////////////////////////////////////
-// PreviousDeals function by Antonious hosny
-    public function PreviousDeals(Request $request){
-        $token = $request->token;
-        if($request->skip && $request->skip > 0 ){
-            $skip = $request->skip.'0' ;
-        }else{
-            $skip = 0 ;
-        }
         $lang = $request->header('lang');
         $dt = Carbon::now();
         $date  = date('Y-m-d', strtotime($dt));
         $time  = date('H:i:s', strtotime($dt));
-        if($token){
-            
-            $user = User::where('remember_token',$token)->first();
-            $now_Deals = Deal::whereDate('expiry_date','=',$date)->whereTime('expiry_time','>=',$time)->where('status','active')->orderBy('id', 'desc')->limit(10)->get();
-            $pervios_Deals = Deal::whereDate('expiry_date','<',$date)->orwhereDate('expiry_date','=',$date)->whereTime('expiry_time','<',$time)->orderBy('id', 'desc')->limit(10)->get();
-            $count_pervios_Deals = 0 ;
-            // return $pervios_Deals ;
-            $pervios_Dealss = [] ;
-            $y = 0;
-          
-            if(sizeof($pervios_Deals) > 0 ){
-                foreach($pervios_Deals as $Deal){
-                    // return asset('img/').'/'. $image->image;
-                    $pervios_Dealss[$y]['Deal_id'] = $Deal->id ;    
-                    if($lang == 'ar'){
-                        $pervios_Dealss[$y]['title'] = $Deal->title_ar ; 
-                        $pervios_Dealss[$y]['disc'] = $Deal->disc_ar ; 
-                        $pervios_Dealss[$y]['info'] = $Deal->info_ar ; 
-                    }else{
-                        $pervios_Dealss[$y]['title'] = $Deal->title_en ; 
-                        $pervios_Dealss[$y]['disc'] = $Deal->disc_en ; 
-                        $pervios_Dealss[$y]['info'] = $Deal->info_en ; 
-                    }
-                    if($Deal->image){
-                        $pervios_Dealss[$y]['image'] = asset('img/').'/'. $Deal->image;
-                    }else{
-                        $pervios_Dealss[$y]['image'] = null ;
-                    }
-                    
-                    $pervios_Dealss[$y]['original_price'] = $Deal->original_price ; 
-                    $pervios_Dealss[$y]['initial_price'] = $Deal->initial_price ; 
-                    $pervios_Dealss[$y]['points'] = $Deal->points ; 
-                    $pervios_Dealss[$y]['tickets'] = $Deal->tickets ; 
-                    $pervios_Dealss[$y]['tender_cost'] = $Deal->tender_cost ; 
-                    $pervios_Dealss[$y]['tender_edit_cost'] = $Deal->tender_edit_cost ; 
-                    $pervios_Dealss[$y]['tender_coupon'] = $Deal->tender_coupon ; 
-                    $pervios_Dealss[$y]['expiry_date'] = date('d-m-Y H:i:s', strtotime($Deal->expiry_date) );  ; 
-                    $favorite = Favorite::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
-                    if($favorite){
-                        $pervios_Dealss[$y]['is_favorite'] = 'true' ;
-                    }else{
-                        $pervios_Dealss[$y]['is_favorite'] = 'false' ;
-                    }
-                    $ticket = Ticket::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
-                    if($ticket){
-                        $pervios_Dealss[$y]['my_ticket_points'] = $ticket->points ;
-                    }else{
-                        $pervios_Dealss[$y]['my_ticket_points'] = null ;
-                    }
-                    $y ++ ; 
-                    $count_pervios_Deals ++ ;
-                }
-            }
-            
-            return response()->json([
-                'success' => 'success',
-                'errors' => null ,
-                'message' => trans('api.fetch'),
-                'data' => [
-                    'pervious_Deals' => $pervios_Dealss ,
-                    'count_pervious_Deals' => $count_pervios_Deals,
-                    ],
-
-            ]);
-            
-        }else{
-            return response()->json([
-                'success' => 'logged',
-                'errors' => trans('api.logout'),
-                "message"=>trans('api.logout'),
-                ]);
-        }
-
-
-    }
-///////////////////////////////////////////////////
-// Categorys function by Antonious hosny
-    public function Categorys(Request $request){
-        $lang = $request->header('lang');
-        $Categorys = Category::where('status','active')->get();
-        if(sizeof($Categorys) > 0 ){
-            $i = 0;
-            foreach($Categorys as $Category){
-                $Categoryss[$i]['id'] = $Category->id ; 
-                if($lang == 'ar'){
-                    $Categoryss[$i]['name'] = $Category->name_ar ; 
-                    $Categoryss[$i]['disc'] = $Category->disc_ar ; 
-
-                }else{
-                    $Categoryss[$i]['name'] = $Category->name_en ; 
-                    $Categoryss[$i]['disc'] = $Category->disc_en ; 
-                }
-                if($Category->image){
-                    $Categoryss[$i]['image'] = asset('img/').'/'. $Category->image;
-                }else{
-                    $Categoryss[$i]['image'] = null ;
-                }
-                $i ++ ; 
-            }
-        }
-        else{
-            $Categoryss = [];
-        }
-        return response()->json([
-            'success' => 'success',
-            'errors' => null ,
-            'message' => trans('api.fetch'),
-            'data' => $Categoryss,
-
-        ]);
-            
-        
-   
-    }   
-///////////////////////////////////////////////////
-// SubCategorys function by Antonious hosny
-    public function SubCategorys(Request $request){
-            $lang = $request->header('lang');
-            $rules=array(
-                'category_id'      =>'required',
-            );
-            $validator  = Validator::make($request->all(),$rules);
-            if($validator->fails())
-            {
-                return response()->json([
-                    'success' => 'failed',
-                    'errors'=> 'رقم القسم مطلوب',
-                    'message' =>'رقم القسم مطلوب',
-                    'data' =>  null ,
-                ]);
-            }
-            $SubCategorys = SubCategory::where('category_id',$request->category_id)->where('status','active')->get();
-            if(sizeof($SubCategorys) > 0 ){
-                $SubCategoryss = []; 
-                $i = 0 ;
-                foreach($SubCategorys as $SubCategory){
-                    $SubCategoryss[$i]['id']        = $SubCategory->id ;   
-                    if($lang == 'ar'){
-                        $SubCategoryss[$i]['name'] = $SubCategory->name_ar ; 
-                        $SubCategoryss[$i]['disc'] = $SubCategory->disc_ar ; 
-    
-                    }else{
-                        $SubCategoryss[$i]['name'] = $SubCategory->name_en ; 
-                        $SubCategoryss[$i]['disc'] = $SubCategory->disc_en ; 
-                    }
-                    if($SubCategory->image){
-                        $SubCategoryss[$i]['image']   = asset('img/').'/'. $SubCategory->image;
-                    }
-                    else{
-                        $SubCategoryss[$i]['image']   = null;
-                    }
-
-                    $i ++ ; 
-                }
-       
-                return response()->json([
-                    'success' => 'success',
-                    'errors' => null ,
-                    'message' => trans('api.fetch'),
-                    'data' => $SubCategoryss ,
-                ]);
-            }
-            else{
-                return response()->json([
-                    'success' => 'failed',
-                    'errors' => 'لا يوجد اقسام',
-                    'message' => 'لا يوجد اقسام ',
-                    'data' => null 
-
-                ]);
-            }
-        // }
-        // else{
-        //     $errors = trans('api.logged_out');
-        //     return response()->json([
-        //         'success' => 'logged',
-        //         'errors' => $errors ,
-        //         'message' => trans('api.logged_out'),
-        //         'data' => null,
-        //     ]);
-        // }
-            
-    }   
-///////////////////////////////////////////////////
-// SubCategoryDeals function by Antonious hosny
-    public function SubCategoryDeals(Request $request){
-        $token = $request->token;
-        if($request->skip && $request->skip > 0 ){
-            $skip = $request->skip.'0' ;
-        }else{
-            $skip = 0 ;
-        }
-        $lang = $request->header('lang');
-        $dt = Carbon::now();
-        // $date = $dt->toDateString();
-        $date  = date('Y-m-d H:i:s', strtotime($dt));
-        if($token){
-            
-            $user = User::where('remember_token',$token)->first();
-            $Deals = Deal::where('sub_id','<',$request->subcategory_id)->where('status','active')->orderBy('id', 'desc')->skip($skip)->limit(10)->get();
-            $count_pervios_Deals = Deal::where('sub_id','<',$request->subcategory_id)->where('status','active')->orderBy('id', 'desc')->count('id');
-            // return $pervios_Deals ;
-            $Dealss = [] ;
-
-            if(sizeof($Deals) > 0 ){
-                $i = 0;
-                foreach($Deals as $Deal){
-                    // return asset('img/').'/'. $image->image;
-                    $Dealss[$i]['Deal_id'] = $Deal->id ;    
-                    if($lang == 'ar'){
-                        $Dealss[$i]['title'] = $Deal->title_ar ; 
-                        $Dealss[$i]['disc'] = $Deal->disc_ar ; 
-                        $Dealss[$i]['info'] = $Deal->info_ar ; 
-                    }else{
-                        $Dealss[$i]['title'] = $Deal->title_en ; 
-                        $Dealss[$i]['disc'] = $Deal->disc_en ; 
-                        $Dealss[$i]['info'] = $Deal->info_en ; 
-                    }
-                    if($Deal->image){
-                        $Dealss[$i]['image'] = asset('img/').'/'. $Deal->image;
-                    }else{
-                        $Dealss[$i]['image'] = null ;
-                    }
-                    
-                    $Dealss[$i]['original_price'] = $Deal->original_price ; 
-                    $Dealss[$i]['initial_price'] = $Deal->initial_price ; 
-                    $Dealss[$i]['points'] = $Deal->points ; 
-                    $Dealss[$i]['tickets'] = $Deal->tickets ; 
-                    $Dealss[$i]['tender_cost'] = $Deal->tender_cost ; 
-                    $Dealss[$i]['tender_edit_cost'] = $Deal->tender_edit_cost ; 
-                    $Dealss[$i]['tender_coupon'] = $Deal->tender_coupon ; 
-                    $Dealss[$i]['expiry_date'] = $Deal->expiry_date .' '.$Deal->expiry_time;   
-                    $favorite = Favorite::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
-                    if($favorite){
-                        $Dealss[$i]['is_favorite'] = 'true' ;
-                    }else{
-                        $Dealss[$i]['is_favorite'] = 'false' ;
-                    }
-                    $ticket = Ticket::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
-                    if($ticket){
-                        $Dealss[$i]['my_ticket_points'] = $ticket->points ;
-                    }else{
-                        $Dealss[$i]['my_ticket_points'] = null ;
-                    }
-                    $i ++ ; 
-                }
-            }
-            
-            return response()->json([
-                'success' => 'success',
-                'errors' => null ,
-                'message' => trans('api.fetch'),
-                'data' => [
-                    'Dealss' => $Dealss ,
-                    'count_Deals' => $count_pervios_Deals,
-                    ],
-
-            ]);
-            
-        }else{
-            return response()->json([
-                'success' => 'logged',
-                'errors' => trans('api.logout'),
-                "message"=>trans('api.logout'),
-                ]);
-        }
-
-
-    }
-///////////////////////////////////////////////////
-// DealDetails function by Antonious hosny
-    public function DealDetails(Request $request){
-        $token = $request->token;
-        if($token == ''){
-            $errors = trans('api.logged_out');
-            return response()->json([
-                'success' => 'logged',
-                'errors' => $errors ,
-                'message' => trans('api.logged_out'),
-                'data' => null,
-            ]);
-        }
-        $user = User::where('remember_token',$token)->first();
-        // return $user ;
-        $dt = Carbon::now();
-        $time = $dt->format('H:i:s');
-        // $date = $dt->toDateString();
-        $date  = date('Y-m-d H:i:s', strtotime($dt));
-        if($user){
-            $lang = $request->header('lang');
-            $rules=array(
-                'Deal_id'      =>'required',
-            );
-
-            $validator  = Validator::make($request->all(),$rules);
-            if($validator->fails())
-            {
-                $messages = 'رقم الصفقة مطلوب';
-                return response()->json([
-                    'success' => 'failed',
-                    'errors'=> $messages,
-                    'message' => $messages,
-                    'data' =>  null ,
-                ]);
-            }
-            $Deal = Deal::where('id',$request->Deal_id)->where('status','active')->first();  
-            // return $request->Deal_id ;
-            $now_Dealss = null;
-            if($Deal){
-
-                $now_Dealss['Deal_id'] = $Deal->id ;    
-                if($lang == 'ar'){
-                    $now_Dealss['title'] = $Deal->title_ar ; 
-                    $now_Dealss['disc'] = $Deal->disc_ar ; 
-                    $now_Dealss['info'] = $Deal->info_ar ; 
-                }else{
-                    $now_Dealss['title'] = $Deal->title_en ; 
-                    $now_Dealss['disc'] = $Deal->disc_en ; 
-                    $now_Dealss['info'] = $Deal->info_en ; 
-                }
-                if($Deal->image){
-                    $now_Dealss['image'] = asset('img/').'/'. $Deal->image;
-                }else{
-                    $now_Dealss['image'] = null ;
-                }
-                
-                $now_Dealss['original_price'] = $Deal->original_price ; 
-                $now_Dealss['initial_price'] = $Deal->initial_price ; 
-                $now_Dealss['points'] = $Deal->points ; 
-                $now_Dealss['tickets'] = $Deal->tickets ; 
-                $now_Dealss['tender_cost'] = $Deal->tender_cost ; 
-                $now_Dealss['tender_edit_cost'] = $Deal->tender_edit_cost ; 
-                $now_Dealss['tender_coupon'] = $Deal->tender_coupon ; 
-                $now_Dealss['expiry_date'] = $Deal->expiry_date.' '.$Deal->expiry_time  ; 
-                // return $Deal->images ;
-                $favorite = Favorite::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
-                    if($favorite){
-                        $now_Dealss['is_favorite'] = 'true' ;
-                    }else{
-                        $now_Dealss['is_favorite'] = 'false' ;
-                    }
-                // $images = json_decode($Deal->images) ;
-                // return $images ;
-                // $deal_images  = [] ;
-                // $i =0 ;
-                // if(sizeof($images) > 0){
-                //     foreach($images as $image){
-                //         if($image){
-                //             $deal_images[$i]['image'] = asset('img/').'/'. $image;
-                //         }else{
-                //             $deal_images[$i]['image'] = null ;
-                //         }
-                //         $i++ ;
-                //     }
-                // }
-                // $now_Dealss['deal_images'] = $deal_images ;
-                $now_Dealss['my_ticket_points'] =  null;
-                
-                $dt = Carbon::now();
-                $time = $dt->format('H:i:s');
-                // $date = $dt->toDateString();
-                
-                $date2 = date('Y-m-d H:i:s', strtotime($dt));
-                $ticketss = Ticket::where('deal_id',$Deal->id)->get();
-                $expiry_date = date('Y-m-d H:i:s', strtotime($Deal->expiry_date) );
-                if($date2 >= $expiry_date){
-                    foreach($ticketss as $ticket){
-                        $ticket->status = '0';
-                        $ticket->save();
-                    }
-                    $ticket = Ticket::where('deal_id',$Deal->id)->orderBy('points','desc')->first();
-                    if($ticket){
-                        
-                        $ticket->status = '1';
-                        $ticket->save();
-                    }
-                    $now_Dealss['winner_name'] = $ticket->name ;
-                    $now_Dealss['winner_id'] = $ticket->user_id ;
-                    $tickets = Ticket::where('deal_id',$Deal->id)->skip(1)->limit(5)->orderBy('points','desc')->get();
-                    // return $tickets ;
-                    $five_second_users  = [];
-                    $n= 0;
-                    if(sizeof($tickets) > 0){
-                        
-                        foreach( $tickets as $ticket){
-                            $five_second_users[$n]['user_name'] = $ticket->name ;
-                            $five_second_users[$n]['user_id'] = $ticket->user_id ;
-                            $n++;
-                        }
-                    }
-                    $now_Dealss['five_second_users'] = $five_second_users ;
-                }
-                else{
-                    $ticket = Ticket::where('deal_id',$Deal->id)->where('user_id',$user->id)->first();
-                    if($ticket){
-                        $now_Dealss['my_ticket_points'] = $ticket->points ;
-                    }
-                    $now_Dealss['winner_name'] = null ;
-                    $now_Dealss['winner_id'] = null ;
-                    $now_Dealss['five_second_users'] = null ;
-                }
-            }
-            return response()->json([
-                'success' => 'success',
-                'errors' => null ,
-                'message' => trans('api.fetch'),
-                'data' =>[
-                    'DealDetails' => $now_Dealss ,
-                ] 
-
-            ]);
-        }
-        else{
-            $errors = trans('api.logged_out');
-            return response()->json([
-                'success' => 'logged',
-                'errors' => $errors ,
-                'message' => trans('api.logged_out'),
-                'data' => null,
-            ]);
-        } 
-    }   
-/////////////////////////////////////////////////////
-// Packages function by Antonious hosny
-    public function Packages(Request $request){
-        $lang = $request->header('lang');
-        $Packages = Package::where('status','active')->get();
-        if(sizeof($Packages) > 0 ){
-            $i = 0;
-            foreach($Packages as $Package){
-                $Packagess[$i]['id'] = $Package->id ; 
-                if($lang == 'ar'){
-                    $Packagess[$i]['title'] = $Package->title_ar ; 
-                }else{
-                    $Packagess[$i]['title'] = $Package->title_en ;      
-                }
-                $Packagess[$i]['cost'] = $Package->cost ;      
-                $Packagess[$i]['points'] = $Package->points ;      
-                $Packagess[$i]['coupons'] = $Package->coupons ;      
-                
-                $i ++ ; 
-            }
-        }
-        else{
-            $Packagess = [];
-        }
-        return response()->json([
-            'success' => 'success',
-            'errors' => null ,
-            'message' => trans('api.fetch'),
-            'data' => $Packagess,
-
-        ]);
-            
-        
-
-    }   
-//////////////////////////////////////////////////////
-// Charge function by Antonious hosny
-    public function Charge(Request $request){
-        $token = $request->token;
         if($token){
             $user = User::where('remember_token',$token)->first();
             if($user){
 
-                $lang = $request->header('lang');
+                $containers = Container::where('status','active')->orderBy('id', 'desc')->skip($skip)->limit(10)->get();
+                $containers_count = Container::where('status','active')->count('id');
+                // return $containers_count ;
+                $containerss = [] ;
+                $i =0 ;
+                if(sizeof($containers) > 0 ){
+                    foreach($containers as $container){
+                        
+                        $containerss[$i]['container_id'] = $container->id ;    
+                        if($lang == 'ar'){
+                            $containerss[$i]['container_name'] = $container->name_ar ; 
+                            $containerss[$i]['container_desc'] = $container->desc_ar ; 
+                        }else{
+                            $containerss[$i]['container_name'] = $container->name_en ; 
+                            $containerss[$i]['container_desc'] = $container->desc_en ; 
+                        }
+                        if($container->image){
+                            $containerss[$i]['image'] = asset('img/').'/'. $container->image;
+                        }else{
+                            $containerss[$i]['image'] = null ;
+                        }
+                        $containerss[$i]['size'] = $container->size ; 
+
+                        $i ++ ;                    
+                        
+                    }
+                }
+                return response()->json([
+                    'success' => 'success',
+                    'errors' => null ,
+                    'message' => trans('api.fetch'),
+                    'data' => [
+                        'containers' => $containerss,
+                        'containers_count' => $containers_count,
+                        ],
+    
+                ]);
+            }else{
+                return response()->json([
+                    'success' => 'logged',
+                    'errors' => trans('api.logout'),
+                    "message"=>trans('api.logout'),
+                ]);
+            }
+            
+        }else{
+            return response()->json([
+                'success' => 'logged',
+                'errors' => trans('api.logout'),
+                "message"=>trans('api.logout'),
+            ]);
+        }
+
+
+    }
+//////////////////////////////////////////////////
+// MakeOrder function by Antonious hosny
+    public function MakeOrder(Request $request){
+        $token = $request->token;
+        $lang = $request->header('lang');
+        $dt = Carbon::now();
+        $date  = date('Y-m-d', strtotime($dt));
+        $time  = date('H:i:s', strtotime($dt));
+        if($token){
+
+            $user = User::where('remember_token',$token)->first();
+            if($user){
                 $rules=array(
-                    'package_id'      =>'required',
+                    'container_id'      =>'required',
+                    'num_containers'    => 'required',
+                    'lat'    => 'required',
+                    'lng'    => 'required',
                 );
-                $validator  = Validator::make($request->all(),$rules);
+                $validator  = \Validator::make($request->all(),$rules);
                 if($validator->fails())
                 {
+                    $messages = $validator->messages();
+                    $transformed = [];
+        
+                    foreach ($messages->all() as $field => $message) {
+                        $transformed[] = [
+                            'message' => $message
+                        ];
+                    }
                     return response()->json([
                         'success' => 'failed',
-                        'errors'=> 'رقم القسم مطلوب',
-                        'message' =>'رقم القسم مطلوب',
-                        'data' =>  null ,
+                        'errors'  => $transformed,
+                        'message' => trans('api.validation_error'),
+                        'data'    => null ,
                     ]);
                 }
+                $container = Container::where('id',$request->container_id)->with('centers')->first();
+                $distancess = [] ;
+                $i = 0;
+                if(sizeof($container->centers) > 0){
 
-                $Package = Package::where('id',$request->package_id)->first();
-                if($Package){
-                   $charge = new Charge ; 
-                   $charge->user_name = $user->name ;
-                   $charge->package = $Package->title_ar ;
-                   $charge->points = $Package->points ;
-                   $charge->package_id = $Package->id ;
-                   $charge->user_id = $user->id ;
-                   $charge->save() ;
-                   $user->points +=  $Package->points ;
-                   $user->coupons +=  $Package->coupons ;
-                   $user->save();
+                    foreach ($container->centers as $center) {
+                       $distance =  $this->GetDistance($request->lat, $center->lat, $request->lng, $center->lng, 'K');
+                       $distancess[$center->id] = $distance  ;
+                       $i++ ;
+                        // print   $distance.' KM ' .'</br>';
+                    }
+                    asort($distancess)  ;
+                    // reset($distancess);
+                    $first_key = key($distancess);
+
+                    $CenterContainer = CenterContainer::where('center_id',$first_key)->where('container_id',$request->container_id)->with('center')->with('container')->first();
+                    //    return $CenterContainer;
+                    $user->city_id = $request->city_id ;
+                    $user->area_id = $request->area_id ;
+                    $user->save();
+                    $order = new Order ;
+                    $order->user_name = $user->name ;
+                    $order->user_mobile = $user->mobile ;
+                    if($user->City)
+                    $order->city = $user->City->name_ar ;
+                    if($user->Area)
+                    $order->area = $user->Area->name_ar ;
+                    $order->let = $request->let ;
+                    $order->lang = $request->lng ;
+                    $order->container_name_ar = $CenterContainer->container->name_ar ;
+                    $order->container_name_en = $CenterContainer->container->name_en ;
+                    $order->container_size = $CenterContainer->container->size ;
+                    $order->no_container = $request->num_containers ;
+                    $order->notes = $request->notes ;
+                    $order->user_id = $user->id ;
+                    $order->center_id = $CenterContainer->center->id ;
+                    $order->container_id = $CenterContainer->container->id ;
+                    $order->price = $CenterContainer->price ;
+                    $order->total = $CenterContainer->price * $request->num_containers ;
+                    $order->status = 'pending' ;
+                    $order->save();
+
+                    $msg = "  لديك طلب جديد من " . $user->name ;
+                    $type = "order";
+                    $title = "  لديك طلب جديد من " . $user->name ;
+                    $center = User::where('id', $CenterContainer->center->id)->first(); 
+                    $center->notify(new Notifications($msg,$type ));
+                    $device_token = $center->device_token ;
+                    if($device_token){
+                        $this->notification($device_token,$title,$msg);
+                    }
+                    
+                    $order = Order::where('id',$order->id)->with('center')->with('container')->first();
+                    $orders = [];
+                    if($order){
+                        $orders['container_id'] =   $order->container->id ;
+                        $orders['center_id'] =   $order->center->id ;
+                        $orders['center_name'] =   $order->center->name ;
+                        if($lang == 'ar'){
+                            $orders['container_name'] =   $order->container->name_ar ;
+                        }else{
+                            $orders['container_name'] =   $order->container->name_en ;
+                        }
+                        $orders['container_size'] =   $order->container->size ;
+                        $orders['num_containers'] =   $order->no_container;
+                        $orders['container_price'] =   $order->price ;
+                        $orders['total'] =   $order->total ;
+                        $orders['status'] =   trans('api.'.$order->status) ;
+                    }
                     return response()->json([
                         'success' => 'success',
                         'errors' => null ,
                         'message' => trans('api.save'),
-                        'data' => $charge ,
+                        'data' => $orders ,
                     ]);
                 }
-                else{
-                    return response()->json([
-                        'success' => 'failed',
-                        'errors' => 'لا توجد باقة',
-                        'message' => 'لا توجد باقة',
-                        'data' => null 
-    
+                return response()->json([
+                    'success' => 'failed',
+                    'errors' => trans('api.notfound'),
+                    "message"=>trans('api.notfound'),
                     ]);
-                }
-            }
-            else{
-                $errors = trans('api.logged_out');
+                
+            }else{
                 return response()->json([
                     'success' => 'logged',
-                    'errors' => $errors ,
-                    'message' => trans('api.logged_out'),
-                    'data' => null,
-                ]);
-            }
-        }
-        else{
-            $errors = trans('api.logged_out');
-            return response()->json([
-                'success' => 'logged',
-                'errors' => $errors ,
-                'message' => trans('api.logged_out'),
-                'data' => null,
-            ]);
-        }
-        
-    } 
-//////////////////////////////////////////////////////
-// AddTicket function by Antonious hosny
-    public function AddTicket(Request $request){
-        $token = $request->token;
-        $dt = Carbon::now();
-        $time = $dt->format('H:i:s');
-        $date = $dt->toDateString();
-        if($token){
-            $user = User::where('remember_token',$token)->first();
-            if($user){
-
-                $lang = $request->header('lang');
-                $rules=array(
-                    'deal_id'      =>'required',
-                    'points'      =>'required',
-                );
-                $validator  = \Validator::make($request->all(),$rules);
-                if($validator->fails())
-                {
-                    $messages = $validator->messages();
-                    $transformed = [];
-        
-                    foreach ($messages->all() as $field => $message) {
-                        $transformed[] = [
-                            'message' => $message
-                        ];
-                    }
-                    return response()->json([
-                        'success' => 'failed',
-                        'errors'  => $transformed,
-                        'message' => trans('api.validation_error'),
-                        'data'    => null ,
+                    'errors' => trans('api.logout'),
+                    "message"=>trans('api.logout'),
                     ]);
-                }
-
-                $deal = Deal::where('id',$request->deal_id)->first();
-                if($deal){
-                    $date1 = strtotime($deal->expiry_date);
-                    $date2 = date('Y-m-d', $date1);
-                    if($date2 < $date){
-                        return response()->json([
-                            'success' => 'failed',
-                            'errors'=> trans('api.date_not_valid'),
-                            'message' => trans('api.date_not_valid'),
-                            'data' =>  null ,
-                        ]);
-                    }
-                    else{
-                        $time1 = date('H:i:s', $date1);
-                        if($date2 == $date && $time > $time1){
-                            return response()->json([
-                                'success' => 'failed',
-                                'errors'=> trans('api.time_not_valid'),
-                                'message' => trans('api.time_not_valid'),
-                                'data' =>  null ,
-                            ]);
-                        }
-                        $ticket = Ticket::where('user_id',$user->id)->where('deal_id',$deal->id)->first();
-                        if($ticket){
-                            if($user->points >= $deal->tender_edit_cost){
-                                $user->points -=  $deal->tender_edit_cost ;
-                                $user->save();
-                                $ticket->points = $request->points ;
-                                $ticket->save();
-                            }else{
-                                return response()->json([
-                                    'success' => 'failed',
-                                    'errors'=> trans('api.you_dont_have_enouph_points'),
-                                    'message' => trans('api.you_dont_have_enouph_points'),
-                                    'data' =>  null ,
-                                ]);
-                            }
-                        }else{
-                            if($user->points >= $deal->tender_cost){
-
-                                $user->points -=  $deal->tender_cost ;
-                                $user->coupons += $deal->tender_coupon ;
-                                $user->save();
-                                $ticket = new  Ticket ;
-                                $ticket->name = $user->name ;
-                                $ticket->user_id = $user->id ;
-                                $ticket->deal_id = $deal->id ;
-                                $ticket->points = $request->points ;
-                                $ticket->save();
-                                $deal->tickets += 1 ;
-                                $deal->save();
-                            }else{
-                                return response()->json([
-                                    'success' => 'failed',
-                                    'errors'=> trans('api.you_dont_have_enouph_points'),
-                                    'message' => trans('api.you_dont_have_enouph_points'),
-                                    'data' =>  null ,
-                                ]);
-                            }
-                        }
-                        return response()->json([
-                            'success' => 'success',
-                            'errors' => null ,
-                            'message' => trans('api.save'),
-                            'data' => $ticket ,
-                        ]);
-                       
-                    }
-                    
-                }
-                else{
-                    return response()->json([
-                        'success' => 'failed',
-                        'errors' => 'لا توجد باقة',
-                        'message' => 'لا توجد باقة',
-                        'data' => null 
-
-                    ]);
-                }
             }
-            else{
-                $errors = trans('api.logged_out');
-                return response()->json([
-                    'success' => 'logged',
-                    'errors' => $errors ,
-                    'message' => trans('api.logged_out'),
-                    'data' => null,
-                ]);
-            }
-        }
-        else{
-            $errors = trans('api.logged_out');
+        }else{
             return response()->json([
                 'success' => 'logged',
-                'errors' => $errors ,
-                'message' => trans('api.logged_out'),
-                'data' => null,
-            ]);
-        }
-        
-    } 
-//////////////////////////////////////////////////////
-// Favorite function by Antonious hosny
-    public function Favorite(Request $request){
-        $token = $request->token;
-        if($token == ''){
-            $errors = trans('api.logged_out');
-            return response()->json([
-                'success' => 'logged',
-                'errors' => $errors ,
-                'message' => trans('api.logged_out'),
-                'data' => null,
-            ]);
-        }
-        $user = User::where('remember_token',$token)->first();
-        // return $user ;
-        if($user){
-            $dt = Carbon::now();
-            $time = $dt->format('H:i:s');
-            $date = $dt->toDateString();
-            $user = User::where('remember_token',$token)->first();
-            if($user){
-
-                $lang = $request->header('lang');
-                $rules=array(
-                    'deal_id'      =>'required',
-                );
-                $validator  = \Validator::make($request->all(),$rules);
-                if($validator->fails())
-                {
-                    $messages = $validator->messages();
-                    $transformed = [];
-        
-                    foreach ($messages->all() as $field => $message) {
-                        $transformed[] = [
-                            'message' => $message
-                        ];
-                    }
-                    return response()->json([
-                        'success' => 'failed',
-                        'errors'  => $transformed,
-                        'message' => trans('api.validation_error'),
-                        'data'    => null ,
-                    ]);
-                }
-
-                $favorite = Favorite::where('user_id',$user->id)->where('deal_id',$request->deal_id)->first();
-                if($favorite){
-                   $favorite->delete();
-                   
-                }
-                else{
-                    $favorite = new Favorite;
-                    $favorite->user_id = $user->id ;
-                    $favorite->deal_id = $request->deal_id ;
-                    $favorite->save();
-                   
-                }
-                $Deal = Deal::where('id',$request->deal_id)->where('status','active')->first();  
-                $now_Dealss = null;
-                if($Deal){
-
-                    $now_Dealss['Deal_id'] = $Deal->id ;    
-                    if($lang == 'ar'){
-                        $now_Dealss['title'] = $Deal->title_ar ; 
-                        $now_Dealss['disc'] = $Deal->disc_ar ; 
-                        $now_Dealss['info'] = $Deal->info_ar ; 
-                    }else{
-                        $now_Dealss['title'] = $Deal->title_en ; 
-                        $now_Dealss['disc'] = $Deal->disc_en ; 
-                        $now_Dealss['info'] = $Deal->info_en ; 
-                    }
-                    if($Deal->image){
-                        $now_Dealss['image'] = asset('img/').'/'. $Deal->image;
-                    }else{
-                        $now_Dealss['image'] = null ;
-                    }
-                    
-                    $now_Dealss['original_price'] = $Deal->original_price ; 
-                    $now_Dealss['initial_price'] = $Deal->initial_price ; 
-                    $now_Dealss['points'] = $Deal->points ; 
-                    $now_Dealss['tickets'] = $Deal->tickets ; 
-                    $now_Dealss['tender_cost'] = $Deal->tender_cost ; 
-                    $now_Dealss['tender_edit_cost'] = $Deal->tender_edit_cost ; 
-                    $now_Dealss['tender_coupon'] = $Deal->tender_coupon ; 
-                    $now_Dealss['expiry_date'] = date('d-m-Y H:i:s', strtotime($Deal->expiry_date) );   
-                    // return $Deal->images ;
-                    $favorite = Favorite::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
-                        if($favorite){
-                            $now_Dealss['is_favorite'] = 'true' ;
-                        }else{
-                            $now_Dealss['is_favorite'] = 'false' ;
-                        }
-                    $images = json_decode($Deal->images) ;
-                    // return $images ;
-                    $deal_images  = [] ;
-                    $i =0 ;
-                    if(sizeof($images) > 0){
-                        foreach($images as $image){
-                            if($image){
-                                $deal_images[$i]['image'] = asset('img/').'/'. $image;
-                            }else{
-                                $deal_images[$i]['image'] = null ;
-                            }
-                            $i++ ;
-                        }
-                    }
-                    $now_Dealss['deal_images'] = $deal_images ;
-                    
-                }
-                return response()->json([
-                    'success' => 'success',
-                    'errors' => null ,
-                    'message' => trans('api.save'),
-                    'data' => $now_Dealss ,
+                'errors' => trans('api.logout'),
+                "message"=>trans('api.logout'),
                 ]);
-            }
-            else{
-                $errors = trans('api.logged_out');
-                return response()->json([
-                    'success' => 'logged',
-                    'errors' => $errors ,
-                    'message' => trans('api.logged_out'),
-                    'data' => null,
-                ]);
-            }
         }
-        else{
-            $errors = trans('api.logged_out');
-            return response()->json([
-                'success' => 'logged',
-                'errors' => $errors ,
-                'message' => trans('api.logged_out'),
-                'data' => null,
-            ]);
-        }
-        
-    } 
-//////////////////////////////////////////////////////
-// AddAddress function by Antonious hosny
-    public function AddAddress(Request $request){
-        $token = $request->token;
-        if($token == ''){
-            $errors = trans('api.logged_out');
-            return response()->json([
-                'success' => 'logged',
-                'errors' => $errors ,
-                'message' => trans('api.logged_out'),
-                'data' => null,
-            ]);
-        }
-        $user = User::where('remember_token',$token)->first();
-        // return $user ;
-        if($user){
-            $user = User::where('remember_token',$token)->first();
-            if($user){
 
-                $lang = $request->header('lang');
-                $rules=array(
-                    'title'      =>'required',
-                    'disc'      =>'required',
-                    'city_id'      =>'required',
-                    'country_id'      =>'required',
-                    'zip_code'      =>'required',
-                    'mobile'      =>'required',
-                );
-                $validator  = \Validator::make($request->all(),$rules);
-                if($validator->fails())
-                {
-                    $messages = $validator->messages();
-                    $transformed = [];
-        
-                    foreach ($messages->all() as $field => $message) {
-                        $transformed[] = [
-                            'message' => $message
-                        ];
-                    }
-                    return response()->json([
-                        'success' => 'failed',
-                        'errors'  => $transformed,
-                        'message' => trans('api.validation_error'),
-                        'data'    => null ,
-                    ]);
-                }
-                if($request->address_id){
-                    $address = Address::find($request->address_id);
-                }
-                else{
-                    $address = new Address;
-                }
-                $address->user_id = $user->id ;
-                $address->city_id = $request->city_id ;
-                $address->country_id = $request->country_id ;
-                $address->mobile = $request->mobile ;
-                $address->zip_code = $request->zip_code ;
-                $address->title = $request->title ;
-                $address->disc = $request->disc ;
-                $address->save();
-                return response()->json([
-                    'success' => 'success',
-                    'errors' => null ,
-                    'message' => trans('api.save'),
-                    'data' => $address ,
-                ]);
-            }
-            else{
-                $errors = trans('api.logged_out');
-                return response()->json([
-                    'success' => 'logged',
-                    'errors' => $errors ,
-                    'message' => trans('api.logged_out'),
-                    'data' => null,
-                ]);
-            }
-        }
-        else{
-            $errors = trans('api.logged_out');
-            return response()->json([
-                'success' => 'logged',
-                'errors' => $errors ,
-                'message' => trans('api.logged_out'),
-                'data' => null,
-            ]);
-        }
-        
-    } 
-//////////////////////////////////////////////////////
-// MyAddress function by Antonious hosny
-    public function MyAddress(Request $request){
+
+    }
+//////////////////////////////////////////////////
+// MyOrders function by Antonious hosny
+    public function MyOrders(Request $request){
         $token = $request->token;
         $lang = $request->header('lang');
-        if($token == ''){
-            $errors = trans('api.logged_out');
-            return response()->json([
-                'success' => 'logged',
-                'errors' => $errors ,
-                'message' => trans('api.logged_out'),
-                'data' => null,
-            ]);
-        }
-        $user = User::where('remember_token',$token)->first();
-        // return $user ;
-        if($user){
+        $dt = Carbon::now();
+        $date  = date('Y-m-d', strtotime($dt));
+        $time  = date('H:i:s', strtotime($dt));
+        if($token){
             $user = User::where('remember_token',$token)->first();
-            if($user){
-
-                
-                $addresses = Address::where('user_id',$user->id)->with('city')->with('country')->get();
-                // return  $addresses ;
-                $addresss = [];
-                $i = 0;
-                if(sizeof($addresses)> 0){
-
-                    foreach($addresses as $address){
-                        $addresss[$i]['title'] = $address->title ;
-                        $addresss[$i]['disc'] = $address->disc ;
-                        $addresss[$i]['zip_code'] = $address->zip_code ;
-                        $addresss[$i]['city_id'] = $address->city_id ;
-                        if($address->city){
-                            if($lang == 'ar'){
-                                $addresss[$i]['city'] = $address->city->name_ar ;
-                            }else{
-                                $addresss[$i]['city'] = $address->city->name_en ;
-                            }
+            if($user && $user->role == 'user'){
+                // $orderss = Order::where('user_id',$user->id)->with('center')->where('status','<>','delivered')->Where('status','<>','canceled')->with('container')->get();
+                $orderss = Order::where('user_id',$user->id)->with('center')->with('container')->get();
+                if(sizeof($orderss) > 0){
+                    $orders = [];
+                    $i = 0 ;
+                    foreach($orderss as $order){
+                        $orders[$i]['order_id'] =   $order->id ;
+                        $orders[$i]['container_id'] =   $order->container->id ;
+                        $orders[$i]['center_id'] =   $order->center->id ;
+                        $orders[$i]['center_name'] =   $order->center->name ;
+                        if($lang == 'ar'){
+                            $orders[$i]['container_name'] =   $order->container->name_ar ;
                         }else{
-                            $addresss[$i]['city'] = '';
+                            $orders[$i]['container_name'] =   $order->container->name_en ;
                         }
-                        $addresss[$i]['country_id'] = $address->country_id ;
-                        if($address->country){
-                            if($lang == 'ar'){
-                                $addresss[$i]['country'] = $address->country->name_ar ;
+                        $orders[$i]['container_size'] =   $order->container->size ;
+                        $orders[$i]['num_containers'] =   $order->no_container;
+                        $orders[$i]['container_price'] =   $order->price ;
+                        if($order->container){
+                            if($order->container->image){
+                                $orders[$i]['image'] = asset('img/').'/'. $container->image;
                             }else{
-                                $addresss[$i]['country'] = $address->country->name_en ;
+                                $orders[$i]['image'] = null ;
                             }
                         }
-                        else{
-                            $addresss[$i]['country'] = '';
-                        }
-                        $i ++ ;
-
+                        $orders[$i]['total'] =   $order->total ;
+                        // $orders[$i]['status'] =   trans('api.'.$order->status) ;
+                        $orders[$i]['status'] =   $order->status;
+                        $orders[$i]['created_at'] =   $order->created_at;
+                        $i++;
                     }
+                    return response()->json([
+                        'success' => 'success',
+                        'errors' => null ,
+                        'message' => trans('api.fetch'),
+                        'data' => $orders ,
+                    ]);
                 }
-               
                 return response()->json([
-                    'success' => 'success',
-                    'errors' => null ,
-                    'message' => trans('api.fetch'),
-                    'data' => $addresss ,
-                ]);
-            }
-            else{
-                $errors = trans('api.logged_out');
+                    'success' => 'failed',
+                    'errors' => trans('api.notfound'),
+                    "message"=>trans('api.notfound'),
+                    ]);
+                
+            }else{
                 return response()->json([
                     'success' => 'logged',
-                    'errors' => $errors ,
-                    'message' => trans('api.logged_out'),
-                    'data' => null,
-                ]);
+                    'errors' => trans('api.logout'),
+                    "message"=>trans('api.logout'),
+                    ]);
             }
-        }
-        else{
-            $errors = trans('api.logged_out');
+        }else{
             return response()->json([
                 'success' => 'logged',
-                'errors' => $errors ,
-                'message' => trans('api.logged_out'),
-                'data' => null,
-            ]);
+                'errors' => trans('api.logout'),
+                "message"=>trans('api.logout'),
+                ]);
         }
-        
-    } 
-//////////////////////////////////////////////////////
-// DeleteAddress function by Antonious hosny
-    public function DeleteAddress(Request $request){
+    }
+//////////////////////////////////////////////////
+// CanceledOrders function by Antonious hosny
+    public function CanceleOrder(Request $request){
         $token = $request->token;
-        if($token == ''){
-            $errors = trans('api.logged_out');
-            return response()->json([
-                'success' => 'logged',
-                'errors' => $errors ,
-                'message' => trans('api.logged_out'),
-                'data' => null,
-            ]);
-        }
-        $user = User::where('remember_token',$token)->first();
-        // return $user ;
-        if($user){
+        $lang = $request->header('lang');
+        $dt = Carbon::now();
+        $date  = date('Y-m-d', strtotime($dt));
+        $time  = date('H:i:s', strtotime($dt));
+        if($token){
             $user = User::where('remember_token',$token)->first();
-            if($user){
-
-                $lang = $request->header('lang');
+            if($user && $user->role == 'user'){
                 $rules=array(
-                    'address_id'      =>'required',
+                    'order_id'      =>'required',
                 );
                 $validator  = \Validator::make($request->all(),$rules);
                 if($validator->fails())
@@ -2249,232 +1381,101 @@ class ApiController extends Controller
                         'data'    => null ,
                     ]);
                 }
-                if($request->address_id){
-                    $address = Address::find($request->address_id);
-                    $address->delete();
-                   
+                $order = Order::where('id',$request->order_id)->first();
+                if($order){
+                    $order->status = 'canceled' ;
+                    $order->save();
+                    return response()->json([
+                        'success' => 'success',
+                        'errors' => null ,
+                        'message' => trans('api.delete'),
+                        'data' => null ,
+                    ]);
                 }
-               
                 return response()->json([
-                    'success' => 'success',
-                    'errors' => null ,
-                    'message' => trans('api.success'),
-                    'data' => null ,
-                ]);
-            }
-            else{
-                $errors = trans('api.logged_out');
+                    'success' => 'failed',
+                    'errors' => trans('api.notfound'),
+                    "message"=>trans('api.notfound'),
+                    ]);
+                
+            }else{
                 return response()->json([
                     'success' => 'logged',
-                    'errors' => $errors ,
-                    'message' => trans('api.logged_out'),
-                    'data' => null,
-                ]);
+                    'errors' => trans('api.logout'),
+                    "message"=>trans('api.logout'),
+                    ]);
             }
-        }
-        else{
-            $errors = trans('api.logged_out');
+        }else{
             return response()->json([
                 'success' => 'logged',
-                'errors' => $errors ,
-                'message' => trans('api.logged_out'),
-                'data' => null,
-            ]);
+                'errors' => trans('api.logout'),
+                "message"=>trans('api.logout'),
+                ]);
         }
-        
-    } 
-//////////////////////////////////////////////////////
-// MyFavorite function by Antonious hosny
-    public function MyFavorite(Request $request){
+    }
+//////////////////////////////////////////////////
+// OrdersHistory function by Antonious hosny
+    public function OrdersHistory(Request $request){
         $token = $request->token;
-        if($token == ''){
-            $errors = trans('api.logged_out');
-            return response()->json([
-                'success' => 'logged',
-                'errors' => $errors ,
-                'message' => trans('api.logged_out'),
-                'data' => null,
-            ]);
-        }
-        $user = User::where('remember_token',$token)->first();
-        // return $user ;
-        if($user){
+        $lang = $request->header('lang');
+        $dt = Carbon::now();
+        $date  = date('Y-m-d', strtotime($dt));
+        $time  = date('H:i:s', strtotime($dt));
+        if($token){
             $user = User::where('remember_token',$token)->first();
-            if($user){
-
-                $lang = $request->header('lang');
-                $favorites = Favorite::where('user_id',$user->id)->get();
-                $now_Dealss = null;
-                $i = 0 ;
-                foreach($favorites as $favorite){
-
-                    $Deal = Deal::where('id',$favorite->deal_id)->where('status','active')->first();  
-                    if($Deal){
-    
-                        $now_Dealss[$i]['Deal_id'] = $Deal->id ;    
+            if($user && $user->role == 'user'){
+                $orderss = Order::where('user_id',$user->id)->with('center')->where('status','delivered')->Orwhere('status','canceled')->with('container')->get();
+                if(sizeof($orderss) > 0){
+                    $orders = [];
+                    $i = 0 ;
+                    foreach($orderss as $order){
+                        $orders[$i]['order_id'] =   $order->id ;
+                        $orders[$i]['container_id'] =   $order->container->id ;
+                        $orders[$i]['center_id'] =   $order->center->id ;
+                        $orders[$i]['center_name'] =   $order->center->name ;
                         if($lang == 'ar'){
-                            $now_Dealss[$i]['title'] = $Deal->title_ar ; 
-                            $now_Dealss[$i]['disc'] = $Deal->disc_ar ; 
-                            $now_Dealss[$i]['info'] = $Deal->info_ar ; 
+                            $orders[$i]['container_name'] =   $order->container->name_ar ;
                         }else{
-                            $now_Dealss[$i]['title'] = $Deal->title_en ; 
-                            $now_Dealss[$i]['disc'] = $Deal->disc_en ; 
-                            $now_Dealss[$i]['info'] = $Deal->info_en ; 
+                            $orders[$i]['container_name'] =   $order->container->name_en ;
                         }
-                        if($Deal->image){
-                            $now_Dealss[$i]['image'] = asset('img/').'/'. $Deal->image;
-                        }else{
-                            $now_Dealss[$i]['image'] = null ;
-                        }
-                        
-                        $now_Dealss[$i]['original_price'] = $Deal->original_price ; 
-                        $now_Dealss[$i]['initial_price'] = $Deal->initial_price ; 
-                        $now_Dealss[$i]['points'] = $Deal->points ; 
-                        $now_Dealss[$i]['tickets'] = $Deal->tickets ; 
-                        $now_Dealss[$i]['tender_cost'] = $Deal->tender_cost ; 
-                        $now_Dealss[$i]['tender_edit_cost'] = $Deal->tender_edit_cost ; 
-                        $now_Dealss[$i]['tender_coupon'] = $Deal->tender_coupon ; 
-                        $now_Dealss[$i]['expiry_date'] = date('d-m-Y H:i:s', strtotime($Deal->expiry_date) );   
-                        // return $Deal->images ;
-                        $favorite = Favorite::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
-                        if($favorite){
-                            $now_Dealss[$i]['is_favorite'] = 'true' ;
-                        }else{
-                            $now_Dealss[$i]['is_favorite'] = 'false' ;
-                        }
-                       
-                        $i++ ;
+                        $orders[$i]['container_size'] =   $order->container->size ;
+                        $orders[$i]['num_containers'] =   $order->no_container;
+                        $orders[$i]['container_price'] =   $order->price ;
+                        $orders[$i]['total'] =   $order->total ;
+                        $orders[$i]['status'] =   trans('api.'.$order->status) ;
+                        $i++;
                     }
+                    return response()->json([
+                        'success' => 'success',
+                        'errors' => null ,
+                        'message' => trans('api.fetch'),
+                        'data' => $orders ,
+                    ]);
                 }
                 return response()->json([
-                    'success' => 'success',
-                    'errors' => null ,
-                    'message' => trans('api.fetch'),
-                    'data' => $now_Dealss ,
-                ]);
-            }
-            else{
-                $errors = trans('api.logged_out');
+                    'success' => 'failed',
+                    'errors' => trans('api.notfound'),
+                    "message"=>trans('api.notfound'),
+                    ]);
+                
+            }else{
                 return response()->json([
                     'success' => 'logged',
-                    'errors' => $errors ,
-                    'message' => trans('api.logged_out'),
-                    'data' => null,
-                ]);
+                    'errors' => trans('api.logout'),
+                    "message"=>trans('api.logout'),
+                    ]);
             }
-        }
-        else{
-            $errors = trans('api.logged_out');
+        }else{
             return response()->json([
                 'success' => 'logged',
-                'errors' => $errors ,
-                'message' => trans('api.logged_out'),
-                'data' => null,
-            ]);
-        }
-        
-    } 
-//////////////////////////////////////////////////////
-// MyDeals function by Antonious hosny
-    public function MyDeals(Request $request){
-        $token = $request->token;
-        if($token == ''){
-            $errors = trans('api.logged_out');
-            return response()->json([
-                'success' => 'logged',
-                'errors' => $errors ,
-                'message' => trans('api.logged_out'),
-                'data' => null,
-            ]);
-        }
-        $user = User::where('remember_token',$token)->first();
-        // return $user ;
-        if($user){
-            $user = User::where('remember_token',$token)->first();
-            if($user){
-
-                $lang = $request->header('lang');
-                $tickets = Ticket::where('user_id',$user->id)->get();
-                $now_Dealss = null;
-                $i = 0 ;
-                foreach($tickets as $ticket){
-
-                    $Deal = Deal::where('id',$ticket->deal_id)->first();  
-                    if($Deal){
-
-                        $now_Dealss[$i]['Deal_id'] = $Deal->id ;    
-                        if($lang == 'ar'){
-                            $now_Dealss[$i]['title'] = $Deal->title_ar ; 
-                            $now_Dealss[$i]['disc'] = $Deal->disc_ar ; 
-                            $now_Dealss[$i]['info'] = $Deal->info_ar ; 
-                        }else{
-                            $now_Dealss[$i]['title'] = $Deal->title_en ; 
-                            $now_Dealss[$i]['disc'] = $Deal->disc_en ; 
-                            $now_Dealss[$i]['info'] = $Deal->info_en ; 
-                        }
-                        if($Deal->image){
-                            $now_Dealss[$i]['image'] = asset('img/').'/'. $Deal->image;
-                        }else{
-                            $now_Dealss[$i]['image'] = null ;
-                        } 
-                        if($Deal->status == '1'){
-                            $now_Dealss[$i]['status'] = 'winner';
-                        }else{
-                            $now_Dealss[$i]['status'] = '0' ;
-                        } 
-                        $now_Dealss[$i]['original_price'] = $Deal->original_price ; 
-                        $now_Dealss[$i]['initial_price'] = $Deal->initial_price ; 
-                        $now_Dealss[$i]['points'] = $Deal->points ; 
-                        $now_Dealss[$i]['tickets'] = $Deal->tickets ; 
-                        $now_Dealss[$i]['tender_cost'] = $Deal->tender_cost ; 
-                        $now_Dealss[$i]['tender_edit_cost'] = $Deal->tender_edit_cost ; 
-                        $now_Dealss[$i]['tender_coupon'] = $Deal->tender_coupon ; 
-                        $now_Dealss[$i]['expiry_date'] = date('d-m-Y H:i:s', strtotime($Deal->expiry_date) );   
-                        // return $Deal->images ;
-                        $favorite = Favorite::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
-                        if($favorite){
-                            $now_Dealss[$i]['is_favorite'] = 'true' ;
-                        }else{
-                            $now_Dealss[$i]['is_favorite'] = 'false' ;
-                        }
-                        $ticket = Ticket::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
-                        if($ticket){
-                            $now_Dealss[$i]['my_ticket_points'] = $ticket->points ;
-                        }else{
-                            $now_Dealss[$i]['my_ticket_points'] = null ;
-                        }
-                        $i++ ;
-                    }
-                }
-                return response()->json([
-                    'success' => 'success',
-                    'errors' => null ,
-                    'message' => trans('api.fetch'),
-                    'data' => $now_Dealss ,
+                'errors' => trans('api.logout'),
+                "message"=>trans('api.logout'),
                 ]);
-            }
-            else{
-                $errors = trans('api.logged_out');
-                return response()->json([
-                    'success' => 'logged',
-                    'errors' => $errors ,
-                    'message' => trans('api.logged_out'),
-                    'data' => null,
-                ]);
-            }
         }
-        else{
-            $errors = trans('api.logged_out');
-            return response()->json([
-                'success' => 'logged',
-                'errors' => $errors ,
-                'message' => trans('api.logged_out'),
-                'data' => null,
-            ]);
-        }
-        
-    } 
-//////////////////////////////////////////////////////
+    }
+//////////////////////////////////////////////////
+
+
 // ContactUs function by Antonious hosny
     public function ContactUs(Request $request){
 
@@ -2619,382 +1620,6 @@ class ApiController extends Controller
 
     }
 ///////////////////////////////////////////////////
-// ChargesHistory function by Antonious hosny
-    public function ChargesHistory(Request $request){
-        $token = $request->token;
-        if($token == ''){
-            $errors = trans('api.logged_out');
-            return response()->json([
-                'success' => 'logged',
-                'errors' => $errors ,
-                'message' => trans('api.logged_out'),
-                'data' => null,
-            ]);
-        }
-        $user = User::where('remember_token',$token)->first();
-        // return $user ;
-        if($user){
-            $user = User::where('remember_token',$token)->first();
-            if($user){
-
-                $lang = $request->header('lang');
-                $charges = Charge::where('user_id',$user->id)->get();
-                $chargess = [];
-                $i = 0 ;
-                foreach($charges as $charge){
-
-                    $package = Package::where('id',$charge->package_id)->first();  
-                    if($package){
-
-                        if($lang == 'ar'){
-                            $chargess[$i]['title'] = $package->title_ar ; 
-                        }else{
-                            $chargess[$i]['title'] = $package->title_en ;  
-                        }
-                        
-                    }else{
-                        $chargess[$i]['title'] = $charge->package ; 
-                    }
-                    $chargess[$i]['points'] = $charge->points ; 
-                    $chargess[$i]['created_at'] = $charge->created_at->format('Y-m-d') ; 
-                    $i++ ;
-                }
-                return response()->json([
-                    'success' => 'success',
-                    'errors' => null ,
-                    'message' => trans('api.fetch'),
-                    'data' => $chargess ,
-                ]);
-            }
-            else{
-                return response()->json([
-                    'success' => 'logged',
-                    'errors' =>trans('api.logged_out'),
-                    'message' => trans('api.logged_out'),
-                    'data' => null,
-                ]);
-            }
-        }
-        else{
-            return response()->json([
-                'success' => 'logged',
-                'errors' => trans('api.logged_out'),
-                'message' => trans('api.logged_out'),
-                'data' => null,
-            ]);
-        }
-        
-    } 
-//////////////////////////////////////////////////////
-// Awards function by Antonious hosny
-    public function Awards(Request $request){
-        $token = $request->token;
-        if($token == ''){
-            $errors = trans('api.logged_out');
-            return response()->json([
-                'success' => 'logged',
-                'errors' => $errors ,
-                'message' => trans('api.logged_out'),
-                'data' => null,
-            ]);
-        }
-        $user = User::where('remember_token',$token)->first();
-        // return $user ;
-        if($user){
-            $user = User::where('remember_token',$token)->first();
-            if($user){
-
-                $lang = $request->header('lang');
-                $awards = Award::where('status','active')->get();
-                $awardss = [];
-                $i = 0 ;
-                foreach($awards as $award){
-
-
-                    if($lang == 'ar'){
-                        $awardss[$i]['title'] = $award->title_ar ; 
-                    }else{
-                        $awardss[$i]['title'] = $award->title_en ;  
-                    }
-                    $awardss[$i]['coupons'] = $award->coupons ; 
-                    $awardss[$i]['images'] = asset('img/').'/'.$award->image ; 
-                    $awardss[$i]['expiry_date'] = date('Y-m-d H:i:s', strtotime($award->expiry_date) )  ; 
-                    $i++ ;
-                }
-                return response()->json([
-                    'success' => 'success',
-                    'errors' => null ,
-                    'message' => trans('api.fetch'),
-                    'data' => $awardss ,
-                ]);
-            }
-            else{
-                return response()->json([
-                    'success' => 'logged',
-                    'errors' =>trans('api.logged_out'),
-                    'message' => trans('api.logged_out'),
-                    'data' => null,
-                ]);
-            }
-        }
-        else{
-            return response()->json([
-                'success' => 'logged',
-                'errors' => trans('api.logged_out'),
-                'message' => trans('api.logged_out'),
-                'data' => null,
-            ]);
-        }
-        
-    } 
-//////////////////////////////////////////////////////
-// Interests function by Antonious hosny
-    public function Interests(Request $request){
-        $token = $request->token;
-        if($token == ''){
-            $errors = trans('api.logged_out');
-            return response()->json([
-                'success' => 'logged',
-                'errors' => $errors ,
-                'message' => trans('api.logged_out'),
-                'data' => null,
-            ]);
-        }
-        $user = User::where('remember_token',$token)->first();
-        // return $user ;
-        if($user){
-            $user = User::where('remember_token',$token)->first();
-            if($user){
-
-                $lang = $request->header('lang');
-                $interests = Interest::where('status','active')->get();
-                $interestss = [];
-                $i = 0 ;
-                foreach($interests as $interest){
-
-                    $interestss[$i]['id'] = $interest->id ; 
-                    if($lang == 'ar'){
-                        $interestss[$i]['title'] = $interest->title_ar ; 
-                    }else{
-                        $interestss[$i]['title'] = $interest->title_en ;  
-                    }
-                    $interestss[$i]['images'] = asset('img/').'/'.$interest->image ; 
-                    $user_interest = USerInterest::where('user_id',$user->id)->where('interest_id',$interest->id)->first();
-                    if($user_interest){
-                        $interestss[$i]['is_interest'] = 'yes'; 
-                    }else{
-                        $interestss[$i]['is_interest'] = 'no' ;  
-                    }
-                    $i++ ;
-                }
-                return response()->json([
-                    'success' => 'success',
-                    'errors' => null ,
-                    'message' => trans('api.fetch'),
-                    'data' => $interestss ,
-                ]);
-            }
-            else{
-                return response()->json([
-                    'success' => 'logged',
-                    'errors' =>trans('api.logged_out'),
-                    'message' => trans('api.logged_out'),
-                    'data' => null,
-                ]);
-            }
-        }
-        else{
-            return response()->json([
-                'success' => 'logged',
-                'errors' => trans('api.logged_out'),
-                'message' => trans('api.logged_out'),
-                'data' => null,
-            ]);
-        }
-        
-    } 
-///////////////////////////////////////////////////////
-// SaveInterests function by Antonious hosny
-    public function SaveInterests(Request $request){
-        $token = $request->token;
-        if($token == ''){
-            $errors = trans('api.logged_out');
-            return response()->json([
-                'success' => 'logged',
-                'errors' => $errors ,
-                'message' => trans('api.logged_out'),
-                'data' => null,
-            ]);
-        }
-        $user = User::where('remember_token',$token)->first();
-        // return $user ;
-        if($user){
-            $user = User::where('remember_token',$token)->first();
-            if($user){
-                $rules=array(
-                    'interests'      =>'required',
-                );
-                $validator  = \Validator::make($request->all(),$rules);
-                if($validator->fails())
-                {
-                    $messages = $validator->messages();
-                    $transformed = [];
-        
-                    foreach ($messages->all() as $field => $message) {
-                        $transformed[] = [
-                            'message' => $message
-                        ];
-                    }
-                    return response()->json([
-                        'success' => 'failed',
-                        'errors'  => $transformed,
-                        'message' => trans('api.validation_error'),
-                        'data'    => null ,
-                    ]);
-                }
-                $lang = $request->header('lang');
-
-                if($request->interests){
-                    if(gettype($request->interests) == 'array'){
-                        $interests = $request->interests ;
-                        // return $interests ;
-                    }else{
-                        $interests = json_decode($request->interests) ;
-                        // return $interests ;
-                    }
-                    $ids = UserInterest::where('user_id',$user->id)->delete();
-
-                    foreach($interests as $interest){
-                        $interest = Interest::find($interest) ;
-                        if($interest){
-                            $interestt = new UserInterest ;
-                            $interestt->user_id = $user->id ;
-                            $interestt->interest_id = $interest->id ;
-                            $interestt->save();
-                        }
-                    }
-                }
-                $interests = Interest::where('status','active')->get();
-                $interestss = [];
-                $i = 0 ;
-                foreach($interests as $interest){
-
-                    $interestss[$i]['id'] = $interest->id ; 
-                    if($lang == 'ar'){
-                        $interestss[$i]['title'] = $interest->title_ar ; 
-                    }else{
-                        $interestss[$i]['title'] = $interest->title_en ;  
-                    }
-                    $interestss[$i]['images'] = asset('img/').'/'.$interest->image ; 
-                    $user_interest = USerInterest::where('user_id',$user->id)->where('interest_id',$interest->id)->first();
-                    if($user_interest){
-                        $interestss[$i]['is_interest'] = 'yes'; 
-                    }else{
-                        $interestss[$i]['is_interest'] = 'no' ;  
-                    }
-                    $i++ ;
-                }
-                return response()->json([
-                    'success' => 'success',
-                    'errors' => null ,
-                    'message' => trans('api.save'),
-                    'data' => $interestss ,
-                ]);
-            }
-            else{
-                return response()->json([
-                    'success' => 'logged',
-                    'errors' =>trans('api.logged_out'),
-                    'message' => trans('api.logged_out'),
-                    'data' => null,
-                ]);
-            }
-        }
-        else{
-            return response()->json([
-                'success' => 'logged',
-                'errors' => trans('api.logged_out'),
-                'message' => trans('api.logged_out'),
-                'data' => null,
-            ]);
-        }
-        
-    } 
-////////////////////////////////////////////////////////
-// send_notification function by Antonious hosny
-    public function send_notification(Request $request){
-
-        $token = $request->token;
-        if($token == ''){
-            $errors[] = [
-                'message' => trans('api.logged_out')
-            ]; 
-            return response()->json([
-                'success' => 'failed',
-                'errors' => $errors ,
-                'message' => trans('api.logged_out'),
-                'data' => null,
-            ]);
-        }
-        $user = User::where('remember_token',$token)->first();
-
-        if($user){
-            $user_id    = $request->user_id;
-            $msg        = $request->message;
-
-            if($user_id){
-                // return $child_id;
-
-                $User2 = User::find($user_id);
-                
-                if($User2){
-                        if($msg){
-                            $type = "message";
-                            $User2->notify(new Notifications($msg,$user,$type ));
-                        }
-                        return response()->json([
-                            'success' => 'success',
-                            'errors' => null ,
-                            'message' => trans('api.save'),
-                            'data' => $msg
-                        ]);
-                }else{
-                    $error = trans('api.user_notfound');
-                    return response()->json([
-                        'success' => 'failed',
-                        'errors' =>$error ,
-                        'message' => trans('api.user_notfound'),
-                        'data' =>null,
-                    ]);
-                }
-                
-
-            }  
-            else{
-                $error = trans('api.user_id_notfound');
-                return response()->json([
-                    'success' => 'failed',
-                    'errors' =>$error ,
-                    'message' => trans('api.user_id_notfound'),
-                    'data' =>null,
-                ]);
-            }  
-
-        }
-        else{
-            $errors[] = [
-                'message' => trans('api.logged_out')
-            ]; 
-            return response()->json([
-                'success' => 'failed',
-                'errors' => $errors ,
-                'message' => trans('api.logged_out'),
-                'data' => null,
-            ]);
-        }
-
-    }
-////////////////////////////////////////////////////////
 // count_notification function by Antonious hosny
     public function count_notification(Request $request){
         
@@ -3083,6 +1708,18 @@ class ApiController extends Controller
     }
 /////////////////////////////////////////////////////////
 
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////for test only //////////////////////////////////
 // for test send_notifications
     public function send_notifications(Request $request){
         // $request->device_id;

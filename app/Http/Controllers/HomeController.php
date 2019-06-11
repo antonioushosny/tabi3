@@ -5,13 +5,11 @@ use App\Client;
 use App\User;
 use App\Country;
 use App\City;
-use App\Category;
-use App\SubCategory;
-use App\Deal;
 use App\Term;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Auth;
+use App ;
 use App\Notifications\Notifications;
 use Notification;
 class HomeController extends Controller
@@ -34,26 +32,28 @@ class HomeController extends Controller
     public function index()
     {
   
-           
+            $lang = App::getlocale();
             $dt = Carbon::now();
             $date = $dt->toDateString();
             $time  = date('H:i:s', strtotime($dt));
             // return $date ;
 
+            // $users      = User::where('role','user')->count('id');
+            // $categories  = Category::count('id');
+            // $deals        = Deal::whereDate('expiry_date','>',$date)->orWhere('expiry_date','')->orWhere('expiry_date',null)->count('id');
+            // $nowdeals        = Deal::whereDate('expiry_date','=',$date)->whereTime('expiry_time','>=',$time)->count('id');
+            // $lastdeals        = Deal::whereDate('expiry_date','<',$date)->orwhereDate('expiry_date','=',$date)->whereTime('expiry_time','<',$time)->count('id');
             
-            // $clients      = User::where('role','client')->count('id');
-            // $departments  = Departement::count('id');
-            // $orders       = Order::count('id');
-            // $users        = User::where('role','user')->count('id');
-            $users      = User::where('role','user')->count('id');
-            $categories  = Category::count('id');
-            $deals        = Deal::whereDate('expiry_date','>',$date)->orWhere('expiry_date','')->orWhere('expiry_date',null)->count('id');
-            $nowdeals        = Deal::whereDate('expiry_date','=',$date)->whereTime('expiry_time','>=',$time)->count('id');
-            $lastdeals        = Deal::whereDate('expiry_date','<',$date)->orwhereDate('expiry_date','=',$date)->whereTime('expiry_time','<',$time)->count('id');
-            
-            $subcategories        = SubCategory::count('id');
+            // $subcategories        = SubCategory::count('id');
+            $users      = 5235;
+            $categories  = 353;
+            $deals        = 355;
+            $nowdeals        = 355;
+            $lastdeals        = 2353;
+            $subcategories        = 35;
+
             $title = 'home' ;
-            return view('home',compact('title','deals','nowdeals','lastdeals','users','categories','subcategories','users'));
+            return view('home',compact('title','deals','nowdeals','lastdeals','users','categories','subcategories','users','lang'));
         
     }
     public function profile($id)

@@ -8,7 +8,7 @@ return [
         'dashboard'                     => 'الرئيسية',   
         'home'                          => 'الرئيسية',   
         'Control_panel'                 => 'لوحة التحكم',     
-        'nasebk'                           => 'نصيبك',   
+        'khazan'                           => 'Khazan',   
         'profile'                       => 'الصفحة الشخصية',   
         'logout'                        => 'تسجيل خروج',   
         'notification'                  => 'اشعارات',   
@@ -60,7 +60,7 @@ return [
         'your_new_password'             => 'كلمة المرور الجديدة الخاصة بك ',
         'wellcome'                      => 'اهلا ',
         'send_password'                 => 'تم ارسال كلمة المرور لبريدك بنجاح',
-        'wllcome_in_nasebk'             => 'اهلا بك في نصيبك  ' ,
+        'Welcome to Khazan'             => 'اهلا بك في Khazan  ' ,
         'Close'                         =>'اغلاق',
         'selectall'                     => 'تحديد الكل',
         'operations'                    => 'عمليات', 
@@ -69,10 +69,10 @@ return [
 
     //sidebar  
         'adminsm'                       => 'إدارة المشرفين',   
-        'usersm'                     => 'إدارة  المستخدمين',
-        'categoriesm'                  => ' الأقسام الرئيسية',
-        'subcategoriesm'                  => ' الأقسام الفرعية',
+        'usersm'                        => 'إدارة  المستخدمين',
         'citiesm'                      => 'إدارة المدن',
+        'areasm'                        => 'إدارة المناطق',
+        'subcategoriesm'                  => ' الأقسام الفرعية',
         'countriesm'                      => 'ادارة الدول ',
         'dealsm'                    => ' الصفقات القادمة ',
         'last_dealsm'                    => ' الصفقات المنتهية ',
@@ -181,71 +181,14 @@ return [
         'delete_admin'                  => 'حذف مشرف',
     //end admin page  
 
-    //deals  page  
-                   
-        'original_price'  =>'السعر الاصلي',           
-        'placeholder_original_price'  =>'ادخل السعر الاصلي ',           
-        'initial_price'  =>'السعر الابتدائي',           
-        'placeholder_initial_price'  =>'ادخل السعر الابتدائي',           
-        'points'  =>'عدد النقاط',           
-        'placeholder_points'  =>'ادخل عدد النقاط ',           
-        'tender_cost'  =>'تكلفة الاشتراك',           
-        'placeholder_tender_cost'  =>'ادخل نقاط تكلفة الاشتراك في الصفقة ',           
-        'tender_edit_cost'  =>'تكلفة التعديل ',           
-        'placeholder_tender_edit_cost'  =>'ادخل نقاط تكلفة التعديل ',           
-        'tender_coupon'  =>'القسائم المجانية',           
-        'placeholder_tender_coupon'  =>'ادخل القسائم المجانية',           
-        'disc_ar'  =>'الوصف بالعربية',           
-        'info_ar'  =>'المعلومات بالعربي',           
-        'placeholder_info_ar'  =>'ادخل المعلومات بالعربي',           
-        'info_en'  =>'المعلومات بالانجليزية',           
-        'placeholder_info_en'  =>'ادخل المعلومات بالانجليزية',           
-        'category_id'  =>'القسم',           
-        'subcategory_id'  =>'القسم الفرعي',           
-        'country_id'  =>'الدولة',           
-        'city_id'  =>'المدينة',           
-        'expiry_date'  =>'تاريخ الانتهاء',     
-        'placeholder_expiry_date'  =>'ادخل تاريخ الانتهاء',     
-        'tickets' => 'التذاكر',
-        'deals' => 'الصفقات القادمة',
-        'nowdeals' => 'الصفقات الحالية ',
-        'nowdealsm' => 'الصفقات الحالية ',
-        'dealss' => 'الصفقات',
-        'add_deal' => 'اضافة صفقة',
-        'edit_deal' => 'تعديل صفقة',
-        'delete_deal' => 'حذف صفقة',
-
-    //end deals page
+    
 
     //users page 
         'users'             => ' المستخدمين ',
         'add_user'          => ' أضافة مستخدم ',
         'edit_user'         => ' تعديل مستخدم ',
         'delete_user'       => '  حذف مستخدم',
-        'class_required'       => 'يجب اختيار الفصل  ',
-        'female'            => 'انثي',
-        'male'            => 'ذكر',
-        'gender'            => 'النوع',
-        'birth_date'        => 'تاريخ الميلاد',
-        'job'        => 'العمل',
     //end users page
-
-     //awards page 
-        'awards'             => ' المكافأت ',
-        'awardsm'             => ' المكافأت ',
-        'add_award'          => ' أضافة مكافاة ',
-        'edit_award'         => ' تعديل مكافاة ',
-        'delete_award'       => '  حذف مكافاة',
-    //end awards page
-
-    //interests page 
-        'interests'             => ' الاهتمامات ',
-        'interestsm'             => ' الاهتمامات ',
-        'add_interest'          => ' أضافة اهتمام ',
-        'edit_interest'         => ' تعديل اهتمام ',
-        'delete_interest'       => '  حذف اهتمام',
-        'count_users'            => ' عدد المهتمين ',
-    //end interests page
 
      //statics page 
  
@@ -253,65 +196,6 @@ return [
         'edit_static'         => ' تعديل  ',
         'delete_static'       => '  حذف ',
     //end statics page
-
-    //services page 
-        'services'             => ' الخدمات ',
-        'offers'             => ' العروض ',
-        'open'             => ' متاح ',
-        'close'             => ' مغلق ',
-        'reject'             => ' مرفوض ',
-        'accept'             => ' مقبول ',
-        'pending'             => ' قيد الانتظار ',
-        'add_service'          => ' أضافة خدمة ',
-        'add_offer'          => ' أضافة عرض ',
-        'edit_service'         => ' تعديل خدمة ',
-        'edit_offer'         => ' تعديل عرض ',
-        'delete_service'       => '  حذف خدمة',
-        'delete_offer'       => '  حذف عرض',
-        'lost'                  => 'خاسر',
-        'winner'                  => 'فائز',
-        'charge_at'                  => 'تاريخ الشحن',
-        'history_charges'          => 'تقارير الشحن',
-        'reportsdeals'          => 'تقارير الصفقات',
-        'deal'          => 'الصفقة',
-        'created_at'          => 'التاريخ ',
-        'charge'          => 'الشحن ',
-        'charges'          => 'الشحنات ',
-        'send_points'          => 'اضافة نقاط / قسائم ',
-        'expiry_time'           => 'وقت الانتهاء',
-        'for_country'           => 'لدول معينة',
-        'for_city'              => 'لمدن معينة',
-        
-    //end users page
-
-    //subcategories page 
-        'subcategories'                       => 'الأقسام الفرعية', 
-        'add_subcategory'                    => ' اضافة قسم'  ,
-        'add_subcategorie'                    => ' اضافة قسم'  ,
-        'edit_subcategorie'                   => ' تعديل قسم'  ,
-        'delete_subcategorie'                 =>  ' حذف قسم',
-    //end subcategories page
-
-    //subcategories page 
-        'categories'                       => 'الأقسام الرئيسية ', 
-        'category'                    => 'القسم'  ,
-        'add_category'                    => ' اضافة قسم' , 
-        'add_categorie'                    => ' اضافة قسم'  ,
-        'edit_categorie'                   => ' تعديل قسم'  ,
-        'delete_categorie'                 =>  ' حذف قسم',
-    //end subcategories page
-
-    //packages page 
-        'packages'                       => ' الباقات', 
-        'packagesm'                       => ' الباقات', 
-        'package'                       => 'الباقة'  ,
-        'add_package'                    => ' اضافة باقة'  ,
-        'edit_package'                   => ' تعديل باقة'  ,
-        'delete_package'                 =>  ' حذف باقة',
-        'cost'                              => 'التكلفة',
-        'coupons'                       => 'القسائم',
-        'coupon'                       => 'قسيمة',
-    //end packages page
 
      //countries page 
         'countries'                       => ' الدول', 
@@ -324,11 +208,66 @@ return [
     //cities page 
         'cities'                       => ' المدن', 
         'city'                       => ' المدينة', 
+        'city_id'                       => ' المدينة', 
         'add_city'                    => ' اضافة مدينة'  ,
         'edit_citie'                   => ' تعديل مدينة'  ,
         'delete_citie'                 =>  ' حذف مدينة',
     //end cities page
- 
+
+    //areas page 
+        'areas'                       => ' المناطق', 
+        'area'                       => ' المنطقة', 
+        'add_area'                    => ' اضافة منطقة'  ,
+        'edit_area'                   => ' تعديل منطقة'  ,
+        'delete_area'                 =>  ' حذف منطقة',
+    //end areas page
+
+    //containers page 
+        'containers'                       => ' الخزانات', 
+        'container'                       => ' الخزان', 
+        'add_container'                    => ' اضافة خزان'  ,
+        'edit_container'                   => '  تعديل خزان'  ,
+        'delete_container'                 =>  '  حذف خزان ',
+    //end containers page
+
+     //providers page 
+        'providers'                       => ' مزودي المياه', 
+        'provider'                        => ' مزود', 
+        'add_provider'                    => ' اضافة مزود'  ,
+        'edit_provider'                   => ' تعديل مزود'  ,
+        'delete_provider'                 =>  ' حذف مزود'  ,
+        'company_name'                    => 'اسم الشركة ',
+        'responsible_name'                => 'اسم المسئول ',
+        'description'                     => 'الوصف',
+        'address'                         => 'العنوان',
+        'join_date'                       => 'ناريخ الانضمام',
+        'placeholder_company_name'              => 'من فضلك ادخل اسم الشركة',
+        'placeholder_responsible_name'              => 'من فضلك ادخل اسم المسئول',
+        'placeholder_description'              => 'من فضلك ادخل الوصف',
+        'placeholder_address'              => 'من فضلك ادخل  العنوان',
+    //end providers page
+
+    //centers page 
+        'centers'                       => ' مراكز التوزيع ', 
+        'center'                        => ' مركو توزيع ', 
+        'add_center'                    => ' اضافة مركز'  ,
+        'edit_center'                   => ' تعديل مركز'  ,
+        'delete_center'                 =>  ' حذف مركز'  ,
+        'choose_city'                   => 'اختر المدينة',
+        'choose_provider'               => 'اختر مزود مياه',
+        'choose_area'                   => 'اختر المنطقة',
+        'choose_center'                 => ' اختر مركز توزيع   ',
+        
+    //end centers page
+
+    //drivers page 
+        'drivers'                       => ' السائقين', 
+        'driver'                        => ' السائق', 
+        'add_driver'                    => ' اضافة سائق'  ,
+        'edit_driver'                   => ' تعديل سائق'  ,
+        'delete_driver'                 =>  ' حذف سائق'  ,
+    //end drivers page
+
     // advertisements page 
         'advertisements'                       => ' الاعلانات', 
         'add_advertisement'                    => '  اضافة اعلان'  ,
@@ -383,5 +322,21 @@ return [
         'Thursday'              => 'الخميس',
         'Friday'                => 'الجمعة',
     //end week days
+
+    //alerts  
+        'alert_title'         => 'هل أنت واثق؟' ,
+        'alert_text'          => 'لن تكون قادرًا على استعادة هذا العنصر!',
+        'warning'             => 'تحذير', 
+        'confirmButtonText'   => 'نعم احذفها!',
+        'cancelButtonText'    => 'لا ، الغاء من فضلك!',
+        'Deleted!'            => 'تم الحذف!' ,
+        'has_been_deleted'    => 'تم حذف العنصر',
+        'success'             => 'نجاح',
+        'Cancelled'           => 'ألغيت',
+        'file_is_safe'        => 'العنصر آمن',
+        'no_elemnet_selected' => 'لا توجد عناصر محددة',
+        'error'               => 'خطأ',
+    //end alerts 
+  
 
 ];

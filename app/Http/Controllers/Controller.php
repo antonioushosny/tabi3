@@ -16,9 +16,7 @@ class Controller extends BaseController
         $path_to_fcm='https://fcm.googleapis.com/fcm/send';
 
         $server_key="AAAAS3O293Q:APA91bG45V-lR8HAaG3J7OVbX_Pu3gbriOlwo9g1SOV2XeRt6Lr6pTZH9qLRvmtbMCcLTQVmm3Pn-Ci-s-LLG4_TMEbv4IFtzDarXnC2Czm3z38yeK9pmx2pjiJlUVayE6l8aJIbQKuM";
-
         $key = $device_id;
-
         $message = $msg;
         $title = $title ;
         $headers = array('Authorization:key=' .$server_key,'Content-Type:application/json');

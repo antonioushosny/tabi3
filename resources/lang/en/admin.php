@@ -8,7 +8,7 @@ return [
         'dashboard'                     => 'Dashboard',    
         'home'                          =>  'Home',   
         'Control_panel'                 => 'Control Panel',   
-        'mou'                           => 'Mou Course',    
+        'khazan'                           => 'Khazan',    
         'profile'                       => 'Profile',  
         'logout'                        => 'Logout',   
         'notification'                  => 'Notification',   
@@ -57,7 +57,7 @@ return [
         'your_new_password'             => 'your new password ',
         'wellcome'                      =>  'Welcome ',
         'send_password'                 =>  'Your password has been successfully sent to your mail  ',
-        'wllcome_in_nasebk'             => 'Welcome in Nasebk ' ,
+        'Welcome to Khazan'             => 'Welcome to Khazan ' ,
         'Close'                         =>'Close',
         'selectall'                     => 'Select All',
         'operations'                    => 'Operations',
@@ -168,75 +168,101 @@ return [
         'edit_admin'                    => 'Edit Admin ',
         'delete_admin'                  => 'Delete admin',
     //end admin page  
+    //users page 
+        'users'             => ' users ',
+        'add_user'          => ' Add User',
+        'edit_user'         => ' Edit User',
+        'delete_user'       => ' Delete User',
+    //end users page
 
-    //teachers page  
-        'teachers'                       => ' Teachers  ', 
-        'add_teacher'                    => '  Add Teacher '  ,
-        'edit_teacher'                   => '  Edit Teacher '  ,
-        'delete_teacher'                 => ' Delete Teacher ',
-    //end teachers page
+    //statics page 
 
-    //students page 
-        'students'             => ' Students ',
-        'add_student'          => ' Add Student ',
-        'edit_student'         => ' Edit Student ',
-        'delete_student'       => ' Delete Student ',
-        'class_required'       => 'Must select Class  ',
-    //end students page
+        'add_static'          => ' Add  ',
+        'edit_static'         => ' Edit  ',
+        'delete_static'       => '  Delete ',
+    //end statics page
 
-    //departments page 
-        'departments'                       => 'Departments', 
-        'add_department'                    => 'Add Department'  ,
-        'edit_department'                   => 'Edit Department'  ,
-        'delete_department'                 => 'Delete Department ',
-    //end departments page
-    
-    //courses page 
-        'courses'                        => 'Courses', 
-        'add_course'                     => ' Add Course'  ,
-        'edit_course'                    => ' Edit Course'  ,
-        'delete_course'                  => 'Delete Course ',
-        'department_id'                  => 'Department',
-        "department"                     => 'Department',
-        "cost"                           => 'Course Cost',
-        "count_student"                  => 'Student Subscriber',
-        "total"                          => ' total amount',
-        'studentaxist'                   => 'Student already shared',
-    //end courses page
+    //countries page 
+        'countries'                       => ' Countries', 
+        'country'                       => ' Country', 
+        'add_countrie'                    => ' Add country'  ,
+        'edit_countrie'                   => '  Edit country'  ,
+        'delete_countrie'                 =>  '  Delete country',
+    //end countries page
 
-    //lessons page 
-        'lessons'                       => 'Lessons', 
-        'add_lesson'                    => ' Add Lesson'  ,
-        'edit_lesson'                   => ' Edit Lesson'  ,
-        'delete_lesson'                 => 'Delete Lesson ',
-        'course_id'                     => 'Course',
-        "course"                        => 'Course',
-        'Choose_Video'                  => 'Choose Video ',
-        'file'                          => 'File',
-        'video'                         => 'Video',
-    //end lessons page
+    //cities page 
+        'cities'                       => ' Cities', 
+        'city'                       => ' City', 
+        'add_citie'                    =>  ' Add City'  ,
+        'edit_citie'                   => '  Edit City'  ,
+        'delete_citie'                 =>  '  Delete City',
+    //end cities page
 
-    //schedules page
-        'schedules'             => 'Schedules ',
-        'add_schedule'          => 'Add Schedule ',
-        'edit_schedule'         => 'Edit Schedule ',
-        'delete_schedule'       => 'Delete Schedule ',
-        'time'                  => 'Time' ,
-    //end schedules page
+    //areas page 
+        'areas'                       => ' Areas', 
+        'area'                        => ' Area', 
+        'add_area'                    => ' Add Area'  ,
+        'edit_area'                   => '  Edit Area'  ,
+        'delete_area'                 =>  '  Delete Area',
+    //end areas page
 
+    //containers page 
+        'containers'                       => ' Containers', 
+        'container'                        => ' Container', 
+        'add_container'                    => ' Add Container'  ,
+        'edit_container'                   => ' Edit Container'  ,
+        'delete_container'                 =>  ' Delete Container'  ,
+    //end containers page
 
-    // assignments page 
-        'assignments'                       => 'Assignments', 
-        'add_assignment'                    => ' Add Assignment'  ,
-        'edit_assignment'                   => ' Edit Assignment'  ,
-        'delete_assignment'                 => 'Delete Assignment ',
-    // end assignments page 
+     //providers page 
+        'providers'                       => 'Water Providers', 
+        'provider'                        => ' Water Provider', 
+        'add_provider'                    => ' Add Provider'  ,
+        'edit_provider'                   => ' Edit Provider'  ,
+        'delete_provider'                 =>  ' Delete Provider'  ,
+        'company_name'                    => 'Company Name',
+        'responsible_name'                => 'Responsible Name',
+        'description'                     => 'Description',
+        'address'                         => 'Address',
+        'join_date'                       => 'Join Date',
+        'placeholder_company_name'              => 'Enter Company Name ',
+        'placeholder_responsible_name'              => 'Enter Responsible Name ',
+        'placeholder_description'              => 'Enter Description  ',
+        'placeholder_address'              => 'Enter Address  ',
+    //end providers page
 
-    //Answers pages 
-        'answers'                       => ' Answers', 
-        'delete_answer'                 => ' Delete Answer ',
-        'student_name'                  => ' Student Name ',
-    //end Answers page
+    //centers page 
+        'centers'                       => ' Distribution  Centers', 
+        'center'                        => ' Distribution  Center', 
+        'add_center'                    => ' Add Center'  ,
+        'edit_center'                   => ' Edit Center'  ,
+        'delete_center'                 =>  ' Delete Center'  ,
+        'choose_city'                   => 'Choose City',
+        'choose_provider'               => 'Choose Water Provider',
+        'choose_area'                   => 'Choose Area',
+        'choose_center'                 => ' Choose Distribution  Center ',
+    //end centers page
+
+    //drivers page 
+        'drivers'                       => ' Drivers', 
+        'driver'                        => ' Driver', 
+        'add_driver'                    => ' Add Driver'  ,
+        'edit_driver'                   => ' Edit Driver'  ,
+        'delete_driver'                 =>  ' Delete Driver'  ,
+    //end drivers page
+ 
+    // advertisements page 
+        'advertisements'                       => ' Advertisements', 
+        'add_advertisement'                    => '  Add Advertisement '  ,
+        'edit_advertisement'                   => '  Edit Advertisement '  ,
+        'delete_advertisement'                 => '  Delete Advertisement '  ,
+        'coming'                               => ' Coming ',
+        'current'                              => ' Current ',
+        'previous'                             => ' Previous ',
+        'start_date'                             => 'Start Date',
+        'end_date'                             => ' end_date',
+ 
+    // end advertisements page 
 
     //contact_us page
         'delete_contact'                => 'Delete Message',
@@ -270,4 +296,19 @@ return [
         'thursday'              => 'Thursday',
         'friday'                => 'Friday',
     //end week days
+
+    //alerts  
+        'alert_title'         => 'Are you sure?',
+        'alert_text'          => 'You will not be able to recover this element!',
+        'alert_type'          => 'warning', 
+        'confirmButtonText'   => 'Yes, delete it!',
+        'cancelButtonText'    => 'No, cancel please!',
+        'Deleted!'            => 'Deleted!' ,
+        'has_been_deleted'    => 'Element has been deleted',
+        'success'             => 'success',
+        'Cancelled'           => 'Cancelled',
+        'file_is_safe'        => 'Element is safe',
+        'no_elemnet_selected' => 'No elements selected ',
+        'error'               => 'Error',
+    //end alerts 
 ];

@@ -1,4 +1,4 @@
-@include('layouts.head')
+<!doctype html>
 <?php   
     $lang = session('lang');
     App::setLocale($lang);
@@ -13,623 +13,496 @@
         $page ='home';
     }
 ?>
-@if($lang == 'ar')
-    <body class="hold-transition skin-blue fixed sidebar-mini sidebar-open" dir="rtl">
+<html class="no-js " lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <div class="wrapper">
-    
-            <header class="main-header">
-                <!-- Logo -->
-                <a href="#" class="logo">
-                    <span class="logo-mini"><b>{{trans('admin.nasebk')}} </b></span>
-                    <span class="logo-lg"><b>{{trans('admin.nasebk')}}</b></span>
-                </a>
+<title>:: Khazan ::</title>
+<!-- <link rel="icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon">  -->
+<link rel="shortcut icon" href="{{ asset('images/logo.png') }}" >
+
+<link rel="stylesheet" href="{{ asset('assets/plugins/bootstrap/css/bootstrap.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/plugins/jvectormap/jquery-jvectormap-2.0.3.min.css') }}"/>
+<link rel="stylesheet" href="{{ asset('assets/plugins/morrisjs/morris.min.css') }}" />
+<link rel="stylesheet" href="{{ asset('assets/plugins/sweetalert/sweetalert.css') }}"/>
+
+<!-- Custom Css -->
+<link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/color_skins.css') }}">
+
+<!-- Bootstrap Material Datetime Picker Css -->
+<link href="{{ asset('assets/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css') }}" rel="stylesheet" />
+<!-- Bootstrap Select Css -->
+<link href="{{ asset('assets/plugins/bootstrap-select/css/bootstrap-select.css') }}" rel="stylesheet" />
+
+
+
+
+@yield('style')  
+<style>
+
+    .select2{
+        width: 100%  !important ;
         
-                <nav class="navbar navbar-static-top" role="navigation">
-                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-                    <span class="sr-only">{{trans('admin.Toggle navigation')}}</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </a>
-                <div class="navbar-custom-menu">
-                    <ul class="nav navbar-nav">
-        
-                        <li class="dropdown user user-menu">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                              
-                                <span class="">{{ Auth::user()->name }}</span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <!-- User image -->
-                                <li class="user-header">
-                                        @if(Auth::user()->profile_pic)
-                                        <img src="{{asset('img/').'/'.Auth::user()->profile_pic}}" class="img-circle" alt="">
-                                        @else 
-                                        <img src="{{ asset('images/nasebk.jpeg') }}" class="img-circle" alt="">
-                                        @endif
-                                   
-                                </li>
-                                <!-- Menu Footer-->
-                                <li class="user-footer">
-                                    <div class="pull-left">
+    }
+    .select2-container--default .select2-selection--single {
+        background-color: #fff;
+        border: 1px solid #867e7e;
+        border-radius: 25px;
+        height: 40px;
+        max-width: 100% !important ;
+    }
 
-                                        <a href="{{route('profile',['id'=>Auth::user()->id])}}" class="btn btn-info btn-flat">{{trans('admin.profile')}} </a>
-                                    </div>
-                                    <div class="pull-right">
-                                        <a class="btn btn-info btn-flat" href="{{ route('logout') }}"
-                                            onclick="event.preventDefault();
-                                            document.getElementById('logout-form').submit();">
-                                            {{trans('admin.logout') }}
-                                        </a>
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                        </form>
-                                    </div>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="dropdown" style=" direction: ltr;" >
-                            <a href="#" class="dropdown-toggle notificaiton" data-toggle="dropdown">
+    /* for text in select2 */
+    .select2-container .select2-selection--single .select2-selection__rendered {
+        padding-left: 21px;
+        padding-right: 20px;
+    }
+    /* for arrow in select2 */
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 26px;
+        top: 8px;
+        right: 8px;
+        width: 17px;
+    }
+</style>
+<!-- Custom Css -->
+@if($lang=='ar')
+<link href='https://fonts.googleapis.com/css?family=Cairo:200,300,400,600,700,900&subset=arabic,latin,latin-ext' rel='stylesheet' type='text/css'>
+<style>
+@import url(https://fonts.googleapis.com/css?family=Cairo:200,300,400,600,700,900&subset=arabic,latin,latin-ext);
+body, html { 
+    font-family: 'Cairo', sans-serif !important ;
+}
+.sidebar { 
+    font-family: 'Cairo', sans-serif !important ;
+    font-weight: bold !important ;
+}
 
-                                  <span class="glyphicon glyphicon-globe"></span> <span class="hidden-xs">{{trans('admin.notification')}}</span> <span class="badge" id="count">{{count(auth()->user()->unreadnotifications)}}</span> <span class="caret"></span>
+</style>
+<link rel="stylesheet" href="{{ asset('assets/css/rtl.css')}}">
+@endif
+
+<!-- JQuery DataTable Css -->
+<link rel="stylesheet" href="{{ asset('assets/plugins/jquery-datatable/dataTables.bootstrap4.min.css') }}">
+</head>
+
+<body class="theme-purple rtl"">
+<!-- Page Loader -->
+<div class="page-loader-wrapper">
+    <div class="loader">
+        <div class="m-t-30"><img class="zmdi-hc-spin" src="{{ asset('images/logo_0.png') }}" width="48" height="48" alt="Khazan"></div>
+        <p>{{__('admin.Please wait')}}...</p>        
+    </div>
+</div>
+<!-- Overlay For Sidebars -->
+<div class="overlay"></div>
+
+<!-- Top Bar -->
+<nav class="navbar p-l-5 p-r-5">
+    <ul class="nav navbar-nav navbar-left">
+        <li>
+            <div class="navbar-header">
+                <a href="javascript:void(0);" class="bars"></a>
+                <a class="navbar-brand" href="{{route('home')}}"><img src="{{ asset('assets/images/logo.png') }}" width="30" alt="Khazan"><span class="m-l-10">Khazan</span></a>
+            </div>
+        </li>
+        <li><a href="javascript:void(0);" class="ls-toggle-btn" data-close="true"><i class="zmdi zmdi-swap"></i></a></li>
+        @if($lang == 'ar')
+        <li> <a class="" href=" {{route('setlang',['lang'=>'en'])}}">{{trans('admin.en')}}</a> </li>
+        @else 
+        <li> <a class="" href=" {{route('setlang',['lang'=>'ar'])}}">{{trans('admin.ar')}}</a> </li>
+        @endif
+
+        <!-- <li class="hidden-md-down"><a href="events.html" title="Events"><i class="zmdi zmdi-calendar"></i></a></li> -->
+        <!-- <li class="hidden-md-down"><a href="mail-inbox.html" title="Inbox"><i class="zmdi zmdi-email"></i></a></li> -->
+        <!-- <li><a href="contact.html" title="Contact List"><i class="zmdi zmdi-account-box-phone"></i></a></li> -->
+        <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button"><i class="zmdi zmdi-notifications"></i>
+            <div class="notify"><span class="heartbit"></span><span class="point"></span></div>
+            </a>
+            <ul class="dropdown-menu pullDown">
+                <li class="body">
+                    <ul class="menu list-unstyled">
+                        <li>
+                            <a href="javascript:void(0);">
+                                <div class="media">
+                                    <img class="media-object" src="{{ asset('assets/images/xs/avatar2.jpg') }}" alt="">
+                                    <div class="media-body">
+                                        <span class="name">Sophia <span class="time">30min ago</span></span>
+                                        <span class="message">There are many variations of passages</span>                                        
+                                    </div>
+                                </div>
                             </a>
-                            <ul class="dropdown-menu" id="showNofication" style="direction: rtl;">
-                            @if(count(auth()->user()->notifications) > 0)
-                            @foreach(auth()->user()->notifications as $note)
-                                <li style=" float:  right;">
-                                    <a href="{{ route('home') }}" class="{{ $note->read_at == null ? 'unread' : '' }}">
-                                            {!! $note->data['data']!!}
-                                           
-                                    </a>
-                                </li>
-                          
-                            @endforeach
-                            {{-- @else 
-                            <li style=" float:  right;">
-                                <a href=" #" >
-                                        لا يوجد اشعارات جديدة
-                                </a>
-                            </li> --}}
-                            @endif
-                    
-                                
-                            </ul>
                         </li>
-                        <!-- <li> <a class="" href=" {{route('setlang',['lang'=>'en'])}}">{{trans('admin.en')}}</a> </li>
-                        <li> <a class="" href=" {{route('setlang',['lang'=>'ar'])}}">{{trans('admin.ar')}}</a> </li> -->
-                    
+                        <li>
+                            <a href="javascript:void(0);">
+                                <div class="media">
+                                    <img class="media-object" src="{{ asset('assets/images/xs/avatar3.jpg') }}" alt="">
+                                    <div class="media-body">
+                                        <span class="name">Sophia <span class="time">31min ago</span></span>
+                                        <span class="message">There are many variations of passages of Lorem Ipsum</span>                                        
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);">
+                                <div class="media">
+                                    <img class="media-object" src="{{ asset('assets/images/xs/avatar4.jpg') }}" alt="">
+                                    <div class="media-body">
+                                        <span class="name">Isabella <span class="time">35min ago</span></span>
+                                        <span class="message">There are many variations of passages</span>                                        
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);">
+                                <div class="media">
+                                    <img class="media-object" src="{{ asset('assets/images/xs/avatar5.jpg') }}" alt="">
+                                    <div class="media-body">
+                                        <span class="name">Alexander <span class="time">35min ago</span></span>
+                                        <span class="message">Contrary to popular belief, Lorem Ipsum random</span>                                        
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);">
+                                <div class="media">
+                                    <img class="media-object" src="{{ asset('assets/images/xs/avatar6.jpg') }}" alt="">
+                                    <div class="media-body">
+                                        <span class="name">Grayson <span class="time">1hr ago</span></span>
+                                        <span class="message">There are many variations of passages</span>                                        
+                                    </div>
+                                </div>
+                            </a>
+                        </li>                        
                     </ul>
-                </div>
-                </nav>
-            </header>
-    
-@else
-    <body class="hold-transition skin-blue fixed sidebar-mini ">
-        <!-- Site wrapper -->
-        <div class="wrapper" id="app">
-    
-            <header class="flex-container main-header">
-                    <!-- Logo -->
-                <a href="#" class="logo">
-                    <span class="logo-mini"><b>{{trans('admin.nasebk')}} </b></span>
-                    <span class="logo-lg"><b>{{trans('admin.nasebk')}}</b></span>
-                </a>
-    
-                <nav class="navbar navbar-static-top">
-                    <!-- Sidebar toggle button-->
-                    <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
-                        <span class="sr-only">{{trans('admin.Toggle navigation')}}</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </a>
-        
-                    <div class="navbar-custom-menu">
-                        <ul class="nav navbar-nav">
-            
-                            <li class="dropdown user user-menu">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-
-                                    <span class="">{{ Auth::user()->name }}</span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <!-- User image -->
-                                    <li class="user-header">
- 
-                                        @if(Auth::user()->profile_pic)
-                                        <img src="{{asset('img/').'/'.Auth::user()->profile_pic}}" class="img-circle" alt="">
-                                        @else 
-                                        <img src="{{ asset('images/nasebk.jpeg') }}" class="img-circle" alt="">
-                                        @endif
-                                    </li>
-                                    <!-- Menu Footer-->
-                                    <li class="user-footer">
-                                        <div class="pull-left">
-                            
-                                            <a href="{{route('profile',['id'=>Auth::user()->id])}}" class="btn btn-info btn-flat">{{trans('admin.profile')}} </a>
+                </li>
+                <li class="footer"> <a href="javascript:void(0);">View All</a> </li>
+            </ul>
+        </li>
+        <!-- <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button"><i class="zmdi zmdi-flag"></i>
+            <div class="notify">
+                <span class="heartbit"></span>
+                <span class="point"></span>
+            </div>
+            </a>
+            <ul class="dropdown-menu pullDown">
+                <li class="header">Project</li>
+                <li class="body">
+                    <ul class="menu tasks list-unstyled">
+                        <li>
+                            <a href="javascript:void(0);">
+                                <div class="progress-container progress-primary">
+                                    <span class="progress-badge">eCommerce Website</span>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="86" aria-valuemin="0" aria-valuemax="100" style="width: 86%;">
+                                            <span class="progress-value">86%</span>
                                         </div>
-                                        <div class="pull-right">
-                                            <a class="btn btn-info btn-flat" href="{{ route('logout') }}"
-                                                onclick="event.preventDefault();
-                                                document.getElementById('logout-form').submit();">
-                                                {{trans('admin.logout') }}
-                                            </a>
-                                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                            @csrf
-                                            </form>
+                                    </div>                        
+                                    <ul class="list-unstyled team-info">
+                                        <li class="m-r-15"><small class="text-muted">Team</small></li>
+                                        <li>
+                                            <img src="{{ asset('assets/images/xs/avatar2.jpg') }}" alt="Avatar">
+                                        </li>
+                                        <li>
+                                            <img src="{{ asset('assets/images/xs/avatar3.jpg') }}" alt="Avatar">
+                                        </li>
+                                        <li>
+                                            <img src="{{ asset('assets/images/xs/avatar4.jpg') }}" alt="Avatar">
+                                        </li>                            
+                                    </ul>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);">
+                                <div class="progress-container progress-info">
+                                    <span class="progress-badge">iOS Game Dev</span>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%;">
+                                            <span class="progress-value">45%</span>
                                         </div>
-                                    </li>
-                                </ul>
-                            </li>
-                
-                            
-                            <li class="dropdown" >
-                                <a href="#" class="dropdown-toggle notificaiton" data-toggle="dropdown">
+                                    </div>
+                                    <ul class="list-unstyled team-info">
+                                        <li class="m-r-15"><small class="text-muted">Team</small></li>
+                                        <li>
+                                            <img src="{{ asset('assets/images/xs/avatar10.jpg') }}" alt="Avatar">
+                                        </li>
+                                        <li>
+                                            <img src="{{ asset('assets/images/xs/avatar9.jpg') }}" alt="Avatar">
+                                        </li>
+                                        <li>
+                                            <img src="{{ asset('assets/images/xs/avatar8.jpg') }}" alt="Avatar">
+                                        </li>
+                                        <li>
+                                            <img src="{{ asset('assets/images/xs/avatar7.jpg') }}" alt="Avatar">
+                                        </li>
+                                        <li>
+                                            <img src="{{ asset('assets/images/xs/avatar6.jpg') }}" alt="Avatar">
+                                        </li>
+                                    </ul>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);">
+                                <div class="progress-container progress-warning">
+                                    <span class="progress-badge">Home Development</span>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="29" aria-valuemin="0" aria-valuemax="100" style="width: 29%;">
+                                            <span class="progress-value">29%</span>
+                                        </div>
+                                    </div>
+                                    <ul class="list-unstyled team-info">
+                                        <li class="m-r-15"><small class="text-muted">Team</small></li>
+                                        <li>
+                                            <img src="{{ asset('assets/images/xs/avatar5.jpg') }}" alt="Avatar">
+                                        </li>
+                                        <li>
+                                            <img src="{{ asset('assets/images/xs/avatar2.jpg') }}" alt="Avatar">
+                                        </li>
+                                        <li>
+                                            <img src="{{ asset('assets/images/xs/avatar7.jpg') }}" alt="Avatar">
+                                        </li>                            
+                                    </ul>
+                                </div>
+                            </a>
+                        </li>                    
+                    </ul>
+                </li>
+                <li class="footer"><a href="javascript:void(0);">View All</a></li>
+            </ul>
+        </li> -->
+        <!-- <li class="hidden-sm-down">
+            <div class="input-group">                
+                <input type="text" class="form-control" placeholder="Search...">
+                <span class="input-group-addon">
+                    <i class="zmdi zmdi-search"></i>
+                </span>
+            </div>
+        </li>  -->
+        <li class="float-right">
+            <!-- <a href="javascript:void(0);" class="fullscreen hidden-sm-down" data-provide="fullscreen" data-close="true"><i class="zmdi zmdi-fullscreen"></i></a> -->
+            <!-- <a href="{{route('logout')}}" class="mega-menu" data-close="true"><i class="zmdi zmdi-power"></i></a> -->
+            <a class="mega-menu" href="{{ route('logout') }}" data-close="true" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">  <i class="zmdi zmdi-power"></i></a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+            </form>
+            <!-- <a href="javascript:void(0);" class="js-right-sidebar" data-close="true"><i class="zmdi zmdi-settings zmdi-hc-spin"></i></a> -->
+        </li>
+    </ul>
+</nav>
 
-                                        <span class="glyphicon glyphicon-globe"></span>  <span class="hidden-xs">{{trans('admin.notification')}}</span> <span class="badge" id="count">{{count(auth()->user()->unreadnotifications)}}</span> <span class="caret"></span>
-                                </a>
-                                <ul class="dropdown-menu" id="showNofication" >
-            
-                                @foreach(auth()->user()->notifications as $note)
-                                    <li>
-                                        <a href=" {{ route('home') }}" class="{{ $note->read_at == null ? 'unread' : '' }}">
-                                                {!! $note->data['data'] !!}
-                                        </a>                                      
-                                    </li>
-                                
-                                @endforeach
-                                    
-                                </ul>
-                            </li>
-        
-                            <!-- <li> <a class="" href=" {{route('setlang',['lang'=>'en'])}}">{{trans('admin.en')}}</a> </li>
-                            <li> <a class="" href=" {{route('setlang',['lang'=>'ar'])}}">{{trans('admin.ar')}}</a> </li> -->
-                        
+<!-- Left Sidebar -->
+<aside id="leftsidebar" class="sidebar">
+    <ul class="nav nav-tabs">
+        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#dashboard"><i class="zmdi zmdi-home m-r-5"></i>Khazan</a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#user"><i class="zmdi zmdi-account m-r-5"></i>User</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane stretchRight active" id="dashboard">
+            <div class="menu">
+                <ul class="list">
+                    <li>
+                        <div class="user-info">
+                            <div class="image"><a href="profile.html"><img src="{{ asset('assets/images/profile_av.jpg') }}" alt="User"></a></div>
+                            <div class="detail">
+                                <h4>Michael</h4>
+                                <small>UI UX Designer</small>                        
+                            </div>
+                            <a title="facebook" href="#"><i class="zmdi zmdi-facebook"></i></a>
+                            <a title="twitter" href="#"><i class="zmdi zmdi-twitter"></i></a>
+                            <a title="instagram" href="#"><i class="zmdi zmdi-instagram"></i></a>                            
+                        </div>
+                    </li>
+                    <!-- <li class="header">MAIN</li> -->
+                    <li <?php echo ($page == 'home') ? "class='active open'" : ""; ?> ><a href="{{ route('home') }}"  ><i class="zmdi zmdi-home"></i> <span> {{trans('admin.dashboard')}}</span></a></li>
+
+                    <li <?php echo ($page == 'admins') ? "class='active open'" : ""; ?> ><a href="{{ route('admins') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.admins')}}</span></a></li>
+
+                    <li <?php echo ($page == 'cities') ? "class='active open'" : ""; ?> ><a href="{{ route('cities') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.cities')}}</span></a></li>
+
+                    <li <?php echo ($page == 'areas') ? "class='active open'" : ""; ?> ><a href="{{ route('areas') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.areas')}}</span></a></li>
+
+                    <li <?php echo ($page == 'containers') ? "class='active open'" : ""; ?> ><a href="{{ route('containers') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.containers')}}</span></a></li>
+
+                    <li <?php echo ($page == 'providers') ? "class='active open'" : ""; ?> ><a href="{{ route('providers') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.providers')}}</span></a></li>
+
+                    <li <?php echo ($page == 'centers') ? "class='active open'" : ""; ?> ><a href="{{ route('centers') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.centers')}}</span></a></li>
+
+                    <li <?php echo ($page == 'drivers') ? "class='active open'" : ""; ?> ><a href="{{ route('drivers') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.drivers')}}</span></a></li>
+
+                    <li <?php echo ($page == 'users') ? "class='active open'" : ""; ?> ><a href="{{ route('users') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.users')}}</span></a></li>
+
+                    <li <?php echo ($page == 'reports') ? "class='active open'" : ""; ?> ><a href="{{ route('reports') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.reports')}}</span></a></li>
+
+                    <!-- <li> <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-apps"></i><span>App</span> </a>
+                        <ul class="ml-menu">
+                            <li><a href="mail-inbox.html">Inbox</a></li>
+                            <li><a href="blog-dashboard.html">Blog</a></li>
                         </ul>
-                    </div>
-                </nav>
-            </header>
-    
-            <!-- =============================================== -->
-    
-@endif
-            <aside class="main-sidebar">
-                <section class="sidebar">
-                    <div class="user-panel">
-                        <img src="{{ asset('images/nasebk.jpeg') }}" width="100%" height="100px" alt="" style="object-fit: contain;">
-                    </div>
+                    </li> -->
+
                     
-                    <ul class="sidebar-menu " data-widget="tree" style="margin-top:10px">
-                        <li onnasebkseover=" animationHover(this , 'pulse');"><a href="{{ route('home') }}" <?php echo ($page == 'home') ? "class='current'" : ""; ?> ><i class="fa fa-home   fa-2x  iconsidebarltr "></i> <span> {{trans('admin.dashboard')}}</span></a></li>
-
-                        
-                        <li onnasebkseover=" animationHover(this , 'pulse');"><a href="{{ route('admins') }}" <?php echo ($page == 'admins') ? "class='current'" : ""; ?> ><i class="fa fa-user-cog   fa-2x  iconsidebarltr "></i> <span> {{trans('admin.admins')}}</span></a></li>
-
-                        <li onmouseover=" animationHover(this , 'pulse');"><a href="{{ route('advertisements') }}" <?php echo ($page == 'advertisements') ? "class='current'" : ""; ?> ><i class="fa fa-newspaper   fa-2x  iconsidebarltr"></i> <span> {{trans('admin.advertisementsm')}}</span></a></li>
-
-                        <li onnasebkseover=" animationHover(this , 'pulse');"><a href="{{ route('countries') }}" <?php echo ($page == 'countries') ? "class='current'" : ""; ?> ><i class="fa fa-flag   fa-2x  iconsidebarltr "></i> <span> {{trans('admin.countriesm')}}</span></a></li>
-                        
-                        <li onnasebkseover=" animationHover(this , 'pulse');"><a href="{{ route('cities') }}" <?php echo ($page == 'cities') ? "class='current'" : ""; ?> ><i class="fa fa-flag-checkered   fa-2x  iconsidebarltr "></i> <span> {{trans('admin.citiesm')}}</span></a></li>
-                       
-                        <li onnasebkseover=" animationHover(this , 'pulse');"><a href="{{ route('users') }}" <?php echo ($page == 'users') ? "class='current'" : ""; ?> ><i class="fa fa-users  fa-2x  iconsidebarltr "></i> <span> {{trans('admin.usersm')}}</span></a></li>
-
-                        <li onnasebkseover=" animationHover(this , 'pulse');"><a href="{{ route('categories') }}" <?php echo ($page == 'categories') ? "class='current'" : ""; ?> ><i class="fa fa-list-alt   fa-2x  iconsidebarltr "></i> <span> {{trans('admin.categoriesm')}}</span></a></li>
-
-                        <li onnasebkseover=" animationHover(this , 'pulse');"><a href="{{ route('subcategories') }}" <?php echo ($page == 'subcategories') ? "class='current'" : ""; ?> ><i class="fa fa-layer-group   fa-2x  iconsidebarltr "></i> <span> {{trans('admin.subcategoriesm')}}</span></a></li> 
-
-                        <li class="treeview"  onmouseover=" animationHover(this , 'pulse');">
-                            <a href="#"  <?php echo ($page == 'nowdeals') ? "class='current'" : ""; ?> <?php echo ($page == 'deals') ? "class='current'" : ""; ?> <?php echo ($page == 'last_deals') ? "class='current'" : ""; ?>  > <i class="fa fa-plus-square  fa-2x  iconsidebarltr"></i> <span> {{trans('admin.dealss')}}</span> <span class="caret" style=" margin-right: 12rem;"></span></a>
-                             <ul class="treeview-menu">
-                                <li onnasebkseover=" animationHover(this , 'pulse');"><a href="{{ route('deals') }}" <?php echo ($page == 'deals') ? "class='current'" : ""; ?> ><i class="fa fa-plus-square   fa-2x  iconsidebarltr "></i> <span> {{trans('admin.dealsm')}}</span></a></li>
-                        
-                                <li onnasebkseover=" animationHover(this , 'pulse');"><a href="{{ route('nowdeals') }}" <?php echo ($page == 'nowdeals') ? "class='current'" : ""; ?> ><i class="fa fa-plus-square   fa-2x  iconsidebarltr "></i> <span> {{trans('admin.nowdealsm')}}</span></a></li>
-                                
-                                <li onnasebkseover=" animationHover(this , 'pulse');"><a href="{{ route('last_deals') }}" <?php echo ($page == 'last_deals') ? "class='current'" : ""; ?> ><i class="fa fa-plus-square   fa-2x  iconsidebarltr "></i> <span> {{trans('admin.last_dealsm')}}</span></a></li>
-                             </ul>
-                        </li>
-                        
-                        <li onnasebkseover=" animationHover(this , 'pulse');"><a href="{{ route('awards') }}" <?php echo ($page == 'awards') ? "class='current'" : ""; ?> ><i class="fa fa-award   fa-2x  iconsidebarltr "></i> <span> {{trans('admin.awardsm')}}</span></a></li> 
-                        
-                        <li onnasebkseover=" animationHover(this , 'pulse');"><a href="{{ route('interests') }}" <?php echo ($page == 'interests') ? "class='current'" : ""; ?> ><i class="fa fa-life-ring   fa-2x  iconsidebarltr "></i> <span> {{trans('admin.interestsm')}}</span></a></li> 
-
-                        <li onnasebkseover=" animationHover(this , 'pulse');"><a href="{{ route('packages') }}" <?php echo ($page == 'packages') ? "class='current'" : ""; ?> ><i class="fa fa-box   fa-2x  iconsidebarltr "></i> <span> {{trans('admin.packagesm')}}</span></a></li> 
-         
-                        <li class="treeview"  onmouseover=" animationHover(this , 'pulse');">
-                           <a href="#"  <?php echo ($page == 'users_new') ? "class='current'" : ""; ?> <?php echo ($page == 'users_solved') ? "class='current'" : ""; ?> <?php echo ($page == 'users_not_resolved') ? "class='current'" : ""; ?>  ><i class="fa fa-phone-square   fa-2x  iconsidebarltr"></i> <span> {{trans('admin.contacts_users')}}</span> <span class="caret" style=" margin-right: 7rem;"></span> </a>
-                            <ul class="treeview-menu">
-                                <li onmouseover=" animationHover(this , 'pulse');"><a href="{{ route('contactsusers','new') }}" <?php echo ($page == 'users_new') ? "class='current'" : ""; ?> ><i class="fa fa-phone-square   fa-2x  iconsidebarltr"></i> <span> {{trans('admin.new')}}</span></a></li>
-
-                                <li onmouseover=" animationHover(this , 'pulse');"><a href="{{ route('contactsusers','solved') }}" <?php echo ($page == 'users_solved') ? "class='current'" : ""; ?> ><i class="fa fa-phone-square   fa-2x  iconsidebarltr"></i> <span> {{trans('admin.solved')}}</span></a></li>
-
-                                <li onmouseover=" animationHover(this , 'pulse');"><a href="{{ route('contactsusers','not_resolved') }}" <?php echo ($page == 'users_not_resolved') ? "class='current'" : ""; ?> ><i class="fa fa-phone-square   fa-2x  iconsidebarltr"></i> <span> {{trans('admin.not_resolved')}}</span></a></li>
-                            </ul>
-                        </li>
-
-                        <li class="treeview"  onmouseover=" animationHover(this , 'pulse');">
-                            <a href="#"  <?php echo ($page == 'policy') ? "class='current'" : ""; ?> <?php echo ($page == 'terms') ? "class='current'" : ""; ?> <?php echo ($page == 'about') ? "class='current'" : ""; ?><?php echo ($page == 'contacts') ? "class='current'" : ""; ?>  ><i class="fa fa-th  fa-2x  iconsidebarltr"></i> <span> {{trans('admin.statics')}}</span> <span class="caret" style=" margin-right: 8.5rem;"></span> </a>
-                             <ul class="treeview-menu">
-                                 <li onmouseover=" animationHover(this , 'pulse');"><a href="{{ route('statics','about') }}" <?php echo ($page == 'about') ? "class='current'" : ""; ?> ><i class="fa fa-address-card  fa-2x  iconsidebarltr"></i> <span> {{trans('admin.about')}}</span></a></li>
- 
-                                 <li onmouseover=" animationHover(this , 'pulse');"><a href="{{ route('statics','terms') }}" <?php echo ($page == 'terms') ? "class='current'" : ""; ?> ><i class="fa fa-align-center   fa-2x  iconsidebarltr"></i> <span> {{trans('admin.terms')}}</span></a></li>
- 
-                                 <li onmouseover=" animationHover(this , 'pulse');"><a href="{{ route('statics','policy') }}" <?php echo ($page == 'policy') ? "class='current'" : ""; ?> ><i class="fa fa-allergies   fa-2x  iconsidebarltr"></i> <span> {{trans('admin.policy')}}</span></a></li>
-
-                                 <li onmouseover=" animationHover(this , 'pulse');"><a href="{{ route('contacts') }}" <?php echo ($page == 'contacts') ? "class='current'" : ""; ?> ><i class="fa fa-phone-square  sfa-2x  iconsidebarltr"></i> <span> {{trans('admin.social_accounts')}}</span></a></li>
-                             </ul>
-                         </li>
-                         
-                        <li  onnasebkseover=" animationHover(this , 'pulse');"><a href="{{ route('messages') }}" <?php echo ($page == 'messages') ? "class='current'" : ""; ?>><i class="fa fa-comment  fa-2x iconsidebarltr"  ></i> <span>{{trans('admin.messages')}}</span></a></li> 
-                        
-                        <li class="treeview"  onmouseover=" animationHover(this , 'pulse');">
-                            <a href="#"  <?php echo ($page == 'reports') ? "class='current'" : ""; ?> <?php echo ($page == 'reportsdeals') ? "class='current'" : ""; ?> <?php echo ($page == 'about') ? "class='current'" : ""; ?>  ><i class="fa fa-bars  fa-2x  iconsidebarltr"></i> <span> {{trans('admin.reports')}}</span> <span class="caret" style=" margin-right: 13rem;"></span> </a>
-                             <ul class="treeview-menu">
-                                 <li onmouseover=" animationHover(this , 'pulse');"><a href="{{ route('charges') }}" <?php echo ($page == 'history_charges') ? "class='current'" : ""; ?> ><i class="fa fa-coins  fa-2x  iconsidebarltr"></i> <span> {{trans('admin.history_charges')}}</span></a></li>
-                                 
-                                 <li onmouseover=" animationHover(this , 'pulse');"><a href="{{ route('reportsdeals') }}" <?php echo ($page == 'reportsdeals') ? "class='current'" : ""; ?> ><i class="fa fa-tasks   fa-2x  iconsidebarltr"></i> <span> {{trans('admin.reportsdeals')}}</span></a></li>
- 
-                             </ul>
-                         </li>
-                         <li></li>
-                         <li></li>
-                         <li></li>
-                         @can('advertisement_list') 
-                        {{-- <li  onnasebkseover=" animationHover(this , 'pulse');"><a href="{{ route('reports') }}" ><i class="fa fa-cogs  fa-2x iconsidebarltr"  ></i> <span>{{trans('admin.reports')}}</span></a></li>  --}}
-                        @endcan 
-                    </ul>
-                </section>
-                <!-- /.sidebar -->
-            </aside>
-
-            <!-- =============================================== -->
-
-            <div class="content-wrapper">
-
-                @yield('content')           
-
+                </ul>
             </div>
-            <!-- /.content-wrapper -->
-
-            <footer class="main-footer">
-                <strong>{{trans('admin.Copyright')}}</strong>&copy; {{trans('admin.All_rights')}}
-            </footer>
-            <div class="control-sidebar-bg"></div>
+        </div>
+        <div class="tab-pane stretchLeft" id="user">
+            <div class="menu">
+                <ul class="list">
+                    <li>
+                        <div class="user-info m-b-20 p-b-15">
+                            <div class="image"><a href="profile.html"><img src="{{ asset('assets/images/profile_av.jpg') }}" alt="User"></a></div>
+                            <div class="detail">
+                                <h4>Michael</h4>
+                                <small>UI UX Designer</small>                        
+                            </div>
+                            <a title="facebook" href="#"><i class="zmdi zmdi-facebook"></i></a>
+                            <a title="twitter" href="#"><i class="zmdi zmdi-twitter"></i></a>
+                            <a title="instagram" href="#"><i class="zmdi zmdi-instagram"></i></a>
+                            <p class="text-muted">795 Folsom Ave, Suite 600 San Francisco, CADGE 94107</p>
+                            <div class="row">
+                                <div class="col-4">
+                                    <h5 class="m-b-5">852</h5>
+                                    <small>Following</small>
+                                </div>
+                                <div class="col-4">
+                                    <h5 class="m-b-5">13k</h5>
+                                    <small>Followers</small>
+                                </div>
+                                <div class="col-4">
+                                    <h5 class="m-b-5">234</h5>
+                                    <small>Post</small>
+                                </div>                            
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <small class="text-muted">Email address: </small>
+                        <p>michael@gmail.com</p>
+                        <hr>
+                        <small class="text-muted">Phone: </small>
+                        <p>+ 202-555-0191</p>
+                        <hr>
+                        <ul class="list-unstyled">
+                            <li>
+                                <div>Photoshop</div>
+                                <div class="progress m-b-20">
+                                    <div class="progress-bar l-blue " role="progressbar" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100" style="width: 89%"> <span class="sr-only">62% Complete</span> </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div>Wordpress</div>
+                                <div class="progress m-b-20">
+                                    <div class="progress-bar l-green " role="progressbar" aria-valuenow="56" aria-valuemin="0" aria-valuemax="100" style="width: 56%"> <span class="sr-only">87% Complete</span> </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div>HTML 5</div>
+                                <div class="progress m-b-20">
+                                    <div class="progress-bar l-amber" role="progressbar" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100" style="width: 78%"> <span class="sr-only">32% Complete</span> </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div>Angular</div>
+                                <div class="progress m-b-20">
+                                    <div class="progress-bar l-blush" role="progressbar" aria-valuenow="43" aria-valuemin="0" aria-valuemax="100" style="width: 43%"> <span class="sr-only">56% Complete</span> </div>
+                                </div>
+                            </li>
+                        </ul>                        
+                    </li>
+                </ul>
             </div>
-            <!-- ./wrapper -->
+        </div>
+    </div>    
+</aside>
 
-@if($lang == 'ar')
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="  crossorigin="anonynasebks"></script>       
-    <script src="{{ asset('rtl/dist/js/app.js') }}"></script> 
-    <script src="{{ asset('rtl/bootstrap/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('rtl/plugins/slimScroll/jquery.slimscroll.min.js') }}"></script>
-    <script src="{{ asset('rtl/plugins/iCheck/icheck.min.js') }}"></script> 
-    <script src="{{ asset('rtl/plugins/fastclick/fastclick.min.js') }}"></script>
-    <script src="{{ asset('ltr/dist/js/adminlte.min.js') }}"></script>
-    <script src="{{ asset('rtl/dist/js/demo.js') }}"></script> 
-@else
-    <script src="{{ asset('ltr/bower_components/jquery/dist/jquery.min.js') }}"></script>
-    <script src="{{ asset('ltr/bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('ltr/bower_components/jquery-slimscroll/jquery.slimscroll.min.js') }}"></script>
-    <script src="{{ asset('ltr/bower_components/fastclick/lib/fastclick.js') }}"></script>
-    <script src="{{ asset('rtl/plugins/iCheck/icheck.min.js') }}"></script> 
-    <script src="{{ asset('ltr/dist/js/adminlte.min.js') }}"></script>
+@yield('content')   
+
+<!-- Jquery Core Js --> 
+<script src="{{ asset('assets/bundles/libscripts.bundle.js') }}"></script> <!-- Lib Scripts Plugin Js ( jquery.v3.2.1, Bootstrap4 js) --> 
+<script src="{{ asset('assets/bundles/vendorscripts.bundle.js') }}"></script> <!-- slimscroll, waves Scripts Plugin Js -->
+<script src="{{ asset('assets/bundles/mainscripts.bundle.js') }}"></script>
+
+<!-- // for form validations  -->
+@if($lang=='ar')
+<script src="{{ asset('assets/plugins/jquery-validation/jquery.validate-ar.js') }}"></script> <!-- Jquery Validation Plugin Css --> 
+@else 
+<script src="{{ asset('assets/plugins/jquery-validation/jquery.validate.js') }}"></script> <!-- Jquery Validation Plugin Css --> 
 @endif
+<script src="{{ asset('assets/plugins/jquery-steps/jquery.steps.js') }}"></script> <!-- JQuery Steps Plugin Js --> 
+<script src="{{ asset('assets/js/pages/forms/form-validation.js') }}"></script> 
+  <!-- //for  dialogs  -->
+<script src="{{ asset('assets/plugins/sweetalert/sweetalert.min.js') }}"></script> <!-- SweetAlert Plugin Js --> 
+<script src="{{ asset('assets/js/pages/ui/dialogs.js') }}"></script>
+ 
+<script src="{{ asset('assets/plugins/momentjs/moment.js') }}"></script> <!-- Moment Plugin Js --> 
+<!-- Bootstrap Material Datetime Picker Plugin Js --> 
+<script src="{{ asset('assets/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js') }}"></script> 
+<script src="{{ asset('assets/plugins/bootstrap-select/js/bootstrap-select.js') }}"></script> 
+<script src="{{ asset('assets/js/pages/forms/basic-form-elements.js') }}"></script> 
 
-    <script src="{{ asset('datatable/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('datatable/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
-    <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
-    <script src="https://cdn.datatables.net/select/1.2.7/js/dataTables.select.min.js"></script>
-    <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
-     <!-- select2 -->
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>
-    <script src="{{URL::to('src/js/vendor/tinymce_4.9.2/tinymce/js/tinymce/tinymce.min.js')}}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script> 
-    <script>
-        toastr.options = {
-        "positionClass": "toast-top-full-width",
-        "closeButton": true,
-        "progressBar": true,
+<!-- Jquery DataTable Plugin Js --> 
+<script src="{{ asset('assets/bundles/datatablescripts.bundle.js') }}"></script>
+<script src="{{ asset('assets/plugins/jquery-datatable/buttons/dataTables.buttons.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/jquery-datatable/buttons/buttons.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/jquery-datatable/buttons/buttons.colVis.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/jquery-datatable/buttons/buttons.html5.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/jquery-datatable/buttons/buttons.print.min.js') }}"></script>
+<script src="{{ asset('assets/js/pages/tables/jquery-datatable.js') }}"></script> 
+<script>
+    function isNumber(e){
+        var key = e.charCode;  
+        if( key <48 || key >57 )
+        {
+            if (key != 0)
+            {
+            e.preventDefault();   
+            }
+                        
         }
+    }
+    function readURL(input,imagediv) {
+        
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            src = document.getElementById(imagediv).src;    
+            imag = "{{asset('images/addimage.png')}}" ;
+            if(imag != src){
+                arrayimages = src ;
+            }
+            reader.onload = function (e) {
+                $('#'+imagediv).attr('src', e.target.result);
+            }
     
-    </script>
-@if($lang == 'ar')
-    <style>
-        .toast-top-full-width {
-        top: 18%;
-        right: 70%;
-        width: 30%;
+            reader.readAsDataURL(input.files[0]);
         }
-        .select2 {
-        width:100%!important;
-        }
-    </style>
-    <script>
-            jQuery(function($){
-                $(document).ready(function () {
-                    $.noConflict();
-                    $('.select2').select2();
-                    var table = $('#example').DataTable({
-                        "language": {
-                            "url": "{{asset('datatablelang.json')}}"
-                        },
-                        dom: 'Blfrtip',
-                        buttons: [
-                            'copy', 'excel', 'print'
-                        ],   
-                    });
-                    var table1 = $('#example1').DataTable({
-                        "language": {
-                            "url": "{{asset('datatablelang.json')}}"
-                        },
-                        dom: 'Blfrtip',
-                        buttons: [
-                            'copy', 'excel', 'print'
-                        ],   
-                    });
-                    var table2 = $('#example2').DataTable({
-                        "language": {
-                            "url": "{{asset('datatablelang.json')}}"
-                        },
-                    });
-                    var table3 = $('#example3').DataTable({
-                        "language": {
-                            "url": "{{asset('datatablelang.json')}}"
-                        } 
-                    });
-                    var table4 = $('#example4').DataTable({
-                        "language": {
-                            "url": "{{asset('datatablelang.json')}}"
-                        } 
-                    });
+    }
+   
+</script> 
+@yield('script')
 
-                });
-            });
-                
-    </script>
-    <script>
-        jQuery(function($){
-
-            $('input').iCheck({
-            checkboxClass: 'icheckbox_square-blue',
-            radioClass: 'iradio_square-blue',
-            increaseArea: '20%' // optional
-            });
-            
-            $('#check-all').on('ifChecked', function(event) {
-                $('.check').iCheck('check');
-            });
-            $('#check-all').on('ifUnchecked', function(event) {
-                $('.check').iCheck('uncheck');
-            });
-            // Removed the checked state from "All" if any checkbox is unchecked
-            $('#check-all').on('ifChanged', function(event){
-                if(!this.changed) {
-                    this.changed=true;
-                    $('#check-all').iCheck('check');
-                } else {
-                    this.changed=false;
-                    $('#check-all').iCheck('uncheck');
-                }
-                $('#check-all').iCheck('update');
-            });
-
-            $('#check-all2').on('ifChecked', function(event) {
-                $('.check2').iCheck('check');
-            });
-            $('#check-all2').on('ifUnchecked', function(event) {
-                $('.check2').iCheck('uncheck');
-            });
-            // Removed the checked state from "All" if any checkbox is unchecked
-            $('#check-all2').on('ifChanged', function(event){
-                if(!this.changed) {
-                    this.changed=true;
-                    $('#check-all2').iCheck('check2');
-                } else {
-                    this.changed=false;
-                    $('#check-all2').iCheck('uncheck');
-                }
-                $('#check-all2').iCheck('update');
-            });
-        });
-    </script>
-@else 
-    <style>
-        .toast-top-full-width {
-        top: 18%;
-        right: 0%;
-        width: 30%;
-        }
-    </style>
-    <script>
-        jQuery(function($){
-            $(document).ready(function () {
-                $.noConflict();
-                var table = $('#example').DataTable({
-                    dom: 'Blfrtip',
-                    buttons: [
-                        'copy', 'excel','print',
-                    ],
-
-                });
-                var table1 = $('#example1').DataTable({
-                    dom: 'Blfrtip',
-                    buttons: [
-                        'copy', 'excel','print',
-                    ],
-
-                });
-                var table2 = $('#example2').DataTable({
-
-                });
-                var table3 = $('#example3').DataTable({
-
-                });
-                var table3 = $('#example4').DataTable({
-
-                });
-            });
-        });
-        
-        $("form").submit(function() {
-        
-            $(this).submit(function() {
-                return false;
-            });
-            return true;
-        });
-        
-    </script>
-    <script>
-        jQuery(function($){
-
-            $('input').iCheck({
-            checkboxClass: 'icheckbox_square-blue',
-            radioClass: 'iradio_square-blue',
-            increaseArea: '20%' // optional
-            });
-            
-            $('#check-all').on('ifChecked', function(event) {
-                $('.check').iCheck('check');
-        
-            });
-            $('#check-all').on('ifUnchecked', function(event) {
-                $('.check').iCheck('uncheck');
-             
-            });
-            // Removed the checked state from "All" if any checkbox is unchecked
-            $('#check-all').on('ifChanged', function(event){
-                if(!this.changed) {
-                    this.changed=true;
-                    $('#check-all').iCheck('check');
-              
-                } else {
-                    this.changed=false;
-                    $('#check-all').iCheck('uncheck');
-          
-                }
-                $('#check-all').iCheck('update');
-            });
-        });
-    </script>
-@endif
-<!-- <script src="{{ asset('fastselect/fastselect.min.js') }}"></script>
-<script src="{{ asset('fastselect/fastselect.standalone.min.js') }}"></script> -->
-    @yield('script1') 
-
-@if($lang == 'en')
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-@endif
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-@if($lang == 'ar')
-    <script>
-
-        var message, ShowDiv = $('#showNofication'), count = $('#count'), c;
-
-        $('.notificaiton').on('click' , function(){
-            setTimeout( function(){
-                count.html(0);
-                $('.unread').each(function(){
-                    $(this).removeClass('unread');
-                });
-            }, 5000);
-            $.get( "{{route('MarkAllSeen') }}" , function(){});
-        });
-    </script>
-@else 
-    <script>
-
-        var message, ShowDiv = $('#showNofication'), count = $('#count'), c;
-        $('.notificaiton').on('click' , function(){
-            setTimeout( function(){
-                count.html(0);
-                $('.unread').each(function(){
-                    $(this).removeClass('unread');
-                });
-            }, 5000);
-            $.get( "{{route('MarkAllSeen') }}" , function(){});
-        });
-    </script>
-@endif
-    @yield('script') 
+<script>
+     $('.js-exportable-ar').DataTable({
+        "language": {
+            "url": "{{asset('datatablelang.json')}}"
+        },
+        dom: 'Bfrtip',
+        // dom: 'Blfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],   
+    });
+    $('.select2').select2();
+</script>
 
 
-    <script src="https://www.gstatic.com/firebasejs/5.5.5/firebase.js"></script>
-    <script>
-
-        // Initialize Firebase
-        // TODO: Replace with your project's customized code snippet
-        var config = {
-            apiKey: "AIzaSyAPA5a0FBYt87i0AJMitg0fC3T3C4Vj_qs",
-            authDomain: "joud-129d5.firebaseapp.com",
-            databaseURL: "https://joud-129d5.firebaseio.com",
-            projectId: "joud-129d5",
-            storageBucket: "joud-129d5.appspot.com",
-            messagingSenderId: "324063917940"
-        };
-        firebase.initializeApp(config);
-        const messaging = firebase.messaging();
-        messaging
-            .requestPermission()
-            .then(function () {
-                
-                {{--  console.log("Notification permission granted.");  --}}
-
-                // get the token in the form of promise
-                return messaging.getToken()
-            })
-            .then(function(token) {
-                 console.log("token is : " + token);  
-                if(token){
-                    $.ajax({
-                        url: "<?php echo url('/')?>/token/"+token,
-                        success: data => {
-                        }
-                    })
-                }
-                
-            })
-            .catch(function (err) {
-                {{--  console.log("Unable to get permission to notify.", err);  --}}
-            });
-
-        messaging.onMessage(function(payload) {
-            var jsonObj = $.parseJSON('[' + payload.data.message + ']');
-            {{-- var jsonObj1 = $.parseJSON('[' + payload.data + ']'); --}}
-            {{--  console.log("Message received. ", payload);  --}}
-            c = parseInt(count.html());
-            count.html(c+1);
-            console.log(jsonObj);
-            console.log(payload.data);
-            @if($lang == 'ar')
-                
-                   ShowDiv.prepend('<li  style=" float:  right;"><a href="{{ route("home") }}" class="unread">'+jsonObj['0']['ar']+'</a></li>');
-                
-
-            @else
-            
-                ShowDiv.prepend('<li><a href="{{ route("home") }}" class="unread">'+jsonObj['0']['en']+'</a></li>');
-
-            
-            @endif
-
-
-        });
-
-    </script>
-    @if($lang == "ar")
-
-
-
-    @endif
 </body>
-
 </html>
-    

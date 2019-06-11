@@ -1,124 +1,617 @@
 @extends('layouts.index')
 
  @section('content')
+<!-- Main Content -->
+<section class="content home">
+    <div class="block-header">
+        <div class="row">
+            <div class="col-lg-5 col-md-5 col-sm-12">
+                <h2>{{__('admin.dashboard')}}
+                <small>{{__('admin.Welcome to Khazan')}}</small>
+                </h2>
+            </div>            
+                @if($lang =='ar')
+                <div class="col-lg-7 col-md-7 col-sm-12 text-left">
+                <ul class="breadcrumb float-md-left" style=" padding: 0.6rem; direction: ltr; ">
+                @else 
+                <div class="col-lg-7 col-md-7 col-sm-12 text-right">
+                <ul class="breadcrumb float-md-right">
+                @endif
+                    <li class="breadcrumb-item"><a href="javascript:void(0);"><i class="zmdi zmdi-home"></i> {{__('admin.dashboard')}}</a></li>
+                    <!-- <li class="breadcrumb-item active">{{__('admin.dashboard')}}</li> -->
+                </ul>
+            </div>
+        </div>
+    </div>
 
-    <section class="content-header">
-        <h1>
-        {{trans('admin.dashboard')}}
-        <small> {{trans('admin.Control_panel')}}</small>
-        </h1>
-        <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-home"></i>{{trans('admin.home')}}</a></li>
-        </ol>
-
-        
-    </section>
-
-        <!-- Main content -->
-        <section class="content">
-            <!-- Small boxes (Stat box) -->
-            <div class="row">
-                <div class="col-lg-4 col-md-6 col-xs-12">
-                    <!-- small box -->
-                    <div class="small-box bg-aqua">
-                    <div class="inner">
-                            <h3 class="count">{{$users}}</h3>
-                        <p>{{trans('admin.users')}}</p>
-                    </div>
-                    <div class="icon">
-                        {{--  <i class="ion ion-person-stalker"></i>  --}}
-                        <i class="ion ion-person-stalker "></i>
-                        
-                    </div>
-                    <a href="{{ route('users') }}" class="small-box-footer">{{trans('admin.More_info')}} <i class="fa fa-arrow-circle-right"></i></a>
+     
+    <div class="container-fluid">
+        <!-- for statics -->
+        <div class="row clearfix">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="body">
+                        <div class="row clearfix">
+                            <div class="col-lg-4 col-md-4 col-sm-12 text-center">
+                                <div class="body">
+                                    <h2 class="number count-to m-t-0 m-b-5" data-from="0" data-to="{{$users}}" data-speed="1000" data-fresh-interval="700">{{$users}}</h2>
+                                    <p class="text-muted">{{trans('admin.users')}}</p>
+                                    <span id="linecustom1">1,4,2,6,5,2,3,8,5,2</span>
+                                    <a href="{{ route('users') }}" class="small-box-footer">{{trans('admin.More_info')}} <i class="fa fa-arrow-circle-right"></i></a>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 text-center">
+                                <div class="body">
+                                    <h2 class="number count-to m-t-0 m-b-5" data-from="0" data-to="{{$categories}}" data-speed="2000" data-fresh-interval="700">{{$categories}}</h2>
+                                    <p class="text-muted ">{{trans('admin.categories')}}</p>
+                                    <span id="linecustom2">2,9,5,5,8,5,4,2,6</span>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 text-center">
+                                <div class="body">
+                                    <h2 class="number count-to m-t-0 m-b-5" data-from="0" data-to="{{$subcategories}}" data-speed="2000" data-fresh-interval="700">{{$subcategories}}</h2>
+                                    <p class="text-muted">{{trans('admin.subcategories')}}</p>
+                                    <span id="linecustom3">1,5,3,6,6,3,6,8,4,2</span>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 text-center">
+                                <div class="body">
+                                    <h2 class="number count-to m-t-0 m-b-5" data-from="0" data-to="{{$lastdeals}}" data-speed="1000" data-fresh-interval="700">{{$lastdeals}}</h2>
+                                    <p class="text-muted">{{trans('admin.last_deals')}}</p>
+                                    <span id="linecustom4">1,4,2,6,5,2,3,8,5,2</span>
+                                    <!-- <a href="{{ route('users') }}" class="small-box-footer">{{trans('admin.More_info')}} <i class="fa fa-arrow-circle-right"></i></a> -->
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 text-center">
+                                <div class="body">
+                                    <h2 class="number count-to m-t-0 m-b-5" data-from="0" data-to="{{$nowdeals}}" data-speed="2000" data-fresh-interval="700">{{$nowdeals}}</h2>
+                                    <p class="text-muted ">{{trans('admin.nowdeals')}}</p>
+                                    <span id="linecustom5">2,9,5,5,8,5,4,2,6</span>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 text-center">
+                                <div class="body">
+                                    <h2 class="number count-to m-t-0 m-b-5" data-from="0" data-to="{{$deals}}" data-speed="2000" data-fresh-interval="700">{{$deals}}</h2>
+                                    <p class="text-muted">{{trans('admin.deals')}}</p>
+                                    <span id="linecustom6">1,5,3,6,6,3,6,8,4,2</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <!-- ./col -->
-                <div class="col-lg-4 col-md-6 col-xs-12">
-                    <!-- small box -->
-                    <div class="small-box bg-green">
-                    <div class="inner">
-                            <h3 class="count">{{$categories}}</h3>
-
-                        <p>{{trans('admin.categories')}}</p>
+            </div>
+        </div>
+        <!-- for statics map -->
+        <div class="row clearfix">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="header">
+                        <h2><strong>Sales</strong> Report</h2>
+                        <ul class="header-dropdown">
+                            <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="zmdi zmdi-more"></i> </a>
+                                <ul class="dropdown-menu dropdown-menu-right slideUp float-right">
+                                    <li><a href="javascript:void(0);">Edit</a></li>
+                                    <li><a href="javascript:void(0);">Delete</a></li>
+                                    <li><a href="javascript:void(0);">Report</a></li>
+                                </ul>
+                            </li>
+                            <li class="remove">
+                                <a role="button" class="boxs-close"><i class="zmdi zmdi-close"></i></a>
+                            </li>
+                        </ul>
                     </div>
-                    <div class="icon ">
-                        <i class="ion ion-navicon-round "></i>
-                    </div>
-                    <a href="{{ route('categories') }}" class="small-box-footer">{{trans('admin.More_info')}}<i class="fa fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <!-- ./col -->
-                <div class="col-lg-4 col-md-6 col-xs-12">
-                    <!-- small box -->
-                    <div class="small-box bg-red">
-                    <div class="inner">
-                        <h3 class="count">{{$subcategories}}</h3>
-
-                        <p>{{trans('admin.subcategories')}}</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-navicon-round"></i>
-                    </div>
-                    <a href="{{ route('subcategories') }}" class="small-box-footer">{{trans('admin.More_info')}}<i class="fa fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <!-- ./col -->
-                <div class="col-lg-4 col-md-6 col-xs-12">
-                    <!-- small box -->
-                    <div class="small-box bg-blue">
-                    <div class="inner">
-                        <h3 class="count">{{$deals}}</h3>
-
-                        <p>{{trans('admin.deals')}}</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-pie-graph"></i>
-                    </div>
-                    <a href="{{ route('deals') }}" class="small-box-footer">{{trans('admin.More_info')}}<i class="fa fa-arrow-circle-right"></i></a>
+                    <div class="body">
+                        <div class="row text-center">
+                            <div class="col-sm-3 col-6">
+                                <h4 class="margin-0">$ 106 <i class="zmdi zmdi-trending-up col-green"></i></h4>
+                                <p class="text-muted"> Today's Sales</p>
+                            </div>
+                            <div class="col-sm-3 col-6">
+                                <h4 class="margin-0">$ 907 <i class="zmdi zmdi-trending-down col-red"></i></h4>
+                                <p class="text-muted">This Week's Sales</p>
+                            </div>
+                            <div class="col-sm-3 col-6">
+                                <h4 class="margin-0">$ 4210 <i class="zmdi zmdi-trending-up col-green"></i></h4>
+                                <p class="text-muted">This Month's Sales</p>
+                            </div>
+                            <div class="col-sm-3 col-6">
+                                <h4 class="margin-0">$ 67,000 <i class="zmdi zmdi-trending-up col-green"></i></h4>
+                                <p class="text-muted">This Year's Sales</p>
+                            </div>
+                        </div>
+                        <div id="area_chart" class="graph"></div>
                     </div>
                 </div>
-                <!-- ./col -->
-                <!-- ./col -->
-                <div class="col-lg-4 col-md-6 col-xs-12">
-                    <!-- small box -->
-                    <div class="small-box bg-blue">
-                    <div class="inner">
-                        <h3 class="count">{{$nowdeals}}</h3>
-
-                        <p>{{trans('admin.nowdeals')}}</p>
+            </div>
+        </div>
+        <div class="row clearfix">
+            <div class="col-lg-8 col-md-12">
+                <div class="row clearfix">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <ul class="row profile_state list-unstyled">
+                                <li class="col-lg-3 col-md-3 col-6">
+                                    <div class="body">
+                                        <i class="zmdi zmdi-eye col-amber"></i>
+                                        <h4>15,453</h4>
+                                        <span>Post View</span>
+                                    </div>
+                                </li>
+                                <li class="col-lg-3 col-md-3 col-6">
+                                    <div class="body">
+                                        <i class="zmdi zmdi-thumb-up col-blue"></i>
+                                        <h4>921</h4>
+                                        <span>Likes</span>
+                                    </div>
+                                </li>
+                                <li class="col-lg-3 col-md-3 col-6">
+                                    <div class="body">
+                                        <i class="zmdi zmdi-comment-text col-red"></i>
+                                        <h4>215</h4>
+                                        <span>Comments</span>
+                                    </div>
+                                </li>
+                                <li class="col-lg-3 col-md-3 col-6">
+                                    <div class="body">
+                                        <i class="zmdi zmdi-account text-success"></i>
+                                        <h4>22,055</h4>
+                                        <span>Profile Views</span>
+                                    </div>
+                                </li>                      
+                            </ul>
+                        </div>
                     </div>
-                    <div class="icon">
-                        <i class="ion ion-pie-graph"></i>
+                    <div class="col-lg-7 col-md-6">
+                        <div class="card tasks_report">
+                            <div class="header">
+                                <h2><strong>Total</strong> Revenue</h2>                        
+                                <ul class="header-dropdown">
+                                    <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="zmdi zmdi-more"></i> </a>
+                                        <ul class="dropdown-menu dropdown-menu-right slideUp">
+                                            <li><a href="javascript:void(0);">2017 Year</a></li>
+                                            <li><a href="javascript:void(0);">2016 Year</a></li>
+                                            <li><a href="javascript:void(0);">2015 Year</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="remove">
+                                        <a role="button" class="boxs-close"><i class="zmdi zmdi-close"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="body text-center">
+                                <h4 class="margin-0">Total Sale</h4>
+                                <h6 class="m-b-20">2,45,124</h6>
+                                <input type="text" class="knob dial1" value="66" data-width="100" data-height="100" data-thickness="0.1" data-fgColor="#212121" readonly>
+                                <h6 class="m-t-20">Satisfaction Rate</h6>
+                                <small class="displayblock">47% Average <i class="zmdi zmdi-trending-up"></i></small>
+                                <div class="sparkline m-t-20" data-type="bar" data-width="97%" data-height="35px" data-bar-Width="2" data-bar-Spacing="8" data-bar-Color="#212121">3,2,6,5,9,8,7,8,4,5,1,2,9,5,1,3,5,7,4,6</div>
+                            </div>
+                        </div>                    
                     </div>
-                    <a href="{{ route('nowdeals') }}" class="small-box-footer">{{trans('admin.More_info')}}<i class="fa fa-arrow-circle-right"></i></a>
+                    <div class="col-lg-5 col-md-6">
+                        <div class="card top-report">
+                            <div class="body">
+                                <h3 class="m-t-0">1,600 <i class="zmdi zmdi-trending-up float-right"></i></h3>
+                                <p class="text-muted">New Feedbacks</p>
+                                <div class="progress">
+                                    <div class="progress-bar l-blush" role="progressbar" aria-valuenow="68" aria-valuemin="0" aria-valuemax="100" style="width: 68%;"></div>
+                                </div>
+                                <small>Change 15%</small>
+                            </div>
+                        </div>
+                        <div class="card top-report">
+                            <div class="body">
+                                <h3 class="m-t-0 m-b-25">50.5 Gb <i class="zmdi zmdi-trending-up float-right"></i></h3>
+                                <p class="text-muted">Traffic this month</p>
+                                <div class="progress">
+                                    <div class="progress-bar l-turquoise" role="progressbar" aria-valuenow="68" aria-valuemin="0" aria-valuemax="100" style="width: 68%;"></div>
+                                </div>
+                                <small>Change 5%</small>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <!-- ./col -->
-                <!-- ./col -->
-                <div class="col-lg-4 col-md-6 col-xs-12">
-                    <!-- small box -->
-                    <div class="small-box bg-blue">
-                    <div class="inner">
-                        <h3 class="count">{{$lastdeals}}</h3>
-
-                        <p>{{trans('admin.last_deals')}}</p>
+            </div>
+            <div class="col-lg-4 col-md-12">
+                <div class="card weather2">
+                    <div class="city-selected body l-khaki">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="city"><span>City:</span> New York</div>
+                                <div class="night">Day - 12:07 PM</div>
+                            </div>
+                            <div class="info col-7">
+                                <div class="temp"><h2>34°</h2></div>									
+                            </div>
+                            <div class="icon col-5">
+                                <img src="{{ asset('assets/images/weather/summer.svg') }}" alt="">
+                            </div>
+                        </div>
                     </div>
-                    <div class="icon">
-                        <i class="ion ion-pie-graph"></i>
+                    <table class="table table-striped m-b-0">
+                        <tbody>
+                            <tr>
+                            <td>Wind</td>
+                            <td class="font-medium">ESE 17 mph</td>
+                        </tr>
+                        <tr>
+                            <td>Humidity</td>
+                            <td class="font-medium">72%</td>
+                        </tr>
+                        <tr>
+                            <td>Pressure</td>
+                            <td class="font-medium">25.56 in</td>
+                        </tr>
+                        <tr>
+                            <td>Cloud Cover</td>
+                            <td class="font-medium">80%</td>
+                        </tr>
+                        <tr>
+                            <td>Ceiling</td>
+                            <td class="font-medium">25280 ft</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="carousel slide" data-ride="carousel">
+                        <div class="carousel-inner" role="listbox">
+                            <div class="carousel-item text-center active">
+                                <div class="col-12">
+                                    <ul class="row days-list list-unstyled">
+                                        <li class="day col-4">
+                                            <p>Monday</p>
+                                            <img src="{{ asset('assets/images/weather/rain.svg') }}" alt="">
+                                        </li>
+                                        <li class="day col-4">
+                                            <p>Tuesday</p>
+                                            <img src="{{ asset('assets/images/weather/cloudy.svg') }}" alt="">
+                                        </li>
+                                        <li class="day col-4">
+                                            <p>Wednesday</p>
+                                            <img src="{{ asset('assets/images/weather/wind.svg') }}" alt="">
+                                        </li>
+                                    </ul>
+                                </div>                                
+                            </div>
+                            <div class="carousel-item text-center">
+                                <div class="col-12">
+                                    <ul class="row days-list list-unstyled">
+                                        <li class="day col-4">
+                                            <p>Thursday</p>
+                                            <img src="{{ asset('assets/images/weather/sky.svg') }}" alt="">
+                                        </li>
+                                        <li class="day col-4">
+                                            <p>Friday</p>
+                                            <img src="{{ asset('assets/images/weather/cloudy.svg') }}" alt="">
+                                        </li>
+                                        <li class="day col-4">
+                                            <p>Saturday</p>
+                                            <img src="{{ asset('assets/images/weather/summer.svg') }}" alt="">
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>							
+                        </div>
+                    </div>                    
+                </div>
+            </div>
+        </div>        
+        <div class="row clearfix">
+            <div class="col-lg-8 col-md-12">
+                <div class="card visitors-map">
+                    <div class="header">
+                        <h2><strong>Visitors</strong> Statistics</h2>
+                        <ul class="header-dropdown">
+                            <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="zmdi zmdi-more"></i> </a>
+                                <ul class="dropdown-menu dropdown-menu-right slideUp">
+                                    <li><a href="javascript:void(0);">Action</a></li>
+                                    <li><a href="javascript:void(0);">Another action</a></li>
+                                    <li><a href="javascript:void(0);">Something else</a></li>
+                                </ul>
+                            </li>
+                            <li class="remove">
+                                <a role="button" class="boxs-close"><i class="zmdi zmdi-close"></i></a>
+                            </li>
+                        </ul>                        
                     </div>
-                    <a href="{{ route('last_deals') }}" class="small-box-footer">{{trans('admin.More_info')}}<i class="fa fa-arrow-circle-right"></i></a>
+                    <div class="body">
+                        <div id="world-map-markers" style="height: 245px;" class="m-b-10"></div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-12">
+                                <div class="progress-container">
+                                    <span class="progress-badge">visitor from america</span>
+                                    <div class="progress">
+                                        <div class="progress-bar l-turquoise" role="progressbar" aria-valuenow="86" aria-valuemin="0" aria-valuemax="100" style="width: 86%;">
+                                            <span class="progress-value">86%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="progress-container m-t-20">
+                                    <span class="progress-badge">visitor from Canada</span>
+                                    <div class="progress">
+                                        <div class="progress-bar l-coral" role="progressbar" aria-valuenow="86" aria-valuemin="0" aria-valuemax="100" style="width: 86%;">
+                                            <span class="progress-value">86%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="progress-container m-t-20">
+                                    <span class="progress-badge">visitor from Germany</span>
+                                    <div class="progress">
+                                        <div class="progress-bar l-blue" role="progressbar" aria-valuenow="38" aria-valuemin="0" aria-valuemax="100" style="width: 38%;">
+                                            <span class="progress-value">86%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-12">
+                                <div class="progress-container">
+                                    <span class="progress-badge">visitor from UK</span>
+                                    <div class="progress">
+                                        <div class="progress-bar l-salmon" role="progressbar" aria-valuenow="48" aria-valuemin="0" aria-valuemax="100" style="width: 48%;">
+                                            <span class="progress-value">86%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="progress-container m-t-20">
+                                    <span class="progress-badge">visitor from India</span>
+                                    <div class="progress">
+                                        <div class="progress-bar l-parpl" role="progressbar" aria-valuenow="86" aria-valuemin="0" aria-valuemax="100" style="width: 86%;">
+                                            <span class="progress-value">86%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="progress-container m-t-20">
+                                    <span class="progress-badge">visitor from Australia</span>
+                                    <div class="progress">
+                                        <div class="progress-bar l-amber" role="progressbar" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100" style="width: 55%;">
+                                            <span class="progress-value">86%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <!-- ./col -->
-            </div> 
-            
-        </section>
-
+                <div class="row clearfix social-widget">                   
+                    <div class="col-lg-4 col-md-4">
+                        <div class="card info-box-2 hover-zoom-effect instagram-widget">
+                            <div class="icon"><i class="zmdi zmdi-instagram"></i></div>
+                            <div class="content">
+                                <div class="text">Followers</div>
+                                <div class="number">231</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                        <div class="card info-box-2 hover-zoom-effect linkedin-widget">
+                            <div class="icon"><i class="zmdi zmdi-linkedin"></i></div>
+                            <div class="content">
+                                <div class="text">Followers</div>
+                                <div class="number">2510</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                        <div class="card info-box-2 hover-zoom-effect behance-widget">
+                            <div class="icon"><i class="zmdi zmdi-behance"></i></div>
+                            <div class="content">
+                                <div class="text">Project</div>
+                                <div class="number">121</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-12">
+                <div class="card">
+                    <div class="header">
+                        <h2><strong>Browser</strong> Usage</h2>
+                        <ul class="header-dropdown">
+                            <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="zmdi zmdi-more"></i> </a>
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li><a href="javascript:void(0);">Action</a></li>
+                                    <li><a href="javascript:void(0);">Another action</a></li>
+                                    <li><a href="javascript:void(0);">Something else</a></li>
+                                </ul>
+                            </li>
+                            <li class="remove">
+                                <a role="button" class="boxs-close"><i class="zmdi zmdi-close"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="body">
+                        <div id="donut_chart" class="dashboard-donut-chart"></div>
+                        <table class="table m-t-25 m-b-0">
+                            <tbody>
+                                <tr>                                   
+                                    <td>Chrome</td>
+                                    <td>6985</td>
+                                    <td><i class="zmdi zmdi-caret-up text-success"></i></td>
+                                </tr>
+                                <tr>
+                                    <td>Other</td>
+                                    <td>2697</td>
+                                    <td><i class="zmdi zmdi-caret-up text-success"></i></td>
+                                </tr>
+                                <tr>
+                                    <td>Safari</td>
+                                    <td>3597</td>
+                                    <td><i class="zmdi zmdi-caret-down text-danger"></i></td>
+                                </tr>
+                                <tr>
+                                    <td>Firefox</td>
+                                    <td>2145</td>
+                                    <td><i class="zmdi zmdi-caret-up text-success"></i></td>
+                                </tr>
+                                <tr>
+                                    <td>Opera</td>
+                                    <td>1854</td>
+                                    <td><i class="zmdi zmdi-caret-down text-danger"></i></td>
+                                </tr>
+                                <tr>
+                                    <td>IE</td>
+                                    <td>154</td>
+                                    <td><i class="zmdi zmdi-caret-down text-danger"></i></td>
+                                </tr> 
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row clearfix">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <div class="card">
+                    <div class="header">
+                        <h2><strong>Members</strong> Profiles <small>Members Preformance / Monthly Status</small> </h2>
+                        <ul class="header-dropdown">
+                            <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="zmdi zmdi-more"></i> </a>
+                                <ul class="dropdown-menu dropdown-menu-right slideUp">
+                                    <li><a href="javascript:void(0);">Action</a></li>
+                                    <li><a href="javascript:void(0);">Another action</a></li>
+                                    <li><a href="javascript:void(0);">Something else</a></li>
+                                </ul>
+                            </li>
+                            <li class="remove">
+                                <a role="button" class="boxs-close"><i class="zmdi zmdi-close"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="body table-responsive members_profiles">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="width:60px;">Member</th>
+                                    <th>Name</th>
+                                    <th>Earnings</th>
+                                    <th>Sales</th>                                    
+                                    <th>Reviews</th>
+                                    <th>Progress</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <img class="rounded-circle" src="{{ asset('assets/images/xs/avatar1.jpg') }}" alt="user" width="40"> </td>
+                                    <td>
+                                        <a href="javascript:void(0);">Logan</a>
+                                    </td>
+                                    <td>$420</td>
+                                    <td>23</td>                                   
+                                    <td>
+                                        <i class="zmdi zmdi-star"></i>
+                                        <i class="zmdi zmdi-star"></i>
+                                        <i class="zmdi zmdi-star"></i>
+                                        <i class="zmdi zmdi-star"></i>
+                                        <i class="zmdi zmdi-star-outline"></i>
+                                    </td>
+                                        <td>
+                                        <div class="progress">
+                                            <div class="progress-bar l-green" role="progressbar" aria-valuenow="87" aria-valuemin="0" aria-valuemax="100" style="width: 87%;"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <img class="rounded-circle" src="{{ asset('assets/images/xs/avatar2.jpg') }}" alt="user" width="40"> </td>
+                                    <td>
+                                        <a href="javascript:void(0);">Isabella</a>
+                                    </td>
+                                    <td>$350</td>
+                                    <td>16</td>                                   
+                                    <td>
+                                        <i class="zmdi zmdi-star"></i>
+                                        <i class="zmdi zmdi-star"></i>
+                                        <i class="zmdi zmdi-star"></i>
+                                        <i class="zmdi zmdi-star-outline"></i>
+                                        <i class="zmdi zmdi-star-outline"></i>
+                                    </td>
+                                        <td>
+                                        <div class="progress">
+                                            <div class="progress-bar l-amber" role="progressbar" aria-valuenow="68" aria-valuemin="0" aria-valuemax="100" style="width: 68%;"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <img class="rounded-circle" src="{{ asset('assets/images/xs/avatar3.jpg') }}" alt="user" width="40"> </td>
+                                    <td>
+                                        <a href="javascript:void(0);">Jackson</a>
+                                    </td>
+                                    <td>$201</td>
+                                    <td>11</td>                                   
+                                    <td>
+                                        <i class="zmdi zmdi-star"></i>
+                                        <i class="zmdi zmdi-star"></i>
+                                        <i class="zmdi zmdi-star-outline"></i>
+                                        <i class="zmdi zmdi-star-outline"></i>
+                                        <i class="zmdi zmdi-star-outline"></i>
+                                    </td>
+                                        <td>
+                                        <div class="progress">
+                                            <div class="progress-bar l-parpl" role="progressbar" aria-valuenow="32" aria-valuemin="0" aria-valuemax="100" style="width:32%;"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <img class="rounded-circle" src="{{ asset('assets/images/xs/avatar4.jpg') }}" alt="user" width="40"> </td>
+                                    <td>
+                                        <a href="javascript:void(0);">Victoria</a>
+                                    </td>
+                                    <td>$651</td>
+                                    <td>28</td>                                   
+                                    <td>
+                                        <i class="zmdi zmdi-star"></i>
+                                        <i class="zmdi zmdi-star"></i>
+                                        <i class="zmdi zmdi-star"></i>
+                                        <i class="zmdi zmdi-star"></i>
+                                        <i class="zmdi zmdi-star-half"></i>
+                                    </td>
+                                        <td>
+                                        <div class="progress">
+                                            <div class="progress-bar l-green" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%;"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <img class="rounded-circle" src="{{ asset('assets/images/xs/avatar5.jpg') }}" alt="user" width="40"> </td>
+                                    <td>
+                                        <a href="javascript:void(0);">Lucas</a>
+                                    </td>
+                                    <td>$300</td>
+                                    <td>20</td>                                   
+                                    <td>
+                                        <i class="zmdi zmdi-star"></i>
+                                        <i class="zmdi zmdi-star"></i>
+                                        <i class="zmdi zmdi-star"></i>
+                                        <i class="zmdi zmdi-star-half"></i>
+                                        <i class="zmdi zmdi-star-outline"></i>
+                                    </td>
+                                        <td>
+                                        <div class="progress">
+                                            <div class="progress-bar l-blue" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%;"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+</section>
   
-
 @endsection 
 
 @section('script')
+<script src="{{ asset('assets/bundles/morrisscripts.bundle.js') }}"></script><!-- Morris Plugin Js -->
+<script src="{{ asset('assets/bundles/jvectormap.bundle.js') }}"></script> <!-- JVectorMap Plugin Js -->
+<script src="{{ asset('assets/bundles/knob.bundle.js') }}"></script> <!-- Jquery Knob, Count To, Sparkline Js -->
+<script src="{{ asset('assets/plugins/chartjs/Chart.bundle.min.js') }}"></script> <!-- Chart Plugins Js -->
+<script src="{{ asset('assets/js/pages/index.js') }}"></script>
 
 @endsection

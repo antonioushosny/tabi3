@@ -20,7 +20,7 @@ class CreateCitiesTable extends Migration
             $table->string('image')->nullable($value = true);
             $table->enum('status', ['active', 'not_active'])->nullable($value = true)->default('active');
             $table->unsignedInteger('country_id')->nullable($value = true);
-            $table->foreign('country_id')->references('id')->on('countries')->onDelete('set null'); 
+            $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade'); 
             $table->timestamps();
         });
     }

@@ -200,6 +200,9 @@ return [
         'video'                 => 'video',
         'message'               => 'message',
         'cost'                  =>  'Course Cost',
+        'device_type'               => 'device type' ,
+        'lat'                 => '   location ',
+        'lng'                 => 'location  ',
     ],
     
 ];

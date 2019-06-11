@@ -8,6 +8,7 @@ return [
     'password_failed'       => 'password not correct',
     'fail_login'            => 'These credentials do not match our records.',
     'save'                  => 'saved successfully',
+    'delete'                  => 'Deleted successfully',
     'failed'                => 'an error occurred ',
     'allowed'               => 'you are not allowed',
     'logged_out'            => 'You are logged out',
@@ -41,7 +42,10 @@ return [
     'savecontact'   =>'Message sent successfully',
     'success'   =>'success',
     'notfound'  => 'data not found',
-    'date_not_valid' => 'date not valid',
-    'time_not_valid' => ' time not valid',
-    'you_dont_have_enouph_points' => 'you dont have enouph points',
+
+    'pending'   => 'Pending',
+    'accepted'   => 'Accepted, Waiting for assign driver',
+    'assigned'   => 'Driver assigned to the order, waiting for delivery',
+    'delivered'   => 'Delivered',
+    'canceled'   => 'Canceled',
 ];

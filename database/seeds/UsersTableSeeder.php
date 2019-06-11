@@ -22,34 +22,26 @@ class UsersTableSeeder extends Seeder
         $password = Hash::make('123456');
 
             User::create([
-                'user_name' => 'admin',
+
                 'name' => 'admin',
                 'email' => 'admin@gmail.com',
                 'password' => $password,
-                'mobile' => '01110874146',
-                'role' => '1',
-                'status' => '1',
+                'mobile' => '3265749874',
+                'role' => 'admin',
+                'status' => 'active',
             ]);
 
-            User::create([
-                'user_name' => 'manager',
-                'name' => 'manager',
-                'email' => 'manager@gmail.com',
-                'password' => $password,
-                'mobile' => '01110874156',
-                'role' => '2',
-                'status' => '1',
-            ]);
+            // User::create([
 
-            User::create([
-                'user_name' => 'employee',
-                'name' => 'employee',
-                'email' => 'employee@gmail.com',
-                'password' => $password,
-                'mobile' => '01110874155',
-                'role' => '3',
-                'status' => '1',
-            ]);
+            //     'name' => 'provider',
+            //     'email' => 'provider@gmail.com',
+            //     'password' => $password,
+            //     'mobile' => '1326585489',
+            //     'role' => 'admin',
+            //     'status' => 'active',
+            // ]);
+
+           
 
     }
 }

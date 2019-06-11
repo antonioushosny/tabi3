@@ -64,7 +64,7 @@ class LoginController extends Controller
             return back()->with('error',trans('admin.email_notfound'));;
         }
 
-        if($user['role'] == 'admin' || $user['role'] == 'school' ){
+        if($user['role'] == 'admin' || $user['role'] == 'provider'|| $user['role'] == 'center' ){
             if($user['status'] == 'active'){
                 if ($this->attemptLogin($request)) {
                     $user = $this->guard()->user();
