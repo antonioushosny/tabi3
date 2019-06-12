@@ -37,8 +37,8 @@
                 <ul class="breadcrumb float-md-right">
                 @endif
                     <li class="breadcrumb-item active"><a href="{{route('home')}}"><i class="zmdi zmdi-home"></i>{{__('admin.dashboard')}}</a></li>
-                    <li class="breadcrumb-item"><a href="{{route('drivers')}}"><i class="zmdi zmdi-accounts-add"></i> {{__('admin.drivers')}}</a></li>
-                    <li class="breadcrumb-item "><a href="javascript:void(0);">{{__('admin.edit_driver')}}</a></li>
+                    <li class="breadcrumb-item"><a href="{{route('users')}}"><i class="zmdi zmdi-accounts-add"></i> {{__('admin.users')}}</a></li>
+                    <li class="breadcrumb-item "><a href="javascript:void(0);">{{__('admin.edit_user')}}</a></li>
                     
                 </ul>
             </div>
@@ -46,7 +46,7 @@
     </div>
 
      
-    <div class="driver-fluid">
+    <div class="user-fluid">
         
         <!-- Exportable Table -->
         <div class="row clearfix">
@@ -55,32 +55,32 @@
                
 
                         <div class="header">
-                            <h2><strong>{{trans('admin.'.$title)}}</strong> {{trans('admin.add_driver')}}  </h2>
+                            <h2><strong>{{trans('admin.'.$title)}}</strong> {{trans('admin.edit_user')}}  </h2>
                             
                         </div>
                         <div class="body">
-                            {!! Form::open(['route'=>['storedriver'],'method'=>'post','autocomplete'=>'off', 'id'=>'form_validation', 'enctype'=>'multipart/form-data' ])!!} 
+                            {!! Form::open(['route'=>['storeuser'],'method'=>'post','autocomplete'=>'off', 'id'=>'form_validation', 'enctype'=>'multipart/form-data' ])!!} 
 
                                 <div class="form-group form-float">
-                                    <input type="hidden" value="{{$driver->id}}" name="id" required>
+                                    <input type="hidden" value="{{$user->id}}" name="id" required>
                                 </div>
                                 
                                 <!-- for center_id -->
                                 <div class= "form-group form-float">
                                     {!! Form::select('center_id',$centers
-                                        ,$driver->center_id,['class'=>'form-control show-tick select2' ,'placeholder' =>trans('admin.choose_center'),'required']) !!}
+                                        ,$user->center_id,['class'=>'form-control show-tick select2' ,'placeholder' =>trans('admin.choose_center'),'required']) !!}
                                     <label id="center_id-error" class="error" for="center_id" style="">  </label>
                                 </div>
                                
                                 <!-- for responsible_name -->
                                 <div class="form-group form-float">
-                                    <input type="text" class="form-control" placeholder="{{__('admin.placeholder_responsible_name')}}" name="responsible_name" value="{{$driver->name}}" required>
+                                    <input type="text" class="form-control" placeholder="{{__('admin.placeholder_responsible_name')}}" name="responsible_name" value="{{$user->name}}" required>
                                     <label id="responsible_name-error" class="error" for="responsible_name" style="">  </label>
                                 </div>
                                
                                 <!-- for email -->
                                 <div class="form-group form-float">
-                                    <input type="email" class="form-control" placeholder="{{__('admin.placeholder_email')}}" name="email" autocomplete="off" value="{{$driver->email}}" required>
+                                    <input type="email" class="form-control" placeholder="{{__('admin.placeholder_email')}}" name="email" autocomplete="off" value="{{$user->email}}" required>
                                     <label id="email-error" class="error" for="email" style=""></label>
                                 </div>
 
@@ -97,15 +97,15 @@
                                                 </a>
                                                 &nbsp;
                                                 <div class='label label-primary' id="upload-file-info" ></div>
-                                                <span style="color: red " class="image text-driver hidden"></span>
+                                                <span style="color: red " class="image text-user hidden"></span>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="col-md-10">
                                         
-                                        @if($driver->image)
-                                            <img id="changeimage" src="{{asset('img/'.$driver->image)}}" width="100px" height="100px" alt=" {{trans('admin.image')}}" />
+                                        @if($user->image)
+                                            <img id="changeimage" src="{{asset('img/'.$user->image)}}" width="100px" height="100px" alt=" {{trans('admin.image')}}" />
                                         @else 
                                             <img id="changeimage" src="{{asset('images/default.png')}}" width="100px" height="100px" alt=" {{trans('admin.image')}}" />
                                         @endif
@@ -113,11 +113,11 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="radio inlineblock m-r-20">
-                                        <input type="radio" name="status" id="active" class="with-gap" value="active" <?php echo ($driver->status == 'active') ? "checked=''" : ""; ?> >
+                                        <input type="radio" name="status" id="active" class="with-gap" value="active" <?php echo ($user->status == 'active') ? "checked=''" : ""; ?> >
                                         <label for="active">{{__('admin.active')}}</label>
                                     </div>                                
                                     <div class="radio inlineblock">
-                                        <input type="radio" name="status" id="not_active" class="with-gap" value="not_active" <?php echo ($driver->status == 'not_active') ? "checked=''" : ""; ?> >
+                                        <input type="radio" name="status" id="not_active" class="with-gap" value="not_active" <?php echo ($user->status == 'not_active') ? "checked=''" : ""; ?> >
                                         <label for="not_active">{{__('admin.not_active')}}</label>
                                     </div>
                                 </div>
@@ -149,7 +149,7 @@
         //    openModal();
           $.ajax({
               type: 'POST',
-              url: '{{ URL::route("storedriver") }}',
+              url: '{{ URL::route("storeuser") }}',
               data:  new FormData($("#form_validation")[0]),
               processData: false,
               contentType: false,
@@ -173,7 +173,7 @@
                             $('#image-error').text(data.errors.image);
                         }
                   } else {
-                        window.location.replace("{{route('drivers')}}");
+                        window.location.replace("{{route('users')}}");
 
                      }
             },

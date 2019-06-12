@@ -260,8 +260,8 @@ class OrdersController  extends Controller
         $drivers = array_pluck($alldrivers,'name', 'id');  
 
         $order = Order::where('id',$id)->with('centers')->with('drivers')->orderBy('id', 'DESC')->first();
-        return $order ; 
-        return view('orders.edit',compact('order','drivers','title','lang'));
+        // return $order ; 
+        return view('orders.show',compact('order','drivers','title','lang'));
     }
 
     public function update(Request $request, $id)

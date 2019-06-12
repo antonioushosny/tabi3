@@ -38,7 +38,7 @@
                
 
                         <div class="header">
-                            <h2><strong>{{trans('admin.'.$title)}}</strong> {{trans('admin.add_citie')}}  </h2>
+                            <h2><strong>{{trans('admin.'.$title)}}</strong> {{trans('admin.edit_citie')}}  </h2>
                             
                         </div>
                         <div class="body">

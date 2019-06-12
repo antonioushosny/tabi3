@@ -71,8 +71,8 @@
                 <ul class="breadcrumb float-md-right">
                 @endif
                     <li class="breadcrumb-item active"><a href="{{route('home')}}"><i class="zmdi zmdi-home"></i>{{__('admin.dashboard')}}</a></li>
-                    <li class="breadcrumb-item"><a href="{{route('centers')}}"><i class="zmdi zmdi-accounts-add"></i> {{__('admin.centers')}}</a></li>
-                    <li class="breadcrumb-item "><a href="javascript:void(0);">{{__('admin.edit_center')}}</a></li>
+                    <li class="breadcrumb-item"><a href="{{route('orders')}}"><i class="zmdi zmdi-accounts-add"></i> {{__('admin.orders')}}</a></li>
+                    <li class="breadcrumb-item "><a href="javascript:void(0);">{{__('admin.order_detail')}}</a></li>
                     
                 </ul>
             </div>
@@ -80,7 +80,7 @@
     </div>
 
      
-    <div class="center-fluid">
+    <div class="order-fluid">
         
         <!-- Exportable Table -->
         <div class="row clearfix">
@@ -89,20 +89,20 @@
                
 
                         <div class="header">
-                            <h2><strong>{{trans('admin.'.$title)}}</strong> {{trans('admin.edit_center')}}  </h2>
+                            <h2><strong>{{trans('admin.'.$title)}}</strong> {{trans('admin.add_order')}}  </h2>
                             
                         </div>
                         <div class="body">
-                            {!! Form::open(['route'=>['storecenter'],'method'=>'post','autocomplete'=>'off', 'id'=>'form_validation', 'enctype'=>'multipart/form-data' ])!!} 
+                            {!! Form::open(['route'=>['storeorder'],'method'=>'post','autocomplete'=>'off', 'id'=>'form_validation', 'enctype'=>'multipart/form-data' ])!!} 
 
                                 <div class="form-group form-float">
-                                    <input type="hidden" value="{{$center->id}}" name="id" required>
+                                    <input type="hidden" value="{{$order->id}}" name="id" required>
                                 </div>
                                 <!-- for company_name -->
                                 @if(Auth::user()->role == 'admin' )
                                     <div class= "form-group form-float">
                                         {!! Form::select('provider_id',$providers
-                                            ,$center->provider_id,['class'=>'form-control show-tick select2' ,'placeholder' =>trans('admin.choose_provider'),'required']) !!}
+                                            ,$order->provider_id,['class'=>'form-control show-tick select2' ,'placeholder' =>trans('admin.choose_provider'),'required']) !!}
                                         <label id="provider_id-error" class="error" for="provider_id" style="">  </label>
                                     </div>
                                 @else 
@@ -112,43 +112,43 @@
                                 @endif
                                 <!-- for responsible_name -->
                                 <div class="form-group form-float">
-                                    <input type="text" class="form-control" placeholder="{{__('admin.placeholder_responsible_name')}}" name="responsible_name" value="{{$center->name}}" required>
+                                    <input type="text" class="form-control" placeholder="{{__('admin.placeholder_responsible_name')}}" name="responsible_name" value="{{$order->name}}" required>
                                     <label id="responsible_name-error" class="error" for="responsible_name" style="">  </label>
                                 </div>
                                
                                 <!-- for email -->
                                 <div class="form-group form-float">
-                                    <input type="email" class="form-control" placeholder="{{__('admin.placeholder_email')}}" name="email" autocomplete="off" value="{{$center->email}}" required>
+                                    <input type="email" class="form-control" placeholder="{{__('admin.placeholder_email')}}" name="email" autocomplete="off" value="{{$order->email}}" required>
                                     <label id="email-error" class="error" for="email" style=""></label>
                                 </div>
 
                                 <!-- for mobile -->
                                 <div class="form-group form-float">
-                                    <input type="text" class="form-control" placeholder="{{__('admin.mobile')}}" value="{{$center->mobile}}" name="mobile" onkeypress='isNumber(event); ' >
+                                    <input type="text" class="form-control" placeholder="{{__('admin.mobile')}}" value="{{$order->mobile}}" name="mobile" onkeypress='isNumber(event); ' >
                                     <label id="mobile-error" class="error" for="mobile" style="">  </label>
                                 </div>
 
                                 <!-- for city -->
                                 <div class= "form-group form-float">
                                     {!! Form::select('city_id',$cities
-                                        ,$center->city_id,['class'=>'form-control show-tick select2' ,'id'=>'city_id','placeholder' =>trans('admin.choose_city'),'required']) !!}
+                                        ,$order->city_id,['class'=>'form-control show-tick select2' ,'id'=>'city_id','placeholder' =>trans('admin.choose_city'),'required']) !!}
                                     <label id="city_id-error" class="error" for="city_id" style="">  </label>
                                 </div>
                                         
                                 <!-- for area -->
                                 <div class= "form-group form-float area_id_div ">
                                     {!! Form::select('area_id',$areas
-                                        ,$center->area_id,['class'=>'form-control show-tick select2' ,'id'=>'area_id','placeholder' =>trans('admin.choose_area'),'required']) !!}
+                                        ,$order->area_id,['class'=>'form-control show-tick select2' ,'id'=>'area_id','placeholder' =>trans('admin.choose_area'),'required']) !!}
                                     <label id="area_id-error" class="error" for="area_id" style="">  </label>
                                 </div>
                                  <!-- for containers  -->
-                                 <h3 style="text-align:center">{{__('admin.containers')}}</h3>
+                                 <h3 style="text-align:order">{{__('admin.containers')}}</h3>
                                 <fieldset>
                                     <div class="control-group">
                                         <div class="container-fluid containers-container">
                                             <?php $c = 0 ?>
-                                            @if(sizeof($center->containers) > 0 )
-                                                @foreach($center->containers as $container)
+                                            @if(sizeof($order->containers) > 0 )
+                                                @foreach($order->containers as $container)
                                                     @if($c == 0)
                                                         <div class="row containers-divrow">
                                                             <div class="col-sm-5">
@@ -162,7 +162,7 @@
                                                             <div class="col-sm-5">
                                                                 <!-- for price -->
                                                                 <div class= "form-group form-float">
-                                                                    <input type="number" step="0.01" class="form-control text-center "  data-rule="currency" placeholder="{{__('admin.price')}}"  name="price[]" value="{{$container->pivot->price}}" required>
+                                                                    <input type="number" step="0.01" class="form-control text-order "  data-rule="currency" placeholder="{{__('admin.price')}}"  name="price[]" value="{{$container->pivot->price}}" required>
                                                                     <label id="price-error" class="error" for="price" style="">  </label>
                                                                 </div>
                                                             </div>
@@ -184,7 +184,7 @@
                                                             <div class="col-sm-5">
                                                                 <!-- for price -->
                                                                 <div class= "form-group form-float">
-                                                                    <input type="number" step="0.01" class="form-control text-center "  data-rule="currency" placeholder="{{__('admin.price')}}"  name="price[]" value="{{$container->pivot->price}}" required>
+                                                                    <input type="number" step="0.01" class="form-control text-order "  data-rule="currency" placeholder="{{__('admin.price')}}"  name="price[]" value="{{$container->pivot->price}}" required>
                                                                     <label id="price-error" class="error" for="price" style="">  </label>
                                                                 </div>
                                                             </div>
@@ -209,7 +209,7 @@
                                                 <div class="col-sm-5">
                                                     <!-- for price -->
                                                     <div class= "form-group form-float">
-                                                        <input type="number" step="0.01" class="form-control text-center " value="1" data-rule="currency" placeholder="{{__('admin.price')}}"  name="price[]" required>
+                                                        <input type="number" step="0.01" class="form-control text-order " value="1" data-rule="currency" placeholder="{{__('admin.price')}}"  name="price[]" required>
                                                         <label id="price-error" class="error" for="price" style="">  </label>
                                                     </div>
                                                 </div>
@@ -238,10 +238,10 @@
 
                                 <div class="form-group">
                                     {{--  {!! Form::label('lat',trans('admin.lat')) !!}  --}}
-                                    {!! Form::hidden('lat',$center->lat,['class'=>'form-control', 'id' => 'lat','placeholder' => trans('admin.placeholder_lat')]) !!}
+                                    {!! Form::hidden('lat',$order->lat,['class'=>'form-control', 'id' => 'lat','placeholder' => trans('admin.placeholder_lat')]) !!}
 
                                     {{--  {!! Form::label('lng',trans('admin.lng')) !!}  --}}
-                                    {!! Form::hidden('lng',$center->lng,['class'=>'form-control', 'id' => 'lng','placeholder' => trans('admin.placeholder_lng')]) !!}
+                                    {!! Form::hidden('lng',$order->lng,['class'=>'form-control', 'id' => 'lng','placeholder' => trans('admin.placeholder_lng')]) !!}
 
                                 </div><br/> 
                                 <!-- end map -->
@@ -259,15 +259,15 @@
                                                 </a>
                                                 &nbsp;
                                                 <div class='label label-primary' id="upload-file-info" ></div>
-                                                <span style="color: red " class="image text-center hidden"></span>
+                                                <span style="color: red " class="image text-order hidden"></span>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="col-md-10">
                                         
-                                        @if($center->image)
-                                            <img id="changeimage" src="{{asset('img/'.$center->image)}}" width="100px" height="100px" alt=" {{trans('admin.image')}}" />
+                                        @if($order->image)
+                                            <img id="changeimage" src="{{asset('img/'.$order->image)}}" width="100px" height="100px" alt=" {{trans('admin.image')}}" />
                                         @else 
                                             <img id="changeimage" src="{{asset('images/default.png')}}" width="100px" height="100px" alt=" {{trans('admin.image')}}" />
                                         @endif
@@ -275,11 +275,11 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="radio inlineblock m-r-20">
-                                        <input type="radio" name="status" id="active" class="with-gap" value="active" <?php echo ($center->status == 'active') ? "checked=''" : ""; ?> >
+                                        <input type="radio" name="status" id="active" class="with-gap" value="active" <?php echo ($order->status == 'active') ? "checked=''" : ""; ?> >
                                         <label for="active">{{__('admin.active')}}</label>
                                     </div>                                
                                     <div class="radio inlineblock">
-                                        <input type="radio" name="status" id="not_active" class="with-gap" value="not_active" <?php echo ($center->status == 'not_active') ? "checked=''" : ""; ?> >
+                                        <input type="radio" name="status" id="not_active" class="with-gap" value="not_active" <?php echo ($order->status == 'not_active') ? "checked=''" : ""; ?> >
                                         <label for="not_active">{{__('admin.not_active')}}</label>
                                     </div>
                                 </div>
@@ -313,7 +313,7 @@
         //    openModal();
           $.ajax({
               type: 'POST',
-              url: '{{ URL::route("storecenter") }}',
+              url: '{{ URL::route("storeorder") }}',
               data:  new FormData($("#form_validation")[0]),
               processData: false,
               contentType: false,
@@ -337,7 +337,7 @@
                             $('#lat-error').text(data.errors.lat);
                         }
                   } else {
-                        window.location.replace("{{route('centers')}}");
+                        window.location.replace("{{route('orders')}}");
 
                      }
             },
@@ -378,7 +378,7 @@
                                                 <div class="col-sm-5">
                                                     <!-- for price -->
                                                     <div class= "form-group form-float">
-                                                        <input type="number" step="0.01" class="form-control text-center " value="1" data-rule="currency" placeholder="{{__('admin.price')}}"  name="price[]" required>
+                                                        <input type="number" step="0.01" class="form-control text-order " value="1" data-rule="currency" placeholder="{{__('admin.price')}}"  name="price[]" required>
                                                         <label id="price-error" class="error" for="price" style="">  </label>
                                                     </div>
                                                 </div>
@@ -401,14 +401,14 @@
 
 
 function initMap() {
-@if($center->lat != null &&  $center->lng != null)    
-    var lat1 = {{$center->lat}};
-    var lng1 = {{$center->lng}}
+@if($order->lat != null &&  $order->lng != null)    
+    var lat1 = {{$order->lat}};
+    var lng1 = {{$order->lng}}
     var haightAshbury = {lat: lat1 , lng:lng1 };
     console.log(haightAshbury) ;
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: 18,
-        center: haightAshbury,
+        order: haightAshbury,
         mapTypeId: 'terrain'
     });
 
@@ -485,7 +485,7 @@ function initMap() {
 
 @else 
     var map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: 29.967176910157654, lng: 31.21215951392594},
+        order: {lat: 29.967176910157654, lng: 31.21215951392594},
         zoom: 18,
         mapTypeId: 'terrain'
     });

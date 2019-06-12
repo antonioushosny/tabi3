@@ -255,8 +255,8 @@ class ApiController extends Controller
 
             ]);
         }
-        $user = User::where('email',$request->email)->where('role','user')->orWhere('role','driver')->first();
-
+        $user = User::where('email',$request->email)->first();
+        // return $user;
         if(!$user){
 
             $errors =  trans('admin.email_notfound');
@@ -270,7 +270,7 @@ class ApiController extends Controller
         }
         else{
             if (\Hash::check( $request->password,$user->password)) {
-                if($user->status == 'not_active'){
+                if($user->status == 'not_active'||$user->role == 'admin' ||$user->role == 'provider' ||$user->role == 'center'){
                     return response()->json([
                         'success' => 'failed',
                         'errors' => trans('api.allowed'),
@@ -1221,6 +1221,12 @@ class ApiController extends Controller
                     $order->total = $CenterContainer->price * $request->num_containers ;
                     $order->status = 'pending' ;
                     $order->save();
+
+                    $ordercenter = new OrderCenter ;
+                    $ordercenter->order_id = $order->id ;
+                    $ordercenter->center_id = $order->center_id ;
+                    $ordercenter->status = 'pending' ;
+                    $ordercenter->save();
 
                     $msg = "  لديك طلب جديد من " . $user->name ;
                     $type = "order";
