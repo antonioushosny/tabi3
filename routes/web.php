@@ -105,6 +105,8 @@ Route::group(['middleware' => 'auth'], function () {
     // routes for orders management
     Route::get('/orders', 'OrdersController@index')->name('orders');
     Route::get('/neworders', 'OrdersController@neworders')->name('neworders');
+    Route::get('/noworders', 'OrdersController@noworders')->name('noworders');
+    Route::get('/lastorders', 'OrdersController@lastorders')->name('lastorders');
     Route::get('/orders/add/', 'OrdersController@add')->name('addorder');
     Route::post('/orders/update/', 'OrdersController@store')->name('storeorder');
     Route::get('/orders/edit/{id}', 'OrdersController@edit')->name('editorder');

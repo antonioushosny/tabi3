@@ -273,6 +273,8 @@ return [
     //orders page 
         'orders'                       => ' الطلبات', 
         'neworders'                       => ' الطلبات الجديدة', 
+        'noworders'                       => ' الطلبات الحالية', 
+        'lastorders'                       => ' الطلبات المنتهية', 
         'allorders'                       => ' كل الطلبات ', 
         'order'                        => ' الطلب', 
         'add_order'                    => ' اضافة طلب'  ,
