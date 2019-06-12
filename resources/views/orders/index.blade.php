@@ -21,8 +21,13 @@
                 <div class="col-lg-7 col-md-7 col-sm-12 text-right">
                 <ul class="breadcrumb float-md-right">
                 @endif
-                    <li class="breadcrumb-item active"><a href="{{route('home')}}"><i class="zmdi zmdi-home"></i>{{__('admin.dashboard')}}</a></li>
+                    <li class="breadcrumb-item active"><a href="{{ route('home') }}"><i class="zmdi zmdi-home"></i>{{__('admin.dashboard')}}</a></li>
+                    @if($title != 'orders')
+                    <li class="breadcrumb-item"><a href="{{ route('orders') }}"><i class="zmdi zmdi-accounts-add"></i> {{__('admin.orders')}}</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:void(0);"><i class="zmdi zmdi-accounts-add"></i> {{__('admin.'.$title)}}</a></li>
+                    @else 
                     <li class="breadcrumb-item"><a href="javascript:void(0);"><i class="zmdi zmdi-accounts-add"></i> {{__('admin.orders')}}</a></li>
+                    @endif 
                 </ul>
             </div>
         </div>
@@ -40,11 +45,11 @@
                             <h2><strong>{{trans('admin.'.$title)}}</strong> </h2>
                             <ul class="header-dropdown">
         
-                                </li>
+                                {{-- </li>
                                     <a href="{{route('addorder')}}" class=" add-modal btn btn-success btn-round" title="{{trans('admin.add_order')}}">
                                         {{trans('admin.add_order')}}
                                     </a>
-                                </li>
+                                </li> --}}
                                 </li>
                                     <a href="javascript:void(0);" class=" deleteall-modal btn btn-danger btn-round" title="{{trans('admin.deleteall')}}">
                                         {{trans('admin.deleteall')}}
@@ -111,7 +116,8 @@
                                             <td style="text-align:order"><span  class="col-red">{{ trans('admin.canceled')}}</span></td>
                                         @endif
                                         <td>
-                                            <a href="{{route('editorder',$data->id)}}" class="btn btn-info waves-effect waves-float waves-green btn-round " title="{{trans('admin.edit')}}"><i class="zmdi zmdi-edit"></i></a>
+
+                                            <a href="{{route('editorder',$data->id)}}" class="btn btn-info waves-effect waves-float waves-green btn-round " title="{{trans('admin.show')}}"><i class="zmdi zmdi-eye"></i></a>
 
                                             <a href="javascript:void(0);" class=" delete-modal btn btn-danger waves-effect waves-float waves-red btn-round " title="{{trans('admin.delete')}}" data-id="{{$data->id}}" ><i class="zmdi zmdi-delete"></i></a>
                                         </td>

@@ -66,7 +66,7 @@ class OrdersController  extends Controller
             $role = 'order';
             return view('unauthorized',compact('role','order'));
         }
-        $title = 'neworders';
+        $title = 'noworders';
         $orders = Order::where('center_id',Auth::user()->id)->where('status','accepted')->orWhere('status','assigned')->orderBy('id', 'DESC')->get();
         // return $orders ; 
         return view('orders.index',compact('orders','title','lang'));
@@ -79,7 +79,7 @@ class OrdersController  extends Controller
             $role = 'order';
             return view('unauthorized',compact('role','order'));
         }
-        $title = 'neworders';
+        $title = 'lastorders';
         $orders = Order::where('center_id',Auth::user()->id)->where('status','delivered')->orWhere('status','canceled')->orderBy('id', 'DESC')->get();
         
         // return $orders ; 

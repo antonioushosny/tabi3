@@ -346,7 +346,7 @@ body, html {
                     @if(Auth::user()->role == 'center')
                    <!--  <li <?php echo ($page == 'orders') ? "class='active open'" : ""; ?> ><a href="{{ route('orders') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.orders')}}</span></a></li>  -->
 
-                    <li <?php echo ($page == 'orders') ? "class='active open'" : ""; ?>  <?php echo ($page == 'neworders') ? "class='active open'" : ""; ?> > <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-apps"></i><span>{{trans('admin.orders')}}</span> </a>
+                    <li <?php echo ($page == 'orders') ? "class='active open'" : ""; ?>  <?php echo ($page == 'neworders') ? "class='active open'" : ""; ?> <?php echo ($page == 'noworders') ? "class='active open'" : ""; ?> <?php echo ($page == 'lastorders') ? "class='active open'" : ""; ?> > <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-apps"></i><span>{{trans('admin.orders')}}</span> </a>
                         <ul class="ml-menu">
                             <li <?php echo ($page == 'orders') ? "class='active '" : ""; ?>><a href="{{ route('orders') }}">{{trans('admin.allorders')}}</a></li>
                             <li <?php echo ($page == 'neworders') ? "class='active '" : ""; ?>><a href="{{ route('neworders') }}">{{trans('admin.neworders')}}</a></li>
