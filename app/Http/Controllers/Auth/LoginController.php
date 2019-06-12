@@ -56,7 +56,7 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
         // return $request->email ;
-        $user = User::where('email',$request->email)->where('role','admin')->first();
+        $user = User::where('email',$request->email)->first();
         // return $user ;
         if(!$user){
             

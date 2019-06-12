@@ -32,12 +32,16 @@ class CentersController  extends Controller
     public function index()
     {
         $lang = App::getlocale();
-        if(Auth::user()->role != 'admin' ){
+        if(!(Auth::user()->role == 'admin' ||  Auth::user()->role == 'provider')){
             $role = 'admin';
             return view('unauthorized',compact('role','admin'));
         }
         $title = 'centers';
-        $centers = User::where('role','center')->orderBy('id', 'DESC')->get();
+        if(Auth::user()->role != 'provider'){
+            $centers = User::where('role','center')->orderBy('id', 'DESC')->get();
+        }else{
+            $centers = User::where('role','center')->where('provider_id',Auth::user()->id)->orderBy('id', 'DESC')->get();
+        }
         // return $centers ; 
         return view('centers.index',compact('centers','title','lang'));
 
@@ -45,7 +49,7 @@ class CentersController  extends Controller
     public function add()
     {
         $lang = App::getlocale();
-        if(Auth::user()->role != 'admin' ){
+        if(!(Auth::user()->role == 'admin' ||  Auth::user()->role == 'provider')){
             $role = 'admin';
             return view('unauthorized',compact('role','admin'));
         }
@@ -206,7 +210,7 @@ class CentersController  extends Controller
     public function edit($id)
     {
         $lang = App::getlocale();
-        if(Auth::user()->role != 'admin' ){
+        if(!(Auth::user()->role == 'admin' ||  Auth::user()->role == 'provider')){
             $role = 'admin';
             return view('unauthorized',compact('role','admin'));
         }
@@ -246,7 +250,7 @@ class CentersController  extends Controller
     public function destroy($id)
     {
        
-        if(Auth::user()->role != 'admin' ){
+        if(!(Auth::user()->role == 'admin' ||  Auth::user()->role == 'provider')){
             $role = 'admin';
             return view('unauthorized',compact('role','admin'));
         }
@@ -262,8 +266,6 @@ class CentersController  extends Controller
 
     public function deleteall(Request $request)
     {
-        
-        
         if($request->ids){
             foreach($request->ids as $id){
                 $id = User::find($id);

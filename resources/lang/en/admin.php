@@ -137,6 +137,8 @@ return [
         'placeholder_user_name'         => 'Please Enter User Name ',
         'placeholder_email'             => 'Please Enter Email ',
         'placeholder_password'          => 'Please Enter Password ',
+        'placeholder_password_confirmation'          =>  'Please Enter Password Confirmation ',
+
         'placeholder_mobile'            => 'Please Enter Mobile ',
         'placeholder_location'          => 'Please Enter Location ',
         'placeholder_title_ar'          => 'Enter Arabic Title ' ,
@@ -241,6 +243,7 @@ return [
         'choose_provider'               => 'Choose Water Provider',
         'choose_area'                   => 'Choose Area',
         'choose_center'                 => ' Choose Distribution  Center ',
+        'choose_container'              => 'Choose Container',
     //end centers page
 
     //drivers page 
@@ -250,6 +253,26 @@ return [
         'edit_driver'                   => ' Edit Driver'  ,
         'delete_driver'                 =>  ' Delete Driver'  ,
     //end drivers page
+
+     //orders page 
+        'orders'                       => ' Orders', 
+        'neworders'                       => 'New Orders', 
+        'allorders'                       => 'All Orders', 
+        'order'                        => ' Order', 
+        'add_order'                    => ' Add Order'  ,
+        'edit_order'                   => ' Edit Order'  ,
+        'delete_order'                 =>  ' Delete Order'  ,
+        'pending'   => 'Pending',
+        'accepted'   => 'Accepted, Waiting for assign driver',
+        'assigned'   => 'Driver assigned to the order, waiting for delivery',
+        'delivered'   => 'Delivered',
+        'canceled'   => 'Canceled',
+        'size'       => 'Size',
+        'price'       => 'Price',
+        'no_container'       => 'Containers Numbers',
+        'total'       => 'Total',
+
+    //end orders page
  
     // advertisements page 
         'advertisements'                       => ' Advertisements', 

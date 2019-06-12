@@ -7,11 +7,15 @@ use App\Notifications\emailnotify;
 use App\User;
 use App\City;
 use App\Area;
+use App\Order;
+use App\Container;
+use App\CenterContainer;
+
 use Spatie\Permission\Models\Role;
 use Auth;
 use App;
 use DB;
-class DriversController  extends Controller
+class OrdersController  extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -29,39 +33,58 @@ class DriversController  extends Controller
     public function index()
     {
         $lang = App::getlocale();
-        if(!(Auth::user()->role == 'admin' || Auth::user()->role == 'provider' || Auth::user()->role == 'center')){
-            $role = 'admin';
-            return view('unauthorized',compact('role','admin'));
+        if(!(Auth::user()->role != 'order' )){
+            $role = 'order';
+            return view('unauthorized',compact('role','order'));
         }
-        $title = 'drivers';
-        if(Auth::user()->role == 'admin'){
-            $drivers = User::where('role','driver')->orderBy('id', 'DESC')->get();
+        $title = 'orders';
+        $orders = Order::where('center_id',Auth::user()->id)->orderBy('id', 'DESC')->get();
+        
+        // return $orders ; 
+        return view('orders.index',compact('orders','title','lang'));
+
+    }
+
+    public function neworders()
+    {
+        $lang = App::getlocale();
+        if(!(Auth::user()->role != 'order' )){
+            $role = 'order';
+            return view('unauthorized',compact('role','order'));
         }
-        else if(Auth::user()->role == 'provider'){
-            $drivers = User::where('role','driver')->where('provider_id',Auth::user()->id)->orderBy('id', 'DESC')->get();
-        }else{
-            $drivers = User::where('role','driver')->where('center_id',Auth::user()->id)->orderBy('id', 'DESC')->get();
-        }
-        // return $admins ; 
-        return view('drivers.index',compact('drivers','title','lang'));
+        $title = 'neworders';
+        $orders = Order::where('status','pending')->where('center_id',Auth::user()->id)->orderBy('id', 'DESC')->get();
+        
+        // return $orders ; 
+        return view('orders.index',compact('orders','title','lang'));
 
     }
     public function add()
     {
         $lang = App::getlocale();
-        if(!(Auth::user()->role == 'admin' || Auth::user()->role == 'provider' || Auth::user()->role == 'center') ){
+        if(!(Auth::user()->role == 'admin' ||  Auth::user()->role == 'provider')){
             $role = 'admin';
             return view('unauthorized',compact('role','admin'));
         }
-        $title = 'drivers';
+        $title = 'orders';
+        $allcities = City::all();
+        if($lang == 'ar'){
+            $cities = array_pluck($allcities,'name_ar', 'id'); 
+        }else{
+            $cities = array_pluck($allcities,'name_en', 'id');
+        }
 
-        $allcenters = User::where('role','center')->get();
-        $centers = array_pluck($allcenters,'name', 'id'); 
-       
+        $allcontainers = Container::all();
+        if($lang == 'ar'){
+            $containers = array_pluck($allcontainers,'name_ar', 'id'); 
+        }else{
+            $containers = array_pluck($allcontainers,'name_en', 'id');
+        }
+
         $allproviders = User::where('role','provider')->get();
-        $providers = array_pluck($allproviders,'company_name', 'id');
-
-        return view('drivers.add',compact('title','centers','providers','lang'));
+        $providers = array_pluck($allproviders,'company_name', 'id'); 
+        
+        return view('orders.add',compact('title','providers','containers','cities','lang'));
     }
     public function store(Request $request)
     {
@@ -70,10 +93,14 @@ class DriversController  extends Controller
         if($request->id ){
             $rules =
             [
-                'center_id'   =>'required', 
+                'provider_id'   =>'required', 
+                'city_id'   =>'required', 
+                'area_id'   =>'required', 
                 'responsible_name'  =>'required|max:190',
                 'email'  =>'required|email|max:190',            
                 'status'  =>'required',   
+                'lat' =>'required',
+                'lng'    =>'required', 
             ];
             
         }     
@@ -81,10 +108,17 @@ class DriversController  extends Controller
         else{
             $rules =
             [
-                'center_id'   =>'required', 
+                'provider_id'   =>'required', 
+                'city_id'   =>'required', 
+                'area_id'   =>'required', 
                 'responsible_name'  =>'required|max:190',
                 'email'  =>'required|email|unique:users,email|max:190',            
                 'status'  =>'required',       
+                // 'password'  =>'required|min:6|max:190',     
+                // 'image'  =>'required',      
+                'lat' =>'required',
+                'lng'    =>'required',   
+                // 'mobile'     =>'required',   
             ];
         }
         
@@ -134,14 +168,19 @@ class DriversController  extends Controller
         }
         
          $user->name          = $request->responsible_name ;
+         $user->lat           = $request->lat ;
+         $user->lng           = $request->lng ;
          $user->email         = $request->email ;
          $user->status        = $request->status ;
+         $user->mobile        = $request->mobile ;
+         $user->city_id       = $request->city_id ;
+         $user->area_id       = $request->area_id ;
          $user->provider_id       = $request->provider_id ;
-         $user->center_id       = $request->center_id ;
 
-         $user->role          = 'driver';
+         $user->role          = 'order';
          $user->save();
         if ($request->hasFile('image')) {
+
             $image = $request->file('image');
             $name = md5($image->getClientOriginalName() . time()) . "." . $image->getClientOriginalExtension();
             $destinationPath = public_path('/img');
@@ -150,9 +189,27 @@ class DriversController  extends Controller
         }
 
         $user->save();
-        return redirect()->route('drivers');
+        $containers  = CenterContainer::where('order_id',$user->id)->delete();
+        $i = 0; 
+        foreach($request->containers as $container_id){
+          
+            if($container_id != '' || $container_id != null){
+                $container = CenterContainer::where('order_id',$user->id)->where('container_id',$container_id)->first();
+                if(!$container){
+
+                    $container = new CenterContainer ;
+                    $container->container_id = $container_id ;
+                    $container->order_id = $user->id ;
+                    $container->price = $request->price[$i] ;
+                    $container->save();
+                }
+                $i ++ ;
+            }
+        }
+
+        return redirect()->route('orders');
         // return \Redirect::back();
-        // return view('drivers.index',compact('admins','title','lang'));
+        // return view('orders.index',compact('admins','title','lang'));
 
         return response()->json($user);
 
@@ -166,24 +223,36 @@ class DriversController  extends Controller
     public function edit($id)
     {
         $lang = App::getlocale();
-        if(!(Auth::user()->role == 'admin' || Auth::user()->role == 'provider' || Auth::user()->role == 'center')){
+        if(!(Auth::user()->role == 'admin' ||  Auth::user()->role == 'provider')){
             $role = 'admin';
             return view('unauthorized',compact('role','admin'));
         }
-        $title = 'drivers';
-        
-         
-
+        $title = 'orders';
+        $allcities = City::all();
+        if($lang == 'ar'){
+            $cities = array_pluck($allcities,'name_ar', 'id'); 
+        }else{
+            $cities = array_pluck($allcities,'name_en', 'id');
+        }
         $allproviders = User::where('role','provider')->get();
-        $providers = array_pluck($allproviders,'company_name', 'id');
+        $providers = array_pluck($allproviders,'company_name', 'id');  
 
-        $driver = User::where('id',$id)->with('center')->orderBy('id', 'DESC')->first();
-        $provider = User::where('id',$driver->center->provider_id)->first() ;
+        $allcontainers = Container::all();
+        if($lang == 'ar'){
+            $containers = array_pluck($allcontainers,'name_ar', 'id'); 
+        }else{
+            $containers = array_pluck($allcontainers,'name_en', 'id');
+        }
 
-        $allcenters = User::where('role','center')->where('provider_id',$driver->center->provider_id)->get();
-        $centers = array_pluck($allcenters,'name', 'id'); 
-        // return $provider ; 
-        return view('drivers.edit',compact('driver','centers','providers','provider','title','lang'));
+        $order = User::where('id',$id)->with('containers')->orderBy('id', 'DESC')->first();
+        $allareas = Area::where('city_id',$order->city_id)->get();
+        if($lang == 'ar'){
+            $areas = array_pluck($allareas,'name_ar', 'id'); 
+        }else{
+            $areas = array_pluck($allareas,'name_en', 'id');
+        }
+        // return $order ; 
+        return view('orders.edit',compact('order','areas','cities','containers','providers','title','lang'));
     }
 
     public function update(Request $request, $id)
@@ -194,7 +263,7 @@ class DriversController  extends Controller
     public function destroy($id)
     {
        
-        if(!(Auth::user()->role == 'admin' || Auth::user()->role == 'provider' || Auth::user()->role == 'center')){
+        if(!(Auth::user()->role == 'admin' ||  Auth::user()->role == 'provider')){
             $role = 'admin';
             return view('unauthorized',compact('role','admin'));
         }

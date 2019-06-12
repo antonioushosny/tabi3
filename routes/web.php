@@ -83,6 +83,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/providers/edit/{id}', 'ProvidersController@edit')->name('editprovider');
     Route::get('/providers/delete/{id}', 'ProvidersController@destroy')->name('destroyprovider');
     Route::post('/providers/deleteall', 'ProvidersController@deleteall')->name('providersdeleteall');
+    Route::get('/providers/{id}/centers', 'ProvidersController@centers')->name('providercenters');
 
     // routes for centers management
     Route::get('/centers', 'CentersController@index')->name('centers');
@@ -100,6 +101,16 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/drivers/delete/{id}', 'DriversController@destroy')->name('destroydriver');
     Route::post('/drivers/deleteall', 'DriversController@deleteall')->name('driversdeleteall');
 
+
+    // routes for orders management
+    Route::get('/orders', 'OrdersController@index')->name('orders');
+    Route::get('/neworders', 'OrdersController@neworders')->name('neworders');
+    Route::get('/orders/add/', 'OrdersController@add')->name('addorder');
+    Route::post('/orders/update/', 'OrdersController@store')->name('storeorder');
+    Route::get('/orders/edit/{id}', 'OrdersController@edit')->name('editorder');
+    Route::get('/orders/delete/{id}', 'OrdersController@destroy')->name('destroyorder');
+    Route::post('/orders/deleteall', 'OrdersController@deleteall')->name('ordersdeleteall');
+    
     // routes for users management
     Route::get('/users', 'UsersController@index')->name('users');
     Route::post('/users/update/', 'UsersController@store')->name('storeuser');

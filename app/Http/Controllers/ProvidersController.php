@@ -47,6 +47,19 @@ class ProvidersController extends Controller
         $title = 'providers';
         return view('providers.add',compact('title','lang'));
     }
+
+    public function centers(Request $request, $id) {
+        // return $id ;
+        if ($request->ajax()) {
+            $lang = App::getlocale();
+            $centers = User::where('provider_id', $id)->select('name','id')->get();
+            
+            return response()->json([
+                'centers' => $centers ,
+            ]);
+        }
+    }
+
     public function store(Request $request)
     {
        

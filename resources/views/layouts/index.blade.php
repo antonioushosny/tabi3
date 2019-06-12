@@ -324,6 +324,7 @@ body, html {
                     </li>
                     <!-- <li class="header">MAIN</li> -->
                     <li <?php echo ($page == 'home') ? "class='active open'" : ""; ?> ><a href="{{ route('home') }}"  ><i class="zmdi zmdi-home"></i> <span> {{trans('admin.dashboard')}}</span></a></li>
+                    @if(Auth::user()->role == 'admin')
 
                     <li <?php echo ($page == 'admins') ? "class='active open'" : ""; ?> ><a href="{{ route('admins') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.admins')}}</span></a></li>
 
@@ -334,12 +335,30 @@ body, html {
                     <li <?php echo ($page == 'containers') ? "class='active open'" : ""; ?> ><a href="{{ route('containers') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.containers')}}</span></a></li>
 
                     <li <?php echo ($page == 'providers') ? "class='active open'" : ""; ?> ><a href="{{ route('providers') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.providers')}}</span></a></li>
-
+                    @endif
+                    
+                    @if(Auth::user()->role == 'admin' || Auth::user()->role == 'provider')
                     <li <?php echo ($page == 'centers') ? "class='active open'" : ""; ?> ><a href="{{ route('centers') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.centers')}}</span></a></li>
+                    @endif
 
                     <li <?php echo ($page == 'drivers') ? "class='active open'" : ""; ?> ><a href="{{ route('drivers') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.drivers')}}</span></a></li>
+                    
+                    @if(Auth::user()->role == 'center')
+                   <!--  <li <?php echo ($page == 'orders') ? "class='active open'" : ""; ?> ><a href="{{ route('orders') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.orders')}}</span></a></li>  -->
 
+                    <li <?php echo ($page == 'orders') ? "class='active open'" : ""; ?>  <?php echo ($page == 'neworders') ? "class='active open'" : ""; ?> > <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-apps"></i><span>{{trans('admin.orders')}}</span> </a>
+                        <ul class="ml-menu">
+                            <li <?php echo ($page == 'neworders') ? "class='active '" : ""; ?>><a href="{{ route('neworders') }}">{{trans('admin.neworders')}}</a></li>
+                            <li <?php echo ($page == 'noworders') ? "class='active '" : ""; ?>><a href="{{ route('noworders') }}">{{trans('admin.noworders')}}</a></li>
+                            <li <?php echo ($page == 'lastorders') ? "class='active '" : ""; ?>><a href="{{ route('lastorders') }}">{{trans('admin.lastorders')}}</a></li>
+                            <li <?php echo ($page == 'orders') ? "class='active '" : ""; ?>><a href="{{ route('orders') }}">{{trans('admin.allorders')}}</a></li>
+                        </ul>
+                    </li> 
+                    @endif
+                   
+                    @if(Auth::user()->role == 'admin')
                     <li <?php echo ($page == 'users') ? "class='active open'" : ""; ?> ><a href="{{ route('users') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.users')}}</span></a></li>
+                    @endif
 
                     <li <?php echo ($page == 'reports') ? "class='active open'" : ""; ?> ><a href="{{ route('reports') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.reports')}}</span></a></li>
 

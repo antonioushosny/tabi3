@@ -64,14 +64,16 @@
                                             <input type="checkbox" class="checkbox icheck" id="check-all" />
                                         </th>
                                         <th>{{trans('admin.name')}}</th>
+                                        @if(Auth::user()->role != 'center' )
                                         <th>{{trans('admin.center')}}</th>
+                                        @endif
                                         <th>{{trans('admin.email')}}</th>
                                         <th>{{trans('admin.image')}}</th>
                                         <th>{{trans('admin.status')}}</th>
                                         <th>{{trans('admin.actions')}}</th>
                                     </tr>
                                 </thead>
-
+ 
                                 <tbody>
                                     @foreach ($drivers as $data)
                                     <tr class="item{{$data->id}}">
@@ -79,10 +81,12 @@
                                             <input type="checkbox" name="ids[]" value={{$data->id}} class="check icheck">
                                         </td>
                                         <td>{{ $data->name }}</td>
-                                        @if($data->center)
-                                        <td>{{ $data->center->name }}</td>
-                                        @else
-                                        <td></td>
+                                        @if(Auth::user()->role != 'center' )
+                                            @if($data->center)
+                                            <td>{{ $data->center->name }}</td>
+                                            @else
+                                            <td></td>
+                                            @endif
                                         @endif
                                         
                                         <td>{{ $data->email }}</td>          
@@ -154,17 +158,27 @@
     //this for delete
     $(document).on('click', '.delete-modal', function() {
 
-        // $('.modal-title').text('{{trans('admin.delete')}}');
-        // $('#id_delete').val($(this).data('id'));
+        titlet ="{{__('admin.alert_title')}}" ;
+        textt ="{{__('admin.alert_text')}}" ;
+        typet ="{{__('admin.warning')}}" ;
+        confirmButtonTextt ="{{__('admin.confirmButtonText')}}" ;
+        cancelButtonTextt ="{{__('admin.cancelButtonText')}}" ;
+        Deleted ="{{__('admin.Deleted!')}}" ;
+        has_been_deleted = "{{__('admin.has_been_deleted')}}" ;
+        success ="{{__('admin.success')}}" ;
+        Cancelled ="{{__('admin.Cancelled')}}" ;
+        file_is_safe ="{{__('admin.file_is_safe')}}" ;
+        no_elemnet_selected ="{{__('admin.no_elemnet_selected')}}" ;
+        error ="{{__('admin.error')}}" ;
         id = $(this).data('id') ;
         swal({
-            title: "Are you sure?",
-            text: "You will not be able to recover this imaginary file!",
+            title: titlet,
+            text: textt,
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Yes, delete it!",
-            cancelButtonText: "No, cancel plx!",
+            confirmButtonText: confirmButtonTextt,
+            cancelButtonText: cancelButtonTextt,
             closeOnConfirm: false,
             closeOnCancel: false
         }, function (isConfirm) {
@@ -177,11 +191,11 @@
                     },
                     success: function(data) {
                         $('.item' + data['id']).remove();
-                        swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                        swal(Deleted, has_been_deleted, "success");
                     }
                 });
             } else {
-                swal("Cancelled", "Your imaginary file is safe :)", "error");
+                swal(Cancelled, file_is_safe, "error");
             }
         });
         // $('#deleteModal').modal('show');
@@ -190,17 +204,26 @@
     //this for delete all selected
     $(document).on('click', '.deleteall-modal', function() {
 
-        // $('.modal-title').text('{{trans('admin.delete')}}');
-        // $('#id_delete').val($(this).data('id'));
-        // id = $(this).data('id') ;
+        titlet ="{{__('admin.alert_title')}}" ;
+        textt ="{{__('admin.alert_text')}}" ;
+        typet ="{{__('admin.warning')}}" ;
+        confirmButtonTextt ="{{__('admin.confirmButtonText')}}" ;
+        cancelButtonTextt ="{{__('admin.cancelButtonText')}}" ;
+        Deleted ="{{__('admin.Deleted!')}}" ;
+        has_been_deleted = "{{__('admin.has_been_deleted')}}" ;
+        success ="{{__('admin.success')}}" ;
+        Cancelled ="{{__('admin.Cancelled')}}" ;
+        file_is_safe ="{{__('admin.file_is_safe')}}" ;
+        no_elemnet_selected ="{{__('admin.no_elemnet_selected')}}" ;
+        error ="{{__('admin.error')}}" ;
         swal({
-            title: "Are you sure?",
-            text: "You will not be able to recover this imaginary file!",
+            title: titlet,
+            text: textt,
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Yes, delete it!",
-            cancelButtonText: "No, cancel plx!",
+            confirmButtonText: confirmButtonTextt,
+            cancelButtonText: cancelButtonTextt,
             closeOnConfirm: false,
             closeOnCancel: false
         }, function (isConfirm) {
@@ -224,16 +247,16 @@
                             for (var i=0;i<data.length;i++){
                                 $('.item' + data[i]).remove();
                             }
-                            swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                            swal(Deleted, has_been_deleted, "success");
                         },
                     });
                 }
                 else{
-                    swal("Cancelled", "Your imaginary file is safe :)", "error");
+                    swal(Cancelled, no_elemnet_selected, "error");
                 }
 
             } else {
-                swal("Cancelled", "Your imaginary file is safe :)", "error");
+                swal(Cancelled, file_is_safe, "error");
             }
         });
         // $('#deleteModal').modal('show');

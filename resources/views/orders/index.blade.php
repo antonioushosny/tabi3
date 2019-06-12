@@ -22,27 +22,27 @@
                 <ul class="breadcrumb float-md-right">
                 @endif
                     <li class="breadcrumb-item active"><a href="{{route('home')}}"><i class="zmdi zmdi-home"></i>{{__('admin.dashboard')}}</a></li>
-                    <li class="breadcrumb-item"><a href="javascript:void(0);"><i class="zmdi zmdi-accounts-add"></i> {{__('admin.centers')}}</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:void(0);"><i class="zmdi zmdi-accounts-add"></i> {{__('admin.orders')}}</a></li>
                 </ul>
             </div>
         </div>
     </div>
 
      
-    <div class="center-fluid">
+    <div class="order-fluid">
         <!-- Exportable Table -->
         <div class="row clearfix">
             <div class="col-lg-12">
                 <div class="card">
-                {!! Form::open(['route'=>['centersdeleteall'],'method'=>'post','autocomplete'=>'off', 'id'=>'centerss_form' ])!!}
+                {!! Form::open(['route'=>['ordersdeleteall'],'method'=>'post','autocomplete'=>'off', 'id'=>'orderss_form' ])!!}
 
                         <div class="header">
                             <h2><strong>{{trans('admin.'.$title)}}</strong> </h2>
                             <ul class="header-dropdown">
         
                                 </li>
-                                    <a href="{{route('addcenter')}}" class=" add-modal btn btn-success btn-round" title="{{trans('admin.add_center')}}">
-                                        {{trans('admin.add_center')}}
+                                    <a href="{{route('addorder')}}" class=" add-modal btn btn-success btn-round" title="{{trans('admin.add_order')}}">
+                                        {{trans('admin.add_order')}}
                                     </a>
                                 </li>
                                 </li>
@@ -64,63 +64,54 @@
                                         <th>
                                             <input type="checkbox" class="checkbox icheck" id="check-all" />
                                         </th>
-                                        @if(Auth::user()->role == 'admin' )
-                                        <th>{{trans('admin.provider')}}</th>
-                                        @endif
-                                        <th>{{trans('admin.responsible_name')}}</th>
-                                        <th>{{trans('admin.email')}}</th>
-                                        <th>{{trans('admin.mobile')}}</th>
-                                        <th>{{trans('admin.city')}}</th>
-                                        <th>{{trans('admin.area')}}</th>
-                                        <th>{{trans('admin.logo')}}</th>
+
+                                        <th>{{trans('admin.user_name')}}</th>
+                                        <th>{{trans('admin.container')}}</th>
+                                        <th>{{trans('admin.size')}}</th>
+                                        <th>{{trans('admin.price')}}</th>
+                                        <th>{{trans('admin.no_container')}}</th>
+                                        <th>{{trans('admin.total')}}</th>
+                                        <th>{{trans('admin.image')}}</th>
                                         <th>{{trans('admin.status')}}</th>
                                         <th>{{trans('admin.actions')}}</th>
                                     </tr>
                                 </thead>
 
                                 <tbody>
-                                    @foreach ($centers as $data)
+                                    @foreach ($orders as $data)
                                     <tr class="item{{$data->id}}">
                                         <td> 
                                             <input type="checkbox" name="ids[]" value={{$data->id}} class="check icheck">
                                         </td>
-                                        @if(Auth::user()->role == 'admin' )
-                                        <td>{{ $data->provider->name }}</td>
-                                        @endif
-                                        <td>{{ $data->name }}</td>
-                                        <td>{{ $data->email }}</td>          
-                                        <td>{{ $data->mobile }}</td>    
-                                        @if($data->City)
-                                            @if($lang == 'ar')
-                                                <td>{{ $data->City->name_ar }}</td>  
-                                            @else
-                                                <td>{{ $data->City->name_en }}</td>  
-                                            @endif
-                                        @else
-                                            <td> </td>  
-                                        @endif  
-
-                                        @if($data->Area)
-                                            @if($lang == 'ar')
-                                                <td>{{ $data->Area->name_ar }}</td>  
-                                            @else
-                                                <td>{{ $data->Area->name_en }}</td>  
-                                            @endif
-                                        @else
-                                            <td> </td>  
+                                        <td>{{ $data->user_name }}</td>
+                                        @if($lang == 'ar')
+                                            <td>{{ $data->container_name_ar }}</td>          
+                                        @else 
+                                            <td>{{ $data->container_name_en }}</td>  
                                         @endif 
-                                        @if($data->image)
-                                            <td><img src="{{asset('img/').'/'.$data->image }}" width="50px" height="50px"></td>
+                                        <td>{{ $data->container_size }}</td>          
+                                        <td>{{ $data->price }}</td>    
+                                        <td>{{ $data->no_container }}</td>    
+                                        <td>{{ $data->total }}</td>    
+                                        
+                                        @if($data->container->image)
+                                            <td><img src="{{asset('img/').'/'.$data->container->image }}" width="50px" height="50px"></td>
                                         @else 
                                             <td><img src="{{asset('images/default.png') }}" width="50px" height="50px"></td>
                                         @endif
-                                        @if($data->status == 'active')
-                                            <td style="text-align:center"><span  class="col-green">{{ trans('admin.active')}}</span></td> 
-                                        @elseif($data->status == 'not_active')
-                                            <td style="text-align:center"><span  class="col-red">{{ trans('admin.not_active')}}</span></td> 
+                                        @if($data->status == 'pending')
+                                            <td style="text-align:order"><span  class="col-green">{{ trans('admin.pending')}}</span></td> 
+                                        @elseif($data->status == 'accepted')
+                                            <td style="text-align:order"><span  class="col-yellow">{{ trans('admin.accepted')}}</span></td>
+                                        @elseif($data->status == 'assigned')
+                                            <td style="text-align:order"><span  class="col-blue">{{ trans('admin.assigned')}}</span></td>
+                                        @elseif($data->status == 'delivered')
+                                            <td style="text-align:order"><span  class="col-yellow">{{ trans('admin.delivered')}}</span></td>
+                                        @elseif($data->status == 'canceled')
+                                            <td style="text-align:order"><span  class="col-red">{{ trans('admin.canceled')}}</span></td>
                                         @endif
                                         <td>
-                                            <a href="{{route('editcenter',$data->id)}}" class="btn btn-info waves-effect waves-float waves-green btn-round " title="{{trans('admin.edit')}}"><i class="zmdi zmdi-edit"></i></a>
+                                            <a href="{{route('editorder',$data->id)}}" class="btn btn-info waves-effect waves-float waves-green btn-round " title="{{trans('admin.edit')}}"><i class="zmdi zmdi-edit"></i></a>
 
                                             <a href="javascript:void(0);" class=" delete-modal btn btn-danger waves-effect waves-float waves-red btn-round " title="{{trans('admin.delete')}}" data-id="{{$data->id}}" ><i class="zmdi zmdi-delete"></i></a>
                                         </td>
@@ -204,7 +195,7 @@
             if (isConfirm) {
                 $.ajax({
                     type: 'GET',
-                    url: "<?php echo url('/')?>/centers/delete/" + id,
+                    url: "<?php echo url('/')?>/orders/delete/" + id,
                     data: {
                         '_token': $('input[name=_token]').val(),
                     },
@@ -258,8 +249,8 @@
                     var form = $(this);
                     $.ajax({
                         type: 'POST',
-                        url: '{{ URL::route("centersdeleteall") }}',
-                        data:  new FormData($("#centerss_form")[0]),
+                        url: '{{ URL::route("ordersdeleteall") }}',
+                        data:  new FormData($("#orderss_form")[0]),
                         processData: false,
                         contentType: false,
                         success: function(data) {

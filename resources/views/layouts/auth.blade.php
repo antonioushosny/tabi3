@@ -20,14 +20,9 @@
 <body class="theme-purple authentication sidebar-collapse">
 
 <div class="page-header">
-    <div class="page-header-image" style="background-image:url(assets/images/login.jpg)"></div>
-    <div class="container">
-        <div class="col-md-12 content-center">
-            <div class="card-plain">
-                @yield('content') 
-            </div>
-        </div>
-    </div>
+    
+
+    @yield('content') 
     <footer class="footer">
         <div class="container">
           

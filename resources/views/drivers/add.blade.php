@@ -60,14 +60,32 @@
                         <div class="body">
                             {!! Form::open(['route'=>['storedriver'],'method'=>'post','autocomplete'=>'off', 'id'=>'form_validation', 'enctype'=>'multipart/form-data' ])!!} 
 
-                                <!-- for center_id -->
 
-                                <div class= "form-group form-float">
-                                    {!! Form::select('center_id',$centers
-                                        ,'',['class'=>'form-control show-tick select2' ,'placeholder' =>trans('admin.choose_center'),'required']) !!}
-                                    <label id="center_id-error" class="error" for="center_id" style="">  </label>
-                                </div>
-                               
+                                <!-- for company_name -->
+                                @if(Auth::user()->role == 'admin' )
+                                    <div class= "form-group form-float">
+                                        {!! Form::select('provider_id',$providers
+                                            ,'',['class'=>'form-control show-tick select2','id'=>'provider_id' ,'placeholder' =>trans('admin.choose_provider'),'required']) !!}
+                                        <label id="provider_id-error" class="error"  for="provider_id" style="">  </label>
+                                    </div>
+                                @else 
+                                    <div class="form-group form-float">
+                                        <input type="hidden" value="{{Auth::user()->id}}" id="provider_id" name="provider_id" required>
+                                    </div>
+                                @endif
+                                
+                                <!-- for center_id -->
+                                @if(Auth::user()->role != 'center' )
+                                    <div class= "form-group form-float">
+                                        {!! Form::select('center_id',[]
+                                            ,'',['class'=>'form-control show-tick select2' ,'id'=>'center_id','placeholder' =>trans('admin.choose_center'),'required']) !!}
+                                        <label id="center_id-error" class="error" for="center_id" style="">  </label>
+                                    </div>
+                                @else 
+                                    <div class="form-group form-float">
+                                        <input type="hidden" value="{{Auth::user()->id}}" id="center_id" name="center_id" required>
+                                    </div>
+                                @endif
                                 <!-- for responsible_name -->
                                 <div class="form-group form-float">
                                     <input type="text" class="form-control" placeholder="{{__('admin.placeholder_responsible_name')}}" name="responsible_name" required>
@@ -130,6 +148,24 @@
 @section('script')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
 <script>
+    // centers for provider account 
+    id = $('#provider_id').val();
+    if(id !=''){
+        $('#center_id').empty();
+        $.ajax({
+            type: 'GET',
+            url: "<?php echo url('/')?>/providers/"+id+"/centers",
+            success: data => {
+                if(data.centers.length <= 0){
+                    alert("{{trans('admin.notfoundcenter')}}");
+                }
+                data.centers.forEach(center =>
+                    $('#center_id').append(`<option value="${center.id}">${center.name}</option>`)
+                )
+            }
+        })
+    }
+    // end centers for provider account 
     //this for add new record
     $("#form_validation").submit(function(e){
            {{--  $('#addModal').modal('hide');  --}}
@@ -170,6 +206,25 @@
         });
     });
     $('.select2').select2();
-   
+    $('#provider_id').on('change', e => {
+
+        $('#center_id').empty();
+        id = $('#provider_id').val();
+        if(id !=''){
+
+            $.ajax({
+                type: 'GET',
+                url: "<?php echo url('/')?>/providers/"+id+"/centers",
+                success: data => {
+                    if(data.centers.length <= 0){
+                        alert("{{trans('admin.notfoundcenter')}}");
+                    }
+                    data.centers.forEach(center =>
+                        $('#center_id').append(`<option value="${center.id}">${center.name}</option>`)
+                    )
+                }
+            })
+        }
+    });
 </script>
 @endsection

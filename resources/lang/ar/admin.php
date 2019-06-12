@@ -145,7 +145,8 @@ return [
         'placeholder_name'              => 'من فضلك أدخل الاسم',
         'placeholder_user_name'         => 'من فضلك أدخل اسم المستخدم',
         'placeholder_email'             => 'من فضلك ادخل البريد الإلكتروني',
-        'placeholder_password'          => 'من فضلك ادخل الرقم السرى',
+        'placeholder_password'          => 'من فضلك ادخل كلمة المرور',
+        'placeholder_password_confirmation'          => 'من فضلك ادخل  تاكيد كلمة المرور',
         'placeholder_mobile'            => 'من فضلك ادخل رقم التليفون',
         'placeholder_location'          => 'من فضلك ادخل الموقع', 
         'placeholder_title_ar'          =>' ادخل العنوان بالعربية' ,
@@ -180,8 +181,6 @@ return [
         'edit_admin'                    => 'تعديل مشرف',
         'delete_admin'                  => 'حذف مشرف',
     //end admin page  
-
-    
 
     //users page 
         'users'             => ' المستخدمين ',
@@ -232,7 +231,7 @@ return [
 
      //providers page 
         'providers'                       => ' مزودي المياه', 
-        'provider'                        => ' مزود', 
+        'provider'                        => ' مزود مياه', 
         'add_provider'                    => ' اضافة مزود'  ,
         'edit_provider'                   => ' تعديل مزود'  ,
         'delete_provider'                 =>  ' حذف مزود'  ,
@@ -250,6 +249,7 @@ return [
     //centers page 
         'centers'                       => ' مراكز التوزيع ', 
         'center'                        => ' مركو توزيع ', 
+        'center_id'                        => ' مركو توزيع ', 
         'add_center'                    => ' اضافة مركز'  ,
         'edit_center'                   => ' تعديل مركز'  ,
         'delete_center'                 =>  ' حذف مركز'  ,
@@ -257,6 +257,7 @@ return [
         'choose_provider'               => 'اختر مزود مياه',
         'choose_area'                   => 'اختر المنطقة',
         'choose_center'                 => ' اختر مركز توزيع   ',
+        'choose_container'                 => ' اختر الخزان    ',
         
     //end centers page
 
@@ -267,6 +268,26 @@ return [
         'edit_driver'                   => ' تعديل سائق'  ,
         'delete_driver'                 =>  ' حذف سائق'  ,
     //end drivers page
+   
+
+    //orders page 
+        'orders'                       => ' الطلبات', 
+        'neworders'                       => ' الطلبات الجديدة', 
+        'allorders'                       => ' كل الطلبات ', 
+        'order'                        => ' الطلب', 
+        'add_order'                    => ' اضافة طلب'  ,
+        'edit_order'                   => ' تعديل طلب'  ,
+        'delete_order'                 =>  ' حذف طلب'  ,
+        'pending'   => 'قيد الانتظار ',
+        'accepted'   =>  'مقبول ، في انتظار تعيين سائق' ,
+        'assigned'   =>  'تم تعيين سائق لهذا الأمر ، في انتظار التسليم' ,
+        'delivered'   =>  'تم التوصيل',
+        'canceled'   =>  'ألغيت',
+        'size'       => 'الحجم',
+        'price'       => 'التكلفة',
+        'no_container'       => 'عدد الخزانات ',
+        'total'       => 'الأجمالي',
+    //end orders page
 
     // advertisements page 
         'advertisements'                       => ' الاعلانات', 
@@ -282,8 +303,6 @@ return [
         'placeholder_time'                 => 'ادخل وقت الظهور بالثواني',
     // end advertisements page 
 
-
-    
     //contact_us page
         'delete_contact'                => 'حذف الرسالة',
         'contacts'                      => 'تواصل معنا' ,
