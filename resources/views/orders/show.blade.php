@@ -56,8 +56,23 @@
     <style>
         h5{
             color: #1e2967;
-            background-color: #8c99e07a;
-
+            background-color: #8c99e033;
+            border-radius: 30px;
+            padding: 4px;
+            padding-right: 25px;
+            box-shadow: 5px 8px #6b6464;
+        }
+        h6{
+            color: #1e2967;
+            padding: 4px;
+            padding-right: 25px;
+            font-size: 25px;
+            border-radius: 30px;
+            text-align: center;
+            box-shadow: 5px 8px #6b6464;
+            background-color: #8c99e033;
+            margin-right: 10rem;
+            margin-left: 10rem;
         }
     </style>
 @endsection
@@ -113,7 +128,7 @@
                         <h5><strong>{{trans('admin.city')}} :- </strong> {{ $order->city }}  </h5>
                         <h5><strong>{{trans('admin.area')}} :- </strong> {{ $order->area }}  </h5>
                         @endif
-                        <h5><strong>{{trans('admin.location')}} :- </strong> </h5>
+                        <h6><strong>{{trans('admin.location')}} </strong> </h6>
 
                         <!-- {{--  for map      --}}  -->
                             <div class="form-group">
@@ -157,8 +172,16 @@
                             <h5><strong>{{trans('admin.total')}} :- </strong> {{ $order->total }}  </h5>
                             <h5><strong>{{trans('admin.notes')}} :- </strong> {{ $order->notes }}  </h5>
                             <h5><strong>{{ trans('admin.status') }} :- </strong> {{ trans('admin.'.$order->status) }}  </h5>
-                           
+                            
+                            @if($order->status == 'pending')
+                            <h4><strong>{{ trans('admin.take_action') }} :- </strong>  </h4>
+                            <div>
+                                <a href="javascript:void(0);" class="btn btn-info" >accept</a>
+                                <a href="javascript:void(0);" class="btn btn-error" >decline</a>
+                            </div>
+                            @endif
                         </div>
+
                     </div>
                 </div>
         </div>
