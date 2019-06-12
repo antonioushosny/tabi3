@@ -18,5 +18,13 @@ class Order extends Model
     {
         return $this->belongsTo('App\Container','container_id');
     } 
+    public function centers()
+    {
+        return $this->hasMany('App\OrderCenter','order_id')->with('center');
+    }
+    public function drivers()
+    {
+        return $this->hasMany('App\OrderDriver','order_id')->with('driver');
+    }
 }
 																

@@ -255,31 +255,13 @@ class OrdersController  extends Controller
             return view('unauthorized',compact('role','center'));
         }
         $title = 'orders';
-        $allcities = City::all();
-        if($lang == 'ar'){
-            $cities = array_pluck($allcities,'name_ar', 'id'); 
-        }else{
-            $cities = array_pluck($allcities,'name_en', 'id');
-        }
-        $alldrivers = User::where('role','driver')->where('center_id',Auth::user()->id)->get();
-        $providers = array_pluck($alldrivers,'name', 'id');  
+        
+        $alldrivers = Order::where('role','driver')->where('center_id',Auth::user()->id)->get();
+        $drivers = array_pluck($alldrivers,'name', 'id');  
 
-        $allcontainers = Container::all();
-        if($lang == 'ar'){
-            $containers = array_pluck($allcontainers,'name_ar', 'id'); 
-        }else{
-            $containers = array_pluck($allcontainers,'name_en', 'id');
-        }
-
-        $order = User::where('id',$id)->with('containers')->orderBy('id', 'DESC')->first();
-        $allareas = Area::where('city_id',$order->city_id)->get();
-        if($lang == 'ar'){
-            $areas = array_pluck($allareas,'name_ar', 'id'); 
-        }else{
-            $areas = array_pluck($allareas,'name_en', 'id');
-        }
-        // return $order ; 
-        return view('orders.edit',compact('order','areas','cities','containers','providers','title','lang'));
+        $order = Order::where('id',$id)->with('centers')->with('drivers')->orderBy('id', 'DESC')->first();
+        return $order ; 
+        return view('orders.edit',compact('order','drivers','title','lang'));
     }
 
     public function update(Request $request, $id)
