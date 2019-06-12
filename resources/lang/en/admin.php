@@ -276,6 +276,11 @@ return [
         'user_mobile'   => 'User Mobile',
         'container_size'  => 'Container Size' ,
         'notes'           => 'Notes',
+        'small'           => 'Small',
+        'large'           => 'Large',
+        'client_detail'           => 'Client Detail',
+        'order_detail'           => ' Detail of request',
+        
 
     //end orders page
  

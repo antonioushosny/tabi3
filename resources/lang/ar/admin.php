@@ -290,7 +290,12 @@ return [
         'no_container'       => 'عدد الخزانات ',
         'total'       => 'الأجمالي',
         'user_mobile'   => 'رقم الجوال ',
-
+        'container_size'  => 'حجم الخزان' ,
+        'notes'           => 'ملاحظات أضافية',
+        'small'           => 'صغير',
+        'large'           => 'كبير',
+        'client_detail'           => 'تفاصيل العميل ',
+        'order_detail'           => ' تفاصيل الطلب',
     //end orders page
 
     // advertisements page 

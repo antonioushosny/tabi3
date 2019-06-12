@@ -50,8 +50,16 @@
             max-width: 97%;
             /* border: 1px solid; */
         }
+      
     </style>
     @endif
+    <style>
+        h5{
+            color: #1e2967;
+            background-color: #8c99e07a;
+
+        }
+    </style>
 @endsection
  @section('content')
 <!-- Main Content -->
@@ -91,28 +99,28 @@
 
                     </div>
                     <div class="body">
-                        <h4><strong>{{trans('admin.user_name')}} :- </strong> {{ $order->user_name }}  </h4>
-                        <h4><strong>{{trans('admin.user_mobile')}} :- </strong> {{ $order->user_mobile }}  </h4>
+                        <h5><strong>{{trans('admin.user_name')}} :- </strong> {{ $order->user_name }}  </h5>
+                        <h5><strong>{{trans('admin.user_mobile')}} :- </strong> {{ $order->user_mobile }}  </h5>
                         @if($order->user && $order->user->City)
                             @if($lang == 'ar')
-                            <h4><strong>{{trans('admin.city')}} :- </strong> {{ $order->user->City->name_ar }}  </h4>
-                            <h4><strong>{{trans('admin.area')}} :- </strong> {{ $order->user->Area->name_ar }}  </h4>
+                            <h5><strong>{{trans('admin.city')}} :- </strong> {{ $order->user->City->name_ar }}  </h5>
+                            <h5><strong>{{trans('admin.area')}} :- </strong> {{ $order->user->Area->name_ar }}  </h5>
                             @else 
-                            <h4><strong>{{trans('admin.city')}} :- </strong> {{ $order->user->City->name_en }}  </h4>
-                            <h4><strong>{{trans('admin.area')}} :- </strong> {{ $order->user->Area->name_en }}  </h4>
+                            <h5><strong>{{trans('admin.city')}} :- </strong> {{ $order->user->City->name_en }}  </h5>
+                            <h5><strong>{{trans('admin.area')}} :- </strong> {{ $order->user->Area->name_en }}  </h5>
                             @endif
                         @else 
-                        <h4><strong>{{trans('admin.city')}} :- </strong> {{ $order->city }}  </h4>
-                        <h4><strong>{{trans('admin.area')}} :- </strong> {{ $order->area }}  </h4>
+                        <h5><strong>{{trans('admin.city')}} :- </strong> {{ $order->city }}  </h5>
+                        <h5><strong>{{trans('admin.area')}} :- </strong> {{ $order->area }}  </h5>
                         @endif
-                        <h4><strong>{{trans('admin.location')}} :- </strong> </h4>
+                        <h5><strong>{{trans('admin.location')}} :- </strong> </h5>
 
                         <!-- {{--  for map      --}}  -->
                             <div class="form-group">
                                 <span style="color: black "> 
-                                    {!! Form::label('location',trans('admin.location')) !!}
+                                    {{-- {!! Form::label('location',trans('admin.location')) !!} --}}
                                 </span>
-                                <input id="pac-input" class="controls" type="text" placeholder="{{trans('admin.Search_Box')}}">
+                                {{-- <input id="pac-input" class="controls" type="text" placeholder="{{trans('admin.Search_Box')}}"> --}}
 
                                 <div class="col-md-12" id="map" style="width:100%;height:400px;"></div>
                                 <label id="lat-error" class="error" for="lat" style="">  </label>
@@ -139,16 +147,16 @@
                         </div>
                         <div class="body">
                             @if($lang == 'ar')
-                                <h4><strong>{{trans('admin.container')}} :- </strong> {{ $order->container_name_ar }}  </h4>
+                                <h5><strong>{{trans('admin.container')}} :- </strong> {{ $order->container_name_ar }}  </h5>
                             @else   
-                                <h4><strong>{{trans('admin.container')}} :- </strong> {{ $order->container_name_en }}  </h4>
+                                <h5><strong>{{trans('admin.container')}} :- </strong> {{ $order->container_name_en }}  </h5>
                             @endif
-                            <h4><strong>{{trans('admin.container_size')}} :- </strong> {{ $order->container_size }}  </h4>
-                            <h4><strong>{{trans('admin.price')}} :- </strong> {{ $order->price }}  </h4>
-                            <h4><strong>{{trans('admin.no_container')}} :- </strong> {{ $order->no_container }}  </h4>
-                            <h4><strong>{{trans('admin.total')}} :- </strong> {{ $order->total }}  </h4>
-                            <h4><strong>{{trans('admin.notes')}} :- </strong> {{ $order->notes }}  </h4>
-                            <h4><strong>{{ trans('admin.status') }} :- </strong> {{ trans('admin.'.$order->status) }}  </h4>
+                            <h5><strong>{{trans('admin.container_size')}} :- </strong> {{ __('admin.'.$order->container_size) }}  </h5>
+                            <h5><strong>{{trans('admin.price')}} :- </strong> {{ $order->price }}  </h5>
+                            <h5><strong>{{trans('admin.no_container')}} :- </strong> {{ $order->no_container }}  </h5>
+                            <h5><strong>{{trans('admin.total')}} :- </strong> {{ $order->total }}  </h5>
+                            <h5><strong>{{trans('admin.notes')}} :- </strong> {{ $order->notes }}  </h5>
+                            <h5><strong>{{ trans('admin.status') }} :- </strong> {{ trans('admin.'.$order->status) }}  </h5>
                            
                         </div>
                     </div>
@@ -208,19 +216,18 @@
 
 
 </script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-A44M149_C_j4zWAZ8rTCFRwvtZzAOBE&libraries=places&signed_in=true&callback=initMap"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-A44M149_C_j4zWAZ8rTCFRwvtZzAOBE&libraries=places&signed_in=true&callback=initMap"></script>
 <script>
 
 
 function initMap() {
-@if(1==2)    
+@if($order->lat != null &&  $order->lng != null)    
     var lat1 = {{$order->lat}};
     var lng1 = {{$order->lng}}
     var haightAshbury = {lat: lat1 , lng:lng1 };
-    console.log(haightAshbury) ;
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: 18,
-        order: haightAshbury,
+        center: haightAshbury,
         mapTypeId: 'terrain'
     });
 
@@ -228,174 +235,7 @@ function initMap() {
         position: haightAshbury,
         map: map
     });
-    var input = document.getElementById('pac-input');
-    var searchBox = new google.maps.places.SearchBox(input);
-    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
-    // Bias the SearchBox results towards current map's viewport.
-    map.addListener('bounds_changed', function() {
-        searchBox.setBounds(map.getBounds());
-    });
-
-    map.addListener('click', function(event) {
-        //clear previous marker
-        marker.setMap(null);
-        //set new marker
-        marker = new google.maps.Marker({
-        position: event.latLng,
-        map: map
-        });
-        document.getElementById('lat').value = event.latLng.lat();
-        document.getElementById('lng').value = event.latLng.lng();
-    });
-    var markers = [];
-    // Listen for the event fired when the user selects a prediction and retrieve
-    // more details for that place.
-    searchBox.addListener('places_changed', function() {
-    var places = searchBox.getPlaces();
-
-    if (places.length == 0) {
-    return;
-    }
-
-    // Clear out the old markers.
-    markers.forEach(function(marker) {
-    marker.setMap(null);
-    });
-    markers = [];
-
-    // For each place, get the icon, name and location.
-    var bounds = new google.maps.LatLngBounds();
-    places.forEach(function(place) {
-    var icon = {
-    url: place.icon,
-    size: new google.maps.Size(71, 71),
-    origin: new google.maps.Point(0, 0),
-    anchor: new google.maps.Point(17, 34),
-    scaledSize: new google.maps.Size(25, 25)
-    };
-
-    // Create a marker for each place.
-    markers.push(new google.maps.Marker({
-    map: map,
-    icon: icon,
-    title: place.name,
-    position: place.geometry.location
-    }));
-
-    document.getElementById('lat').value = place.geometry.location.lat();
-    document.getElementById('lng').value = place.geometry.location.lng();
-    if (place.geometry.viewport) {
-    // Only geocodes have viewport.
-    bounds.union(place.geometry.viewport);
-    } else {
-    bounds.extend(place.geometry.location);
-    }
-    });
-    map.fitBounds(bounds);
-    });
-
-@else 
-    var map = new google.maps.Map(document.getElementById('map'), {
-        order: {lat: 29.967176910157654, lng: 31.21215951392594},
-        zoom: 18,
-        mapTypeId: 'terrain'
-    });
-    var marker = new google.maps.Marker({
-        position: {lat: 29.967176910157654, lng: 31.21215951392594},
-        map: map
-    });
-    var infoWindow = new google.maps.InfoWindow({map: map});
-
-    // Try HTML5 geolocation.
-    if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-    var pos = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
-    };
-    document.getElementById('lat').value = position.coords.latitude;
-    document.getElementById('lng').value = position.coords.longitude;
-    infoWindow.setPosition(pos);
-    
-    infoWindow.setContent('location found');
-    map.setCenter(pos);
-    }, function() {
-    handleLocationError(true, infoWindow, map.getCenter());
-    });
-
-    } else {
-    // Browser doesn't support Geolocation
-    handleLocationError(false, infoWindow, map.getCenter());
-    }
-
-    // Create the search box and link it to the UI element.
-    var input = document.getElementById('pac-input');
-    var searchBox = new google.maps.places.SearchBox(input);
-    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-
-    // Bias the SearchBox results towards current map's viewport.
-    map.addListener('bounds_changed', function() {
-    searchBox.setBounds(map.getBounds());
-    });
-
-    map.addListener('click', function(event) {
-    //clear previous marker
-    marker.setMap(null);
-    //set new marker
-    marker = new google.maps.Marker({
-    position: event.latLng,
-    map: map
-    });
-    document.getElementById('lat').value = event.latLng.lat();
-    document.getElementById('lng').value = event.latLng.lng();
-    });
-    var markers = [];
-    // Listen for the event fired when the user selects a prediction and retrieve
-    // more details for that place.
-    searchBox.addListener('places_changed', function() {
-    var places = searchBox.getPlaces();
-
-    if (places.length == 0) {
-    return;
-    }
-
-    // Clear out the old markers.
-    markers.forEach(function(marker) {
-    marker.setMap(null);
-    });
-    markers = [];
-
-    // For each place, get the icon, name and location.
-    var bounds = new google.maps.LatLngBounds();
-    places.forEach(function(place) {
-    var icon = {
-    url: place.icon,
-    size: new google.maps.Size(71, 71),
-    origin: new google.maps.Point(0, 0),
-    anchor: new google.maps.Point(17, 34),
-    scaledSize: new google.maps.Size(25, 25)
-    };
-
-    // Create a marker for each place.
-    markers.push(new google.maps.Marker({
-    map: map,
-    icon: icon,
-    title: place.name,
-    position: place.geometry.location
-    }));
-
-    document.getElementById('lat').value = place.geometry.location.lat();
-    document.getElementById('lng').value = place.geometry.location.lng();
-    if (place.geometry.viewport) {
-    // Only geocodes have viewport.
-    bounds.union(place.geometry.viewport);
-    } else {
-    bounds.extend(place.geometry.location);
-    }
-    });
-    map.fitBounds(bounds);
-    }); 
 @endif
 
 }

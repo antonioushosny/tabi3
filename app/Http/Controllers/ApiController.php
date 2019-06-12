@@ -560,6 +560,13 @@ class ApiController extends Controller
             //     \File::put(public_path(). '/img/' . $imageName, base64_decode($image));
             //     $user->image = $imageName;
             // }
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $name = md5($image->getClientOriginalName() . time()) . "." . $image->getClientOriginalExtension();
+                $destinationPath = public_path('/img');
+                $image->move($destinationPath, $name);
+                $user->image   = $name;  
+            }
             $user->save();
             $user =  User::where('id',$user->id)->with('City')->with('Area')->first();
             $users = [] ;
