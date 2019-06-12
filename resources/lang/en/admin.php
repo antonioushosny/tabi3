@@ -273,6 +273,9 @@ return [
         'price'       => 'Price',
         'no_container'       => 'Containers Numbers',
         'total'       => 'Total',
+        'user_mobile'   => 'User Mobile',
+        'container_size'  => 'Container Size' ,
+        'notes'           => 'Notes',
 
     //end orders page
  

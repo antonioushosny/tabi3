@@ -84,131 +84,75 @@
         
         <!-- Exportable Table -->
         <div class="row clearfix">
-            <div class="col-lg-12">
+            <div class="col-lg-6 col-md-12">
                 <div class="card">
-               
+                    <div class="header">
+                        <h2><strong>{{trans('admin.client_detail')}}  </strong> </h2>
 
+                    </div>
+                    <div class="body">
+                        <h4><strong>{{trans('admin.user_name')}} :- </strong> {{ $order->user_name }}  </h4>
+                        <h4><strong>{{trans('admin.user_mobile')}} :- </strong> {{ $order->user_mobile }}  </h4>
+                        @if($order->user && $order->user->City)
+                            @if($lang == 'ar')
+                            <h4><strong>{{trans('admin.city')}} :- </strong> {{ $order->user->City->name_ar }}  </h4>
+                            <h4><strong>{{trans('admin.area')}} :- </strong> {{ $order->user->Area->name_ar }}  </h4>
+                            @else 
+                            <h4><strong>{{trans('admin.city')}} :- </strong> {{ $order->user->City->name_en }}  </h4>
+                            <h4><strong>{{trans('admin.area')}} :- </strong> {{ $order->user->Area->name_en }}  </h4>
+                            @endif
+                        @else 
+                        <h4><strong>{{trans('admin.city')}} :- </strong> {{ $order->city }}  </h4>
+                        <h4><strong>{{trans('admin.area')}} :- </strong> {{ $order->area }}  </h4>
+                        @endif
+                        <h4><strong>{{trans('admin.location')}} :- </strong> </h4>
+
+                        <!-- {{--  for map      --}}  -->
+                            <div class="form-group">
+                                <span style="color: black "> 
+                                    {!! Form::label('location',trans('admin.location')) !!}
+                                </span>
+                                <input id="pac-input" class="controls" type="text" placeholder="{{trans('admin.Search_Box')}}">
+
+                                <div class="col-md-12" id="map" style="width:100%;height:400px;"></div>
+                                <label id="lat-error" class="error" for="lat" style="">  </label>
+                            </div><br/>        
+
+                            <div class="form-group">
+                                {{--  {!! Form::label('lat',trans('admin.lat')) !!}  --}}
+                                {!! Form::hidden('lat','',['class'=>'form-control', 'id' => 'lat','placeholder' => trans('admin.placeholder_lat')]) !!}
+
+                                {{--  {!! Form::label('lng',trans('admin.lng')) !!}  --}}
+                                {!! Form::hidden('lng','',['class'=>'form-control', 'id' => 'lng','placeholder' => trans('admin.placeholder_lng')]) !!}
+
+                            </div><br/> 
+                        <!-- end map -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-md-12">
+                    <div class="card">
                         <div class="header">
-                            <h2><strong>{{trans('admin.'.$title)}}</strong> {{trans('admin.order_detail')}}  </h2>
+                            <h2><strong>{{trans('admin.order_detail')}}</strong>   </h2>
                             
                         </div>
                         <div class="body">
-                            {!! Form::open(['route'=>['storeorder'],'method'=>'post','autocomplete'=>'off', 'id'=>'form_validation', 'enctype'=>'multipart/form-data' ])!!} 
-
-                                <div class="form-group form-float">
-                                    <input type="hidden" value="{{$order->id}}" name="id" required>
-                                </div>
-                                <!-- for company_name -->
-                                @if(Auth::user()->role == 'admin' )
-                                    <div class= "form-group form-float">
-                                        {!! Form::select('provider_id',$providers
-                                            ,$order->provider_id,['class'=>'form-control show-tick select2' ,'placeholder' =>trans('admin.choose_provider'),'required']) !!}
-                                        <label id="provider_id-error" class="error" for="provider_id" style="">  </label>
-                                    </div>
-                                @else 
-                                    <div class="form-group form-float">
-                                        <input type="hidden" value="{{Auth::user()->id}}" name="provider_id" required>
-                                    </div>
-                                @endif
-                                <!-- for responsible_name -->
-                                <div class="form-group form-float">
-                                    <input type="text" class="form-control" placeholder="{{__('admin.placeholder_responsible_name')}}" name="responsible_name" value="{{$order->name}}" required>
-                                    <label id="responsible_name-error" class="error" for="responsible_name" style="">  </label>
-                                </div>
-                               
-                                <!-- for email -->
-                                <div class="form-group form-float">
-                                    <input type="email" class="form-control" placeholder="{{__('admin.placeholder_email')}}" name="email" autocomplete="off" value="{{$order->email}}" required>
-                                    <label id="email-error" class="error" for="email" style=""></label>
-                                </div>
-
-                                <!-- for mobile -->
-                                <div class="form-group form-float">
-                                    <input type="text" class="form-control" placeholder="{{__('admin.mobile')}}" value="{{$order->mobile}}" name="mobile" onkeypress='isNumber(event); ' >
-                                    <label id="mobile-error" class="error" for="mobile" style="">  </label>
-                                </div>
-
-                                <!-- for city -->
-                                <div class= "form-group form-float">
-                                    {!! Form::select('city_id',[]
-                                        ,$order->city_id,['class'=>'form-control show-tick select2' ,'id'=>'city_id','placeholder' =>trans('admin.choose_city'),'required']) !!}
-                                    <label id="city_id-error" class="error" for="city_id" style="">  </label>
-                                </div>
-                                        
-                                <!-- for area -->
-                                <div class= "form-group form-float area_id_div ">
-                                    {!! Form::select('area_id',[]
-                                        ,$order->area_id,['class'=>'form-control show-tick select2' ,'id'=>'area_id','placeholder' =>trans('admin.choose_area'),'required']) !!}
-                                    <label id="area_id-error" class="error" for="area_id" style="">  </label>
-                                </div>
-                
-                                 <!-- {{--  for map      --}}  -->
-                                 <div class="form-group">
-                                    <span style="color: black "> 
-                                        {!! Form::label('location',trans('admin.location')) !!}
-                                    </span>
-                                    <input id="pac-input" class="controls" type="text" placeholder="{{trans('admin.Search_Box')}}">
-
-                                    <div class="col-md-12" id="map" style="width:100%;height:400px;"></div>
-                                    <label id="lat-error" class="error" for="lat" style="">  </label>
-                                </div><br/>        
-
-                                <div class="form-group">
-                                    {{--  {!! Form::label('lat',trans('admin.lat')) !!}  --}}
-                                    {!! Form::hidden('lat',$order->lat,['class'=>'form-control', 'id' => 'lat','placeholder' => trans('admin.placeholder_lat')]) !!}
-
-                                    {{--  {!! Form::label('lng',trans('admin.lng')) !!}  --}}
-                                    {!! Form::hidden('lng',$order->lng,['class'=>'form-control', 'id' => 'lng','placeholder' => trans('admin.placeholder_lng')]) !!}
-
-                                </div><br/> 
-                                <!-- end map -->
-
-                                <!-- for image  -->
-                                <div class="form-group form-float row" >
-                                    {{--  for image  --}}
-                                    <div class= "col-md-2 col-xs-3">
-                                        <div class="form-group form-float  " >
-                                            <div style="position:relative; ">
-                                                <a class='btn btn-primary' href='javascript:;' >
-                                                    {{trans('admin.Choose_Image')}}
-            
-                                                    {!! Form::file('image',['class'=>'form-control','id' => 'image_field', 'accept'=>'image/x-png,image/gif,image/jpeg' ,'style'=>'position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;','size'=> '40' ,'onchange' => 'readURL(this,"changeimage");' ]) !!}
-                                                </a>
-                                                &nbsp;
-                                                <div class='label label-primary' id="upload-file-info" ></div>
-                                                <span style="color: red " class="image text-order hidden"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-10">
-                                        
-                                        @if($order->image)
-                                            <img id="changeimage" src="{{asset('img/'.$order->image)}}" width="100px" height="100px" alt=" {{trans('admin.image')}}" />
-                                        @else 
-                                            <img id="changeimage" src="{{asset('images/default.png')}}" width="100px" height="100px" alt=" {{trans('admin.image')}}" />
-                                        @endif
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="radio inlineblock m-r-20">
-                                        <input type="radio" name="status" id="active" class="with-gap" value="active" <?php echo ($order->status == 'active') ? "checked=''" : ""; ?> >
-                                        <label for="active">{{__('admin.active')}}</label>
-                                    </div>                                
-                                    <div class="radio inlineblock">
-                                        <input type="radio" name="status" id="not_active" class="with-gap" value="not_active" <?php echo ($order->status == 'not_active') ? "checked=''" : ""; ?> >
-                                        <label for="not_active">{{__('admin.not_active')}}</label>
-                                    </div>
-                                </div>
-
-                               
-
-                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                <button class="btn btn-raised btn-primary btn-round waves-effect" type="submit">{{__('admin.edit')}}</button>
-                            </form>
+                            @if($lang == 'ar')
+                                <h4><strong>{{trans('admin.container')}} :- </strong> {{ $order->container_name_ar }}  </h4>
+                            @else   
+                                <h4><strong>{{trans('admin.container')}} :- </strong> {{ $order->container_name_en }}  </h4>
+                            @endif
+                            <h4><strong>{{trans('admin.container_size')}} :- </strong> {{ $order->container_size }}  </h4>
+                            <h4><strong>{{trans('admin.price')}} :- </strong> {{ $order->price }}  </h4>
+                            <h4><strong>{{trans('admin.no_container')}} :- </strong> {{ $order->no_container }}  </h4>
+                            <h4><strong>{{trans('admin.total')}} :- </strong> {{ $order->total }}  </h4>
+                            <h4><strong>{{trans('admin.notes')}} :- </strong> {{ $order->notes }}  </h4>
+                            <h4><strong>{{ trans('admin.status') }} :- </strong> {{ trans('admin.'.$order->status) }}  </h4>
+                           
                         </div>
+                    </div>
                 </div>
-            </div>
         </div>
   
     </div>
@@ -269,7 +213,7 @@
 
 
 function initMap() {
-@if($order->lat != null &&  $order->lng != null)    
+@if(1==2)    
     var lat1 = {{$order->lat}};
     var lng1 = {{$order->lng}}
     var haightAshbury = {lat: lat1 , lng:lng1 };

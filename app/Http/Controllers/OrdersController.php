@@ -259,7 +259,7 @@ class OrdersController  extends Controller
         $alldrivers = User::where('role','driver')->where('center_id',Auth::user()->id)->get();
         $drivers = array_pluck($alldrivers,'name', 'id');  
 
-        $order = Order::where('id',$id)->with('centers')->with('drivers')->orderBy('id', 'DESC')->first();
+        $order = Order::where('id',$id)->with('centers')->with('drivers')->with('user')->orderBy('id', 'DESC')->first();
         // return $order ; 
         return view('orders.show',compact('order','drivers','title','lang'));
     }

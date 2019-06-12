@@ -1161,6 +1161,8 @@ class ApiController extends Controller
                     'num_containers'    => 'required',
                     'lat'    => 'required',
                     'lng'    => 'required',
+                    'city_id'    => 'required',
+                    'area_id'    => 'required',
                 );
                 $validator  = \Validator::make($request->all(),$rules);
                 if($validator->fails())

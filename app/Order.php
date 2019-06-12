@@ -14,6 +14,10 @@ class Order extends Model
     {
         return $this->belongsTo('App\User','center_id');
     }
+    public function user()
+    {
+        return $this->belongsTo('App\User','user_id')->with('City')->with('Area');
+    }
     public function container()
     {
         return $this->belongsTo('App\Container','container_id');

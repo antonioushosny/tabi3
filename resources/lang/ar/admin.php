@@ -289,6 +289,8 @@ return [
         'price'       => 'التكلفة',
         'no_container'       => 'عدد الخزانات ',
         'total'       => 'الأجمالي',
+        'user_mobile'   => 'رقم الجوال ',
+
     //end orders page
 
     // advertisements page 
