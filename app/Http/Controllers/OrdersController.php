@@ -250,9 +250,9 @@ class OrdersController  extends Controller
     public function edit($id)
     {
         $lang = App::getlocale();
-        if(!(Auth::user()->role == 'admin' ||  Auth::user()->role == 'provider')){
-            $role = 'admin';
-            return view('unauthorized',compact('role','admin'));
+        if(!(Auth::user()->role == 'center')){
+            $role = 'center';
+            return view('unauthorized',compact('role','center'));
         }
         $title = 'orders';
         $allcities = City::all();
@@ -261,8 +261,8 @@ class OrdersController  extends Controller
         }else{
             $cities = array_pluck($allcities,'name_en', 'id');
         }
-        $allproviders = User::where('role','provider')->get();
-        $providers = array_pluck($allproviders,'company_name', 'id');  
+        $alldrivers = User::where('role','driver')->where('center_id',Auth::user()->id)->get();
+        $providers = array_pluck($alldrivers,'name', 'id');  
 
         $allcontainers = Container::all();
         if($lang == 'ar'){
