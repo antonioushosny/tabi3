@@ -256,7 +256,7 @@ class OrdersController  extends Controller
         }
         $title = 'orders';
         
-        $alldrivers = Order::where('role','driver')->where('center_id',Auth::user()->id)->get();
+        $alldrivers = User::where('role','driver')->where('center_id',Auth::user()->id)->get();
         $drivers = array_pluck($alldrivers,'name', 'id');  
 
         $order = Order::where('id',$id)->with('centers')->with('drivers')->orderBy('id', 'DESC')->first();
