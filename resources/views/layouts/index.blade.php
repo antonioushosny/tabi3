@@ -519,7 +519,6 @@ body, html {
             'copy', 'csv', 'excel', 'pdf', 'print'
         ],   
     });
-    $('.select2').select2();
 </script>
 
 
