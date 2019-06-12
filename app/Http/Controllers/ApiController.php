@@ -1207,8 +1207,8 @@ class ApiController extends Controller
                     $order->city = $user->City->name_ar ;
                     if($user->Area)
                     $order->area = $user->Area->name_ar ;
-                    $order->let = $request->let ;
-                    $order->lang = $request->lng ;
+                    $order->lat = $request->lat ;
+                    $order->lng = $request->lng ;
                     $order->container_name_ar = $CenterContainer->container->name_ar ;
                     $order->container_name_en = $CenterContainer->container->name_en ;
                     $order->container_size = $CenterContainer->container->size ;

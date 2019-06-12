@@ -89,7 +89,7 @@
                
 
                         <div class="header">
-                            <h2><strong>{{trans('admin.'.$title)}}</strong> {{trans('admin.add_order')}}  </h2>
+                            <h2><strong>{{trans('admin.'.$title)}}</strong> {{trans('admin.order_detail')}}  </h2>
                             
                         </div>
                         <div class="body">
@@ -130,101 +130,18 @@
 
                                 <!-- for city -->
                                 <div class= "form-group form-float">
-                                    {!! Form::select('city_id',$cities
+                                    {!! Form::select('city_id',[]
                                         ,$order->city_id,['class'=>'form-control show-tick select2' ,'id'=>'city_id','placeholder' =>trans('admin.choose_city'),'required']) !!}
                                     <label id="city_id-error" class="error" for="city_id" style="">  </label>
                                 </div>
                                         
                                 <!-- for area -->
                                 <div class= "form-group form-float area_id_div ">
-                                    {!! Form::select('area_id',$areas
+                                    {!! Form::select('area_id',[]
                                         ,$order->area_id,['class'=>'form-control show-tick select2' ,'id'=>'area_id','placeholder' =>trans('admin.choose_area'),'required']) !!}
                                     <label id="area_id-error" class="error" for="area_id" style="">  </label>
                                 </div>
-                                 <!-- for containers  -->
-                                 <h3 style="text-align:order">{{__('admin.containers')}}</h3>
-                                <fieldset>
-                                    <div class="control-group">
-                                        <div class="container-fluid containers-container">
-                                            <?php $c = 0 ?>
-                                            @if(sizeof($order->containers) > 0 )
-                                                @foreach($order->containers as $container)
-                                                    @if($c == 0)
-                                                        <div class="row containers-divrow">
-                                                            <div class="col-sm-5">
-                                                                <!-- for containers -->
-                                                                <div class= "form-group form-float">
-                                                                    {!! Form::select('containers[]',$containers
-                                                                        ,$container->pivot->container_id,['class'=>'form-control show-tick select2' ,'id'=>'containers','placeholder' =>trans('admin.choose_container'),'required']) !!}
-                                                                    <label id="containers-error" class="error" for="containers" style="">  </label>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-5">
-                                                                <!-- for price -->
-                                                                <div class= "form-group form-float">
-                                                                    <input type="number" step="0.01" class="form-control text-order "  data-rule="currency" placeholder="{{__('admin.price')}}"  name="price[]" value="{{$container->pivot->price}}" required>
-                                                                    <label id="price-error" class="error" for="price" style="">  </label>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-2">
-                                                                <span class="btn btn-raised btn-primary btn-round waves-effect" id="add_container">{{__('admin.add_container')}}</span>
-
-                                                            </div>
-                                                        </div>
-                                                    @else 
-                                                        <div class="row containers-divrow{{$c}}">
-                                                            <div class="col-sm-5">
-                                                                <!-- for containers -->
-                                                                <div class= "form-group form-float">
-                                                                    {!! Form::select('containers[]',$containers
-                                                                        ,$container->pivot->container_id,['class'=>'form-control show-tick select2' ,'id'=>'containers'.$c,'placeholder' =>trans('admin.choose_container'),'required']) !!}
-                                                                    <label id="containers-error" class="error" for="containers" style="">  </label>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-5">
-                                                                <!-- for price -->
-                                                                <div class= "form-group form-float">
-                                                                    <input type="number" step="0.01" class="form-control text-order "  data-rule="currency" placeholder="{{__('admin.price')}}"  name="price[]" value="{{$container->pivot->price}}" required>
-                                                                    <label id="price-error" class="error" for="price" style="">  </label>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-2">
-                                                                <span class="btn btn-raised btn-warning btn-round waves-effect" id="add_container{{$c}}" onclick="deletecontainer('{{$c}}')">{{__('admin.delete')}}</span>
-
-                                                            </div>
-                                                        </div>
-                                                    @endif 
-                                                    <?php $c ++; ?>
-                                                @endforeach
-                                            @else 
-                                            <div class="row containers-divrow">
-                                                <div class="col-sm-5">
-                                                    <!-- for containers -->
-                                                    <div class= "form-group form-float">
-                                                        {!! Form::select('containers[]',$containers
-                                                            ,'',['class'=>'form-control show-tick select2' ,'id'=>'containers','placeholder' =>trans('admin.choose_container'),'required']) !!}
-                                                        <label id="containers-error" class="error" for="containers" style="">  </label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-5">
-                                                    <!-- for price -->
-                                                    <div class= "form-group form-float">
-                                                        <input type="number" step="0.01" class="form-control text-order " value="1" data-rule="currency" placeholder="{{__('admin.price')}}"  name="price[]" required>
-                                                        <label id="price-error" class="error" for="price" style="">  </label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-2">
-                                                    <span class="btn btn-raised btn-primary btn-round waves-effect" id="add_container">{{__('admin.add_container')}}</span>
-
-                                                </div>
-                                            </div>
-                                            @endif
-
-                                                  
-                                        </div>  
-                                    </div>
-                                </fieldset>
-                                <!-- end for containers -->
+                
                                  <!-- {{--  for map      --}}  -->
                                  <div class="form-group">
                                     <span style="color: black "> 
@@ -343,58 +260,9 @@
             },
         });
     });
-    $('#city_id').on('change', e => {
-        $('#area_id').empty();
-        id = $('#city_id').val();
 
-        $.ajax({
-            type: 'GET',
-            url: "<?php echo url('/')?>/cities/"+id+"/areas",
-            success: data => {
-                if(data.areas.length <= 0){
-                    alert("{{trans('admin.notfoundarea')}}");
-                }
-                data.areas.forEach(area =>
-                    // console.log(area.name)
-                    $('#area_id').append(`<option value="${area.id}">${area.name}</option>`)
-                )
-            }
-        })
-    })
 
-    var count = 10000 ;
-    $('#add_container').on('click',e => {
-        count ++ ;
-        $('.containers-container').append(`
-                                            <div class="row containers-divrow`+count+`">
-                                                <div class="col-sm-5">
-                                                    <!-- for containers -->
-                                                    <div class= "form-group form-float">
-                                                        {!! Form::select('containers[]',$containers
-                                                            ,'',['class'=>'form-control show-tick select' ,'id'=>'containers`+count+`','placeholder' =>trans('admin.choose_container'),'required']) !!}
-                                                        <label id="containers-error" class="error" for="containers" style="">  </label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-5">
-                                                    <!-- for price -->
-                                                    <div class= "form-group form-float">
-                                                        <input type="number" step="0.01" class="form-control text-order " value="1" data-rule="currency" placeholder="{{__('admin.price')}}"  name="price[]" required>
-                                                        <label id="price-error" class="error" for="price" style="">  </label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-2">
-                                                    <span class="btn btn-raised btn-warning btn-round waves-effect" id="add_container`+count+`" onclick="deletecontainer(`+count+`)">{{__('admin.delete')}}</span>
 
-                                                </div>
-                                            </div>  
-        `);
-        $('#containers'+count).select2();
-        // alert('afafafaf');
-    });
-    function deletecontainer(count){
-        // alert(count);
-        $('.containers-divrow'+count).remove();
-    }
 </script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-A44M149_C_j4zWAZ8rTCFRwvtZzAOBE&libraries=places&signed_in=true&callback=initMap"></script>
 <script>
