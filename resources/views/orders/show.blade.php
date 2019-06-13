@@ -178,18 +178,26 @@
                             
                             @if($order->status == 'pending')
                                 <h4><strong>{{ trans('admin.take_action') }} :- </strong>  </h4>
-                                {!! Form::open(['route'=>['storecenter'],'method'=>'post','autocomplete'=>'off', 'id'=>'form_validation', 'enctype'=>'multipart/form-data' ])!!} 
+                                {!! Form::open(['route'=>['actionfororder'],'method'=>'post','autocomplete'=>'off', 'id'=>'form_validation', 'enctype'=>'multipart/form-data' ])!!} 
+                                    
+                                    <div class="form-group form-float">
+                                        <input type="hidden" value="{{$order->id}}" name="order_id" required>
+                                    </div>
+
                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                                     <div class="form-group">
+
                                         <div class="radio inlineblock m-r-20">
                                             <input type="radio" name="status" id="accept" class="with-gap" value="accept"  >
                                             <label for="accept">{{__('admin.accept')}}</label>
-                                        </div>                                
+                                        </div>
+
                                         <div class="radio inlineblock">
                                             <input type="radio" name="status" id="decline" class="with-gap" value="decline"  >
                                             <label for="decline">{{__('admin.decline')}}</label>
                                         </div>
+
                                     </div>
                                     <div id="action_div">
                                         
@@ -222,28 +230,24 @@
         //    openModal();
           $.ajax({
               type: 'POST',
-              url: '{{ URL::route("storeorder") }}',
+              url: '{{ URL::route("actionfororder") }}',
               data:  new FormData($("#form_validation")[0]),
               processData: false,
               contentType: false,
                
               success: function(data) {
                   if ((data.errors)) {                        
-                        if (data.errors.company_name) {
-                            $('#company_name-error').css('display', 'inline-block');
-                            $('#company_name-error').text(data.errors.company_name);
+                        if (data.errors.driver_id) {
+                            $('#driver_id-error').css('display', 'inline-block');
+                            $('#driver_id-error').text(data.errors.driver_id);
                         }
-                        if (data.errors.responsible_name) {
-                            $('#responsible_name-error').css('display', 'inline-block');
-                            $('#responsible_name-error').text(data.errors.responsible_name);
+                        if (data.errors.reason) {
+                            $('#reason-error').css('display', 'inline-block');
+                            $('#reason-error').text(data.errors.reason);
                         }
-                        if (data.errors.image) {
-                            $('#image-error').css('display', 'inline-block');
-                            $('#image-error').text(data.errors.image);
-                        }
-                        if (data.errors.lat) {
-                            $('#lat-error').css('display', 'inline-block');
-                            $('#lat-error').text(data.errors.lat);
+                        if (data.errors.status) {
+                            $('#status-error').css('display', 'inline-block');
+                            $('#status-error').text(data.errors.status);
                         }
                   } else {
                         window.location.replace("{{route('orders')}}");
@@ -251,7 +255,7 @@
                      }
             },
         });
-    });
+    });  
 
     $('#accept').on('change',function(event) {
         $('#action_div').html(`
@@ -274,7 +278,7 @@
             <div class="form-group form-float">
                 <label for="reason" class="reason ">{{__('admin.placeholder_reason')}}</label>
 
-                <textarea rows="4" name="reason"  class="form-control no-resize reason "  placeholder="{{__('admin.placeholder_reason')}}" "required" ="required"> </textarea>
+                <textarea rows="4" name="reason"  class="form-control no-resize reason "  placeholder="{{__('admin.placeholder_reason')}}" required> </textarea>
 
                 <label id="reason-error" class="error" for="reason" style="">  </label>
             </div>

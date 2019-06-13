@@ -264,7 +264,7 @@ class OrdersController  extends Controller
         return view('orders.show',compact('order','drivers','title','lang'));
     }
 
-    public function update(Request $request, $id)
+    public function actionfororder(Request $request, $id)
     {
         
     }
