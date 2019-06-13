@@ -286,7 +286,9 @@ return [
         'take_action'    => 'Take Action',
         'submit'    => 'Submit',
         'choose_driver'     => 'Choose Driver',
-        
+        'reason'          => 'Reason' ,
+        'decline_date'    => 'ٌReject Date/Time',
+        'accept_date'    => 'Accept Date/Time',
 
     //end orders page
  

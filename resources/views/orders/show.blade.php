@@ -205,47 +205,44 @@
 
                                 </form>
                             @elseif($order->drivers )    
-                                <?php $i = 1 ;  $n = true ; ?>
+                                <?php  $n = false ; ?>
                                 
 
                                 @foreach($order->drivers as $driver)
-                                    @if($driver->status == 'accepted' || $driver->status == 'pending')
-                                        <?php $n = false ; ?>
-                                        <a href="#" class="btn btn-round btn-info">{{ __('admin.asssign') }}</a> 
+                                    @if($driver->status == 'accept' || $driver->status == 'pending')
+                                        <?php $n = true ; ?>
+                                        {{--  <a href="#" class="btn btn-round btn-info">{{ __('admin.asssign') }}</a>   --}}
                                     @endif
                                   
                                     <table class="table table-striped">
                                         <thead>
-                                            <th>{{ __('#') }}</th>
                                             <th>{{ __('admin.driver') }}</th>
                                             <th>{{ __('admin.status') }}</th>
-                                            @if($driver->status == 'accepted')
+                                            @if($driver->status == 'accept')
                                             <th>{{ __('admin.accept_date') }}</th>
                                             @elseif($driver->status == 'decline')
                                             <th>{{ __('admin.decline_date') }}</th>
                                             <th>{{ __('admin.reason') }}</th>
-                                            <th>{{ __('admin.action') }}</th>
+                                            {{--  <th>{{ __('admin.action') }}</th>  --}}
                                             @endif
                                             
                                         </thead>
                                         <tbody>
-                                            <td>{{$i}}</td>
                                             <td>{{$driver->driver->name}}</td>
                                             <td>{{ __('admin.'.$driver->status) }}</td>
-                                            @if($driver->status == 'accepted')
+                                            @if($driver->status == 'accept')
                                             <td>{{ $driver->accept_date }}</td>
-                                            @elseif($driver->status == 'declined')
-                                            <td>{{ $driver->accept_date  }}</td>
+                                            @elseif($driver->status == 'decline')
+                                            <td>{{ $driver->decline_date  }}</td>
                                             <td>{{ $driver->reason  }}</td>
-                                            <td> <a href="#" class="btn btn-round btn-info">{{ __('admin.reassign') }}</a></td>
+                                            {{--  <td> <a href="#" class="btn btn-round btn-info">{{ __('admin.reassign') }}</a></td>  --}}
                                             @endif
                                         </tbody>
                                     </table>
                                     {{--  {{ $driver }}  --}}
-                                    <?php $i ++ ;  ?>
-
+                                   
                                 @endforeach
-                                @if($n == true)
+                                @if($n == false)
                                     <a href="#" class="btn btn-round btn-info">{{ __('admin.assign') }}</a>
                                 @endif
                             @endif

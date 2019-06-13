@@ -302,6 +302,9 @@ return [
         'take_action'    => 'رجاء اخذ اجراء',
         'submit'    => 'تم',
         'choose_driver'     => 'اختر سائق ',
+        'reason'          => 'سبب الرفض ' ,
+        'decline_date'    => 'وقت وتاريخ الرفض',
+        'accept_date'    => 'وقت وتاريخ القبول',
         
     //end orders page
 
