@@ -176,7 +176,7 @@
                             <h5><strong>{{trans('admin.notes')}} :- </strong> {{ $order->notes }}  </h5>
                             <h5><strong>{{ trans('admin.status') }} :- </strong> {{ trans('admin.'.$order->status) }}  </h5>
                             
-                            @if($order->status == 'pending')
+                            @if($order->status == 'pending' && $order->center_id == Auth::user()->id)
                                 <h4><strong>{{ trans('admin.take_action') }} :- </strong>  </h4>
                                 {!! Form::open(['route'=>['actionfororder'],'method'=>'post','autocomplete'=>'off', 'id'=>'form_validation', 'enctype'=>'multipart/form-data' ])!!} 
 
@@ -204,6 +204,11 @@
                                     </div>
 
                                 </form>
+
+                            @elseif($order->drivers )    
+                                @foreach($order->drivers as $driver)
+                                    {{ $driver }}
+                                @endforeach
                             @endif
                         </div>
 

@@ -318,6 +318,7 @@ class ApiController extends Controller
                     $users['lat'] = $user->lat ;
                     $users['lng'] = $user->lng ;
                     $users['role'] = $user->role ;
+                    $users['image'] = asset('img/').'/'. $user->image;
                     
                     $users['remember_token'] = $user->remember_token ;
                     
@@ -560,7 +561,7 @@ class ApiController extends Controller
             //     \File::put(public_path(). '/img/' . $imageName, base64_decode($image));
             //     $user->image = $imageName;
             // }
-            
+
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $name = md5($image->getClientOriginalName() . time()) . "." . $image->getClientOriginalExtension();
