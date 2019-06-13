@@ -74,6 +74,9 @@
             margin-right: 10rem;
             margin-left: 10rem;
         }
+        .hidden{
+            display: none;
+        }
     </style>
 @endsection
  @section('content')
@@ -174,11 +177,25 @@
                             <h5><strong>{{ trans('admin.status') }} :- </strong> {{ trans('admin.'.$order->status) }}  </h5>
                             
                             @if($order->status == 'pending')
-                            <h4><strong>{{ trans('admin.take_action') }} :- </strong>  </h4>
-                            <div>
-                                <a href="javascript:void(0);" class="btn btn-info" >accept</a>
-                                <a href="javascript:void(0);" class="btn btn-error" >decline</a>
-                            </div>
+                                <h4><strong>{{ trans('admin.take_action') }} :- </strong>  </h4>
+                                {!! Form::open(['route'=>['storecenter'],'method'=>'post','autocomplete'=>'off', 'id'=>'form_validation', 'enctype'=>'multipart/form-data' ])!!} 
+                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
+                                    <div class="form-group">
+                                        <div class="radio inlineblock m-r-20">
+                                            <input type="radio" name="status" id="accept" class="with-gap" value="accept"  >
+                                            <label for="accept">{{__('admin.accept')}}</label>
+                                        </div>                                
+                                        <div class="radio inlineblock">
+                                            <input type="radio" name="status" id="decline" class="with-gap" value="decline"  >
+                                            <label for="decline">{{__('admin.decline')}}</label>
+                                        </div>
+                                    </div>
+                                    <div id="action_div">
+                                        
+                                    </div>
+
+                                </form>
                             @endif
                         </div>
 
@@ -236,7 +253,36 @@
         });
     });
 
+    $('#accept').on('change',function(event) {
+        $('#action_div').html(`
+            <!-- for drivers -->
+            <div class= "form-group form-float">
+                <label for="choose_driver" class="driver_id ">{{__('admin.choose_driver')}}</label>
 
+                {!! Form::select('driver_id',$drivers
+                    ,'',['class'=>'form-control show-tick select2 ' ,'id'=>'driver_id','placeholder' =>trans('admin.choose_driver'),'required']) !!}
+                <label id="driver_id-error" class="error" for="driver_id" style="">  </label>
+            </div>
+            <button class="btn btn-raised btn-primary btn-round waves-effect" type="submit">{{__('admin.submit')}}</button>
+        `);
+        console.log('accept change')
+        $('.select2').select2();
+    })
+    $('#decline').on('change',function(event) {
+        $('#action_div').html(`
+            <!-- for reason -->
+            <div class="form-group form-float">
+                <label for="reason" class="reason ">{{__('admin.placeholder_reason')}}</label>
+
+                <textarea rows="4" name="reason"  class="form-control no-resize reason "  placeholder="{{__('admin.placeholder_reason')}}" "required" ="required"> </textarea>
+
+                <label id="reason-error" class="error" for="reason" style="">  </label>
+            </div>
+            <button class="btn btn-raised btn-primary btn-round waves-effect" type="submit">{{__('admin.submit')}}</button>
+        `);
+        console.log('decline change')
+    })
+ 
 
 </script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-A44M149_C_j4zWAZ8rTCFRwvtZzAOBE&libraries=places&signed_in=true&callback=initMap"></script>
