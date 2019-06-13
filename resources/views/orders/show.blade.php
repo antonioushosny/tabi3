@@ -224,10 +224,10 @@
                                         <tbody>
                                             <td>{{$i}}</td>
                                             <td>{{$driver->driver->name}}</td>
-                                            <td>{{ $driver->status }}</td>
+                                            <td>{{ __('admin.'.$driver->status) }}</td>
                                             @if($driver->status == 'accepted')
                                             <td>{{ $driver->accept_date }}</td>
-                                            @elseif($driver->status == 'decline')
+                                            @elseif($driver->status == 'declined')
                                             <td>{{ $driver->accept_date  }}</td>
                                             <td>{{ $driver->reason  }}</td>
                                             @endif
@@ -333,7 +333,7 @@ function initMap() {
     var lng1 = {{$order->lng}}
     var haightAshbury = {lat: lat1 , lng:lng1 };
     map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 18,
+        zoom: 8,
         center: haightAshbury,
         mapTypeId: 'terrain'
     });
