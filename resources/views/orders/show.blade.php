@@ -206,8 +206,36 @@
                                 </form>
 
                             @elseif($order->drivers )    
+                                <?php $i = 1 ;  ?>
                                 @foreach($order->drivers as $driver)
-                                    {{ $driver }}
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <th>{{ __('#') }}</th>
+                                            <th>{{ __('admin.driver') }}</th>
+                                            <th>{{ __('admin.status') }}</th>
+                                            @if($driver->status == 'accepted')
+                                            <th>{{ __('admin.accept_date') }}</th>
+                                            @elseif($driver->status == 'decline')
+                                            <th>{{ __('admin.decline_date') }}</th>
+                                            <th>{{ __('admin.reason') }}</th>
+                                            @endif
+                                            
+                                        </thead>
+                                        <tbody>
+                                            <td>{{$i}}</td>
+                                            <td>{{$driver->driver->name}}</td>
+                                            <td>{{ $driver->status }}</td>
+                                            @if($driver->status == 'accepted')
+                                            <td>{{ $driver->accept_date }}</td>
+                                            @elseif($driver->status == 'decline')
+                                            <td>{{ $driver->accept_date  }}</td>
+                                            <td>{{ $driver->reason  }}</td>
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                    {{--  {{ $driver }}  --}}
+                                    <?php $i ++ ;  ?>
+
                                 @endforeach
                             @endif
                         </div>

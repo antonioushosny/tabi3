@@ -111,9 +111,9 @@ class ApiController extends Controller
     public function Cities(Request $request){ 
         $lang = $request->header('lang');
         if($lang == 'ar'){
-            $Cities  = City::where('status','active')->orderBy('name_ar', 'asc')->get();
+            $Cities  = City::where('status','active')->with('areas')->orderBy('name_ar', 'asc')->get();
         }else{
-            $Cities  = City::where('status','active')->orderBy('name_en', 'asc')->get();
+            $Cities  = City::where('status','active')->with('areas')->orderBy('name_en', 'asc')->get();
         }
             if(sizeof($Cities) > 0){
                 $Citiess =[];
@@ -127,6 +127,22 @@ class ApiController extends Controller
                         }else{
                             $Citiess[$i]['city_name']   =  $City->name_en;
                         }
+                        $areass = [] ;
+                        $n  = 0 ;
+                        if(sizeOf($City->areas) > 0){
+
+                            foreach($City->areas as $area){
+                                $areass[$n]['area_id']   = $area->id;
+                                if($lang == 'ar'){
+                                    $areass[$n]['area_name']   = $area->name_ar;
+                                }else{
+                                    $areass[$n]['area_name']   =  $area->name_en;
+                                }
+                                $n ++ ;
+                        
+                            }
+                        }
+                        $Citiess[$i]['areas'] = $areass ;
                         $i ++ ;
                     
                     }
