@@ -334,7 +334,7 @@ class OrdersController  extends Controller
                 $this->notification($device_token,$title,$msg);
             }
             return \Response::json('accepted') ;
-            
+
         }else if($request->status == 'decline'){
              $order->save();
             $ordercenter->status  = 'declined' ;
@@ -373,7 +373,7 @@ class OrdersController  extends Controller
                     $order->center_id = $CenterContainer->center->id ;
                     $order->container_id = $CenterContainer->container->id ;
                     $order->price = $CenterContainer->price ;
-                    $order->total = $CenterContainer->price * $request->num_containers ;
+                    $order->total = $CenterContainer->price * $order->no_container ;
                     $order->status = 'pending' ;
                     $order->save();
     
