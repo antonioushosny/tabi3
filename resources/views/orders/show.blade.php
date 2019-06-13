@@ -56,11 +56,11 @@
     <style>
         h5{
             color: #1e2967;
-            background-color: #8c99e033;
+            background-color: #8c99e01f;
             border-radius: 30px;
             padding: 4px;
             padding-right: 25px;
-            box-shadow: 5px 8px #6b6464;
+            box-shadow: 2px 3px #6b6464;
         }
         h6{
             color: #1e2967;
@@ -69,8 +69,8 @@
             font-size: 25px;
             border-radius: 30px;
             text-align: center;
-            box-shadow: 5px 8px #6b6464;
-            background-color: #8c99e033;
+            box-shadow: 2px 3px #6b6464;
+            background-color: #8c99e01f;
             margin-right: 10rem;
             margin-left: 10rem;
         }
@@ -179,7 +179,7 @@
                             @if($order->status == 'pending')
                                 <h4><strong>{{ trans('admin.take_action') }} :- </strong>  </h4>
                                 {!! Form::open(['route'=>['actionfororder'],'method'=>'post','autocomplete'=>'off', 'id'=>'form_validation', 'enctype'=>'multipart/form-data' ])!!} 
-                                    
+
                                     <div class="form-group form-float">
                                         <input type="hidden" value="{{$order->id}}" name="order_id" required>
                                     </div>

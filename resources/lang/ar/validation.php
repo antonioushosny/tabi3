@@ -175,6 +175,8 @@ return [
         'lng'                 => 'الموقع  ',
         'center_id'                        => ' مركو توزيع ', 
         'provider_id'                        => ' مزود مياه', 
+        'driver_id'                        => ' السائق', 
+        'reason'                        => ' السبب', 
     ],
     
 

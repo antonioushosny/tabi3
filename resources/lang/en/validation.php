@@ -190,6 +190,8 @@ return [
         'lng'                 => 'location  ',
         'center_id'                        => ' Distribution  Center', 
         'provider_id'                        => ' Water Provider', 
+        'driver_id'                        => ' Driver', 
+        'reason'                        => ' Reason', 
     ],
     
 ];

@@ -280,6 +280,12 @@ return [
         'large'           => 'Large',
         'client_detail'           => 'Client Detail',
         'order_detail'           => ' Detail of request',
+        'placeholder_reason'    => 'Enter Your Reason',
+        'accept'    => 'Accept',
+        'decline'    => 'Decline',
+        'take_action'    => 'Take Action',
+        'submit'    => 'Submit',
+        'choose_driver'     => 'Choose Driver',
         
 
     //end orders page

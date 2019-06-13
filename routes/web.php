@@ -108,7 +108,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/noworders', 'OrdersController@noworders')->name('noworders');
     Route::get('/lastorders', 'OrdersController@lastorders')->name('lastorders');
     Route::get('/orders/add/', 'OrdersController@add')->name('addorder');
-    Route::post('/orders/update/', 'OrdersController@store')->name('storeorder');
+    Route::post('/orders/update/', 'OrdersController@actionfororder')->name('actionfororder');
     Route::get('/orders/edit/{id}', 'OrdersController@edit')->name('editorder');
     Route::get('/orders/delete/{id}', 'OrdersController@destroy')->name('destroyorder');
     Route::post('/orders/deleteall', 'OrdersController@deleteall')->name('ordersdeleteall');

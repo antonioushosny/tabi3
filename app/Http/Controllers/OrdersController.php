@@ -10,7 +10,9 @@ use App\Area;
 use App\Order;
 use App\Container;
 use App\CenterContainer;
-
+use App\OrderCenter;
+use App\OrderDriver;
+use Carbon\Carbon;
 use Spatie\Permission\Models\Role;
 use Auth;
 use App;
@@ -264,9 +266,42 @@ class OrdersController  extends Controller
         return view('orders.show',compact('order','drivers','title','lang'));
     }
 
-    public function actionfororder(Request $request, $id)
+    public function actionfororder(Request $request)
     {
-        
+        $rules =
+            [
+                'status'   =>'required', 
+            ];
+
+            // return $request ;
+        if($request->status == 'accept' ){
+            $rules =
+            [
+                'driver_id'   =>'required', 
+            ];
+            
+        }     
+    
+        else if($request->status == 'decline' ) {
+            $rules =
+            [
+                'reason'   =>'required',   
+            ];
+        }
+        $validator = \Validator::make($request->all(), $rules);
+         if ($validator->fails()) {
+             return \Response::json(array('errors' => $validator->getMessageBag()->toArray()));
+         }
+
+        $ordercenter = OrderCenter::where('order_id',$request->id)->where('center_id',Auth::user()->id)->first();
+        $dt = Carbon::now();
+        $date  = date('Y-m-d H:i:s', strtotime($dt));
+        if($request->status == 'accept'){
+        $ordercenter->status  = 'accepted' ;
+        $ordercenter->accept_date  = 'accepted' ;
+        $ordercenter->status  = 'accepted' ;
+        }
+         
     }
 
     public function destroy($id)

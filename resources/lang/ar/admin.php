@@ -296,6 +296,13 @@ return [
         'large'           => 'كبير',
         'client_detail'           => 'تفاصيل العميل ',
         'order_detail'           => ' تفاصيل الطلب',
+        'placeholder_reason'    => 'ادخل السبب',
+        'accept'    => 'قبول',
+        'decline'    => 'رفض',
+        'take_action'    => 'رجاء اخذ اجراء',
+        'submit'    => 'تم',
+        'choose_driver'     => 'اختر سائق ',
+        
     //end orders page
 
     // advertisements page 
