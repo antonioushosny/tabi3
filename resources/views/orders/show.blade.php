@@ -200,14 +200,20 @@
 
                                     </div>
                                     <div id="action_div">
-                                        
+                                            
                                     </div>
 
                                 </form>
-
                             @elseif($order->drivers )    
-                                <?php $i = 1 ;  ?>
+                                <?php $i = 1 ;  $n = true ; ?>
+                                
+
                                 @foreach($order->drivers as $driver)
+                                    @if($driver->status == 'accepted' || $driver->status == 'pending')
+                                        <?php $n = false ; ?>
+                                        <a href="#" class="btn btn-round btn-info">{{ __('admin.asssign') }}</a> 
+                                    @endif
+                                  
                                     <table class="table table-striped">
                                         <thead>
                                             <th>{{ __('#') }}</th>
@@ -218,6 +224,7 @@
                                             @elseif($driver->status == 'decline')
                                             <th>{{ __('admin.decline_date') }}</th>
                                             <th>{{ __('admin.reason') }}</th>
+                                            <th>{{ __('admin.action') }}</th>
                                             @endif
                                             
                                         </thead>
@@ -230,6 +237,7 @@
                                             @elseif($driver->status == 'declined')
                                             <td>{{ $driver->accept_date  }}</td>
                                             <td>{{ $driver->reason  }}</td>
+                                            <td> <a href="#" class="btn btn-round btn-info">{{ __('admin.reassign') }}</a></td>
                                             @endif
                                         </tbody>
                                     </table>
@@ -237,6 +245,9 @@
                                     <?php $i ++ ;  ?>
 
                                 @endforeach
+                                @if($n == true)
+                                    <a href="#" class="btn btn-round btn-info">{{ __('admin.assign') }}</a>
+                                @endif
                             @endif
                         </div>
 
