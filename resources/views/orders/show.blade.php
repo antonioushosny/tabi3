@@ -235,7 +235,7 @@
                                             @elseif($driver->status == 'decline')
                                             <td>{{ $driver->decline_date  }}</td>
                                             <td>{{ $driver->reason  }}</td>
-                                            {{--  <td> <a href="#" class="btn btn-round btn-info">{{ __('admin.reassign') }}</a></td>  --}}
+
                                             @endif
                                         </tbody>
                                     </table>
@@ -243,8 +243,23 @@
                                    
                                 @endforeach
                                 @if($n == false)
-                                    <a href="#" class="btn btn-round btn-info">{{ __('admin.assign') }}</a>
+                                    <a href="#" class="btn btn-round btn-info" id="reassign">{{ __('admin.reassign') }}</a>
+                                    <a href="#" class="btn btn-round btn-warning" id="decline_btn">{{ __('admin.decline_order') }}</a>
                                 @endif
+                                <div> 
+
+                                    {!! Form::open(['route'=>['assignDriver'],'method'=>'post','autocomplete'=>'off', 'id'=>'form_re_assign', 'enctype'=>'multipart/form-data' ])!!} 
+                                        <div class="form-group form-float">
+                                            <input type="hidden" value="{{$order->id}}" name="order_id" required>
+                                        </div>
+    
+                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                        <div id="action_div_assigndriver">
+                                            
+                                        </div>
+        
+                                    </form>
+                                </div>
                             @endif
                         </div>
 
@@ -291,14 +306,44 @@
                             $('#status-error').text(data.errors.status);
                         }
                   } else {
-                        console.log(data)
-                        {{--  location.reload();  --}}
+                        {{--  console.log(data)  --}}
+                        location.reload();
 
                      }
             },
         });
     });  
 
+    $("#form_re_assign").submit(function(e){
+        e.preventDefault();
+        var form = $(this);
+      //    openModal();
+        $.ajax({
+            type: 'POST',
+            url: '{{ URL::route("assignDriver") }}',
+            data:  new FormData($("#form_re_assign")[0]),
+            processData: false,
+            contentType: false,
+             
+            success: function(data) {
+                if ((data.errors)) {                        
+                    if (data.errors.driver_id) {
+                        $('#driver_id-error').css('display', 'inline-block');
+                        $('#driver_id-error').text(data.errors.driver_id);
+                    }
+                    if (data.errors.reason) {
+                        $('#reason-error').css('display', 'inline-block');
+                        $('#reason-error').text(data.errors.reason);
+                    }
+                     
+                } else {
+                      {{--  console.log(data)  --}}
+                      location.reload();
+
+                   }
+          },
+      });
+  });  
     $('#accept').on('change',function(event) {
         $('#action_div').html(`
             <!-- for drivers -->
@@ -311,7 +356,7 @@
             </div>
             <button class="btn btn-raised btn-primary btn-round waves-effect" type="submit">{{__('admin.submit')}}</button>
         `);
-        console.log('accept change')
+        {{--  console.log('accept change')  --}}
         $('.select2').select2();
     })
     $('#decline').on('change',function(event) {
@@ -326,10 +371,41 @@
             </div>
             <button class="btn btn-raised btn-primary btn-round waves-effect" type="submit">{{__('admin.submit')}}</button>
         `);
-        console.log('decline change')
+        {{--  console.log('decline change')  --}}
     })
  
+    $('#reassign').on('click',function(event) {
+        $('#action_div_assigndriver').html(`
+            <!-- for drivers -->
+            <div class= "form-group form-float">
+                <label for="choose_driver" class="driver_id ">{{__('admin.choose_driver')}}</label>
 
+                {!! Form::select('driver_id',$drivers
+                    ,'',['class'=>'form-control show-tick select2 ' ,'id'=>'driver_id','placeholder' =>trans('admin.choose_driver'),'required']) !!}
+                <label id="driver_id-error" class="error" for="driver_id" style="">  </label>
+            </div>
+            <button class="btn btn-raised btn-primary btn-round waves-effect" type="submit">{{__('admin.submit')}}</button>
+        `);
+        $('html,body').animate({ scrollTop: 9999 }, 'slow');
+        {{--  console.log('accept change')  --}}
+        $('.select2').select2();
+    })
+    $('#decline_btn').on('click',function(event) {
+        $('#action_div_assigndriver').html(`
+            <!-- for reason -->
+            <div class="form-group form-float">
+                <label for="reason" class="reason ">{{__('admin.placeholder_reason')}}</label>
+
+                <textarea rows="4" name="reason"  class="form-control no-resize reason "  placeholder="{{__('admin.placeholder_reason')}}" required> </textarea>
+
+                <label id="reason-error" class="error" for="reason" style="">  </label>
+            </div>
+            <button class="btn btn-raised btn-primary btn-round waves-effect" type="submit">{{__('admin.submit')}}</button>
+        `);
+        $('html,body').animate({ scrollTop: 9999 }, 'slow');
+        {{--  console.log('decline change')  --}}
+    })
+    
 </script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-A44M149_C_j4zWAZ8rTCFRwvtZzAOBE&libraries=places&signed_in=true&callback=initMap"></script>
 <script>

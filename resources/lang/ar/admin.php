@@ -305,7 +305,9 @@ return [
         'reason'          => 'سبب الرفض ' ,
         'decline_date'    => 'وقت وتاريخ الرفض',
         'accept_date'    => 'وقت وتاريخ القبول',
-        
+        'reassign'       => ' تعيين سائق آخر ',
+        'decline_order'     => 'رفض الطلب',
+
     //end orders page
 
     // advertisements page 

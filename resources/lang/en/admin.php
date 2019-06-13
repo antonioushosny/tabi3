@@ -289,6 +289,8 @@ return [
         'reason'          => 'Reason' ,
         'decline_date'    => 'ٌReject Date/Time',
         'accept_date'    => 'Accept Date/Time',
+        'reassign'       => ' Assign Other Driver ',
+        'decline_order'     => 'Reject Order',
 
     //end orders page
  

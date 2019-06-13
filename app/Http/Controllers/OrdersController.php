@@ -421,6 +421,46 @@ class OrdersController  extends Controller
          
     }
 
+    public function assignDriver(Request $request)
+    {
+
+        
+        $rules =
+        [
+            'order_id'   =>'required', 
+        ];
+    
+        $validator = \Validator::make($request->all(), $rules);
+         if ($validator->fails()) {
+             return \Response::json(array('errors' => $validator->getMessageBag()->toArray()));
+         }
+
+        $ordercenter = OrderCenter::where('order_id',$request->order_id)->where('center_id',Auth::user()->id)->first();
+        $dt = Carbon::now();
+        $date  = date('Y-m-d H:i:s', strtotime($dt));
+        $order = Order::where('id',$request->order_id)->first();
+
+        $orderdriver = new OrderDriver ;
+        $orderdriver->status  =  'pending' ; 
+        $orderdriver->center_id  =   $ordercenter->center_id ; 
+        $orderdriver->order_id  =   $ordercenter->order_id ; 
+        $orderdriver->driver_id  =   $request->driver_id ; 
+        $orderdriver->save();  
+        $msg = "  تم اختيارك لتوصيل طلب جديد "  ;
+        $type = "order";
+        $title = "  لديك طلب جديد من " ;
+        $driver = User::where('id', $request->driver_id)->first(); 
+        $driver->notify(new Notifications($msg,$type ));
+        $device_token = $driver->device_token ;
+        if($device_token){
+            $this->notification($device_token,$title,$msg);
+        }
+        return \Response::json('accepted') ;
+
+       
+         
+    }
+    
     public function destroy($id)
     {
        

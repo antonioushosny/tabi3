@@ -109,6 +109,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/lastorders', 'OrdersController@lastorders')->name('lastorders');
     Route::get('/orders/add/', 'OrdersController@add')->name('addorder');
     Route::post('/orders/update/', 'OrdersController@actionfororder')->name('actionfororder');
+    Route::post('/orders/assignDriver/', 'OrdersController@assignDriver')->name('assignDriver');
     Route::get('/orders/edit/{id}', 'OrdersController@edit')->name('editorder');
     Route::get('/orders/delete/{id}', 'OrdersController@destroy')->name('destroyorder');
     Route::post('/orders/deleteall', 'OrdersController@deleteall')->name('ordersdeleteall');
