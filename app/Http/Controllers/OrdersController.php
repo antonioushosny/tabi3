@@ -17,6 +17,8 @@ use Spatie\Permission\Models\Role;
 use Auth;
 use App;
 use DB;
+use App\Notifications\Notifications;
+
 class OrdersController  extends Controller
 {
     /**
@@ -312,13 +314,33 @@ class OrdersController  extends Controller
                 $orderdriver->driver_id  =   $request->driver_id ; 
                 $orderdriver->save();  
             }
-            return 'success';
+            $msg = "  تم اختيارك لتوصيل طلب جديد "  ;
+            $type = "order";
+            $title = "  لديك طلب جديد من " ;
+            $driver = User::where('id', $request->driver_id)->first(); 
+            $driver->notify(new Notifications($msg,$type ));
+            $device_token = $driver->device_token ;
+            if($device_token){
+                $this->notification($device_token,$title,$msg);
+            }
+
+            $msg = "  تم  قبول طلبك "  ;
+            $type = "accepted_order" ;
+            $title = "  تم  قبول طلبك " ;
+            $user = User::where('id', $request->user_id)->first(); 
+            $user->notify(new Notifications($msg,$type ));
+            $device_token = $user->device_token ;
+            if($device_token){
+                $this->notification($device_token,$title,$msg);
+            }
+            return \Response::json('accepted') ;
+            
         }else if($request->status == 'decline'){
              $order->save();
             $ordercenter->status  = 'declined' ;
             $ordercenter->reason  = $request->reason ;
             $ordercenter->decline_date  = $date ;
-            // $ordercenter->save() ;
+            $ordercenter->save() ;
 
             $container = Container::where('id',$order->container_id)->with('centers')->first();
             $distancess = [] ;
@@ -331,47 +353,66 @@ class OrdersController  extends Controller
                     $i++ ;
                 }
                 asort($distancess)  ;
-                $first_key = key($distancess);
-
-                return \Response::json( $first_key) ;
-
                 // reset($distancess);
+   
+                // return \Response::json( $distancess) ;
                 foreach($distancess as $key => $distances) {
                     $ordercenter = OrderCenter::where('center_id',$key)->where('order_id',$request->order_id)->first();
+                    print ($ordercenter) ;
                     if($ordercenter){
                         unset($distancess[$key]);
                     }
-                    return \Response::json( $distancess) ;
                 }
-                asort($distancess)  ;
+                // return \Response::json( $distancess) ;
+                // asort($distancess)  ;
                 $first_key = key($distancess);
-                return \Response::json( $first_key) ;
-
+                
                 $CenterContainer = CenterContainer::where('center_id',$first_key)->where('container_id',$order->container_id)->with('center')->with('container')->first();
-                return \Response::json( $distancess) ;
-                $order->center_id = $CenterContainer->center->id ;
-                $order->container_id = $CenterContainer->container->id ;
-                $order->price = $CenterContainer->price ;
-                $order->total = $CenterContainer->price * $request->num_containers ;
-                $order->status = 'pending' ;
-                $order->save();
+                if($CenterContainer){
 
-                $ordercenter = new OrderCenter ;
-                $ordercenter->order_id = $request->order_id ;
-                $ordercenter->center_id = $first_key ;
-                $ordercenter->status = 'pending' ;
-                $ordercenter->save();
+                    $order->center_id = $CenterContainer->center->id ;
+                    $order->container_id = $CenterContainer->container->id ;
+                    $order->price = $CenterContainer->price ;
+                    $order->total = $CenterContainer->price * $request->num_containers ;
+                    $order->status = 'pending' ;
+                    $order->save();
+    
+                    $ordercenter = new OrderCenter ;
+                    $ordercenter->order_id = $request->order_id ;
+                    $ordercenter->center_id = $first_key ;
+                    $ordercenter->status = 'pending' ;
+                    $ordercenter->save();
+    
+                    $msg = "  لديك طلب جديد من " . $order->user_name ;
+                    $type = "order";
+                    $title = "  لديك طلب جديد من " . $order->user_name  ;
+                    $center = User::where('id', $CenterContainer->center->id)->first(); 
+                    $center->notify(new Notifications($msg,$type ));
+                    $device_token = $center->device_token ;
+                    if($device_token){
+                        $this->notification($device_token,$title,$msg);
+                    }
+                    return \Response::json('canceled') ;
+                }else{
+                    $order->center_id = null ;
+                    $order->container_id = $order->container_id ;
+                    $order->price =  null ;
+                    $order->total = null ;
+                    $order->status = 'canceled' ;
+                    $order->save();
 
-                $msg = "  لديك طلب جديد من " . $user->name ;
-                $type = "order";
-                $title = "  لديك طلب جديد من " . $user->name ;
-                $center = User::where('id', $CenterContainer->center->id)->first(); 
-                $center->notify(new Notifications($msg,$type ));
-                $device_token = $center->device_token ;
-                if($device_token){
-                    $this->notification($device_token,$title,$msg);
+                    $msg = "  تم  رفض طلبك "  ;
+                    $type = "canceled_order" ;
+                    $title = "  تم  رفض طلبك " ;
+                    $user = User::where('id', $request->user_id)->first(); 
+                    $user->notify(new Notifications($msg,$type ));
+                    $device_token = $user->device_token ;
+                    if($device_token){
+                        $this->notification($device_token,$title,$msg);
+                    }
+                    return \Response::json('canceled') ;
                 }
-                return \Response::json( $first_key) ;
+                
 
             }
 
