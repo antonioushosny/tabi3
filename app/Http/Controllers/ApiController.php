@@ -1325,6 +1325,7 @@ class ApiController extends Controller
             if($user && $user->role == 'user'){
                 // $orderss = Order::where('user_id',$user->id)->with('center')->where('status','<>','delivered')->Where('status','<>','canceled')->with('container')->get();
                 $orderss = Order::where('user_id',$user->id)->with('center')->with('container')->get();
+                $count_orders = Order::where('user_id',$user->id)->with('center')->with('container')->count('id');
                 if(sizeof($orderss) > 0){
                     $orders = [];
                     $i = 0 ;
@@ -1358,7 +1359,10 @@ class ApiController extends Controller
                         'success' => 'success',
                         'errors' => null ,
                         'message' => trans('api.fetch'),
-                        'data' => $orders ,
+                        'data' => [
+                            'order' => $orders  , 
+                            'count_orders' => $count_orders
+                        ]
                     ]);
                 }
                 return response()->json([
