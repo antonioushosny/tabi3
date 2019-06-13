@@ -204,7 +204,7 @@
                                     </div>
 
                                 </form>
-                            @elseif($order->drivers )    
+                            @elseif(sizeof($order->drivers) > 0 )    
                                 <?php  $n = false ; ?>
                                 
 
@@ -249,8 +249,9 @@
                                 <div> 
 
                                     {!! Form::open(['route'=>['assignDriver'],'method'=>'post','autocomplete'=>'off', 'id'=>'form_re_assign', 'enctype'=>'multipart/form-data' ])!!} 
-                                        <div class="form-group form-float">
+                                    <div class="form-group form-float">
                                             <input type="hidden" value="{{$order->id}}" name="order_id" required>
+                                            
                                         </div>
     
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -307,7 +308,7 @@
                         }
                   } else {
                         {{--  console.log(data)  --}}
-                        location.reload();
+                        window.location.replace("{{route('orders')}}");
 
                      }
             },
@@ -338,7 +339,7 @@
                      
                 } else {
                       {{--  console.log(data)  --}}
-                      location.reload();
+                      window.location.replace("{{route('orders')}}");
 
                    }
           },
@@ -377,11 +378,12 @@
     $('#reassign').on('click',function(event) {
         $('#action_div_assigndriver').html(`
             <!-- for drivers -->
+            <input type="hidden" value="reassign" name="type" required>
             <div class= "form-group form-float">
                 <label for="choose_driver" class="driver_id ">{{__('admin.choose_driver')}}</label>
 
                 {!! Form::select('driver_id',$drivers
-                    ,'',['class'=>'form-control show-tick select2 ' ,'id'=>'driver_id','placeholder' =>trans('admin.choose_driver'),'required']) !!}
+                    ,'',['class'=>'form-control show-tick select2 ' ,'id'=>'driver_id','placeholder' =>trans('admin.choose_driver')]) !!}
                 <label id="driver_id-error" class="error" for="driver_id" style="">  </label>
             </div>
             <button class="btn btn-raised btn-primary btn-round waves-effect" type="submit">{{__('admin.submit')}}</button>
@@ -393,10 +395,11 @@
     $('#decline_btn').on('click',function(event) {
         $('#action_div_assigndriver').html(`
             <!-- for reason -->
+                <input type="hidden" value="decline" name="type" required>
             <div class="form-group form-float">
                 <label for="reason" class="reason ">{{__('admin.placeholder_reason')}}</label>
 
-                <textarea rows="4" name="reason"  class="form-control no-resize reason "  placeholder="{{__('admin.placeholder_reason')}}" required> </textarea>
+                <textarea rows="4" name="reason"  class="form-control no-resize reason "  placeholder="{{__('admin.placeholder_reason')}}" > </textarea>
 
                 <label id="reason-error" class="error" for="reason" style="">  </label>
             </div>
