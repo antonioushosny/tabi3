@@ -250,7 +250,8 @@
                             $('#status-error').text(data.errors.status);
                         }
                   } else {
-                        location.reload();
+                        console.log(data)
+                        {{--  location.reload();  --}}
 
                      }
             },

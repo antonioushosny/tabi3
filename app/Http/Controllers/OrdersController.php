@@ -318,7 +318,7 @@ class OrdersController  extends Controller
             $ordercenter->status  = 'declined' ;
             $ordercenter->reason  = $request->reason ;
             $ordercenter->decline_date  = $date ;
-            $ordercenter->save() ;
+            // $ordercenter->save() ;
 
             $container = Container::where('id',$order->container_id)->with('centers')->first();
             $distancess = [] ;
@@ -329,12 +329,49 @@ class OrdersController  extends Controller
                     $distance =  $this->GetDistance($request->lat, $center->lat, $request->lng, $center->lng, 'K');
                     $distancess[$center->id] = $distance  ;
                     $i++ ;
-                    // print   $distance.' KM ' .'</br>';
                 }
                 asort($distancess)  ;
-                // reset($distancess);
-                dd($distancess) ;
                 $first_key = key($distancess);
+
+                return \Response::json( $first_key) ;
+
+                // reset($distancess);
+                foreach($distancess as $key => $distances) {
+                    $ordercenter = OrderCenter::where('center_id',$key)->where('order_id',$request->order_id)->first();
+                    if($ordercenter){
+                        unset($distancess[$key]);
+                    }
+                    return \Response::json( $distancess) ;
+                }
+                asort($distancess)  ;
+                $first_key = key($distancess);
+                return \Response::json( $first_key) ;
+
+                $CenterContainer = CenterContainer::where('center_id',$first_key)->where('container_id',$order->container_id)->with('center')->with('container')->first();
+                return \Response::json( $distancess) ;
+                $order->center_id = $CenterContainer->center->id ;
+                $order->container_id = $CenterContainer->container->id ;
+                $order->price = $CenterContainer->price ;
+                $order->total = $CenterContainer->price * $request->num_containers ;
+                $order->status = 'pending' ;
+                $order->save();
+
+                $ordercenter = new OrderCenter ;
+                $ordercenter->order_id = $request->order_id ;
+                $ordercenter->center_id = $first_key ;
+                $ordercenter->status = 'pending' ;
+                $ordercenter->save();
+
+                $msg = "  لديك طلب جديد من " . $user->name ;
+                $type = "order";
+                $title = "  لديك طلب جديد من " . $user->name ;
+                $center = User::where('id', $CenterContainer->center->id)->first(); 
+                $center->notify(new Notifications($msg,$type ));
+                $device_token = $center->device_token ;
+                if($device_token){
+                    $this->notification($device_token,$title,$msg);
+                }
+                return \Response::json( $first_key) ;
 
             }
 
