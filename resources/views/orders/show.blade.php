@@ -250,7 +250,7 @@
                             $('#status-error').text(data.errors.status);
                         }
                   } else {
-                        window.location.replace("{{route('orders')}}");
+                        location.reload();
 
                      }
             },

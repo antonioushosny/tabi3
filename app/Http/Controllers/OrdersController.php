@@ -293,13 +293,52 @@ class OrdersController  extends Controller
              return \Response::json(array('errors' => $validator->getMessageBag()->toArray()));
          }
 
-        $ordercenter = OrderCenter::where('order_id',$request->id)->where('center_id',Auth::user()->id)->first();
+        $ordercenter = OrderCenter::where('order_id',$request->order_id)->where('center_id',Auth::user()->id)->first();
         $dt = Carbon::now();
         $date  = date('Y-m-d H:i:s', strtotime($dt));
+         $order = Order::where('id',$request->order_id)->first();
         if($request->status == 'accept'){
-        $ordercenter->status  = 'accepted' ;
-        $ordercenter->accept_date  = 'accepted' ;
-        $ordercenter->status  = 'accepted' ;
+            $order->status  = 'accepted' ;
+            $order->save();
+            $ordercenter->status  = 'accepted' ;
+            $ordercenter->accept_date  = $date ;
+            $ordercenter->save() ;
+            $orderdriver = OrderDriver::where('center_id',$ordercenter->center_id)->where('order_id',$ordercenter->order_id)->where('driver_id',$request->driver_id)->first();
+            if(!$orderdriver){
+                $orderdriver = new OrderDriver ;
+                $orderdriver->status  =  'pending' ; 
+                $orderdriver->center_id  =   $ordercenter->center_id ; 
+                $orderdriver->order_id  =   $ordercenter->order_id ; 
+                $orderdriver->driver_id  =   $request->driver_id ; 
+                $orderdriver->save();  
+            }
+            return 'success';
+        }else if($request->status == 'decline'){
+             $order->save();
+            $ordercenter->status  = 'declined' ;
+            $ordercenter->reason  = $request->reason ;
+            $ordercenter->decline_date  = $date ;
+            $ordercenter->save() ;
+
+            $container = Container::where('id',$order->container_id)->with('centers')->first();
+            $distancess = [] ;
+            $i = 0;
+            if(sizeof($container->centers) > 0){
+
+                foreach ($container->centers as $center) {
+                    $distance =  $this->GetDistance($request->lat, $center->lat, $request->lng, $center->lng, 'K');
+                    $distancess[$center->id] = $distance  ;
+                    $i++ ;
+                    // print   $distance.' KM ' .'</br>';
+                }
+                asort($distancess)  ;
+                // reset($distancess);
+                dd($distancess) ;
+                $first_key = key($distancess);
+
+            }
+
+            return 'success';
         }
          
     }
