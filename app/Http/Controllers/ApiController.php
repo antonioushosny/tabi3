@@ -1425,7 +1425,7 @@ class ApiController extends Controller
                     return response()->json([
                         'success' => 'success',
                         'errors' => null ,
-                        'message' => trans('api.delete'),
+                        'message' => trans('api.canceled'),
                         'data' => null ,
                     ]);
                 }
@@ -1511,7 +1511,115 @@ class ApiController extends Controller
         }
     }
 //////////////////////////////////////////////////
-
+// ChangeStatusOrders function by Antonious hosny
+    public function ChangeStatusOrders(Request $request){
+        $token = $request->token;
+        $lang = $request->header('lang');
+        $dt = Carbon::now();
+        $date  = date('Y-m-d', strtotime($dt));
+        $time  = date('H:i:s', strtotime($dt));
+        if($token){
+            $user = User::where('remember_token',$token)->first();
+            if($user && $user->role == 'driver'){
+                $rules=array(
+                    'status'      =>'required',
+                    'order_id'      =>'required',
+                );
+                $validator  = \Validator::make($request->all(),$rules);
+                if($validator->fails())
+                {
+                    $messages = $validator->messages();
+                    $transformed = [];
+        
+                    foreach ($messages->all() as $field => $message) {
+                        $transformed[] = [
+                            'message' => $message
+                        ];
+                    }
+                    return response()->json([
+                        'success' => 'failed',
+                        'errors'  => $transformed,
+                        'message' => trans('api.validation_error'),
+                        'data'    => null ,
+                    ]);
+                }
+                $order = Order::where('id',$request->order_id)->first();
+                $dt = Carbon::now();
+                $date  = date('Y-m-d H:i:s', strtotime($dt));
+                if($order){
+                    if($request->status == 'accept'){
+                        $order->status = 'assigned' ;
+                        $order->save();
+                        $orderdriver = OrderDriver::where('order_id',$order->id)->where('driver_id',$user->id)->first();
+                        if($orderdriver){
+                            $orderdriver->status = 'accept' ;
+                            $orderdriver->accept_date  = $date ;
+                            $orderdriver->save(); 
+                        }
+                        return response()->json([
+                            'success' => 'success',
+                            'errors' => null ,
+                            'message' => trans('api.success'),
+                            'data' => null ,
+                        ]);
+                    }
+                    else if($request->status == 'decline'){
+                        $order->status = 'accepted' ;
+                        $order->save();
+                        $orderdriver = OrderDriver::where('order_id',$order->id)->where('driver_id',$user->id)->first();
+                        if($orderdriver){
+                            $orderdriver->status = 'decline' ;
+                            $orderdriver->reason = $request->reason ;
+                            $orderdriver->decline_date  = $date ;
+                            $orderdriver->save(); 
+                        }
+                        return response()->json([
+                            'success' => 'success',
+                            'errors' => null ,
+                            'message' => trans('api.success'),
+                            'data' => null ,
+                        ]);
+                    }
+                    else if($request->status == 'delivered'){
+                        $order->status = 'delivered' ;
+                        $order->save();
+                        return response()->json([
+                            'success' => 'success',
+                            'errors' => null ,
+                            'message' => trans('api.success'),
+                            'data' => null ,
+                        ]);
+                    }
+                    return response()->json([
+                        'success' => 'failed',
+                        'errors' => null ,
+                        'message' => trans('api.notfound'),
+                        'data' => null ,
+                    ]);
+                    
+                }
+                return response()->json([
+                    'success' => 'failed',
+                    'errors' => trans('api.notfound'),
+                    "message"=>trans('api.notfound'),
+                    ]);
+                
+            }else{
+                return response()->json([
+                    'success' => 'logged',
+                    'errors' => trans('api.logout'),
+                    "message"=>trans('api.logout'),
+                    ]);
+            }
+        }else{
+            return response()->json([
+                'success' => 'logged',
+                'errors' => trans('api.logout'),
+                "message"=>trans('api.logout'),
+                ]);
+        }
+    }
+//////////////////////////////////////////////////
 
 // ContactUs function by Antonious hosny
     public function ContactUs(Request $request){
