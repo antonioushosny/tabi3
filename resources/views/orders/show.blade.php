@@ -223,8 +223,8 @@
                                         @elseif($driver->status == 'decline')
                                         <th>{{ __('admin.decline_date') }}</th>
                                         <th>{{ __('admin.reason') }}</th>
-                                        {{--  <th>{{ __('admin.action') }}</th>  --}}
                                         @endif
+                                        <th>{{ __('admin.action') }}</th>
                                         
                                     </thead>
                                     <tbody>
@@ -235,8 +235,20 @@
                                         @elseif($driver->status == 'decline')
                                         <td>{{ $driver->decline_date  }}</td>
                                         <td>{{ $driver->reason  }}</td>
-
+                                        
                                         @endif
+                                        <td> 
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-primary">Sony</button>
+                                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <li><a href="#">Tablet</a></li>
+                                                    <li><a href="#">Smartphone</a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
                                     </tbody>
                                 </table>
                                 {{--  {{ $driver }}  --}}
