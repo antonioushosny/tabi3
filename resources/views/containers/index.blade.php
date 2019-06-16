@@ -182,7 +182,7 @@
                     },
                     success: function(data) {
                         $('.item' + data['id']).remove();
-                         swal(Deleted, has_been_deleted, "success");
+                          swal(Deleted, has_been_deleted, "success");
                     }
                 });
             } else {

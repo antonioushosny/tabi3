@@ -509,7 +509,7 @@ body, html {
 @yield('script')
 
 <script>
-     $('.js-exportable-ar').DataTable({
+       table =  $('.js-exportable-ar').DataTable({
         "language": {
             "url": "{{asset('datatablelang.json')}}"
         },
