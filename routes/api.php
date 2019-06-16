@@ -34,6 +34,10 @@ Route::post('OrdersHistory', 'ApiController@OrdersHistory')->middleware('localiz
 Route::post('CanceleOrder', 'ApiController@CanceleOrder')->middleware('localization');
 Route::post('ChangeStatusOrders', 'ApiController@ChangeStatusOrders')->middleware('localization');
 Route::post('ContactUs', 'ApiController@ContactUs')->middleware('localization');
+Route::post('TermsConditions', 'ApiController@TermsConditions')->middleware('localization');
+Route::post('Policy', 'ApiController@Policy')->middleware('localization');
+Route::post('AboutUs', 'ApiController@AboutUs')->middleware('localization');
+Route::post('SocialContacts', 'ApiController@SocialContacts')->middleware('localization');
 
 
 Route::Post('count_notification','ApiController@count_notification')->middleware('localization');

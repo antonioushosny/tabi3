@@ -831,273 +831,6 @@ class ApiController extends Controller
         
     }
 /////////////////////////////////////////////////
-// request_home function by Antonious hosny
-    public function HomePage(Request $request){
-        $token = $request->token;
-        if($token == ''){
-            $errors = trans('api.logged_out');
-            return response()->json([
-                'success' => 'logged',
-                'errors' => $errors ,
-                'message' => trans('api.logged_out'),
-                'data' => null,
-            ]);
-        }
-        $user = User::where('remember_token',$token)->first();
-        // return $user ;
-        if($user){
-            $lang = $request->header('lang');
-            $dt = Carbon::now();
-            $date2 = date('Y-m-d', strtotime($dt));
-            $time2 = $dt->format('H:i:s');
-            $date  = date('Y-m-d', strtotime($dt));
-            $time  = date('H:i:s', strtotime($dt));
-            $advertisements  = Advertisement::where('status','active')->orderBy('id', 'desc')->get();
-            $advertisementss =[];
-            $i = 0 ;
-            if(sizeof($advertisements) > 0){
-                foreach($advertisements as $advertisement){
-                    $advertisementss[$i]['link'] = $advertisement->link;
-                    $advertisementss[$i]['time'] = $advertisement->time;
-                    if($advertisement->image != null){
-                        $advertisementss[$i]['image']   = asset('img/').'/'. $advertisement->image;
-                    }
-                    else{
-                        $advertisementss[$i]['image']   = null;
-                    }
-                    $i ++ ;
-                }
-            }
-            $user = User::where('remember_token',$token)->first();
-            // return $user;
-            $now_Deals = Deal::whereDate('expiry_date','=',$date)->whereTime('expiry_time','>=',$time)->where('status','active')->orderBy('id', 'desc')->limit(10)->get();
-            $count_now_Deals = 0 ;
-            $coming_Deals = Deal::whereDate('expiry_date','>',$date)->orWhere('expiry_date','')->orWhere('expiry_date',null)->where('status','active')->orderBy('id', 'desc')->limit(10)->get();
-            $count_coming_Deals = 0 ;
-            $pervios_Deals = Deal::whereDate('expiry_date','<',$date)->orwhereDate('expiry_date','=',$date)->whereTime('expiry_time','<',$time)->where('status','active')->orderBy('id', 'desc')->limit(10)->get();
-            $count_pervios_Deals = 0 ;
-            // return $pervios_Deals ;
-            $now_Dealss = [] ;
-            $coming_Dealss = [] ;
-            $pervios_Dealss = [] ;
-            $my_Dealss = [] ;
-            $i = 0;
-            $x = 0;
-            $y = 0;
-            if(sizeof($now_Deals) > 0 ){
-                foreach($now_Deals as $Deal){
-                    $datedeal = strtotime($Deal->expiry_date);
-                    // return asset('img/').'/'. $image->image;
-                    $now_Dealss[$i]['Deal_id'] = $Deal->id ;    
-                    if($lang == 'ar'){
-                        $now_Dealss[$i]['title'] = $Deal->title_ar ; 
-                        $now_Dealss[$i]['disc'] = $Deal->disc_ar ; 
-                        $now_Dealss[$i]['info'] = $Deal->info_ar ; 
-                    }else{
-                        $now_Dealss[$i]['title'] = $Deal->title_en ; 
-                        $now_Dealss[$i]['disc'] = $Deal->disc_en ; 
-                        $now_Dealss[$i]['info'] = $Deal->info_en ; 
-                    }
-                    if($Deal->image){
-                        $now_Dealss[$i]['image'] = asset('img/').'/'. $Deal->image;
-                    }else{
-                        $now_Dealss[$i]['image'] = null ;
-                    }
-                    
-                    $now_Dealss[$i]['original_price'] = $Deal->original_price ; 
-                    $now_Dealss[$i]['initial_price'] = $Deal->initial_price ; 
-                    $now_Dealss[$i]['points'] = $Deal->points ; 
-                    $now_Dealss[$i]['tickets'] = $Deal->tickets ; 
-                    $now_Dealss[$i]['tender_cost'] = $Deal->tender_cost ; 
-                    $now_Dealss[$i]['tender_edit_cost'] = $Deal->tender_edit_cost ; 
-                    $now_Dealss[$i]['tender_coupon'] = $Deal->tender_coupon ; 
-                    $now_Dealss[$i]['expiry_date'] = $Deal->expiry_date .' '.$Deal->expiry_time;  
-
-                    $favorite = Favorite::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
-                    if($favorite){
-                        $now_Dealss[$i]['is_favorite'] = 'true' ;
-                    }else{
-                        $now_Dealss[$i]['is_favorite'] = 'false' ;
-                    }
-                    $ticket = Ticket::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
-                    if($ticket){
-                        $now_Dealss[$i]['my_ticket_points'] = $ticket->points ;
-                    }else{
-                        $now_Dealss[$i]['my_ticket_points'] = null ;
-                    }
-                    $i ++ ; 
-                    $count_now_Deals ++ ;
-                   
-                    
-                }
-            }
-            if(sizeof($coming_Deals) > 0 ){
-                foreach($coming_Deals as $Deal){
-                    // return asset('img/').'/'. $image->image;
-                     $coming_Dealss[$x]['Deal_id'] = $Deal->id ;    
-                    if($lang == 'ar'){
-                        $coming_Dealss[$x]['title'] = $Deal->title_ar ; 
-                        $coming_Dealss[$x]['disc'] = $Deal->disc_ar ; 
-                        $coming_Dealss[$x]['info'] = $Deal->info_ar ; 
-                    }else{
-                        $coming_Dealss[$x]['title'] = $Deal->title_en ; 
-                        $coming_Dealss[$x]['disc'] = $Deal->disc_en ; 
-                        $coming_Dealss[$x]['info'] = $Deal->info_en ; 
-                    }
-                    if($Deal->image){
-                        $coming_Dealss[$x]['image'] = asset('img/').'/'. $Deal->image;
-                    }else{
-                        $coming_Dealss[$x]['image'] = null ;
-                    }
-                    
-                    $coming_Dealss[$x]['original_price'] = $Deal->original_price ; 
-                    $coming_Dealss[$x]['initial_price'] = $Deal->initial_price ; 
-                    $coming_Dealss[$x]['points'] = $Deal->points ; 
-                    $coming_Dealss[$x]['tickets'] = $Deal->tickets ; 
-                    $coming_Dealss[$x]['tender_cost'] = $Deal->tender_cost ; 
-                    $coming_Dealss[$x]['tender_edit_cost'] = $Deal->tender_edit_cost ; 
-                    $coming_Dealss[$x]['tender_coupon'] = $Deal->tender_coupon ; 
-                    $coming_Dealss[$x]['expiry_date'] = $Deal->expiry_date .' '.$Deal->expiry_time; 
-                    $favorite = Favorite::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
-                    if($favorite){
-                        $coming_Dealss[$x]['is_favorite'] = 'true' ;
-                    }else{
-                        $coming_Dealss[$x]['is_favorite'] = 'false' ;
-                    }
-                    $ticket = Ticket::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
-                    if($ticket){
-                        $coming_Dealss[$x]['my_ticket_points'] = $ticket->points ;
-                    }else{
-                        $coming_Dealss[$x]['my_ticket_points'] = null ;
-                    }
-                    $x ++ ; 
-                    $count_coming_Deals ++ ;
-                }
-            }
-            if(sizeof($pervios_Deals) > 0 ){
-                foreach($pervios_Deals as $Deal){
-                    // return asset('img/').'/'. $image->image;
-                    $pervios_Dealss[$y]['Deal_id'] = $Deal->id ;    
-                    if($lang == 'ar'){
-                        $pervios_Dealss[$y]['title'] = $Deal->title_ar ; 
-                        $pervios_Dealss[$y]['disc'] = $Deal->disc_ar ; 
-                        $pervios_Dealss[$y]['info'] = $Deal->info_ar ; 
-                    }else{
-                        $pervios_Dealss[$y]['title'] = $Deal->title_en ; 
-                        $pervios_Dealss[$y]['disc'] = $Deal->disc_en ; 
-                        $pervios_Dealss[$y]['info'] = $Deal->info_en ; 
-                    }
-                    if($Deal->image){
-                        $pervios_Dealss[$y]['image'] = asset('img/').'/'. $Deal->image;
-                    }else{
-                        $pervios_Dealss[$y]['image'] = null ;
-                    }
-                    
-                    $pervios_Dealss[$y]['original_price'] = $Deal->original_price ; 
-                    $pervios_Dealss[$y]['initial_price'] = $Deal->initial_price ; 
-                    $pervios_Dealss[$y]['points'] = $Deal->points ; 
-                    $pervios_Dealss[$y]['tickets'] = $Deal->tickets ; 
-                    $pervios_Dealss[$y]['tender_cost'] = $Deal->tender_cost ; 
-                    $pervios_Dealss[$y]['tender_edit_cost'] = $Deal->tender_edit_cost ; 
-                    $pervios_Dealss[$y]['tender_coupon'] = $Deal->tender_coupon ; 
-                    $pervios_Dealss[$y]['expiry_date'] = $Deal->expiry_date .' '.$Deal->expiry_time; 
-                    $favorite = Favorite::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
-                    if($favorite){
-                        $pervios_Dealss[$y]['is_favorite'] = 'true' ;
-                    }else{
-                        $pervios_Dealss[$y]['is_favorite'] = 'false' ;
-                    }
-                    $ticket = Ticket::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
-                    if($ticket){
-                        $pervios_Dealss[$y]['my_ticket_points'] = $ticket->points ;
-                    }else{
-                        $pervios_Dealss[$y]['my_ticket_points'] = null ;
-                    }
-                    $y ++ ; 
-                    $count_pervios_Deals ++ ;
-                }
-            }
-            $tickets = Ticket::where('user_id',$user->id)->get();
-            $i = 0 ;
-            foreach($tickets as $ticket){
-
-                $Deal = Deal::where('id',$ticket->deal_id)->first();  
-                if($Deal){
-
-                    $my_Dealss[$i]['Deal_id'] = $Deal->id ;    
-                    if($lang == 'ar'){
-                        $my_Dealss[$i]['title'] = $Deal->title_ar ; 
-                        $my_Dealss[$i]['disc'] = $Deal->disc_ar ; 
-                        $my_Dealss[$i]['info'] = $Deal->info_ar ; 
-                    }else{
-                        $my_Dealss[$i]['title'] = $Deal->title_en ; 
-                        $my_Dealss[$i]['disc'] = $Deal->disc_en ; 
-                        $my_Dealss[$i]['info'] = $Deal->info_en ; 
-                    }
-                    if($Deal->image){
-                        $my_Dealss[$i]['image'] = asset('img/').'/'. $Deal->image;
-                    }else{
-                        $my_Dealss[$i]['image'] = null ;
-                    }
-                    
-                    $my_Dealss[$i]['original_price'] = $Deal->original_price ; 
-                    $my_Dealss[$i]['initial_price'] = $Deal->initial_price ; 
-                    $my_Dealss[$i]['points'] = $Deal->points ; 
-                    $my_Dealss[$i]['tickets'] = $Deal->tickets ; 
-                    $my_Dealss[$i]['tender_cost'] = $Deal->tender_cost ; 
-                    $my_Dealss[$i]['tender_edit_cost'] = $Deal->tender_edit_cost ; 
-                    $my_Dealss[$i]['tender_coupon'] = $Deal->tender_coupon ; 
-                    $my_Dealss[$i]['expiry_date'] = $Deal->expiry_date .' '.$Deal->expiry_time;  
-                    // return $Deal->images ;
-                    $favorite = Favorite::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
-                    if($favorite){
-                        $my_Dealss[$i]['is_favorite'] = 'true' ;
-                    }else{
-                        $my_Dealss[$i]['is_favorite'] = 'false' ;
-                    }
-                    $ticket = Ticket::where('user_id',$user->id)->where('deal_id',$Deal->id)->first();
-                    if($ticket){
-                        $my_Dealss[$i]['my_ticket_points'] = $ticket->points ;
-                    }else{
-                        $my_Dealss[$i]['my_ticket_points'] = null ;
-                    }
-                    if($ticket->status == '1'){
-                        $my_Dealss[$i]['ticket_status'] = 'winner';
-                    }else{
-                        $my_Dealss[$i]['ticket_status'] = '0' ;
-                    }
-                    $i++ ;
-                }
-            }
-            return response()->json([
-                'success' => 'success',
-                'errors' => null ,
-                'message' => trans('api.fetch'),
-                'data' => [
-                    'now_Deals' => $now_Dealss,
-                    'pervious_Deals' => $pervios_Dealss ,
-                    'coming_Deals'         => $coming_Dealss ,
-                    'my_Deals'         => $my_Dealss,
-                    'advertisements'   => $advertisementss,
-                    'count_now_Deals' => $count_now_Deals,
-                    'count_coming_Deals' => $count_coming_Deals,
-                    'count_pervious_Deals' => $count_pervios_Deals,
-    
-                    ],
-    
-            ]);
-            
-        }else{
-            return response()->json([
-                'success' => 'logged',
-                'errors' => trans('api.logout'),
-                "message"=>trans('api.logout'),
-                ]);
-        }
-
-
-    }
-//////////////////////////////////////////////////
 // Containers function by Antonious hosny
     public function Containers(Request $request){
         if($request->page && $request->page > 0 ){
@@ -1686,6 +1419,9 @@ class ApiController extends Controller
     }
 //////////////////////////////////////////////////
 
+
+
+/////////////////////////////////////////////////////
 // ContactUs function by Antonious hosny
     public function ContactUs(Request $request){
 
@@ -1745,7 +1481,7 @@ class ApiController extends Controller
         $i = 0 ;
         if(sizeof($docs)> 0){
             foreach($docs as $doc){
-                $docss[$i]['id'] = $doc->id ; 
+                // $docss[$i]['id'] = $doc->id ; 
                 if($lang == 'ar'){
                     $docss[$i]['title'] = $doc->title_ar ; 
                     $docss[$i]['disc'] = $doc->disc_ar ; 
@@ -1776,7 +1512,7 @@ class ApiController extends Controller
         $i = 0 ;
         if(sizeof($docs)> 0){
             foreach($docs as $doc){
-                $docss[$i]['id'] = $doc->id ; 
+                // $docss[$i]['id'] = $doc->id ; 
                 if($lang == 'ar'){
                     $docss[$i]['title'] = $doc->title_ar ; 
                     $docss[$i]['disc'] = $doc->disc_ar ; 
@@ -1798,7 +1534,7 @@ class ApiController extends Controller
 
 
     }
-    ///////////////////////////////////////////////////
+///////////////////////////////////////////////////
 // AboutUs function by Antonious hosny
     public function AboutUs(Request $request){
         $lang = $request->header('lang');
@@ -1807,7 +1543,7 @@ class ApiController extends Controller
         $i = 0 ;
         if(sizeof($docs)> 0){
             foreach($docs as $doc){
-                $docss[$i]['id'] = $doc->id ; 
+                // $docss[$i]['id'] = $doc->id ; ي
                 if($lang == 'ar'){
                     $docss[$i]['title'] = $doc->title_ar ; 
                     $docss[$i]['disc'] = $doc->disc_ar ; 
@@ -1826,6 +1562,32 @@ class ApiController extends Controller
             'data' =>  $docss,
                 
         ]);
+
+
+    }
+///////////////////////////////////////////////////
+// AboutUs function by Antonious hosny
+    public function SocialContacts(Request $request){
+        $lang = $request->header('lang');
+        $contacts= Contact::first();
+        if($contacts){
+            return response()->json([
+                'success' => 'success',
+                'errors' => null ,
+                'message' => trans('api.fetch'),
+                'data' =>  $contacts,
+                    
+            ]);
+        }else{
+            return response()->json([
+                'success' => 'failed',
+                'errors' => null ,
+                'message' => trans('api.notfound'),
+                'data' =>  null,
+                    
+            ]);
+        }
+        
 
 
     }
@@ -1917,14 +1679,6 @@ class ApiController extends Controller
 
     }
 /////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
 
 
 
