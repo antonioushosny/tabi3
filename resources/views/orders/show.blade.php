@@ -158,114 +158,116 @@
             </div>
 
             <div class="col-lg-6 col-md-12">
-                    <div class="card">
-                        <div class="header">
-                            <h2><strong>{{trans('admin.order_detail')}}</strong>   </h2>
-                            
-                        </div>
-                        <div class="body">
-                            @if($lang == 'ar')
-                                <h5><strong>{{trans('admin.container')}} :- </strong> {{ $order->container_name_ar }}  </h5>
-                            @else   
-                                <h5><strong>{{trans('admin.container')}} :- </strong> {{ $order->container_name_en }}  </h5>
-                            @endif
-                            <h5><strong>{{trans('admin.container_size')}} :- </strong> {{ __('admin.'.$order->container_size) }}  </h5>
-                            <h5><strong>{{trans('admin.price')}} :- </strong> {{ $order->price }}  </h5>
-                            <h5><strong>{{trans('admin.no_container')}} :- </strong> {{ $order->no_container }}  </h5>
-                            <h5><strong>{{trans('admin.total')}} :- </strong> {{ $order->total }}  </h5>
-                            <h5><strong>{{trans('admin.notes')}} :- </strong> {{ $order->notes }}  </h5>
-                            <h5><strong>{{ trans('admin.status') }} :- </strong> {{ trans('admin.'.$order->status) }}  </h5>
-                            
-                            @if($order->status == 'pending' && $order->center_id == Auth::user()->id)
-                                <h4><strong>{{ trans('admin.take_action') }} :- </strong>  </h4>
-                                {!! Form::open(['route'=>['actionfororder'],'method'=>'post','autocomplete'=>'off', 'id'=>'form_validation', 'enctype'=>'multipart/form-data' ])!!} 
+                <div class="card">
+                    <div class="header">
+                        <h2><strong>{{trans('admin.order_detail')}}</strong>   </h2>
+                        
+                    </div>
+                    <div class="body">
+                        @if($lang == 'ar')
+                            <h5><strong>{{trans('admin.container')}} :- </strong> {{ $order->container_name_ar }}  </h5>
+                        @else   
+                            <h5><strong>{{trans('admin.container')}} :- </strong> {{ $order->container_name_en }}  </h5>
+                        @endif
+                        <h5><strong>{{trans('admin.container_size')}} :- </strong> {{ __('admin.'.$order->container_size) }}  </h5>
+                        <h5><strong>{{trans('admin.price')}} :- </strong> {{ $order->price }}  </h5>
+                        <h5><strong>{{trans('admin.no_container')}} :- </strong> {{ $order->no_container }}  </h5>
+                        <h5><strong>{{trans('admin.total')}} :- </strong> {{ $order->total }}  </h5>
+                        <h5><strong>{{trans('admin.notes')}} :- </strong> {{ $order->notes }}  </h5>
+                        <h5><strong>{{ trans('admin.status') }} :- </strong> {{ trans('admin.'.$order->status) }}  </h5>
+                        
+                        @if($order->status == 'pending' && $order->center_id == Auth::user()->id)
+                            <h4><strong>{{ trans('admin.take_action') }} :- </strong>  </h4>
+                            {!! Form::open(['route'=>['actionfororder'],'method'=>'post','autocomplete'=>'off', 'id'=>'form_validation', 'enctype'=>'multipart/form-data' ])!!} 
 
-                                    <div class="form-group form-float">
+                                <div class="form-group form-float">
+                                    <input type="hidden" value="{{$order->id}}" name="order_id" required>
+                                </div>
+
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
+                                <div class="form-group">
+
+                                    <div class="radio inlineblock m-r-20">
+                                        <input type="radio" name="status" id="accept" class="with-gap" value="accept"  >
+                                        <label for="accept">{{__('admin.accept')}}</label>
+                                    </div>
+
+                                    <div class="radio inlineblock">
+                                        <input type="radio" name="status" id="decline" class="with-gap" value="decline"  >
+                                        <label for="decline">{{__('admin.decline')}}</label>
+                                    </div>
+
+                                </div>
+                                <div id="action_div">
+                                        
+                                </div>
+
+                            </form>
+                        @elseif(sizeof($order->drivers) > 0 )    
+                            <?php  $n = false ; ?>
+                            
+
+                            @foreach($order->drivers as $driver)
+                                @if($driver->status == 'accept' || $driver->status == 'pending')
+                                    <?php $n = true ; ?>
+                                    {{--  <a href="#" class="btn btn-round btn-info">{{ __('admin.asssign') }}</a>   --}}
+                                @endif
+                                
+                                <table class="table table-striped">
+                                    <thead>
+                                        <th>{{ __('admin.driver') }}</th>
+                                        <th>{{ __('admin.status') }}</th>
+                                        @if($driver->status == 'accept')
+                                        <th>{{ __('admin.accept_date') }}</th>
+                                        @elseif($driver->status == 'decline')
+                                        <th>{{ __('admin.decline_date') }}</th>
+                                        <th>{{ __('admin.reason') }}</th>
+                                        {{--  <th>{{ __('admin.action') }}</th>  --}}
+                                        @endif
+                                        
+                                    </thead>
+                                    <tbody>
+                                        <td>{{$driver->driver->name}}</td>
+                                        <td>{{ __('admin.'.$driver->status) }}</td>
+                                        @if($driver->status == 'accept')
+                                        <td>{{ $driver->accept_date }}</td>
+                                        @elseif($driver->status == 'decline')
+                                        <td>{{ $driver->decline_date  }}</td>
+                                        <td>{{ $driver->reason  }}</td>
+
+                                        @endif
+                                    </tbody>
+                                </table>
+                                {{--  {{ $driver }}  --}}
+                                
+                            @endforeach
+                            @if($n == false)
+                                <a href="#" class="btn btn-round btn-info" id="reassign">{{ __('admin.reassign') }}</a>
+                                <a href="#" class="btn btn-round btn-warning" id="decline_btn">{{ __('admin.decline_order') }}</a>
+                            @endif
+                            <div> 
+
+                                {!! Form::open(['route'=>['assignDriver'],'method'=>'post','autocomplete'=>'off', 'id'=>'form_re_assign', 'enctype'=>'multipart/form-data' ])!!} 
+                                <div class="form-group form-float">
                                         <input type="hidden" value="{{$order->id}}" name="order_id" required>
+                                        
                                     </div>
 
                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
-
-                                    <div class="form-group">
-
-                                        <div class="radio inlineblock m-r-20">
-                                            <input type="radio" name="status" id="accept" class="with-gap" value="accept"  >
-                                            <label for="accept">{{__('admin.accept')}}</label>
-                                        </div>
-
-                                        <div class="radio inlineblock">
-                                            <input type="radio" name="status" id="decline" class="with-gap" value="decline"  >
-                                            <label for="decline">{{__('admin.decline')}}</label>
-                                        </div>
-
+                                    <div id="action_div_assigndriver">
+                                        
                                     </div>
-                                    <div id="action_div">
-                                            
-                                    </div>
-
-                                </form>
-                            @elseif(sizeof($order->drivers) > 0 )    
-                                <?php  $n = false ; ?>
-                                
-
-                                @foreach($order->drivers as $driver)
-                                    @if($driver->status == 'accept' || $driver->status == 'pending')
-                                        <?php $n = true ; ?>
-                                        {{--  <a href="#" class="btn btn-round btn-info">{{ __('admin.asssign') }}</a>   --}}
-                                    @endif
-                                  
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <th>{{ __('admin.driver') }}</th>
-                                            <th>{{ __('admin.status') }}</th>
-                                            @if($driver->status == 'accept')
-                                            <th>{{ __('admin.accept_date') }}</th>
-                                            @elseif($driver->status == 'decline')
-                                            <th>{{ __('admin.decline_date') }}</th>
-                                            <th>{{ __('admin.reason') }}</th>
-                                            {{--  <th>{{ __('admin.action') }}</th>  --}}
-                                            @endif
-                                            
-                                        </thead>
-                                        <tbody>
-                                            <td>{{$driver->driver->name}}</td>
-                                            <td>{{ __('admin.'.$driver->status) }}</td>
-                                            @if($driver->status == 'accept')
-                                            <td>{{ $driver->accept_date }}</td>
-                                            @elseif($driver->status == 'decline')
-                                            <td>{{ $driver->decline_date  }}</td>
-                                            <td>{{ $driver->reason  }}</td>
-
-                                            @endif
-                                        </tbody>
-                                    </table>
-                                    {{--  {{ $driver }}  --}}
-                                   
-                                @endforeach
-                                @if($n == false)
-                                    <a href="#" class="btn btn-round btn-info" id="reassign">{{ __('admin.reassign') }}</a>
-                                    <a href="#" class="btn btn-round btn-warning" id="decline_btn">{{ __('admin.decline_order') }}</a>
-                                @endif
-                                <div> 
-
-                                    {!! Form::open(['route'=>['assignDriver'],'method'=>'post','autocomplete'=>'off', 'id'=>'form_re_assign', 'enctype'=>'multipart/form-data' ])!!} 
-                                    <div class="form-group form-float">
-                                            <input type="hidden" value="{{$order->id}}" name="order_id" required>
-                                            
-                                        </div>
     
-                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                        <div id="action_div_assigndriver">
-                                            
-                                        </div>
-        
-                                    </form>
-                                </div>
-                            @endif
-                        </div>
-
+                                </form>
+                            </div>
+                        @endif
                     </div>
+
                 </div>
+            </div>
+
+            
         </div>
   
     </div>
