@@ -301,6 +301,7 @@ class OrdersController  extends Controller
          $order = Order::where('id',$request->order_id)->first();
         if($request->status == 'accept'){
             $order->status  = 'accepted' ;
+            $order->driver_id  =  $request->driver_id ;
             $order->save();
             $ordercenter->status  = 'accepted' ;
             $ordercenter->accept_date  = $date ;
@@ -336,6 +337,8 @@ class OrdersController  extends Controller
             return \Response::json('accepted') ;
 
         }else if($request->status == 'decline'){
+            $order->center_id  =  null ; 
+            $order->driver_id  = null ; 
             $order->save();
             $ordercenter->status  = 'declined' ;
             $ordercenter->reason  = $request->reason ;
@@ -455,7 +458,8 @@ class OrdersController  extends Controller
             $dt = Carbon::now();
             $date  = date('Y-m-d H:i:s', strtotime($dt));
             $order = Order::where('id',$request->order_id)->first();
-
+            $order->driver_id =  $request->driver_id ; 
+            $order->save();
             $orderdriver = new OrderDriver ;
             $orderdriver->status  =  'pending' ; 
             $orderdriver->center_id  =   $ordercenter->center_id ; 
@@ -472,6 +476,7 @@ class OrdersController  extends Controller
                 $this->notification($device_token,$title,$msg);
             }
         }else{
+            $order->driver_id =  null ; 
             $order->save();
             $ordercenter->status  = 'declined' ;
             $ordercenter->reason  = $request->reason ;
@@ -531,6 +536,7 @@ class OrdersController  extends Controller
                     return \Response::json('canceled') ;
                 }else{
                     $order->center_id = null ;
+                    $order->driver_id = null ;
                     $order->container_id = $order->container_id ;
                     $order->price =  null ;
                     $order->total = null ;

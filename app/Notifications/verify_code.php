@@ -20,7 +20,6 @@ class verify_code extends Notification
     public function __construct($code)
     {
         $this->code = $code;
-
     }
 
     /**

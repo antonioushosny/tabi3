@@ -1371,7 +1371,58 @@ class ApiController extends Controller
                     "message"=>trans('api.notfound'),
                     ]);
                 
-            }else{
+            }
+            else if($user && $user->role == 'driver'){
+                // $orderss = Order::where('user_id',$user->id)->with('center')->where('status','<>','delivered')->Where('status','<>','canceled')->with('container')->get();
+                $orderss = Order::where('driver_id',$user->id)->with('center')->with('container')->get();
+                $count_orders = Order::where('driver_id',$user->id)->with('center')->with('container')->count('id');
+                if(sizeof($orderss) > 0){
+                    $orders = [];
+                    $i = 0 ;
+                    foreach($orderss as $order){
+                        $orders[$i]['order_id'] =   $order->id ;
+                        $orders[$i]['container_id'] =   $order->container->id ;
+                        $orders[$i]['center_id'] =   $order->center->id ;
+                        $orders[$i]['center_name'] =   $order->center->name ;
+                        if($lang == 'ar'){
+                            $orders[$i]['container_name'] =   $order->container->name_ar ;
+                        }else{
+                            $orders[$i]['container_name'] =   $order->container->name_en ;
+                        }
+                        $orders[$i]['container_size'] =   $order->container->size ;
+                        $orders[$i]['num_containers'] =   $order->no_container;
+                        $orders[$i]['container_price'] =   $order->price ;
+                        if($order->container){
+                            if($order->container->image){
+                                $orders[$i]['image'] = asset('img/').'/'. $container->image;
+                            }else{
+                                $orders[$i]['image'] = null ;
+                            }
+                        }
+                        $orders[$i]['total'] =   $order->total ;
+                        // $orders[$i]['status'] =   trans('api.'.$order->status) ;
+                        $orders[$i]['status'] =   $order->status;
+                        $orders[$i]['created_at'] =   $order->created_at;
+                        $i++;
+                    }
+                    return response()->json([
+                        'success' => 'success',
+                        'errors' => null ,
+                        'message' => trans('api.fetch'),
+                        'data' => [
+                            'order' => $orders  , 
+                            'count_orders' => $count_orders
+                        ]
+                    ]);
+                }
+                return response()->json([
+                    'success' => 'failed',
+                    'errors' => trans('api.notfound'),
+                    "message"=>trans('api.notfound'),
+                    ]);
+                
+            }
+            else{
                 return response()->json([
                     'success' => 'logged',
                     'errors' => trans('api.logout'),
