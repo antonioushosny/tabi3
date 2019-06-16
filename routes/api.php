@@ -33,6 +33,7 @@ Route::post('MyOrders', 'ApiController@MyOrders')->middleware('localization');
 Route::post('OrdersHistory', 'ApiController@OrdersHistory')->middleware('localization');
 Route::post('CanceleOrder', 'ApiController@CanceleOrder')->middleware('localization');
 Route::post('ChangeStatusOrders', 'ApiController@ChangeStatusOrders')->middleware('localization');
+Route::post('ContactUs', 'ApiController@ContactUs')->middleware('localization');
 
 
 Route::Post('count_notification','ApiController@count_notification')->middleware('localization');

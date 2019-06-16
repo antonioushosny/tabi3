@@ -224,7 +224,7 @@
                                         <th>{{ __('admin.decline_date') }}</th>
                                         <th>{{ __('admin.reason') }}</th>
                                         @endif
-                                        <th>{{ __('admin.action') }}</th>
+                                        {{--  <th>{{ __('admin.action') }}</th>  --}}
                                         
                                     </thead>
                                     <tbody>
@@ -237,7 +237,7 @@
                                         <td>{{ $driver->reason  }}</td>
                                         
                                         @endif
-                                        <td> 
+                                        {{--  <td> 
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-primary">Sony</button>
                                                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
@@ -248,7 +248,7 @@
                                                     <li><a href="#">Smartphone</a></li>
                                                 </ul>
                                             </div>
-                                        </td>
+                                        </td>  --}}
                                     </tbody>
                                 </table>
                                 {{--  {{ $driver }}  --}}

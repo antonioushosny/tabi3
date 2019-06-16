@@ -541,7 +541,7 @@ class OrdersController  extends Controller
                     $order->price =  null ;
                     $order->total = null ;
                     $order->status = 'canceled' ;
-                    $order->save();
+                    $order->save(); 
 
                     $msg = "  تم  رفض طلبك "  ;
                     $type = "canceled_order" ;

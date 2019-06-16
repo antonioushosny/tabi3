@@ -1100,8 +1100,8 @@ class ApiController extends Controller
 //////////////////////////////////////////////////
 // Containers function by Antonious hosny
     public function Containers(Request $request){
-         if($request->page && $request->page > 0 ){
-            $skip = $request->skip.'0' ;
+        if($request->page && $request->page > 0 ){
+            $skip = $request->page.'0' ;
         }else{
             $skip = 0 ;
         }
@@ -1320,11 +1320,18 @@ class ApiController extends Controller
         $dt = Carbon::now();
         $date  = date('Y-m-d', strtotime($dt));
         $time  = date('H:i:s', strtotime($dt));
+        if($request->page && $request->page >= 1 ){
+            $skip = $request->page.'0' ;
+            // return $skip ;
+        }else{
+            $skip = 0 ;
+        }
+        
         if($token){
             $user = User::where('remember_token',$token)->first();
             if($user && $user->role == 'user'){
                 // $orderss = Order::where('user_id',$user->id)->with('center')->where('status','<>','delivered')->Where('status','<>','canceled')->with('container')->get();
-                $orderss = Order::where('user_id',$user->id)->with('center')->with('container')->get();
+                $orderss = Order::where('user_id',$user->id)->with('center')->with('container')->skip($skip)->limit(10)->get();
                 $count_orders = Order::where('user_id',$user->id)->with('center')->with('container')->count('id');
                 if(sizeof($orderss) > 0){
                     $orders = [];
@@ -1374,13 +1381,20 @@ class ApiController extends Controller
             }
             else if($user && $user->role == 'driver'){
                 // $orderss = Order::where('user_id',$user->id)->with('center')->where('status','<>','delivered')->Where('status','<>','canceled')->with('container')->get();
-                $orderss = Order::where('driver_id',$user->id)->with('center')->with('container')->get();
+                $orderss = Order::where('driver_id',$user->id)->with('center')->with('container')->skip($skip)->limit(10)->get();
                 $count_orders = Order::where('driver_id',$user->id)->with('center')->with('container')->count('id');
                 if(sizeof($orderss) > 0){
                     $orders = [];
                     $i = 0 ;
                     foreach($orderss as $order){
                         $orders[$i]['order_id'] =   $order->id ;
+                        $orders[$i]['user_id'] =   $order->user_id ;
+                        $orders[$i]['user_name'] =   $order->user_name ;
+                        $orders[$i]['mobile'] =   $order->user_mobile ;
+                        $orders[$i]['lat'] =   $order->lat ;
+                        $orders[$i]['lng'] =   $order->lng ;
+                        $orders[$i]['city'] =   $order->city ;
+                        $orders[$i]['area'] =   $order->area ;
                         $orders[$i]['container_id'] =   $order->container->id ;
                         $orders[$i]['center_id'] =   $order->center->id ;
                         $orders[$i]['center_name'] =   $order->center->name ;
@@ -1601,7 +1615,7 @@ class ApiController extends Controller
                     if($request->status == 'accept'){
                         $order->status = 'assigned' ;
                         $order->save();
-                        $orderdriver = OrderDriver::where('order_id',$order->id)->where('driver_id',$user->id)->first();
+                        $orderdriver = OrderDriver::where('order_id',$order->id)->where('driver_id',$user->id)->orderBy('id',"Desc")->first();
                         if($orderdriver){
                             $orderdriver->status = 'accept' ;
                             $orderdriver->accept_date  = $date ;
@@ -1617,7 +1631,7 @@ class ApiController extends Controller
                     else if($request->status == 'decline'){
                         $order->status = 'accepted' ;
                         $order->save();
-                        $orderdriver = OrderDriver::where('order_id',$order->id)->where('driver_id',$user->id)->first();
+                        $orderdriver = OrderDriver::where('order_id',$order->id)->where('driver_id',$user->id)->orderBy('id',"Desc")->first();
                         if($orderdriver){
                             $orderdriver->status = 'decline' ;
                             $orderdriver->reason = $request->reason ;
