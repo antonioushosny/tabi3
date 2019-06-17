@@ -33,7 +33,7 @@ Route::get('/', function () {
 
 
 Auth::routes();
-
+// Route::post('reset-password/{token}', 'ResetPasswordController@resetPassword')->name('resetPassword');
 Route::group(['middleware' => 'auth'], function () {
 
     Route::resource('roles','RoleController');

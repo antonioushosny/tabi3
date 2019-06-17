@@ -61,6 +61,8 @@ return [
         'Close'                         =>'Close',
         'selectall'                     => 'Select All',
         'operations'                    => 'Operations',
+        'resendlink'                    => 'Sorry, you can not complete the task. Try again' ,
+
     //end public 
 
     //sidebar  

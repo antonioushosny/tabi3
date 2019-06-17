@@ -47,4 +47,6 @@ return [
     'assigned'   =>  'تم تعيين سائق لهذا الأمر ، في انتظار التسليم' ,
     'delivered'   =>  'تم التوصيل',
     'canceled'   =>  'ألغيت',
+
+    'notfoundcenter' => 'There are no distribution centers for this container',
 ];

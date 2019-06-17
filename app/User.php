@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
+use App\Notifications\MailResetPasswordNotification;
 class User extends Authenticatable
 {
     use HasRoles;
@@ -14,7 +15,10 @@ class User extends Authenticatable
         'company_name', 'name','email', 'password','mobile','address','desc','join_date','city','area','lat','lng','image','device_token','role','status','available','country_id','type','city_id','provider_id','center_id','area_id'
     ];
 
-    
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new MailResetPasswordNotification($token));
+    }
     protected $hidden = [
         'password',
         //  'remember_token',

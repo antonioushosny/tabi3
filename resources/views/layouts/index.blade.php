@@ -360,14 +360,11 @@ body, html {
                     <li <?php echo ($page == 'users') ? "class='active open'" : ""; ?> ><a href="{{ route('users') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.users')}}</span></a></li>
                     @endif
 
-                    <li <?php echo ($page == 'reports') ? "class='active open'" : ""; ?> ><a href="{{ route('reports') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.reports')}}</span></a></li>
-
-                    <!-- <li> <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-apps"></i><span>App</span> </a>
+                     <li <?php echo ($page == 'reports') ? "class='active open'" : ""; ?> > <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-apps"></i><span>{{trans('admin.reports')}}</span> </a>
                         <ul class="ml-menu">
-                            <li><a href="mail-inbox.html">Inbox</a></li>
-                            <li><a href="blog-dashboard.html">Blog</a></li>
+                            <li <?php echo ($page == 'reports') ? "class='active open'" : ""; ?> ><a href="{{ route('reports') }}"  > <span> {{trans('admin.reports')}}</span></a></li>
                         </ul>
-                    </li> -->
+                    </li> 
 
                     
                 </ul>

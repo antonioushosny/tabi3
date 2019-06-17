@@ -711,7 +711,7 @@ class ApiController extends Controller
             return response()->json([
                 'success' => 'success',
                 'errors'  => null,
-                "message"=>trans('api.send_token'),
+                "message"=>trans('api.send_token'), 
                 ]);
 
         }
@@ -976,12 +976,13 @@ class ApiController extends Controller
                     $order->notes = $request->notes ;
                     $order->user_id = $user->id ;
                     $order->center_id = $CenterContainer->center->id ;
+                    $order->provider_id = $CenterContainer->center->provider_id ;
                     $order->container_id = $CenterContainer->container->id ;
                     $order->price = $CenterContainer->price ;
                     $order->total = $CenterContainer->price * $request->num_containers ;
                     $order->status = 'pending' ;
+                    
                     $order->save();
-
                     $ordercenter = new OrderCenter ;
                     $ordercenter->order_id = $order->id ;
                     $ordercenter->center_id = $order->center_id ;
@@ -1024,8 +1025,8 @@ class ApiController extends Controller
                 }
                 return response()->json([
                     'success' => 'failed',
-                    'errors' => trans('api.notfound'),
-                    "message"=>trans('api.notfound'),
+                    'errors' => trans('api.notfoundcenter'),
+                    "message"=>trans('api.notfoundcenter'),
                     ]);
                 
             }else{

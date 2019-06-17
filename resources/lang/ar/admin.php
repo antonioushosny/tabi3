@@ -64,6 +64,7 @@ return [
         'Close'                         =>'اغلاق',
         'selectall'                     => 'تحديد الكل',
         'operations'                    => 'عمليات', 
+        'resendlink'                    => 'عفوا لا يمكنك اكمال المهمة حاول مرة اخري' ,
         
     //end public 
 

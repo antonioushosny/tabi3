@@ -7,6 +7,12 @@
                 <form action="{{ route('login') }}" method="POST" class="form" id="loginform" autocomplete="off">
                     @csrf
                         <div class="header">
+
+                            @if (session('status'))
+                                <div class="alert alert-success">
+                                    {{ session('status') }}
+                                </div>
+                            @endif
                             <div class="logo-container">
                                 <img src="{{ asset('assets/images/logo.png') }}" alt="">
                             </div>

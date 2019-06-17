@@ -21,6 +21,7 @@
                 </div>
                 <div class="content">                                                
                     <div class="input-group input-lg">
+                        <input type="hidden" id="code" name="code"  value="{{ $token }}"  required >
                         <input type="text" id="email" name="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" placeholder="{{trans('admin.placeholder_email')}}" value="{{ old('email') }}"  required autofocus>
                         <!-- <input type="text" class="form-control" placeholder="Enter User Name" value="{{ old('email') }}"  autofocus> -->
                         <span class="input-group-addon">

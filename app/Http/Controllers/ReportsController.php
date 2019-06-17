@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Deal;
-use App\Ticket;
+use App\Order;
+use App\OrderDriver;
+use App\OrderCenter;
 use App\User;
-use App\Charge;
 use Carbon\Carbon;
 use Auth;
 use App;
@@ -19,7 +19,11 @@ class ReportsController extends Controller
      */
     public function index()
     {
-
+        $reports = Order::where('center_id',Auth::user()->id)->get();
+        // return $orders;
+        $title = 'reports' ;
+        $lang = App::getlocale();
+        return view('reports.index',compact('title','reports','lang'));
         if(Auth::user()->role == 'admin' ){
             $dt = Carbon::now();
             $date = $dt->toDateString();

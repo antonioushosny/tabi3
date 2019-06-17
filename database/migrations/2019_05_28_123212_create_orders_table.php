@@ -19,8 +19,8 @@ class CreateOrdersTable extends Migration
             $table->string('user_mobile')->nullable($value = true);
             $table->string('city')->nullable($value = true);
             $table->string('area')->nullable($value = true);
-            $table->string('let')->nullable($value = true);
-            $table->string('lang')->nullable($value = true);
+            $table->string('lat')->nullable($value = true);
+            $table->string('lng')->nullable($value = true);
             $table->string('container_name_ar')->nullable($value = true);
             $table->string('container_name_en')->nullable($value = true);
             $table->string('container_size')->nullable($value = true);

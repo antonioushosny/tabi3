@@ -48,4 +48,7 @@ return [
     'assigned'   => 'Driver assigned to the order, waiting for delivery',
     'delivered'   => 'Delivered',
     'canceled'   => 'Canceled',
+
+    'notfoundcenter' => '',
+
 ];
