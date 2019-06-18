@@ -7,6 +7,8 @@ use App\Order;
 use App\OrderDriver;
 use App\OrderCenter;
 use App\User;
+use App\City;
+use App\Area;
 use Carbon\Carbon;
 use Auth;
 use App;
@@ -19,11 +21,46 @@ class ReportsController extends Controller
      */
     public function index()
     {
-        $reports = Order::where('center_id',Auth::user()->id)->get();
-        // return $orders;
         $title = 'reports' ;
         $lang = App::getlocale();
-        return view('reports.index',compact('title','reports','lang'));
+
+        $allcities = City::all();
+        if($lang == 'ar'){
+            $cities = array_pluck($allcities,'name_ar', 'id'); 
+        }else{
+            $cities = array_pluck($allcities,'name_en', 'id');
+        }
+        
+        $allareas = Area::all();
+        if($lang == 'ar'){
+            $areas = array_pluck($allareas,'name_ar', 'id'); 
+        }else{
+            $areas = array_pluck($allareas,'name_en', 'id');
+        }
+
+        $allproviders = User::where('role','provider')->get();
+        $providers = array_pluck($allproviders,'company_name', 'id');  
+
+        $allcenters = User::where('role','center')->where('provider_id',Auth::user()->id)->get();
+        $centers = array_pluck($allcenters,'name', 'id');
+
+        $alldrivers = User::where('role','driver')->where('center_id',Auth::user()->id)->get();
+        $drivers = array_pluck($alldrivers,'name', 'id');
+
+        if(Auth::user()->role == 'admin' ){
+
+            $reports = Order::all();
+            return view('reports.index',compact('title','reports','cities','areas','providers','lang'));
+        }
+        else if(Auth::user()->role == 'provider' ){
+            $reports = Order::where('provider_id',Auth::user()->id)->get();
+            return view('reports.index',compact('title','reports','cities','areas','centers','lang'));
+        }
+        else{
+            $reports = Order::where('center_id',Auth::user()->id)->get();
+            return view('reports.index',compact('title','reports','cities','areas','drivers','lang'));
+        }
+        
         if(Auth::user()->role == 'admin' ){
             $dt = Carbon::now();
             $date = $dt->toDateString();
