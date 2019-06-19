@@ -5,7 +5,7 @@ use App\Client;
 use App\User;
 use App\Country;
 use App\City;
-use App\Term;
+use App\Doc;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Auth;
@@ -29,6 +29,7 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
   
@@ -36,16 +37,9 @@ class HomeController extends Controller
             $dt = Carbon::now();
             $date = $dt->toDateString();
             $time  = date('H:i:s', strtotime($dt));
-            // return $date ;
 
-            // $users      = User::where('role','user')->count('id');
-            // $categories  = Category::count('id');
-            // $deals        = Deal::whereDate('expiry_date','>',$date)->orWhere('expiry_date','')->orWhere('expiry_date',null)->count('id');
-            // $nowdeals        = Deal::whereDate('expiry_date','=',$date)->whereTime('expiry_time','>=',$time)->count('id');
-            // $lastdeals        = Deal::whereDate('expiry_date','<',$date)->orwhereDate('expiry_date','=',$date)->whereTime('expiry_time','<',$time)->count('id');
             
-            // $subcategories        = SubCategory::count('id');
-            $users      = 5235;
+            $users      = User::where('role','user')->count('id');
             $categories  = 353;
             $deals        = 355;
             $nowdeals        = 355;
@@ -56,6 +50,39 @@ class HomeController extends Controller
             return view('home',compact('title','deals','nowdeals','lastdeals','users','categories','subcategories','users','lang'));
         
     }
+
+    public function aboutUs()
+    {
+        $lang = App::getlocale();
+        $title = 'aboutUs' ;
+        $settings      = Doc::where('type','about')->get();
+        // return $about ;
+        return view('settings.index',compact('lang','title','settings')) ;
+    }
+    public function add(){
+        $lang = App::getlocale();
+        $title = "AboutUs" ;
+        return view('settings.add',compact('title','lang')) ;
+    }
+    public function destroy($id)
+    {
+        if(Auth::user()->role != 'admin' ){
+            $role = 'admin';
+            return view('unauthorized',compact('role','admin'));
+        }
+        $id = Doc::find( $id );
+        $id ->delete();
+        return response()->json($id);
+    }
+
+    public function deleteall(Request $request)
+    {
+        if($request->ids){
+            $ids = Doc::whereIn('id',$request->ids)->delete();
+        }
+        return response()->json($request->ids);
+    }
+
     public function profile($id)
     {
 
@@ -65,6 +92,7 @@ class HomeController extends Controller
         $title = "home" ;
         return view('profile',compact('admin','title','term'));
     }
+
     public function editprofile(Request $request)
     {
         // return $request;
@@ -220,5 +248,5 @@ class HomeController extends Controller
         session()->flash('alert-success', trans('admin.successfully_send'));
         return redirect()->route('messages');
     }
-    
+     
 }

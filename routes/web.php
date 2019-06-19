@@ -125,21 +125,28 @@ Route::group(['middleware' => 'auth'], function () {
 
     
     //  routes for contact_us management
-    // Route::get('/contact_us/cliens/{status}', 'ContactsController@indexclients')->name('contactsclients');
-    Route::get('/contact_us/users/{status}', 'ContactsController@indexusers')->name('contactsusers');
-    Route::post('/contacts/add', 'ContactsController@store')->name('editcontact');
+    //  routes for contact_us management
+    Route::get('/contact_us', 'ContactsController@index')->name('contacts');
     Route::get('/contacts/delete/{id}', 'ContactsController@destroy')->name('destroycontact');
-    Route::post('/contacts/deleteall', 'ContactsController@deleteall')->name('contactdeleteall');
+    Route::post('/contacts/deleteall', 'ContactsController@deleteall')->name('contactsdeleteall');
+
 
     // routes for reports management
     Route::get('/reports', 'ReportsController@index')->name('reports');
-    Route::post('/reports', 'ReportsController@search')->name('searchreports');
-    Route::get('/reports/charges', 'ReportsController@charges')->name('charges');
-    Route::get('/reports/reportsdeals', 'ReportsController@reportsdeals')->name('reportsdeals');
+    Route::post('/reports', 'ReportsController@search')->name('reportfilter');
+    // Route::get('/reports/reportfilter', 'ReportsController@reportfilter')->name('reportfilter');
+    Route::get('/reports/reportdetail/{id}', 'ReportsController@show')->name('reportdetail');
     
     // routes for settings management
-    Route::get('/settings', 'HomeController@settings')->name('settings');
+    Route::get('/settings/aboutUs', 'HomeController@aboutUs')->name('AboutUs');
+    Route::get('/settings/Policy', 'HomeController@policy')->name('Policy');
+    Route::get('/settings/Terms&Conditions', 'HomeController@terms')->name('Terms');
+    Route::get('/settings/add', 'HomeController@add')->name('addsetting');
+    Route::post('/settings/store', 'HomeController@store')->name('storesetting');
+    Route::get('/settings/edit/{id}', 'HomeController@edit')->name('editsetting');
     Route::put('/settings/edit/{id}', 'HomeController@editsettings')->name('editsettings');
+    Route::get('/settings/delete/{id}', 'HomeController@destroy')->name('destroysetting');
+    Route::post('/settings/deleteall', 'HomeController@deleteall')->name('settingsdeleteall');
     
     Route::get('/token/{token}','HomeController@savetoken')->name('savetoken');
     // routes for notifications management

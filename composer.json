@@ -11,10 +11,12 @@
         "doctrine/dbal": "^2.8",
         "fideloper/proxy": "^4.0",
         "get-stream/stream-laravel": "^2.3",
-        "laravel/framework": "5.6.*",
+        "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
         "laravelcollective/html": "^5.6",
-        "spatie/laravel-permission": "^2.29"
+        "rackspace/php-opencloud": "dev-master",
+        "spatie/laravel-permission": "^2.29",
+        "yajra/laravel-datatables-oracle": "^9.4"
     },
     "require-dev": {
         "filp/whoops": "^2.0",

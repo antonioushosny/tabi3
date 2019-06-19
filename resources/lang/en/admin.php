@@ -62,6 +62,8 @@ return [
         'selectall'                     => 'Select All',
         'operations'                    => 'Operations',
         'resendlink'                    => 'Sorry, you can not complete the task. Try again' ,
+        'notfoundarea'                  => 'There are no areas for this city',
+        
 
     //end public 
 
@@ -293,6 +295,10 @@ return [
         'accept_date'    => 'Accept Date/Time',
         'reassign'       => ' Assign Other Driver ',
         'decline_order'     => 'Reject Order',
+        'date_from'      => 'From Date',
+        'date_to'      => 'To Date',
+        'choose_status' => ' Choose Status ' ,
+        'all' => 'All ' ,
 
     //end orders page
  

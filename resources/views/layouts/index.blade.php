@@ -346,11 +346,14 @@ body, html {
                     @if(Auth::user()->role == 'center')
                    <!--  <li <?php echo ($page == 'orders') ? "class='active open'" : ""; ?> ><a href="{{ route('orders') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.orders')}}</span></a></li>  -->
 
-                    <li <?php echo ($page == 'orders') ? "class='active open'" : ""; ?>  <?php echo ($page == 'neworders') ? "class='active open'" : ""; ?> <?php echo ($page == 'noworders') ? "class='active open'" : ""; ?> <?php echo ($page == 'lastorders') ? "class='active open'" : ""; ?> > <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-apps"></i><span>{{trans('admin.orders')}}</span> </a>
+                    <li <?php echo ($page == 'orders' ||$page == 'neworders' ||$page == 'noworders' ||$page == 'lastorders' ) ? "class='active open'" : ""; ?>   > <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-apps"></i><span>{{trans('admin.orders')}}</span> </a>
                         <ul class="ml-menu">
                             <li <?php echo ($page == 'orders') ? "class='active '" : ""; ?>><a href="{{ route('orders') }}">{{trans('admin.allorders')}}</a></li>
+
                             <li <?php echo ($page == 'neworders') ? "class='active '" : ""; ?>><a href="{{ route('neworders') }}">{{trans('admin.neworders')}}</a></li>
+
                             <li <?php echo ($page == 'noworders') ? "class='active '" : ""; ?>><a href="{{ route('noworders') }}">{{trans('admin.noworders')}}</a></li>
+
                             <li <?php echo ($page == 'lastorders') ? "class='active '" : ""; ?>><a href="{{ route('lastorders') }}">{{trans('admin.lastorders')}}</a></li>
                         </ul>
                     </li> 
@@ -358,9 +361,21 @@ body, html {
                    
                     @if(Auth::user()->role == 'admin')
                     <li <?php echo ($page == 'users') ? "class='active open'" : ""; ?> ><a href="{{ route('users') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.users')}}</span></a></li>
+
+                    <li <?php echo ($page == 'contacts') ? "class='active open'" : ""; ?> ><a href="{{ route('contacts') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.contacts')}}</span></a></li>
+                   
+                    <li <?php echo ($page == 'AboutUs' || $page == 'Terms' || $page == 'Policy') ? "class='active open'" : ""; ?> > <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-apps"></i><span>{{trans('admin.settings')}}</span> </a>
+                        <ul class="ml-menu">
+                            <li <?php echo ($page == 'AboutUs') ? "class='active open'" : ""; ?> ><a href="{{ route('AboutUs') }}"  > <span> {{trans('admin.AboutUs')}}</span></a></li>
+
+                            <li <?php echo ($page == 'Terms') ? "class='active open'" : ""; ?> ><a href="{{ route('Terms') }}"  > <span> {{trans('admin.Terms')}}</span></a></li>
+
+                            <li <?php echo ($page == 'Policy') ? "class='active open'" : ""; ?> ><a href="{{ route('Policy') }}"  > <span> {{trans('admin.Policy')}}</span></a></li>
+                        </ul>
+                    </li> 
                     @endif
 
-                     <li <?php echo ($page == 'reports') ? "class='active open'" : ""; ?> > <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-apps"></i><span>{{trans('admin.reports')}}</span> </a>
+                    <li <?php echo ($page == 'reports') ? "class='active open'" : ""; ?> > <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-apps"></i><span>{{trans('admin.reports')}}</span> </a>
                         <ul class="ml-menu">
                             <li <?php echo ($page == 'reports') ? "class='active open'" : ""; ?> ><a href="{{ route('reports') }}"  > <span> {{trans('admin.reports')}}</span></a></li>
                         </ul>
@@ -507,15 +522,15 @@ body, html {
 
 <script>
        table =  $('.js-exportable-ar').DataTable({
-        "language": {
-            "url": "{{asset('datatablelang.json')}}"
-        },
-        dom: 'Bfrtip',
-        // dom: 'Blfrtip',
-        buttons: [
-            'copy', 'csv', 'excel', 'pdf', 'print'
-        ],   
-    });
+            "language": {
+                "url": "{{asset('datatablelang.json')}}"
+            },
+            dom: 'Bfrtip',
+            // dom: 'Blfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],   
+        });
 </script>
 
 

@@ -65,6 +65,7 @@ return [
         'selectall'                     => 'تحديد الكل',
         'operations'                    => 'عمليات', 
         'resendlink'                    => 'عفوا لا يمكنك اكمال المهمة حاول مرة اخري' ,
+        'notfoundarea'                  => 'لا يوجد مناطق لهذه المدينة' ,
         
     //end public 
 
@@ -308,7 +309,10 @@ return [
         'accept_date'    => 'وقت وتاريخ القبول',
         'reassign'       => ' تعيين سائق آخر ',
         'decline_order'     => 'رفض الطلب',
-
+        'date_from'      => 'من تاريخ ',
+        'date_to'      => 'الي تاريخ ',
+        'choose_status' => 'اختر الحالة ' ,
+        'all' => 'الكل ' ,
     //end orders page
 
     // advertisements page 

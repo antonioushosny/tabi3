@@ -23,8 +23,6 @@ class CreateUsersTable extends Migration
             $table->text('address')->nullable($value = true);
             $table->text('desc')->nullable($value = true);
             $table->string('join_date')->nullable($value = true);
-            $table->string('city')->nullable($value = true);
-            $table->string('area')->nullable($value = true);
             $table->string('lat')->nullable($value = true);
             $table->string('lng')->nullable($value = true);
             $table->string('image')->nullable($value = true);
@@ -34,15 +32,15 @@ class CreateUsersTable extends Migration
             $table->tinyInteger('available')->nullable($value = true);       
             $table->tinyInteger('type')->nullable($value = true);       
             $table->unsignedInteger('country_id')->nullable($value = true);
-            $table->unsignedInteger('city_id')->nullable($value = true);
             $table->unsignedInteger('provider_id')->nullable($value = true);
             $table->unsignedInteger('center_id')->nullable($value = true);
+            $table->unsignedInteger('city_id')->nullable($value = true);
             $table->unsignedInteger('area_id')->nullable($value = true);
-            $table->foreign('country_id')->references('id')->on('countries')->onDelete('set null'); 
             $table->foreign('city_id')->references('id')->on('cities')->onDelete('set null'); 
+            $table->foreign('area_id')->references('id')->on('areas')->onDelete('set null'); 
+            $table->foreign('country_id')->references('id')->on('countries')->onDelete('set null'); 
             $table->foreign('provider_id')->references('id')->on('users')->onDelete('cascade'); 
             $table->foreign('center_id')->references('id')->on('users')->onDelete('cascade'); 
-            $table->foreign('area_id')->references('id')->on('areas')->onDelete('set null'); 
             $table->rememberToken();
             $table->timestamps();
         });

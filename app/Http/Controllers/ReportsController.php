@@ -12,6 +12,7 @@ use App\Area;
 use Carbon\Carbon;
 use Auth;
 use App;
+use DataTables;
 class ReportsController extends Controller
 {
     /**
@@ -46,19 +47,26 @@ class ReportsController extends Controller
 
         $alldrivers = User::where('role','driver')->where('center_id',Auth::user()->id)->get();
         $drivers = array_pluck($alldrivers,'name', 'id');
+        $status = [] ;
+        $status['pending'] = __('admin.pending') ;
+        $status['accepted'] = __('admin.accepted') ;
+        $status['assigned'] = __('admin.assigned') ;
+        $status['delivered'] = __('admin.delivered') ;
+        $status['canceled'] = __('admin.canceled') ;
+        // return $status;
 
         if(Auth::user()->role == 'admin' ){
 
-            $reports = Order::all();
-            return view('reports.index',compact('title','reports','cities','areas','providers','lang'));
+            $reports = Order::latest()->get();
+            return view('reports.index',compact('title','reports','cities','areas','providers','status','lang'));
         }
         else if(Auth::user()->role == 'provider' ){
-            $reports = Order::where('provider_id',Auth::user()->id)->get();
-            return view('reports.index',compact('title','reports','cities','areas','centers','lang'));
+            $reports = Order::where('provider_id',Auth::user()->id)->latest()->get();
+            return view('reports.index',compact('title','reports','cities','areas','centers','status','lang'));
         }
         else{
-            $reports = Order::where('center_id',Auth::user()->id)->get();
-            return view('reports.index',compact('title','reports','cities','areas','drivers','lang'));
+            $reports = Order::where('center_id',Auth::user()->id)->latest()->get();
+            return view('reports.index',compact('title','reports','cities','areas','drivers','status','lang'));
         }
         
         if(Auth::user()->role == 'admin' ){
@@ -149,7 +157,28 @@ class ReportsController extends Controller
 
         }
     }
+    public function ajax(){
 
+        if ($request->ajax()) {
+
+            $data = Order::all();
+
+            return Datatables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('action', function($row){
+                           $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editProduct">Edit</a>';
+                           $btn = $btn.' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteProduct">Delete</a>';
+                            return $btn;
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+
+        }
+        return view('reports.index',compact('reports'));
+        // $data = Order::where('center_id',Auth::user()->id)->get();
+        // return $data ;
+        //  return response()->json(['data'=>$data]);
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -158,7 +187,101 @@ class ReportsController extends Controller
     public function search(Request $request)
     {
         // return $request->start->date("m-d-Y");
-      
+        $title = 'reports' ;
+        $lang = App::getlocale();
+
+        $allcities = City::all();
+        if($lang == 'ar'){
+            $cities = array_pluck($allcities,'name_ar', 'id'); 
+        }else{
+            $cities = array_pluck($allcities,'name_en', 'id');
+        }
+        
+        $allareas = Area::all();
+        if($lang == 'ar'){
+            $areas = array_pluck($allareas,'name_ar', 'id'); 
+        }else{
+            $areas = array_pluck($allareas,'name_en', 'id');
+        }
+
+        $allproviders = User::where('role','provider')->get();
+        $providers = array_pluck($allproviders,'company_name', 'id');  
+
+        $allcenters = User::where('role','center')->where('provider_id',Auth::user()->id)->get();
+        $centers = array_pluck($allcenters,'name', 'id');
+
+        $alldrivers = User::where('role','driver')->where('center_id',Auth::user()->id)->get();
+        $drivers = array_pluck($alldrivers,'name', 'id');
+
+        $status = [] ;
+        $status['pending'] = __('admin.pending') ;
+        $status['accepted'] = __('admin.accepted') ;
+        $status['assigned'] = __('admin.assigned') ;
+        $status['delivered'] = __('admin.delivered') ;
+        $status['canceled'] = __('admin.canceled') ;
+        // return $status;
+
+        if(Auth::user()->role == 'admin' ){
+            $reports = Order::latest();
+        }
+        else if(Auth::user()->role == 'provider' ){
+            $reports = Order::where('provider_id',Auth::user()->id)->latest();  
+        }
+        else{
+            $reports = Order::where('center_id',Auth::user()->id)->latest();  
+        }
+        // return $request ;
+        $provider_id = '' ;
+        $center_id = '' ;
+        $driver_id = '' ;
+        $city_id = '' ;
+        $area_id = '' ;
+        $stat = '' ;
+        $date_from = '' ;
+        $date_to = '' ;
+
+           
+        if($request->provider_id){
+            $reports = $reports->where('provider_id',$request->provider_id);
+            $provider_id = $request->provider_id ;
+        }
+        if($request->center_id){
+            $reports = $reports->where('center_id',$request->center_id);
+            $center_id = $request->center_id ;
+        }
+        if($request->driver_id){
+            $reports = $reports->where('driver_id',$request->driver_id);
+            $driver_id = $request->driver_id ;
+        }
+        if($request->city_id){
+            $reports = $reports->where('city_id',$request->city_id);
+            $city_id = $request->city_id ;
+
+        }
+        if($request->area_id){
+            $reports = $reports->where('area_id',$request->area_id);
+            $area_id = $request->area_id ;
+
+        }
+        if($request->status){
+            $reports = $reports->where('status',$request->status);
+            $stat = $request->status ;
+
+        }
+        if($request->date_from){
+            $reports = $reports->whereDate('created_at','>=',$request->date_from);
+            $date_from = $request->date_from ;
+
+        }
+        if($request->date_to){
+            $reports = $reports->whereDate('created_at','<=',$request->date_to);
+            $date_to = $request->date_to ;
+
+        }
+        $reports = $reports->get();
+        // return $reports ;
+        return view('reports.index',compact('title','reports','cities','areas','providers','centers','drivers','status','lang','provider_id','center_id','driver_id','city_id','area_id','stat','date_from','date_to'));
+        
 
         if(Auth::user()->role == 'admin' ){
             $start = Carbon::parse($request->start)->toDateString() ;
@@ -206,7 +329,12 @@ class ReportsController extends Controller
      */
     public function show($id)
     {
-        //
+        $lang = App::getlocale();
+
+        $title = 'reports';
+        $order = Order::where('id',$id)->with('centers')->with('drivers')->with('user')->orderBy('id', 'DESC')->first();
+        // return $order ; 
+        return view('reports.show',compact('order','title','lang'));
     }
 
     /**

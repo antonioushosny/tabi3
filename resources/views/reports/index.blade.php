@@ -1,8 +1,18 @@
 @extends('layouts.index')
 @section('style')
 <link rel="stylesheet" href="{{ asset('rtl/plugins/iCheck/square/blue.css') }}">
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script> -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="{{asset('assets/plugins/jquery-spinner/css/bootstrap-spinner.css') }}">
 
+<style>
+    .select2-container--default .select2-selection--single {
+        background-color: #fff;
+        border: 1.6px solid #aaa;
+        border-radius: 13px;
+        max-width: 97%;
+        /* border: 1px solid; */
+    }
+</style>
 @endsection
  @section('content')
 <!-- Main Content -->
@@ -37,67 +47,108 @@
                        
         
                                 <div class="header">
-                                    <h2><strong>{{trans('admin.'.$title)}}</strong> {{trans('admin.add_center')}}  </h2>
+                                    <h2><strong>{{trans('admin.filter')}}</strong>   </h2>
                                     
                                 </div>
                                 <div class="body">
-                                    {!! Form::open(['route'=>['storecenter'],'method'=>'post','autocomplete'=>'off', 'id'=>'form_validation', 'enctype'=>'multipart/form-data' ])!!} 
+                                    {!! Form::open(['route'=>['reportfilter'],'method'=>'post','autocomplete'=>'off', 'id'=>'form_validation', 'enctype'=>'multipart/form-data' ])!!} 
         
                                         <div class="row">
-                                            <div class="col-md-6"> 
-                                                @if(Auth::user()->role == 'admin' )
+                                            @if(Auth::user()->role == 'admin' )
+                                                <div class="col-md-1">
+                                                    {{__('admin.provider')}}
+                                                </div> 
+                                                <div class="col-md-3"> 
                                                     <!-- for provider_id -->
                                                     <div class= "form-group form-float">
                                                         {!! Form::select('provider_id',$providers
-                                                            ,'',['class'=>'form-control show-tick select2' ,'placeholder' =>trans('admin.choose_provider'),'required']) !!}
+                                                            ,!isset($provider_id)?null:$provider_id,['class'=>'form-control show-tick select2' ,'placeholder' =>trans('admin.all')]) !!}
                                                         <label id="provider_id-error" class="error" for="provider_id" style="">  </label>
                                                     </div>
-                                                @elseif(Auth::user()->role == 'provider' )
+                                                </div>
+                                            @elseif(Auth::user()->role == 'provider' )
+                                                <div class="col-md-1">
+                                                    {{__('admin.center')}}
+                                                </div> 
+                                                <div class="col-md-3">
                                                     <!-- for center_id -->
                                                     <div class= "form-group form-float">
                                                         {!! Form::select('center_id',$centers
-                                                            ,'',['class'=>'form-control show-tick select2' ,'placeholder' =>trans('admin.choose_center'),'required']) !!}
+                                                            ,!isset($center_id)?null:$center_id,['class'=>'form-control show-tick select2' ,'placeholder' =>trans('admin.all')]) !!}
                                                         <label id="center_id-error" class="error" for="center_id" style="">  </label>
                                                     </div>
-                                                @else
+                                                </div>
+                                            @else
+                                                <div class="col-md-1">
+                                                    {{__('admin.driver')}}
+                                                </div> 
+                                                <div class="col-md-3">
                                                     <!-- for driver_id -->
                                                     <div class= "form-group form-float">
                                                         {!! Form::select('driver_id',$drivers
-                                                            ,'',['class'=>'form-control show-tick select2' ,'placeholder' =>trans('admin.choose_driver'),'required']) !!}
+                                                            ,!isset($driver_id)?null:$driver_id,['class'=>'form-control show-tick select2' ,'placeholder' =>trans('admin.all')]) !!}
                                                         <label id="driver_id-error" class="error" for="driver_id" style="">  </label>
                                                     </div>
-                                               
-                                                @endif
-                                            </div>
-                                            <div class="col-md-6">
-                                                    
-                                            </div>
-                                            <div class="col-md-6">  
+                                                
+                                                </div>
+                                            @endif
+                                            
+                                            <div class="col-md-1">
+                                                {{__('admin.city')}}
+                                            </div> 
+                                            <div class="col-md-3"> 
                                                 <!-- for city -->
                                                 <div class= "form-group form-float">
                                                     {!! Form::select('city_id',$cities
-                                                        ,'',['class'=>'form-control show-tick select2' ,'id'=>'city_id','placeholder' =>trans('admin.choose_city'),'required']) !!}
+                                                        ,!isset($city_id)?null:$city_id,['class'=>'form-control show-tick select2' ,'id'=>'city_id','placeholder' =>trans('admin.all')]) !!}
                                                     <label id="city_id-error" class="error" for="city_id" style="">  </label>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-1">
+                                                {{__('admin.area')}}
+                                            </div> 
+                                            <div class="col-md-3">
                                                 <!-- for area -->
                                                 <div class= "form-group form-float area_id_div ">
                                                     {!! Form::select('area_id',$areas
-                                                        ,'',['class'=>'form-control show-tick select2' ,'id'=>'area_id','placeholder' =>trans('admin.choose_area'),'required']) !!}
+                                                        ,!isset($area_id)?null:$area_id,['class'=>'form-control show-tick select2' ,'id'=>'area_id','placeholder' =>trans('admin.all')]) !!}
                                                     <label id="area_id-error" class="error" for="area_id" style="">  </label>
                                                 </div>
                                             </div>
-                                            
-                                            <div class="col-md-6">
+                                            <div class="col-md-1">
+                                                {{__('admin.status')}}
+                                            </div> 
+                                            <div class="col-md-3">
                                                 <!-- for status -->
-                                                <div class= "form-group form-float area_id_div ">
+                                                <div class= "form-group form-float">
                                                     {!! Form::select('status',$status
-                                                        ,'',['class'=>'form-control show-tick select2' ,'id'=>'status','placeholder' =>trans('admin.choose_area'),'required']) !!}
+                                                        ,!isset($stat)?null:$stat,['class'=>'form-control show-tick select2' ,'placeholder' =>trans('admin.all')]) !!}
                                                     <label id="status-error" class="error" for="status" style="">  </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                {{__('admin.date_from')}}
+                                            </div> 
+                                            <div class="col-md-3">
+                                                <!-- for date -->
+                                                <div class= "form-group form-float  ">
+                                                    {!! Form::date('date_from',!isset($date_from)?null:$date_from,['class'=>'form-control ' ,'id'=>'date_from','placeholder' =>trans('admin.placeholder_date_from')]) !!}
+                                                    <label id="date_from-error" class="error" for="date_from" style="">  </label>
                                                 </div>
                                                 
                                             </div>
+                                            <div class="col-md-1">
+                                                {{__('admin.date_to')}}
+                                            </div> 
+                                            <div class="col-md-3">
+                                                <!-- for date -->
+                                                <div class= "form-group form-float  ">
+                                                    {!! Form::date('date_to',!isset($date_to)?null:$date_to,['class'=>'form-control ' ,'id'=>'date_to','placeholder' =>trans('admin.placeholder_date_to')]) !!}
+                                                    <label id="date_to-error" class="error" for="date_to" style="">  </label>
+                                                </div>
+                                                
+                                            </div>
+                                           
                                         </div>
 
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -112,22 +163,11 @@
         <div class="row clearfix">
             <div class="col-lg-12">
                 <div class="card">
-                {{--  {!! Form::open(['route'=>['reportsdeleteall'],'method'=>'post','autocomplete'=>'off', 'id'=>'reportss_form' ])!!}  --}}
 
                         <div class="header">
                             <h2><strong>{{trans('admin.'.$title)}}</strong> </h2>
                             <ul class="header-dropdown">
-        
-                                {{--  <!-- </li>
-                                    <a href="{{route('addreport')}}" class=" add-modal btn btn-success btn-round" title="{{trans('admin.add_report')}}">
-                                        {{trans('admin.add_report')}}
-                                    </a>
-                                </li> -->  --}}
-                                {{--  </li>
-                                    <a href="javascript:void(0);" class=" deleteall-modal btn btn-danger btn-round" title="{{trans('admin.deleteall')}}">
-                                        {{trans('admin.deleteall')}}
-                                    </a>
-                                </li>                                  --}}
+
                             </ul>
                         </div>
                         <div class="body">
@@ -145,10 +185,17 @@
                                         <th>{{trans('admin.usermobile')}}</th>
                                         <th>{{trans('admin.container_name')}}</th>
                                         <th>{{trans('admin.price')}}</th>
+                                        <th>{{trans('admin.no_containers')}}</th>
                                         <th>{{trans('admin.total')}}</th>
                                         <th>{{trans('admin.city')}}</th>
                                         <th>{{trans('admin.area')}}</th>
-                                        <th>{{trans('admin.image')}}</th>
+                                        @if(Auth::user()->role == 'admin')
+                                            <th>{{trans('admin.provider')}}</th>
+                                        @elseif(Auth::user()->role == 'provider')
+                                            <th>{{trans('admin.center')}}</th>
+                                        @else 
+                                            <th>{{trans('admin.driver')}}</th>
+                                        @endif
                                         <th>{{trans('admin.status')}}</th>
                                         <th>{{trans('admin.actions')}}</th>
                                     </tr>
@@ -162,18 +209,33 @@
                                         </td>  --}}
                                         <td>{{ $data->user_name }}</td>
                                         <td>{{ $data->user_mobile }}</td>
-                                        <td>{{ $data->container_name_ar }}</td>     
+                                        <td>{{ $data->container_name_ar }}</td>   
                                         <td>{{ $data->price }}</td>     
+                                        <td>{{ $data->no_container }}</td>  
                                         <td>{{ $data->total }}</td>     
                                         <td>{{ $data->city }}</td>     
                                         <td>{{ $data->area }}</td>     
-                                             
-                            
-                                        @if($data->image)
-                                            <td><img src="{{asset('img/').'/'.$data->image }}" width="50px" height="50px"></td>
+                                        @if(Auth::user()->role == 'admin')
+                                            @if($data->provider)
+                                                <td>{{ $data->provider->company_name }}</td>
+                                            @else 
+                                                <td></td>
+                                            @endif
+                                        @elseif(Auth::user()->role == 'provider')
+                                            @if($data->center)
+                                                <td>{{ $data->center->name }}</td>
+                                            @else 
+                                                <td></td>
+                                            @endif
                                         @else 
-                                            <td><img src="{{asset('images/default.png') }}" width="50px" height="50px"></td>
-                                        @endif
+                                            @if($data->driver)
+                                                <td>{{ $data->driver->name }}</td>
+                                            @else 
+                                                <td></td>
+                                            @endif
+                                        @endif    
+                            
+                                        
 
                                         @if($data->status == 'pending')
                                             <td style="text-align:report"><span  class="col-green">{{ trans('admin.pending')}}</span></td> 
@@ -181,9 +243,8 @@
                                             <td style="text-align:report"><span  class="col-red">{{ trans('admin.'.$data->status)}}</span></td> 
                                         @endif
                                         <td>
-                                            {{--  <!-- <a href="{{route('editreport',$data->id)}}" class="btn btn-info waves-effect waves-float waves-green btn-round " title="{{trans('admin.edit')}}"><i class="zmdi zmdi-edit"></i></a> -->  --}}
+                                            <a href="{{route('reportdetail',$data->id)}}" class="btn btn-info waves-effect waves-float waves-green btn-round " title="{{trans('admin.show')}}"><i class="zmdi zmdi-eye"></i></a>
 
-                                            {{--  <a href="javascript:void(0);" class=" delete-modal btn btn-danger waves-effect waves-float waves-red btn-round " title="{{trans('admin.delete')}}" data-id="{{$data->id}}" ><i class="zmdi zmdi-delete"></i></a>  --}}
                                         </td>
                                     </tr>
                                     
@@ -202,11 +263,12 @@
 @endsection 
 
 @section('script')
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
+<script src="{{asset('assets/plugins/jquery-spinner/js/jquery.spinner.js') }}"></script> <!-- Jquery Spinner Plugin Js --> 
 <script src="{{ asset('rtl/plugins/iCheck/icheck.min.js') }}"></script> 
 
-<script>
-
+<script>      
+   
     $('input').iCheck({
         checkboxClass: 'icheckbox_square-blue',
         radioClass: 'iradio_square-blue',
@@ -341,7 +403,46 @@
         // $('#deleteModal').modal('show');
         // id = $('#id_delete').val();
     });
-    
+        
+    id = $('#city_id').val();
+    if(id !=''){
+        $('#area_id').empty();
+        $('#area_id').append(`<option value="">{{__('admin.choose_area')}}</option>`)
+        $.ajax({
+            type: 'GET',
+            url: "<?php echo url('/')?>/cities/"+id+"/areas",
+            success: data => {
+                if(data.areas.length <= 0){
+                    alert("{{trans('admin.notfoundarea')}}");
+                }
+                data.areas.forEach(area =>
+                    // console.log(area.name)
+                    $('#area_id').append(`<option value="${area.id}">${area.name}</option>`)
+                )
+            }
+        })
+    }
+    $('.select2').select2();
+    $('#city_id').on('change', e => {
+        $('#area_id').empty();
+        $('#area_id').append(`<option value="">{{__('admin.all')}}</option>`)
+        id = $('#city_id').val();
+        if(id !=''){
+            $.ajax({
+                type: 'GET',
+                url: "<?php echo url('/')?>/cities/"+id+"/areas",
+                success: data => {
+                    if(data.areas.length <= 0){
+                        alert("{{trans('admin.notfoundarea')}}");
+                    }
+                    data.areas.forEach(area =>
+                        // console.log(area.name)
+                        $('#area_id').append(`<option value="${area.id}">${area.name}</option>`)
+                    )
+                }
+            })
+        }
+    });
 </script>
     
 @endsection

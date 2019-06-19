@@ -1347,6 +1347,8 @@ class ApiController extends Controller
                 $date  = date('Y-m-d H:i:s', strtotime($dt));
                 if($order){
                     if($request->status == 'accept'){
+                        $user->available = 0 ;
+                        $user->save();
                         $order->status = 'assigned' ;
                         $order->save();
                         $orderdriver = OrderDriver::where('order_id',$order->id)->where('driver_id',$user->id)->orderBy('id',"Desc")->first();
@@ -1363,6 +1365,8 @@ class ApiController extends Controller
                         ]);
                     }
                     else if($request->status == 'decline'){
+                        $user->available = 1 ;
+                        $user->save();
                         $order->status = 'accepted' ;
                         $order->save();
                         $orderdriver = OrderDriver::where('order_id',$order->id)->where('driver_id',$user->id)->orderBy('id',"Desc")->first();
@@ -1380,6 +1384,8 @@ class ApiController extends Controller
                         ]);
                     }
                     else if($request->status == 'delivered'){
+                        $user->available = 1 ;
+                        $user->save();
                         $order->status = 'delivered' ;
                         $order->save();
                         return response()->json([

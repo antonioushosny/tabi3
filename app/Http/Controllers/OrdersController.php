@@ -260,7 +260,7 @@ class OrdersController  extends Controller
         }
         $title = 'orders';
         
-        $alldrivers = User::where('role','driver')->where('center_id',Auth::user()->id)->get();
+        $alldrivers = User::where('role','driver')->where('available','1')->where('center_id',Auth::user()->id)->get();
         $drivers = array_pluck($alldrivers,'name', 'id');  
 
         $order = Order::where('id',$id)->with('centers')->with('drivers')->with('user')->orderBy('id', 'DESC')->first();
@@ -303,7 +303,7 @@ class OrdersController  extends Controller
             $order->status  = 'accepted' ;
             $order->driver_id  =  $request->driver_id ;
             $order->save();
-            $ordercenter->status  = 'accepted' ;
+            $ordercenter->status  = 'accept' ;
             $ordercenter->accept_date  = $date ;
             $ordercenter->save() ;
             $orderdriver = OrderDriver::where('center_id',$ordercenter->center_id)->where('order_id',$ordercenter->order_id)->where('driver_id',$request->driver_id)->first();
@@ -340,7 +340,7 @@ class OrdersController  extends Controller
             $order->center_id  =  null ; 
             $order->driver_id  = null ; 
             $order->save();
-            $ordercenter->status  = 'declined' ;
+            $ordercenter->status  = 'decline' ;
             $ordercenter->reason  = $request->reason ;
             $ordercenter->decline_date  = $date ;
             $ordercenter->save() ;
@@ -481,7 +481,7 @@ class OrdersController  extends Controller
         }else{
             $order->driver_id =  null ; 
             $order->save();
-            $ordercenter->status  = 'declined' ;
+            $ordercenter->status  = 'decline' ;
             $ordercenter->reason  = $request->reason ;
             $ordercenter->decline_date  = $date ;
             $ordercenter->save() ;
