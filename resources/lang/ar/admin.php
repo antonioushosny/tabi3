@@ -313,6 +313,12 @@ return [
         'date_to'      => 'الي تاريخ ',
         'choose_status' => 'اختر الحالة ' ,
         'all' => 'الكل ' ,
+        'SAR'   => '',
+        'This_Month_Sales'   => '',
+        'This_Year_Sales'   => '',
+        'This_Week_Sales'   => '',
+        'Today_Sales'   => '',
+        'sales'   => '',
     //end orders page
 
     // advertisements page 

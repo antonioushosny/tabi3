@@ -316,20 +316,20 @@ body, html {
 
                     <li <?php echo ($page == 'admins') ? "class='active open'" : ""; ?> ><a href="{{ route('admins') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.admins')}}</span></a></li>
 
-                    <li <?php echo ($page == 'cities') ? "class='active open'" : ""; ?> ><a href="{{ route('cities') }}"  ><i class="zmdi zmdi-flag"></i> <span> {{trans('admin.cities')}}</span></a></li>
+                    <li <?php echo ($page == 'cities') ? "class='active open'" : ""; ?> ><a href="{{ route('cities') }}"  ><i class="zmdi zmdi-city"></i> <span> {{trans('admin.cities')}}</span></a></li>
 
                     <li <?php echo ($page == 'areas') ? "class='active open'" : ""; ?> ><a href="{{ route('areas') }}"  ><i class="zmdi zmdi-pin"></i> <span> {{trans('admin.areas')}}</span></a></li>
 
                     <li <?php echo ($page == 'containers') ? "class='active open'" : ""; ?> ><a href="{{ route('containers') }}"  ><i class="zmdi zmdi-local-drink"></i> <span> {{trans('admin.containers')}}</span></a></li>
 
-                    <li <?php echo ($page == 'providers') ? "class='active open'" : ""; ?> ><a href="{{ route('providers') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.providers')}}</span></a></li>
+                    <li <?php echo ($page == 'providers') ? "class='active open'" : ""; ?> ><a href="{{ route('providers') }}"  ><i class="zmdi zmdi-accounts-list"></i> <span> {{trans('admin.providers')}}</span></a></li>
                     @endif
                     
                     @if(Auth::user()->role == 'admin' || Auth::user()->role == 'provider')
                     <li <?php echo ($page == 'centers') ? "class='active open'" : ""; ?> ><a href="{{ route('centers') }}"  ><i class="zmdi zmdi-truck"></i> <span> {{trans('admin.centers')}}</span></a></li>
                     @endif
 
-                    <li <?php echo ($page == 'drivers') ? "class='active open'" : ""; ?> ><a href="{{ route('drivers') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.drivers')}}</span></a></li>
+                    <li <?php echo ($page == 'drivers') ? "class='active open'" : ""; ?> ><a href="{{ route('drivers') }}"  ><i class="zmdi zmdi-car"></i> <span> {{trans('admin.drivers')}}</span></a></li>
                     
                     @if(Auth::user()->role == 'center')
                    <!--  <li <?php echo ($page == 'orders') ? "class='active open'" : ""; ?> ><a href="{{ route('orders') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.orders')}}</span></a></li>  -->

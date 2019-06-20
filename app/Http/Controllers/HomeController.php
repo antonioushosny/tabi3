@@ -71,7 +71,7 @@ class HomeController extends Controller
                 for($i=0 ;$i <=11 ; $i++){
                     $month = Carbon::now()->subMonths($i+1)->toDateString();
                     $lastmonth = Carbon::now()->subMonths($i)->toDateString();
-                    $sales_for_year[$i]['period'] = date('Y-d-M', strtotime($lastmonth));
+                    $sales_for_year[$i]['period'] = date('Y-M-d', strtotime($lastmonth));
                     $sales_for_year[$i]['sales'] = Order::where('status','delivered')->whereDate('created_at','>=',$month)->whereDate('created_at','<=',$lastmonth)->sum('total');
                     $sales_for_year[$i]['orders'] = Order::where('status','delivered')->whereDate('created_at','>=',$month)->whereDate('created_at','<=',$lastmonth)->count('id');
                 }
@@ -105,7 +105,7 @@ class HomeController extends Controller
                 for($i=0 ;$i <=11 ; $i++){
                     $month = Carbon::now()->subMonths($i+1)->toDateString();
                     $lastmonth = Carbon::now()->subMonths($i)->toDateString();
-                    $sales_for_year[$i]['period'] = date('Y-d-M', strtotime($lastmonth));
+                    $sales_for_year[$i]['period'] = date('Y-M-d', strtotime($lastmonth));
                     $sales_for_year[$i]['sales'] = Order::where('status','delivered')->where('provider_id',Auth::user()->id)->whereDate('created_at','>=',$month)->whereDate('created_at','<=',$lastmonth)->sum('total');
                     $sales_for_year[$i]['orders'] = Order::where('status','delivered')->where('provider_id',Auth::user()->id)->whereDate('created_at','>=',$month)->whereDate('created_at','<=',$lastmonth)->count('id');
                 }
@@ -138,7 +138,7 @@ class HomeController extends Controller
                 for($i=0 ;$i <=11 ; $i++){
                     $month = Carbon::now()->subMonths($i+1)->toDateString();
                     $lastmonth = Carbon::now()->subMonths($i)->toDateString();
-                    $sales_for_year[$i]['period'] = date('Y-d-M', strtotime($lastmonth));
+                    $sales_for_year[$i]['period'] = date('Y-M-d', strtotime($lastmonth));
                     $sales_for_year[$i]['sales'] = Order::where('status','delivered')->where('center_id',Auth::user()->id)->whereDate('created_at','>=',$month)->whereDate('created_at','<=',$lastmonth)->sum('total');
                     $sales_for_year[$i]['orders'] = Order::where('status','delivered')->where('center_id',Auth::user()->id)->whereDate('created_at','>=',$month)->whereDate('created_at','<=',$lastmonth)->count('id');
                 }
