@@ -440,10 +440,10 @@ body, html {
                                                 <a class='btn btn-primary' href='javascript:void(0);'  style="color: white;">
                                                     {{trans('admin.Choose_Image')}}
             
-                                                    {!! Form::file('image',['class'=>'form-control','id' => 'image_field', 'accept'=>'image/x-png,image/gif,image/jpeg' ,'style'=>'position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;','size'=> '40' ,'onchange' => 'readURL(this,"changeimage");' ]) !!}
+                                                    {!! Form::file('image',['class'=>'form-control','id' => 'images_field', 'accept'=>'image/x-png,image/gif,image/jpeg' ,'style'=>'position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;','size'=> '40' ,'onchange' => 'readURL(this,"changeimages");' ]) !!}
                                                 </a>
                                                 &nbsp;
-                                                <div class='label label-primary' id="upload-file-info" ></div>
+                                                <div class='label label-primary' id="upload-file-infos" ></div>
                                                 <span style="color: red " class="image text-center hidden"></span>
                                             </div>
                                         </div>
@@ -452,7 +452,7 @@ body, html {
                                     <div class="col-md-6">
                                         
                                         @if(Auth::user()->image)
-                                            <img id="changeimage" src="{{asset('img/'.Auth::user()->image)}}" width="100px" height="100px" alt=" {{trans('admin.image')}}" />
+                                            <img id="changeimages" src="{{asset('img/'.Auth::user()->image)}}" width="100px" height="100px" alt=" {{trans('admin.image')}}" />
                                         @else 
                                             <img id="changeimage" src="{{asset('images/default.png')}}" width="100px" height="100px" alt=" {{trans('admin.image')}}" />
                                         @endif
@@ -464,6 +464,7 @@ body, html {
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                 <button class="btn btn-raised btn-primary btn-round waves-effect" type="submit">{{__('admin.edit')}}</button>
                             </li>
+                        </form>
                         </ul>                        
                     </li>
                 </ul>
