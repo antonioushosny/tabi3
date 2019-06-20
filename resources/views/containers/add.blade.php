@@ -63,13 +63,13 @@
                                 </div>
                                 <!-- for desc_ar -->
                                 <div class="form-group form-float">
-                                    <textarea rows="4"  name="desc_ar"  class="form-control no-resize"  placeholder="{{__('admin.placeholder_desc_ar')}}" >  </textarea>
+                                    <textarea rows="4"  name="desc_ar"  class="form-control no-resize"  placeholder="{{__('admin.placeholder_desc_ar')}}" ></textarea>
 
                                     <label id="desc-ar-error" class="error" for="desc_ar" style="">  </label>
                                 </div>
                                 <!-- for desc_en -->
                                 <div class="form-group form-float">
-                                    <textarea rows="4" name="desc_en"  class="form-control no-resize"  placeholder="{{__('admin.placeholder_desc_en')}}" > </textarea>
+                                    <textarea rows="4" name="desc_en"  class="form-control no-resize"  placeholder="{{__('admin.placeholder_desc_en')}}" ></textarea>
 
                                     <label id="desc-en-error" class="error" for="desc_en" style="">  </label>
                                 </div>

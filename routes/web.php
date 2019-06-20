@@ -138,15 +138,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/reports/reportdetail/{id}', 'ReportsController@show')->name('reportdetail');
     
     // routes for settings management
-    Route::get('/settings/aboutUs', 'HomeController@aboutUs')->name('AboutUs');
-    Route::get('/settings/Policy', 'HomeController@policy')->name('Policy');
-    Route::get('/settings/Terms&Conditions', 'HomeController@terms')->name('Terms');
-    Route::get('/settings/add', 'HomeController@add')->name('addsetting');
+    Route::get('/settings/{type}', 'HomeController@settings')->name('settings');
+    Route::get('/settings/add/{type}', 'HomeController@add')->name('addsetting');
     Route::post('/settings/store', 'HomeController@store')->name('storesetting');
-    Route::get('/settings/edit/{id}', 'HomeController@edit')->name('editsetting');
+    Route::get('/settings/edit/{type}/{id}', 'HomeController@edit')->name('editsetting');
     Route::put('/settings/edit/{id}', 'HomeController@editsettings')->name('editsettings');
     Route::get('/settings/delete/{id}', 'HomeController@destroy')->name('destroysetting');
     Route::post('/settings/deleteall', 'HomeController@deleteall')->name('settingsdeleteall');
+    Route::post('/editprofile', 'HomeController@editprofile')->name('editprofile');
     
     Route::get('/token/{token}','HomeController@savetoken')->name('savetoken');
     // routes for notifications management

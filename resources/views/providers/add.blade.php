@@ -79,13 +79,13 @@
                                 </div> -->
                                 <!-- for description -->
                                 <div class="form-group form-float">
-                                    <textarea rows="4"  name="description"  class="form-control no-resize"  placeholder="{{__('admin.placeholder_description')}}" >  </textarea>
+                                    <textarea rows="4"  name="description"  class="form-control no-resize"  placeholder="{{__('admin.placeholder_description')}}" ></textarea>
 
                                     <label id="description-error" class="error" for="description" style="">  </label>
                                 </div>
                                 <!-- for address -->
                                 <div class="form-group form-float">
-                                    <textarea rows="4" name="address"  class="form-control no-resize"  placeholder="{{__('admin.placeholder_address')}}" > </textarea>
+                                    <textarea rows="4" name="address"  class="form-control no-resize"  placeholder="{{__('admin.placeholder_address')}}" ></textarea>
 
                                     <label id="address-error" class="error" for="address" style="">  </label>
                                 </div>

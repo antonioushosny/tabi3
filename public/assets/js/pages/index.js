@@ -6,40 +6,12 @@
 //should be included in all pages. It controls some layout
 $(function() {
     "use strict";    
-    initDonutChart();
     MorrisArea();
+    initDonutChart();
     Jknob();
 });
 
-//======
-function initDonutChart() {
-    Morris.Donut({
-        element: 'donut_chart',
-        data: [{
-                label: 'Chrome',
-                value: 37
-            }, {
-                label: 'Firefox',
-                value: 30
-            }, {
-                label: 'Safari',
-                value: 18
-            }, {
-                label: 'Opera',
-                value: 12
-            },
-            {
-                label: 'Other',
-                value: 3
-            }
-        ],
-        colors: ['#93e3ff', '#b0dd91', '#ffe699', '#f8cbad', '#a4a4a4'],
-        formatter: function(y) {
-            return y + '%'
-        }
-    });
-}
-//======
+
 function MorrisArea() {
     Morris.Area({
         element: 'area_chart',
@@ -94,6 +66,35 @@ function MorrisArea() {
     hideHover: 'auto'
     });
 }
+//======
+function initDonutChart() {
+    Morris.Donut({
+        element: 'donut_chart',
+        data: [{
+                label: 'Chrome',
+                value: 37
+            }, {
+                label: 'Firefox',
+                value: 30
+            }, {
+                label: 'Safari',
+                value: 18
+            }, {
+                label: 'Opera',
+                value: 12
+            },
+            {
+                label: 'Other',
+                value: 3
+            }
+        ],
+        colors: ['#93e3ff', '#b0dd91', '#ffe699', '#f8cbad', '#a4a4a4'],
+        formatter: function(y) {
+            return y + '%'
+        }
+    });
+}
+//======
 //======
 function Jknob() {
     $('.knob').knob({
@@ -258,27 +259,5 @@ $('#linecustom4').sparkline('html',
     minSpotColor: true,
     maxSpotColor: true,
     spotColor: '#e2a8df',
-    spotRadius: 1
-});
-$('#linecustom5').sparkline('html',
-{
-    height: '35px',
-    width: '100%',
-    lineColor: '#c9e3f4',
-    fillColor: '#dfeefa',
-    minSpotColor: true,
-    maxSpotColor: true,
-    spotColor: '#8dbfe0',
-    spotRadius: 1
-});
-$('#linecustom6').sparkline('html',
-{	
-    height: '35px',
-    width: '100%',
-    lineColor: '#efded3',
-    fillColor: '#f8f0ea',
-    minSpotColor: true,
-    maxSpotColor: true,
-    spotColor: '#e0b89d',
     spotRadius: 1
 });

@@ -42,7 +42,7 @@
                             <ul class="header-dropdown">
                                 
                                 </li>
-                                    <a href="{{route('addsetting')}}" class=" add-modal btn btn-success btn-round" title="{{trans('admin.add_setting')}}"> {{trans('admin.add_setting')}} </a>
+                                    <a href="{{route('addsetting',$type)}}" class=" add-modal btn btn-success btn-round" title="{{trans('admin.add_setting')}}"> {{trans('admin.add_setting')}} </a>
                                 </li>
                                 
                                 </li>
@@ -92,7 +92,7 @@
                                         @endif
 
                                         <td>
-                                            <a href="{{route('editsetting',$data->id)}}" class="btn btn-info waves-effect waves-float waves-green btn-round " title="{{trans('admin.edit')}}"><i class="zmdi zmdi-edit"></i></a>
+                                            <a href="{{route('editsetting',[$data->type ,$data->id])}}" class="btn btn-info waves-effect waves-float waves-green btn-round " title="{{trans('admin.edit')}}"><i class="zmdi zmdi-edit"></i></a>
 
                                             <a href="javascript:void(0);" class=" delete-modal btn btn-danger waves-effect waves-float waves-red btn-round " title="{{trans('admin.delete')}}" data-id="{{$data->id}}" ><i class="zmdi zmdi-delete"></i></a>
                                         </td>

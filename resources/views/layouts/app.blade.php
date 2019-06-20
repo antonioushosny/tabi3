@@ -609,15 +609,9 @@
             console.log(jsonObj);
             console.log(payload.data);
             @if($lang == 'ar')
-                
-                   ShowDiv.prepend('<li  style=" float:  right;"><a href="{{ route("home") }}" class="unread">'+jsonObj['0']['ar']+'</a></li>');
-                
-
+                ShowDiv.prepend('<li  style=" float:  right;"><a href="{{ route("home") }}" class="unread">'+jsonObj['0']['ar']+'</a></li>');
             @else
-            
                 ShowDiv.prepend('<li><a href="{{ route("home") }}" class="unread">'+jsonObj['0']['en']+'</a></li>');
-
-            
             @endif
 
 

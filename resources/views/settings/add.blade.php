@@ -20,7 +20,7 @@
                 <ul class="breadcrumb float-md-right">
                 @endif
                     <li class="breadcrumb-item active"><a href="{{route('home')}}"><i class="zmdi zmdi-home"></i>{{__('admin.dashboard')}}</a></li>
-                    <li class="breadcrumb-item"><a href="{{route('AboutUs')}}"><i class="zmdi zmdi-accounts-add"></i> {{__('admin.settings')}}</a></li>
+                    <li class="breadcrumb-item"><a href="{{route('settings',$type)}}"><i class="zmdi zmdi-accounts-add"></i> {{__('admin.settings')}}</a></li>
                     <li class="breadcrumb-item "><a href="javascript:void(0);">{{__('admin.add_setting')}}</a></li>
                     
                 </ul>
@@ -42,39 +42,58 @@
                             
                         </div>
                         <div class="body">
-                            {!! Form::open(['route'=>['AboutUs'],'method'=>'post','autocomplete'=>'off', 'id'=>'form_validation', 'enctype'=>'multipart/form-data' ])!!} 
+                            {!! Form::open(['route'=>['storesetting'],'method'=>'post','autocomplete'=>'off', 'id'=>'form_validation', 'enctype'=>'multipart/form-data' ])!!} 
 
-                               
-                                <!-- for title_ar -->
-                                <div class="form-group form-float">
-                                    <input type="text" class="form-control" placeholder="{{__('admin.placeholder_title_ar')}}" name="title_ar" required>
-                                    <label id="name-ar-error" class="error" for="title_ar" style="">  </label>
+                                <div class="row">
+                                    <div class="col-md-1">{{ __('admin.title_ar') }}</div>
+                                    <div class="col-md-5">
+                                        <!-- for title_ar -->
+                                        <div class="form-group form-float">
+                                            <input type="text" value="{{ !isset($data->title_ar)?'':$data->title_ar }}" class="form-control" placeholder="{{__('admin.placeholder_title_ar')}}" name="title_ar" required>
+                                            <label id="name-ar-error" class="error" for="title_ar" style="">  </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">{{ __('admin.title_en') }}</div>
+                                    <div class="col-md-5">
+                                        <!-- for title_en -->
+                                        <div class="form-group form-float">
+                                            <input type="text" value="{{ !isset($data->title_en)?null:$data->title_en }}"  class="form-control" placeholder="{{__('admin.placeholder_title_en')}}" name="title_en" required>
+                                            <label id="name-en-error" class="error" for="title_en" style="">  </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">{{ __('admin.desc_ar') }}</div>
+                                    <div class="col-md-5">
+                                        <!-- for desc_ar -->
+                                        <div class="form-group form-float">
+                                            <textarea rows="4"  name="desc_ar"  class="form-control no-resize"  placeholder="{{__('admin.placeholder_desc_ar')}}" >{{ !isset($data->title_en)?null:$data->title_en }}</textarea>
+        
+                                            <label id="desc-ar-error" class="error" for="desc_ar" style="">  </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">{{ __('admin.desc_en') }}</div>
+                                    <div class="col-md-5">
+                                        <!-- for desc_en -->
+                                        <div class="form-group form-float">
+                                            <textarea rows="4" name="desc_en"  class="form-control no-resize"  placeholder="{{__('admin.placeholder_desc_en')}}" >{{ !isset($data->title_en)?null:$data->title_en }}</textarea>
+        
+                                            <label id="desc-en-error" class="error" for="desc_en" style="">  </label>
+                                        </div>
+                                    </div>
                                 </div>
-                                <!-- for title_en -->
-                                <div class="form-group form-float">
-                                    <input type="text" class="form-control" placeholder="{{__('admin.placeholder_title_en')}}" name="title_en" required>
-                                    <label id="name-en-error" class="error" for="title_en" style="">  </label>
-                                </div>
+                                
                                 <!-- for type -->
                                 <div class= "form-group form-float">
-                                    {!! Form::hidden('type','',['class'=>'form-control show-tick']) !!}
+                                    {!! Form::hidden('type',$type,['class'=>'form-control show-tick']) !!}
                                     <label id="type-error" class="error" for="type" style="">  </label>
                                 </div>
-                                <!-- for desc_ar -->
-                                <div class="form-group form-float">
-                                    <textarea rows="4"  name="desc_ar"  class="form-control no-resize"  placeholder="{{__('admin.placeholder_desc_ar')}}" >  </textarea>
 
-                                    <label id="desc-ar-error" class="error" for="desc_ar" style="">  </label>
+                                <!-- for id -->
+                                <div class= "form-group form-float">
+                                    {!! Form::hidden('id',!isset($data->id)?null:$data->id ,['class'=>'form-control show-tick']) !!}
                                 </div>
-                                <!-- for desc_en -->
-                                <div class="form-group form-float">
-                                    <textarea rows="4" name="desc_en"  class="form-control no-resize"  placeholder="{{__('admin.placeholder_desc_en')}}" > </textarea>
 
-                                    <label id="desc-en-error" class="error" for="desc_en" style="">  </label>
-                                </div>
                                 <!-- for image  -->
-                                <div class="form-group form-float row"  >
-                                    {{--  for image  --}}
+                                {{--  <div class="form-group form-float row"  >
                                     <div class= "col-md-2 col-xs-3">
                                         <div class="form-group form-float  " >
                                             <div style="position:relative; ">
@@ -94,19 +113,20 @@
                                         
                                         <img id="changeimage" src="{{asset('images/default.png')}}" width="100px" height="100px" alt=" {{trans('admin.image')}}" />
                                     </div>
-                                </div>
+                                </div>  --}}
+                                
                                 <div class="form-group">
                                     <div class="radio inlineblock m-r-20">
-                                        <input type="radio" name="status" id="active" class="with-gap" value="active" checked="">
+                                        <input type="radio" name="status" id="active" class="with-gap" value="active" checked > 
                                         <label for="active">{{__('admin.active')}}</label>
-                                    </div>                                
+                                    </div>                                 
                                     <div class="radio inlineblock">
-                                        <input type="radio" name="status" id="not_active" class="with-gap" value="not_active"  >
+                                        <input type="radio" name="status" id="not_active" class="with-gap" value="not_active" <?php echo ( isset($data->status) && $data->status == 'not_active') ? "checked=''" : ""; ?> >
                                         <label for="not_active">{{__('admin.not_active')}}</label>
                                     </div>
                                 </div>
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                <button class="btn btn-raised btn-primary btn-round waves-effect" type="submit">{{__('admin.add')}}</button>
+                                <button class="btn btn-raised btn-primary btn-round waves-effect" type="submit">{{__('admin.save')}}</button>
                             </form>
                         </div>
                 </div>
@@ -157,7 +177,7 @@
                             $('#image-error').text(data.errors.image);
                         }
                   } else {
-                        window.location.replace("{{route('AboutUs')}}");
+                        window.location.replace("{{route('settings',$type)}}");
 
                      }
             },

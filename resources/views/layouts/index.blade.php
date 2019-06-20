@@ -69,6 +69,12 @@
         right: 8px;
         width: 17px;
     }
+    .notificationimage{
+        max-width: 25%;
+    }
+    .unread{
+        background-color: #dedede;
+    }
 </style>
 <!-- Custom Css -->
 @if($lang=='ar')
@@ -96,7 +102,7 @@ body, html {
 <div class="page-loader-wrapper">
     <div class="loader">
         <div class="m-t-30"><img class="zmdi-hc-spin" src="{{ asset('images/logo_0.png') }}" width="48" height="48" alt="Khazan"></div>
-        <p>{{__('admin.Please wait')}}...</p>        
+        <p>{{__('admin.Please_wait')}}...</p>        
     </div>
 </div>
 <!-- Overlay For Sidebars -->
@@ -121,70 +127,48 @@ body, html {
         <!-- <li class="hidden-md-down"><a href="events.html" title="Events"><i class="zmdi zmdi-calendar"></i></a></li> -->
         <!-- <li class="hidden-md-down"><a href="mail-inbox.html" title="Inbox"><i class="zmdi zmdi-email"></i></a></li> -->
         <!-- <li><a href="contact.html" title="Contact List"><i class="zmdi zmdi-account-box-phone"></i></a></li> -->
-        <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button"><i class="zmdi zmdi-notifications"></i>
-            <div class="notify"><span class="heartbit"></span><span class="point"></span></div>
+        <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle notificaiton" data-toggle="dropdown" role="button" ><i class="zmdi zmdi-notifications"></i>
+            <div class="notify"><span class="heartbit" style="color:black;"></span><span class="point"></span></div>
             </a>
             <ul class="dropdown-menu pullDown">
                 <li class="body">
-                    <ul class="menu list-unstyled">
-                        <li>
-                            <a href="javascript:void(0);">
-                                <div class="media">
-                                    <img class="media-object" src="{{ asset('assets/images/xs/avatar2.jpg') }}" alt="">
-                                    <div class="media-body">
-                                        <span class="name">Sophia <span class="time">30min ago</span></span>
-                                        <span class="message">There are many variations of passages</span>                                        
+                    <ul class="menu list-unstyled " id="showNofication">
+                        @if(sizeof(Auth()->user()->notifications) > 0)
+                            @foreach(Auth()->user()->notifications as $note)
+                                {{--  <li>
+                                    <a href=" {{ route('home') }}" class="{{ $note->read_at == null ? 'unread' : '' }}">
+                                            {!! $note->data['data'] !!}
+                                    </a>                                      
+                                </li>  --}}
+                                <li>
+                                    <a href="javascript:void(0);"  class="{{ $note->read_at == null ? 'unread' : '' }}">
+                                        <div class="media">
+                                            <img class="media-object notificationimage" src="{{ asset('assets/images/logo.png') }}" alt="">
+                                            <div class="media-body">
+                                                <span class="name"> <span class="time"> {!! $note->created_at  !!} </span></span><br>
+                                                <span class="message"> {!! $note->data['data']  !!}   </span>                                        
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                            @endforeach
+                        @else 
+
+                            <li>
+                                <a href="javascript:void(0);">
+                                    <div class="media">
+                                        <img class="media-object notificationimage" src="{{ asset('assets/images/logo.png') }}" alt="">
+                                        <div class="media-body">
+                                            {{--  <span class="name">Sophia <span class="time"> </span></span>  --}}
+                                            <span class="message">{{__('admin.no_notification_found')}}</span>                                        
+                                        </div>
                                     </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);">
-                                <div class="media">
-                                    <img class="media-object" src="{{ asset('assets/images/xs/avatar3.jpg') }}" alt="">
-                                    <div class="media-body">
-                                        <span class="name">Sophia <span class="time">31min ago</span></span>
-                                        <span class="message">There are many variations of passages of Lorem Ipsum</span>                                        
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);">
-                                <div class="media">
-                                    <img class="media-object" src="{{ asset('assets/images/xs/avatar4.jpg') }}" alt="">
-                                    <div class="media-body">
-                                        <span class="name">Isabella <span class="time">35min ago</span></span>
-                                        <span class="message">There are many variations of passages</span>                                        
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);">
-                                <div class="media">
-                                    <img class="media-object" src="{{ asset('assets/images/xs/avatar5.jpg') }}" alt="">
-                                    <div class="media-body">
-                                        <span class="name">Alexander <span class="time">35min ago</span></span>
-                                        <span class="message">Contrary to popular belief, Lorem Ipsum random</span>                                        
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);">
-                                <div class="media">
-                                    <img class="media-object" src="{{ asset('assets/images/xs/avatar6.jpg') }}" alt="">
-                                    <div class="media-body">
-                                        <span class="name">Grayson <span class="time">1hr ago</span></span>
-                                        <span class="message">There are many variations of passages</span>                                        
-                                    </div>
-                                </div>
-                            </a>
-                        </li>                        
+                                </a>
+                            </li>               
+                        @endif
                     </ul>
                 </li>
-                <li class="footer"> <a href="javascript:void(0);">View All</a> </li>
+                {{--  <li class="footer"> <a href="javascript:void(0);">View All</a> </li>  --}}
             </ul>
         </li>
         <!-- <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button"><i class="zmdi zmdi-flag"></i>
@@ -303,8 +287,8 @@ body, html {
 <!-- Left Sidebar -->
 <aside id="leftsidebar" class="sidebar">
     <ul class="nav nav-tabs">
-        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#dashboard"><i class="zmdi zmdi-home m-r-5"></i>Khazan</a></li>
-        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#user"><i class="zmdi zmdi-account m-r-5"></i>User</a></li>
+        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#dashboard"><i class="zmdi zmdi-home m-r-5"></i>{{__('Khazan')}} </a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#user"><i class="zmdi zmdi-account m-r-5"></i> {{Auth::user()->name}} </a></li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane stretchRight active" id="dashboard">
@@ -312,14 +296,18 @@ body, html {
                 <ul class="list">
                     <li>
                         <div class="user-info">
-                            <div class="image"><a href="profile.html"><img src="{{ asset('assets/images/profile_av.jpg') }}" alt="User"></a></div>
+                            @if(Auth::user()->image != '' || Auth::user()->image != null)
+                                <div class="image"><a href="javascript:void(0);"><img src="{{ asset('img/'.Auth::user()->image) }}" alt="{{Auth::user()->name}}"></a></div>
+                            @else 
+                                <div class="image"><a href="javascript:void(0);"><img src="{{ asset('assets/images/profile_av.jpg') }}" alt="{{Auth::user()->name}}"></a></div>
+                            @endif
                             <div class="detail">
-                                <h4>Michael</h4>
-                                <small>UI UX Designer</small>                        
+                                <h4>{{Auth::user()->name}}</h4>
+                                @if(Auth::user()->role == 'provider')
+                                <small>{{Auth::user()->company_name}}</small>  
+                                @endif
+                                <small>{{Auth::user()->email}}</small>  
                             </div>
-                            <a title="facebook" href="#"><i class="zmdi zmdi-facebook"></i></a>
-                            <a title="twitter" href="#"><i class="zmdi zmdi-twitter"></i></a>
-                            <a title="instagram" href="#"><i class="zmdi zmdi-instagram"></i></a>                            
                         </div>
                     </li>
                     <!-- <li class="header">MAIN</li> -->
@@ -328,17 +316,17 @@ body, html {
 
                     <li <?php echo ($page == 'admins') ? "class='active open'" : ""; ?> ><a href="{{ route('admins') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.admins')}}</span></a></li>
 
-                    <li <?php echo ($page == 'cities') ? "class='active open'" : ""; ?> ><a href="{{ route('cities') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.cities')}}</span></a></li>
+                    <li <?php echo ($page == 'cities') ? "class='active open'" : ""; ?> ><a href="{{ route('cities') }}"  ><i class="zmdi zmdi-flag"></i> <span> {{trans('admin.cities')}}</span></a></li>
 
-                    <li <?php echo ($page == 'areas') ? "class='active open'" : ""; ?> ><a href="{{ route('areas') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.areas')}}</span></a></li>
+                    <li <?php echo ($page == 'areas') ? "class='active open'" : ""; ?> ><a href="{{ route('areas') }}"  ><i class="zmdi zmdi-pin"></i> <span> {{trans('admin.areas')}}</span></a></li>
 
-                    <li <?php echo ($page == 'containers') ? "class='active open'" : ""; ?> ><a href="{{ route('containers') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.containers')}}</span></a></li>
+                    <li <?php echo ($page == 'containers') ? "class='active open'" : ""; ?> ><a href="{{ route('containers') }}"  ><i class="zmdi zmdi-local-drink"></i> <span> {{trans('admin.containers')}}</span></a></li>
 
                     <li <?php echo ($page == 'providers') ? "class='active open'" : ""; ?> ><a href="{{ route('providers') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.providers')}}</span></a></li>
                     @endif
                     
                     @if(Auth::user()->role == 'admin' || Auth::user()->role == 'provider')
-                    <li <?php echo ($page == 'centers') ? "class='active open'" : ""; ?> ><a href="{{ route('centers') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.centers')}}</span></a></li>
+                    <li <?php echo ($page == 'centers') ? "class='active open'" : ""; ?> ><a href="{{ route('centers') }}"  ><i class="zmdi zmdi-truck"></i> <span> {{trans('admin.centers')}}</span></a></li>
                     @endif
 
                     <li <?php echo ($page == 'drivers') ? "class='active open'" : ""; ?> ><a href="{{ route('drivers') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.drivers')}}</span></a></li>
@@ -360,17 +348,17 @@ body, html {
                     @endif
                    
                     @if(Auth::user()->role == 'admin')
-                    <li <?php echo ($page == 'users') ? "class='active open'" : ""; ?> ><a href="{{ route('users') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.users')}}</span></a></li>
+                    <li <?php echo ($page == 'users') ? "class='active open'" : ""; ?> ><a href="{{ route('users') }}"  ><i class="zmdi zmdi-accounts"></i> <span> {{trans('admin.users')}}</span></a></li>
 
-                    <li <?php echo ($page == 'contacts') ? "class='active open'" : ""; ?> ><a href="{{ route('contacts') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.contacts')}}</span></a></li>
+                    <li <?php echo ($page == 'contacts') ? "class='active open'" : ""; ?> ><a href="{{ route('contacts') }}"  ><i class="zmdi zmdi-email"></i> <span> {{trans('admin.contacts')}}</span></a></li>
                    
-                    <li <?php echo ($page == 'AboutUs' || $page == 'Terms' || $page == 'Policy') ? "class='active open'" : ""; ?> > <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-apps"></i><span>{{trans('admin.settings')}}</span> </a>
+                    <li <?php echo ($page == 'AboutUs' || $page == 'Terms' || $page == 'Policy') ? "class='active open'" : ""; ?> > <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-settings"></i><span>{{trans('admin.settings')}}</span> </a>
                         <ul class="ml-menu">
-                            <li <?php echo ($page == 'AboutUs') ? "class='active open'" : ""; ?> ><a href="{{ route('AboutUs') }}"  > <span> {{trans('admin.AboutUs')}}</span></a></li>
+                            <li <?php echo ($page == 'AboutUs') ? "class='active open'" : ""; ?> ><a href="{{ route('settings','about') }}"  > <span> {{trans('admin.AboutUs')}}</span></a></li>
 
-                            <li <?php echo ($page == 'Terms') ? "class='active open'" : ""; ?> ><a href="{{ route('Terms') }}"  > <span> {{trans('admin.Terms')}}</span></a></li>
+                            <li <?php echo ($page == 'Terms') ? "class='active open'" : ""; ?> ><a href="{{ route('settings','term') }}"  > <span> {{trans('admin.Terms')}}</span></a></li>
 
-                            <li <?php echo ($page == 'Policy') ? "class='active open'" : ""; ?> ><a href="{{ route('Policy') }}"  > <span> {{trans('admin.Policy')}}</span></a></li>
+                            <li <?php echo ($page == 'Policy') ? "class='active open'" : ""; ?> ><a href="{{ route('settings','policy') }}"  > <span> {{trans('admin.Policy')}}</span></a></li>
                         </ul>
                     </li> 
                     @endif
@@ -380,7 +368,6 @@ body, html {
                             <li <?php echo ($page == 'reports') ? "class='active open'" : ""; ?> ><a href="{{ route('reports') }}"  > <span> {{trans('admin.reports')}}</span></a></li>
                         </ul>
                     </li> 
-
                     
                 </ul>
             </div>
@@ -390,62 +377,92 @@ body, html {
                 <ul class="list">
                     <li>
                         <div class="user-info m-b-20 p-b-15">
-                            <div class="image"><a href="profile.html"><img src="{{ asset('assets/images/profile_av.jpg') }}" alt="User"></a></div>
+                            @if(Auth::user()->image != '' || Auth::user()->image != null)
+                                <div class="image"><a href="javascript:void(0);"><img src="{{ asset('img/'.Auth::user()->image) }}" alt="{{Auth::user()->name}}"></a></div>
+                            @else 
+                                <div class="image"><a href="javascript:void(0);"><img src="{{ asset('assets/images/profile_av.jpg') }}" alt="{{Auth::user()->name}}"></a></div>
+                            @endif
                             <div class="detail">
-                                <h4>Michael</h4>
-                                <small>UI UX Designer</small>                        
-                            </div>
-                            <a title="facebook" href="#"><i class="zmdi zmdi-facebook"></i></a>
-                            <a title="twitter" href="#"><i class="zmdi zmdi-twitter"></i></a>
-                            <a title="instagram" href="#"><i class="zmdi zmdi-instagram"></i></a>
-                            <p class="text-muted">795 Folsom Ave, Suite 600 San Francisco, CADGE 94107</p>
-                            <div class="row">
-                                <div class="col-4">
-                                    <h5 class="m-b-5">852</h5>
-                                    <small>Following</small>
-                                </div>
-                                <div class="col-4">
-                                    <h5 class="m-b-5">13k</h5>
-                                    <small>Followers</small>
-                                </div>
-                                <div class="col-4">
-                                    <h5 class="m-b-5">234</h5>
-                                    <small>Post</small>
-                                </div>                            
+                                <h4>{{Auth::user()->name}}</h4>
+                                @if(Auth::user()->role == 'provider')
+                                <small>{{Auth::user()->company_name}}</small>  
+                                @endif
+                                <small>{{Auth::user()->email}}</small>  
+                                             
+                                @if(Auth::user()->role == 'provider')
+                                <p class="text-muted">{{Auth::user()->address}}</p>
+                                @endif
+                            
                             </div>
                         </div>
                     </li>
                     <li>
-                        <small class="text-muted">Email address: </small>
-                        <p>michael@gmail.com</p>
+                        <small class="text-muted">{{__('admin.Email_address')}}: </small>
+                        <p>{{Auth::user()->email}}</p>
                         <hr>
-                        <small class="text-muted">Phone: </small>
-                        <p>+ 202-555-0191</p>
+                        <small class="text-muted">{{__('admin.Phone')}}: </small>
+                        <p>{{Auth::user()->mobile}}</p>
                         <hr>
                         <ul class="list-unstyled">
+                            {!! Form::open(['route'=>['editprofile'],'method'=>'post','autocomplete'=>'off', 'enctype'=>'multipart/form-data' ])!!} 
+
                             <li>
-                                <div>Photoshop</div>
-                                <div class="progress m-b-20">
-                                    <div class="progress-bar l-blue " role="progressbar" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100" style="width: 89%"> <span class="sr-only">62% Complete</span> </div>
+                                <input type="hidden" value="{{Auth::user()->id}}" name="id" required>
+                            </li>
+                            <li>
+                                <div>{{__('admin.email')}}</div>
+                                <div class="m-t-10 m-b-20">
+                                    <input type="email" value="{{Auth::user()->email}}" class="form-control" placeholder="{{__('admin.placeholder_email')}}" name="email" autocomplete="off" >
+                                    <label id="email-error" class="error" for="email" style=""></label>
                                 </div>
                             </li>
                             <li>
-                                <div>Wordpress</div>
-                                <div class="progress m-b-20">
-                                    <div class="progress-bar l-green " role="progressbar" aria-valuenow="56" aria-valuemin="0" aria-valuemax="100" style="width: 56%"> <span class="sr-only">87% Complete</span> </div>
+                                <div>{{__('admin.mobile')}}</div>
+                                <div class="m-t-10 m-b-20">
+                                    <input type="text" value="{{Auth::user()->mobile}}" class="form-control" placeholder="{{__('admin.mobile')}}" name="mobile" >
+                                    <label id="mobile-error" class="error" for="mobile" style="">  </label>
                                 </div>
                             </li>
                             <li>
-                                <div>HTML 5</div>
-                                <div class="progress m-b-20">
-                                    <div class="progress-bar l-amber" role="progressbar" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100" style="width: 78%"> <span class="sr-only">32% Complete</span> </div>
+                                <div>{{__('admin.password')}}</div>
+                                <div class="m-t-10 m-b-20">
+                                    <input type="password"  class="form-control" placeholder="{{__('admin.placeholder_password')}}" name="password"  autocomplete="new-password">
+                                    <label id="password-error" class="error" for="password" style=""></label>
                                 </div>
                             </li>
                             <li>
-                                <div>Angular</div>
-                                <div class="progress m-b-20">
-                                    <div class="progress-bar l-blush" role="progressbar" aria-valuenow="43" aria-valuemin="0" aria-valuemax="100" style="width: 43%"> <span class="sr-only">56% Complete</span> </div>
+                                <div>{{__('admin.image')}}</div>
+                                <div class="form-group form-float row" >
+                                    {{--  for image  --}}
+                                    <div class= "col-md-6 col-xs-3">
+                                        <div class="form-group form-float  " >
+                                            <div style="position:relative; ">
+                                                <a class='btn btn-primary' href='javascript:void(0);'  style="color: white;">
+                                                    {{trans('admin.Choose_Image')}}
+            
+                                                    {!! Form::file('image',['class'=>'form-control','id' => 'image_field', 'accept'=>'image/x-png,image/gif,image/jpeg' ,'style'=>'position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;','size'=> '40' ,'onchange' => 'readURL(this,"changeimage");' ]) !!}
+                                                </a>
+                                                &nbsp;
+                                                <div class='label label-primary' id="upload-file-info" ></div>
+                                                <span style="color: red " class="image text-center hidden"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        
+                                        @if(Auth::user()->image)
+                                            <img id="changeimage" src="{{asset('img/'.Auth::user()->image)}}" width="100px" height="100px" alt=" {{trans('admin.image')}}" />
+                                        @else 
+                                            <img id="changeimage" src="{{asset('images/default.png')}}" width="100px" height="100px" alt=" {{trans('admin.image')}}" />
+                                        @endif
+                                    </div>
                                 </div>
+
+                            </li>
+                            <li> 
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                <button class="btn btn-raised btn-primary btn-round waves-effect" type="submit">{{__('admin.edit')}}</button>
                             </li>
                         </ul>                        
                     </li>
@@ -516,7 +533,17 @@ body, html {
             reader.readAsDataURL(input.files[0]);
         }
     }
-   
+    var message, ShowDiv = $('#showNofication'), count = $('#count'), c;
+
+    $('.notificaiton').on('click' , function(){
+        setTimeout( function(){
+            count.html(0);
+            $('.unread').each(function(){
+                $(this).removeClass('unread');
+            });
+        }, 5000);
+        $.get( "{{route('MarkAllSeen') }}" , function(){});
+    });
 </script> 
 @yield('script')
 
@@ -532,7 +559,78 @@ body, html {
             ],   
         });
 </script>
+<script src="https://www.gstatic.com/firebasejs/5.5.5/firebase.js"></script>
+<script>
 
+    // Initialize Firebase
+    // TODO: Replace with your project's customized code snippet
+    var config = {
+        apiKey: "AIzaSyAPA5a0FBYt87i0AJMitg0fC3T3C4Vj_qs",
+        authDomain: "joud-129d5.firebaseapp.com",
+        databaseURL: "https://joud-129d5.firebaseio.com",
+        projectId: "joud-129d5",
+        storageBucket: "joud-129d5.appspot.com",
+        messagingSenderId: "324063917940"
+    };
+    firebase.initializeApp(config);
+    const messaging = firebase.messaging();
+    messaging
+        .requestPermission()
+        .then(function () {
+            // get the token in the form of promise
+            return messaging.getToken()
+        })
+        .then(function(token) {
+                console.log("token is : " + token);  
+            if(token){
+                $.ajax({
+                    url: "<?php echo url('/')?>/token/"+token,
+                    success: data => {
+                    }
+                })
+            }
+        })
+        .catch(function (err) {
+            console.log("Unable to get permission to notify.", err);
+        });
+    messaging.onMessage(function(payload) {
+        var jsonObj = $.parseJSON('[' + payload.data.message + ']');
+        {{-- var jsonObj1 = $.parseJSON('[' + payload.data + ']'); --}}
+        {{--  console.log("Message received. ", payload);  --}}
+        c = parseInt(count.html());
+        count.html(c+1);
+        console.log(jsonObj);
+        console.log(payload.data);
+        @if($lang == 'ar')
+            ShowDiv.prepend('<li>
+                                <a href="javascript:void(0);"  class="unread">
+                                    <div class="media">
+                                        <img class="media-object notificationimage" src="{{ asset('assets/images/logo.png') }}" alt="">
+                                        <div class="media-body">
+                                            <span class="name"> <span class="time">30min ago</span></span>
+                                            <span class="message">'+jsonObj['0']['ar']+' </span>                                        
+                                        </div>
+                                    </div>
+                                </a>
+                            </li> ');
+        @else
+            ShowDiv.prepend('<li>
+                                <a href="javascript:void(0);"  class="unread">
+                                    <div class="media">
+                                        <img class="media-object notificationimage" src="{{ asset('assets/images/logo.png') }}" alt="">
+                                        <div class="media-body">
+                                            <span class="name"> <span class="time">30min ago</span></span>
+                                            <span class="message">'+jsonObj['0']['ar']+' </span>                                        
+                                        </div>
+                                    </div>
+                                </a>
+                            </li> ');
+        @endif
+
+
+    });
+
+</script>
 
 </body>
 </html>
