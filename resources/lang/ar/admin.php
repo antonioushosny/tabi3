@@ -154,8 +154,8 @@ return [
         'placeholder_title_ar'          =>' ادخل العنوان بالعربية' ,
         'placeholder_title_en'          =>'ادخل العنوان باللغة الانجليزية ' ,
         'placeholder_disc'              =>'ادخل الوصف  ' ,
-        'placeholder_disc_ar'           =>'ادخل الوصف باللغة بالعربية ' ,
-        'placeholder_disc_en'           =>'ادخل الوصف باللغة الانجليزية ' ,
+        'placeholder_desc_ar'           =>'ادخل الوصف باللغة بالعربية ' ,
+        'placeholder_desc_en'           =>'ادخل الوصف باللغة الانجليزية ' ,
         'placeholder_address'           =>'ادخل العنوان ',
         'placeholder_stage'             => ' اختر  المرحلة',
         'placeholder_level'             => 'ادخل المستوي  ',
@@ -171,6 +171,8 @@ return [
         'placeholder_price'              => ' ادخل السعر  ',
         'placeholder_sale'              => ' ادخل سعر المنتج بعد التخفيض ',
         'placeholder_national_id'       => ' ادخل الرقم القومي   ',
+        'Search_Box'                    => 'بحث',
+        'Please_wait'                    => 'انتظر من فضلك' ,
     //end placeholders
 
     //admin page
@@ -229,6 +231,10 @@ return [
         'add_container'                    => ' اضافة خزان'  ,
         'edit_container'                   => '  تعديل خزان'  ,
         'delete_container'                 =>  '  حذف خزان ',
+        'no_containers'             => '',
+        'container_name'             => '',
+        'usermobile'             => '',
+        'filter'             => '',
     //end containers page
 
      //providers page 
@@ -313,12 +319,12 @@ return [
         'date_to'      => 'الي تاريخ ',
         'choose_status' => 'اختر الحالة ' ,
         'all' => 'الكل ' ,
-        'SAR'   => '',
-        'This_Month_Sales'   => '',
-        'This_Year_Sales'   => '',
-        'This_Week_Sales'   => '',
-        'Today_Sales'   => '',
-        'sales'   => '',
+        'SAR'   => 'ريال',
+        'This_Month_Sales'   => "مبيعات هذا الشهر",
+        'This_Year_Sales'   => "مبيعات هذا العام",
+        'This_Week_Sales'   => "مبيعات هذا الأسبوع",
+        'Today_Sales'   => "مبيعات اليوم",
+        'sales'   => 'مبيعات',
     //end orders page
 
     // advertisements page 
@@ -388,6 +394,11 @@ return [
         'no_elemnet_selected' => 'لا توجد عناصر محددة',
         'error'               => 'خطأ',
     //end alerts 
-  
+
+    //settigs and static pages  
+        'AboutUs'  =>' من نحن' ,
+        'Terms'  =>' البنود ' ,
+        'Policy'  =>' سياسة الخصوصية' ,
+    //end settigs and static pages  
 
 ];

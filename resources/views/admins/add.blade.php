@@ -48,11 +48,11 @@
                                     <label id="name-error" class="error" for="name" style="">  </label>
                                 </div>
                                 <div class="form-group form-float">
-                                    <input type="email" class="form-control" placeholder="{{__('admin.placeholder_email')}}" name="email" autocomplete="off" required>
+                                    <input type="email" class="form-control" placeholder="{{ __('admin.placeholder_email')}}" name="email" autocomplete="username email"  required>
                                     <label id="email-error" class="error" for="email" style=""></label>
                                 </div>
                                 <div class="form-group form-float">
-                                    <input type="password"  class="form-control" placeholder="{{__('admin.placeholder_password')}}" name="password" required autocomplete="new-password">
+                                    <input type="password"  class="form-control" placeholder="{{__('admin.placeholder_password')}}" name="password" required  autocomplete="new-password" >
                                     <label id="password-error" class="error" for="password" style=""></label>
                                 </div>
                                

@@ -147,8 +147,8 @@ return [
         'placeholder_location'          => 'Please Enter Location ',
         'placeholder_title_ar'          => 'Enter Arabic Title ' ,
         'placeholder_title_en'          => 'Enter English Title ' ,
-        'placeholder_disc_ar'           => 'Enter Arabic Discription ' ,
-        'placeholder_disc_en'           => 'Enter English Discription ' ,
+        'placeholder_desc_ar'           => 'Enter Arabic Discription ' ,
+        'placeholder_desc_en'           => 'Enter English Discription ' ,
         'placeholder_address'           => ' Enter Address ',
         'placeholder_stage'             => ' Choose Stage ',
         'placeholder_level'             => ' Enter Level ',
@@ -161,7 +161,8 @@ return [
         'placeholder_title'             => 'Enter Title ',
         'placeholder_message'           => 'Enter Message ',
         'placeholder_cost'              => 'Enter Course Cost ',
-
+        'Search_Box'                    => 'Search Box',
+        'Please_wait'                    => 'Please Wait',
     //end placeholders
     
     //admin page
@@ -299,7 +300,12 @@ return [
         'date_to'      => 'To Date',
         'choose_status' => ' Choose Status ' ,
         'all' => 'All ' ,
-
+        'SAR'   => 'SAR',
+        'This_Month_Sales'   => "This Month's Sales",
+        'This_Year_Sales'   => "This Year's Sales",
+        'This_Week_Sales'   => "This Week's Sales",
+        'Today_Sales'   => "Today's Sales",
+        'sales'   => 'Sales',
     //end orders page
  
     // advertisements page 
@@ -362,4 +368,10 @@ return [
         'no_elemnet_selected' => 'No elements selected ',
         'error'               => 'Error',
     //end alerts 
+
+    //settigs and static pages  
+        'AboutUs'  =>' About Us' ,
+        'Terms'  =>' Terms & Conditions' ,
+        'Policy'  =>' Policy' ,
+    //end settigs and static pages  
 ];

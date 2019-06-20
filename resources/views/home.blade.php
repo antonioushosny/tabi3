@@ -113,19 +113,19 @@
                     <div class="body">
                         <div class="row text-center">
                             <div class="col-sm-3 col-6">
-                                <h4 class="margin-0">{{__('admin.SAR')}} {{$this_day}} <i class="zmdi zmdi-trending-up col-green"></i></h4>
+                                <h4 class="margin-0"> {{$this_day}} {{ __('admin.SAR') }}<i class="zmdi zmdi-trending-up col-green"></i></h4>
                                 <p class="text-muted"> {{__('admin.Today_Sales')}}</p>
                             </div>
                             <div class="col-sm-3 col-6">
-                                <h4 class="margin-0">{{__('admin.SAR')}} {{$this_week}}  <i class="zmdi zmdi-trending-up col-green"></i></h4>
+                                <h4 class="margin-0"> {{$this_week}} {{ __('admin.SAR') }} <i class="zmdi zmdi-trending-up col-green"></i></h4>
                                 <p class="text-muted">{{__('admin.This_Week_Sales')}}</p>
                             </div>
                             <div class="col-sm-3 col-6">
-                                <h4 class="margin-0">{{__('admin.SAR')}} {{$this_month}} <i class="zmdi zmdi-trending-up col-green"></i></h4>
+                                <h4 class="margin-0"> {{$this_month}} {{ __('admin.SAR') }}<i class="zmdi zmdi-trending-up col-green"></i></h4>
                                 <p class="text-muted">{{__('admin.This_Month_Sales')}}</p>
                             </div>
                             <div class="col-sm-3 col-6">
-                                <h4 class="margin-0">{{__('admin.SAR')}} {{$this_year}} <i class="zmdi zmdi-trending-up col-green"></i></h4>
+                                <h4 class="margin-0"> {{$this_year}} {{ __('admin.SAR') }}<i class="zmdi zmdi-trending-up col-green"></i></h4>
                                 <p class="text-muted">{{__('admin.This_Year_Sales')}}</p>
                             </div>
                         </div>
