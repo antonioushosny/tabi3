@@ -231,10 +231,10 @@ return [
         'add_container'                    => ' اضافة خزان'  ,
         'edit_container'                   => '  تعديل خزان'  ,
         'delete_container'                 =>  '  حذف خزان ',
-        'no_containers'             => '',
-        'container_name'             => '',
-        'usermobile'             => '',
-        'filter'             => '',
+        'no_containers'             => 'عدد الخزانات',
+        'container_name'             => 'اسم الخزان',
+        'usermobile'             => 'رقم العميل',
+        'filter'             => 'تصفية',
     //end containers page
 
      //providers page 

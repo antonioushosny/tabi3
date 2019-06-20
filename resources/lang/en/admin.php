@@ -195,6 +195,7 @@ return [
         'add_countrie'                    => ' Add country'  ,
         'edit_countrie'                   => '  Edit country'  ,
         'delete_countrie'                 =>  '  Delete country',
+        
     //end countries page
 
     //cities page 
@@ -219,6 +220,10 @@ return [
         'add_container'                    => ' Add Container'  ,
         'edit_container'                   => ' Edit Container'  ,
         'delete_container'                 =>  ' Delete Container'  ,
+        'no_containers'             => 'Num Container',
+        'container_name'             => 'Container Name',
+        'usermobile'             => 'User Mobile',
+        'filter'             => 'Filter',
     //end containers page
 
      //providers page 
