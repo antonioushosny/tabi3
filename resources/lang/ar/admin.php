@@ -115,8 +115,8 @@ return [
         'status'                        => 'الحالة',
         'title_ar'                      =>'العنوان بالعربية',
         'title_en'                      =>'العنوان بالانجليزية',
-        'disc'                          =>'الوصف ',
-        'disc_en'                       =>'الوصف بالانجليزية',
+        'desc_ar'                          =>' الوصف بالعربية',
+        'desc_en'                       =>'الوصف بالانجليزية',
         'date'                          => 'التاريخ',
         'stage'                         => 'المرحلة' ,
         'level'                         => 'المستوى' ,
@@ -395,10 +395,12 @@ return [
         'error'               => 'خطأ',
     //end alerts 
 
-    //settigs and static pages  
+    //settings and static pages  
         'AboutUs'  =>' من نحن' ,
         'Terms'  =>' البنود ' ,
         'Policy'  =>' سياسة الخصوصية' ,
-    //end settigs and static pages  
+        'add_setting'  => 'الاضافة ',
+        'edit_setting'  => 'التعديل   ',
+    //end settings and static pages  
 
 ];

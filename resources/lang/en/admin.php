@@ -111,8 +111,8 @@ return [
         'status'                        => 'Status ',
         'title_ar'                      =>'Arabic Title ',
         'title_en'                      =>'English Title ',
-        'disc_ar'                       =>'Arabic Discription ',
-        'disc_en'                       =>'English Discription ',
+        'desc_ar'                       =>'Arabic Discription ',
+        'desc_en'                       =>'English Discription ',
         'date'                          => 'Date',
         'stage'                         => 'Stage' ,
         'level'                         => 'Level' ,
@@ -374,9 +374,11 @@ return [
         'error'               => 'Error',
     //end alerts 
 
-    //settigs and static pages  
+    //settings and static pages  
         'AboutUs'  =>' About Us' ,
         'Terms'  =>' Terms & Conditions' ,
         'Policy'  =>' Policy' ,
-    //end settigs and static pages  
+        'add_setting'  => 'Add Form',
+        'edit_setting' => 'Edit Form',
+    //end settings and static pages  
 ];

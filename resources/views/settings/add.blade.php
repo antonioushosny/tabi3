@@ -21,7 +21,7 @@
                 @endif
                     <li class="breadcrumb-item active"><a href="{{route('home')}}"><i class="zmdi zmdi-home"></i>{{__('admin.dashboard')}}</a></li>
                     <li class="breadcrumb-item"><a href="{{route('settings',$type)}}"><i class="zmdi zmdi-accounts-add"></i> {{__('admin.settings')}}</a></li>
-                    <li class="breadcrumb-item "><a href="javascript:void(0);">{{__('admin.add_setting')}}</a></li>
+                    <li class="breadcrumb-item "><a href="javascript:void(0);">{{ !isset($data->title_en)?__('admin.add_setting'):__('admin.edit_setting') }} </a></li>
                     
                 </ul>
             </div>
