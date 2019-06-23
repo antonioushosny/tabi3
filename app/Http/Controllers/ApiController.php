@@ -1746,15 +1746,9 @@ class ApiController extends Controller
         // $msg = "you have message from backend";
         // $title = "test";
         
-        $msg =  [
-            'msg_ar' => 'لديك طلب جديد من '   ,
-            'msg_en' => 'you have new order from '  ,
-        ] ;
+        $msg =  'لديك طلب جديد من '  ;
 
-        $title = [
-        'title_ar' => 'طلب جديد' ,  
-        'title_en' => 'New Order' ,   
-        ];
+        $title = 'طلب جديد';
         $type = "order" ;
         $this->webnotification($device_id,$title,$msg, $type);
         

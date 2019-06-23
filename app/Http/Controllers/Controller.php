@@ -7,6 +7,8 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\User;
+use Carbon\Carbon;
+
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
@@ -84,20 +86,21 @@ class Controller extends BaseController
         date_default_timezone_set('Africa/Cairo');
         $path_to_fcm='https://fcm.googleapis.com/fcm/send';
 
-        $server_key="AAAAnoHniOk:APA91bETw9yW-3Zisy3obLchdKYqDQQUsEyaj4A4mqxqulLk3kuEKv6YsrM6J4WUnlYA-yD_4dtJxZrv5WKJOtsCLkkpXYYO1fwpUOyzsCaMjDNAUqZDaH-RKJuaEmb1tc_kvtAntEyBEcqZbexAycDSJEkA3tVD0g";
+        $server_key="AAAAxKwM6B0:APA91bE32WyTg62kem1QQsu0wU0IqqCZmFR5oBjVy2IC4KYr1pgb02oTuXEg0JcKBeLAccBxa2M7U_MtBvNTI1SUkiEUa60Vzos6hDc-lLzuEc4HGeui_yfZOnsbvkmHqt90dz5nfiqX";
 
         $key = $device_id; 
         $message = $msg;
         $title = $title ;
         $headers = array('Authorization:key=' .$server_key,'Content-Type:application/json');
-
+        $dt = Carbon::now();
+        $date  = date('Y-m-d H:i:s', strtotime($dt));
         $fields =array('to'=>$key,
             'notification' => array("title" => $title,
             "body" => $type  ,
             "click_action"=>"khazan/home",
             "sound"=>"default",
             "icon"=>"khazan/public/images/logo.png" ), 'data' => array('type' => $type ,"title" => $title,
-            "message" => $message  ),
+            "message" => $message ,"date" => $date   ),
 
         );
         // dd($fields);
@@ -123,7 +126,7 @@ class Controller extends BaseController
 
        curl_close($curl_session);
 
-        dd($result) ;
+        // dd($result) ;
     }
     // end send notification 
     public function AllSeen(){
