@@ -59,7 +59,7 @@
                         <div class="footer text-center">
                             <!-- <a href="index.html" class="btn btn-primary btn-round btn-lg btn-block ">SIGN IN</a> -->
                             <button type="submit" class="btn btn-primary  btn-round btn-lg btn-block">{{trans('admin.sign')}}</button>
-                        <h5><a href="{{Url('password/reset')}}" class="link">Forgot Password Or First Login ?</a></h5>
+                        <h5><a href="{{Url('password/reset')}}" class="link">{{__('admin.Forgot Password Or First Login ?')}}</a></h5>
                         </div>
                 </form>
         </div>

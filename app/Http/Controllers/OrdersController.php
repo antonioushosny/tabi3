@@ -37,9 +37,9 @@ class OrdersController  extends Controller
     public function index()
     {
         $lang = App::getlocale();
-        if(!(Auth::user()->role != 'order' )){
+        if((Auth::user()->role != 'center' )){
             $role = 'order';
-            return view('unauthorized',compact('role','order'));
+            return view('unauthorized',compact('role','center'));
         }
         $title = 'orders';
         $orders = Order::where('center_id',Auth::user()->id)->orderBy('id', 'DESC')->get();
@@ -52,9 +52,9 @@ class OrdersController  extends Controller
     public function neworders()
     {
         $lang = App::getlocale();
-        if(!(Auth::user()->role != 'order' )){
-            $role = 'order';
-            return view('unauthorized',compact('role','order'));
+        if((Auth::user()->role != 'center' )){
+            $role = 'center';
+            return view('unauthorized',compact('role','center'));
         }
         $title = 'neworders';
         $orders = Order::where('status','pending')->where('center_id',Auth::user()->id)->orderBy('id', 'DESC')->get();
@@ -66,9 +66,9 @@ class OrdersController  extends Controller
     public function noworders()
     {
         $lang = App::getlocale();
-        if(!(Auth::user()->role != 'order' )){
-            $role = 'order';
-            return view('unauthorized',compact('role','order'));
+        if((Auth::user()->role != 'center' )){
+            $role = 'center';
+            return view('unauthorized',compact('role','center'));
         }
         $title = 'noworders';
         $orders = Order::where('center_id',Auth::user()->id)->where('status','accepted')->orWhere('status','assigned')->orderBy('id', 'DESC')->get();
@@ -79,9 +79,9 @@ class OrdersController  extends Controller
     public function lastorders()
     {
         $lang = App::getlocale();
-        if(!(Auth::user()->role != 'order' )){
-            $role = 'order';
-            return view('unauthorized',compact('role','order'));
+        if((Auth::user()->role != 'center' )){
+            $role = 'center';
+            return view('unauthorized',compact('role','center'));
         }
         $title = 'lastorders';
         $orders = Order::where('center_id',Auth::user()->id)->where('status','delivered')->orWhere('status','canceled')->orderBy('id', 'DESC')->get();

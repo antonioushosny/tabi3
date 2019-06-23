@@ -82,7 +82,7 @@
     </div>
 
      
-    <div class="center-fluid">
+    <div class="container-fluid">
         
         <!-- Exportable Table -->
         <div class="row clearfix">

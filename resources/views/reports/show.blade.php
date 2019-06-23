@@ -106,7 +106,7 @@
     </div>
 
      
-    <div class="order-fluid">
+    <div class="container-fluid">
         
         <!-- Exportable Table -->
         <div class="row clearfix">

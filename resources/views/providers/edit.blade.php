@@ -36,7 +36,7 @@
     </div>
 
      
-    <div class="provider-fluid">
+    <div class="container-fluid">
         
         <!-- Exportable Table -->
         <div class="row clearfix">

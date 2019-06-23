@@ -39,7 +39,7 @@
     </div>
 
      
-    <div class="report-fluid">
+    <div class="container-fluid">
 
             <div class="row clearfix">
                     <div class="col-lg-12">

@@ -29,7 +29,7 @@
     </div>
 
      
-    <div class="user-fluid">
+    <div class="container-fluid">
         <!-- Exportable Table -->
         <div class="row clearfix">
             <div class="col-lg-12">
@@ -108,9 +108,15 @@
                                             <td><img src="{{asset('images/default.png') }}" width="50px" height="50px"></td>
                                         @endif
                                         @if($data->status == 'active')
-                                            <td style="text-align:user"><span  class="col-green">{{ trans('admin.active')}}</span></td> 
+                                            <td style="text-align:user">
+                                                <a href="{{route('userstatus',$data->id)}}" class="btn btn-success waves-effect waves-float waves-green  " title="{{trans('admin.active')}}"><span  >{{ trans('admin.active')}}</span></a>
+                                                
+                                            </td> 
                                         @elseif($data->status == 'not_active')
-                                            <td style="text-align:user"><span  class="col-red">{{ trans('admin.not_active')}}</span></td> 
+                                            <td style="text-align:user">
+                                                <a href="{{route('userstatus',$data->id)}}" class="btn btn-danger waves-effect waves-float waves-green  "title="{{trans('admin.active')}}"><span >{{ trans('admin.not_active')}}</span></a>
+                                                
+                                            </td> 
                                         @endif
                                         <td>
                                             <!-- <a href="{{route('edituser',$data->id)}}" class="btn btn-info waves-effect waves-float waves-green btn-round " title="{{trans('admin.edit')}}"><i class="zmdi zmdi-edit"></i></a> -->

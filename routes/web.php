@@ -119,6 +119,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/users/update/', 'UsersController@store')->name('storeuser');
     Route::get('/users/add', 'UsersController@add')->name('adduser');
     Route::get('/users/edit/{id}', 'UsersController@edit')->name('edituser');
+    Route::get('/users/userstatus/{id}', 'UsersController@changestatus')->name('userstatus');
     Route::get('/users/delete/{id}', 'UsersController@destroy')->name('destroyuser');
     Route::post('/users/deleteall', 'UsersController@deleteall')->name('usersdeleteall');
     Route::get('/users/orders/{id}', 'UsersController@orders')->name('userorders');

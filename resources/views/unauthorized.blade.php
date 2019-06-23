@@ -5,7 +5,7 @@
     <div class="col-md-12 content-center">
         <div class="card-plain">
                 <div class= "alert alert-danger">
-                     You cannot access this page! 
+                     {{ __('admin.You cannot access this page!') }}
                 </div>
         </div>
     </div>

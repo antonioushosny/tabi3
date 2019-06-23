@@ -124,11 +124,10 @@ body, html {
         <li> <a class="" href=" {{route('setlang',['lang'=>'ar'])}}">{{trans('admin.ar')}}</a> </li>
         @endif
 
-        <!-- <li class="hidden-md-down"><a href="events.html" title="Events"><i class="zmdi zmdi-calendar"></i></a></li> -->
-        <!-- <li class="hidden-md-down"><a href="mail-inbox.html" title="Inbox"><i class="zmdi zmdi-email"></i></a></li> -->
-        <!-- <li><a href="contact.html" title="Contact List"><i class="zmdi zmdi-account-box-phone"></i></a></li> -->
         <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle notificaiton" data-toggle="dropdown" role="button" ><i class="zmdi zmdi-notifications"></i>
-            <div class="notify"><span class="heartbit" style="color:black;"></span><span class="point"></span></div>
+            <div class="notify"><span class="heartbit" style="color:black;"></span>
+                <span class="point"  id="count" style=" right: -9px; top: -38px;font-size: 8px; color: #3d4c5a;">{{count(auth()->user()->unreadnotifications)}}</span>
+            </div>
             </a>
             <ul class="dropdown-menu pullDown">
                 <li class="body">
@@ -330,7 +329,7 @@ body, html {
                     @if(Auth::user()->role == 'center')
                    <!--  <li <?php echo ($page == 'orders') ? "class='active open'" : ""; ?> ><a href="{{ route('orders') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.orders')}}</span></a></li>  -->
 
-                    <li <?php echo ($page == 'orders' ||$page == 'neworders' ||$page == 'noworders' ||$page == 'lastorders' ) ? "class='active open'" : ""; ?>   > <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-apps"></i><span>{{trans('admin.orders')}}</span> </a>
+                    <li <?php echo ($page == 'orders' ||$page == 'neworders' ||$page == 'noworders' ||$page == 'lastorders' ) ? "class='active open'" : ""; ?>   > <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-shopping-cart"></i><span>{{trans('admin.orders')}}</span> </a>
                         <ul class="ml-menu">
                             <li <?php echo ($page == 'orders') ? "class='active '" : ""; ?>><a href="{{ route('orders') }}">{{trans('admin.allorders')}}</a></li>
 

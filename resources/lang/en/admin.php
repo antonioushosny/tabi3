@@ -362,4 +362,7 @@ return [
         'add_setting'  => 'Add Form',
         'edit_setting' => 'Edit Form',
     //end settings and static pages  
+
+    'You cannot access this page!'  => 'You cannot access this page!' ,
+    'Forgot Password Or First Login ?'  => 'Forgot Password Or First Login ?' ,
 ];

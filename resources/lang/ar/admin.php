@@ -390,5 +390,6 @@ return [
         'add_setting'  => 'الاضافة ',
         'edit_setting'  => 'التعديل   ',
     //end settings and static pages  
-
+        'You cannot access this page!'  => ' !لا يمكنك الوصول إلى هذه الصفحة ',
+        'Forgot Password Or First Login ?'  => 'نسيت كلمة المرور أو أول تسجيل دخول ؟',
 ];
