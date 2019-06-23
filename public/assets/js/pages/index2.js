@@ -95,3 +95,9 @@ $({animatedVal: 0}).animate({animatedVal: 88}, {
         $(".dial4").val(Math.ceil(this.animatedVal)).trigger("change"); 
     }
 });
+
+
+
+
+
+

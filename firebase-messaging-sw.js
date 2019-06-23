@@ -8,6 +8,7 @@ var config = {
   projectId: "elsalamapp",
   storageBucket: "elsalamapp.appspot.com",
   messagingSenderId: "844700117021",
+  appId: "1:844700117021:web:afdaf9090454799d"
 };
 
 

@@ -15,7 +15,7 @@ class Controller extends BaseController
     {
         $path_to_fcm='https://fcm.googleapis.com/fcm/send';
 
-        $server_key="AAAAS3O293Q:APA91bG45V-lR8HAaG3J7OVbX_Pu3gbriOlwo9g1SOV2XeRt6Lr6pTZH9qLRvmtbMCcLTQVmm3Pn-Ci-s-LLG4_TMEbv4IFtzDarXnC2Czm3z38yeK9pmx2pjiJlUVayE6l8aJIbQKuM";
+        $server_key="AAAAxKwM6B0:APA91bE32WyTg62kem1QQsu0wU0IqqCZmFR5oBjVy2IC4KYr1pgb02oTuXEg0JcKBeLAccBxa2M7U_MtBvNTI1SUkiEUa60Vzos6hDc-lLzuEc4HGeui_yfZOnsbvkmHqt90dz5nfiqX";
         $key = $device_id;
         $message = $msg;
         $title = $title ;
@@ -84,7 +84,7 @@ class Controller extends BaseController
         date_default_timezone_set('Africa/Cairo');
         $path_to_fcm='https://fcm.googleapis.com/fcm/send';
 
-        $server_key="AAAAS3O293Q:APA91bG45V-lR8HAaG3J7OVbX_Pu3gbriOlwo9g1SOV2XeRt6Lr6pTZH9qLRvmtbMCcLTQVmm3Pn-Ci-s-LLG4_TMEbv4IFtzDarXnC2Czm3z38yeK9pmx2pjiJlUVayE6l8aJIbQKuM";
+        $server_key="AAAAxKwM6B0:APA91bE32WyTg62kem1QQsu0wU0IqqCZmFR5oBjVy2IC4KYr1pgb02oTuXEg0JcKBeLAccBxa2M7U_MtBvNTI1SUkiEUa60Vzos6hDc-lLzuEc4HGeui_yfZOnsbvkmHqt90dz5nfiqX";
 
         $key = $device_id; 
         $message = $msg;
@@ -94,9 +94,9 @@ class Controller extends BaseController
         $fields =array('to'=>$key,
             'notification' => array("title" => $title,
             "body" => $type  ,
-            "click_action"=>"fresh/public/home",
+            "click_action"=>"khazan/home",
             "sound"=>"default",
-            "icon"=>"fresh/public/fresh_fruit.png" ), 'data' => array('type' => $type ,"title" => $title,
+            "icon"=>"khazan/public/images/logo.png" ), 'data' => array('type' => $type ,"title" => $title,
             "message" => $message  ),
 
         );

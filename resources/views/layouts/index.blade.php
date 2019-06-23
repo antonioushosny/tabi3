@@ -547,30 +547,29 @@ body, html {
         });
     </script> 
     @yield('script')
-
-    <script src="https://www.gstatic.com/firebasejs/6.2.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.2.2/firebase.js"></script>
     <script>
-        // Your web app's Firebase configuration
-        var firebaseConfig = {
+        
+        var config = {
             apiKey: "AIzaSyB7plMdLEI9IkHEYQIYHI_btxj5sYElhn8",
             authDomain: "elsalamapp.firebaseapp.com",
             databaseURL: "https://elsalamapp.firebaseio.com",
             projectId: "elsalamapp",
             storageBucket: "elsalamapp.appspot.com",
             messagingSenderId: "844700117021",
+            appId: "1:844700117021:web:afdaf9090454799d"
         };
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-
+        firebase.initializeApp(config);
         const messaging = firebase.messaging();
         messaging
             .requestPermission()
             .then(function () {
+                {{--  console.log("Notification permission granted.");  --}}
                 // get the token in the form of promise
                 return messaging.getToken()
             })
             .then(function(token) {
-                    console.log("token is : " + token);  
+                {{--  console.log("token is : " + token);  --}}
                 if(token){
                     $.ajax({
                         url: "<?php echo url('/')?>/token/"+token,
@@ -578,6 +577,7 @@ body, html {
                         }
                     })
                 }
+                
             })
             .catch(function (err) {
                 console.log("Unable to get permission to notify.", err);
