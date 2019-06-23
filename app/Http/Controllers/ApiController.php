@@ -285,6 +285,14 @@ class ApiController extends Controller
             ]);
         }
         else{
+            if($user->password == null || $user->password == ''){
+                return response()->json([
+                    'success' => 'failed',
+                    'errors' => trans('api.activate_account'),
+                    'message' => trans('api.activate_account'),
+                    'data' => null,
+                ]);
+            }
             if (\Hash::check( $request->password,$user->password)) {
                 if($user->status == 'not_active'||$user->role == 'admin' ||$user->role == 'provider' ||$user->role == 'center'){
                     return response()->json([

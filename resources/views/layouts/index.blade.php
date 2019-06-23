@@ -506,50 +506,121 @@ body, html {
 <script src="{{ asset('assets/plugins/jquery-datatable/buttons/buttons.html5.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/jquery-datatable/buttons/buttons.print.min.js') }}"></script>
 <script src="{{ asset('assets/js/pages/tables/jquery-datatable.js') }}"></script> 
-<script>
-    function isNumber(e){
-        var key = e.charCode;  
-        if( key <48 || key >57 )
-        {
-            if (key != 0)
+    <script>
+        function isNumber(e){
+            var key = e.charCode;  
+            if( key <48 || key >57 )
             {
-            e.preventDefault();   
+                if (key != 0)
+                {
+                e.preventDefault();   
+                }
+                            
             }
-                        
         }
-    }
-    function readURL(input,imagediv) {
+        function readURL(input,imagediv) {
+            
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                src = document.getElementById(imagediv).src;    
+                imag = "{{asset('images/addimage.png')}}" ;
+                if(imag != src){
+                    arrayimages = src ;
+                }
+                reader.onload = function (e) {
+                    $('#'+imagediv).attr('src', e.target.result);
+                }
         
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            src = document.getElementById(imagediv).src;    
-            imag = "{{asset('images/addimage.png')}}" ;
-            if(imag != src){
-                arrayimages = src ;
+                reader.readAsDataURL(input.files[0]);
             }
-            reader.onload = function (e) {
-                $('#'+imagediv).attr('src', e.target.result);
-            }
-    
-            reader.readAsDataURL(input.files[0]);
         }
-    }
-    var message, ShowDiv = $('#showNofication'), count = $('#count'), c;
+        var message, ShowDiv = $('#showNofication'), count = $('#count'), c;
 
-    $('.notificaiton').on('click' , function(){
-        setTimeout( function(){
-            count.html(0);
-            $('.unread').each(function(){
-                $(this).removeClass('unread');
+        $('.notificaiton').on('click' , function(){
+            setTimeout( function(){
+                count.html(0);
+                $('.unread').each(function(){
+                    $(this).removeClass('unread');
+                });
+            }, 5000);
+            $.get( "{{route('MarkAllSeen') }}" , function(){});
+        });
+    </script> 
+    @yield('script')
+
+    <script src="https://www.gstatic.com/firebasejs/6.2.2/firebase-app.js"></script>
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyB7plMdLEI9IkHEYQIYHI_btxj5sYElhn8",
+            authDomain: "elsalamapp.firebaseapp.com",
+            databaseURL: "https://elsalamapp.firebaseio.com",
+            projectId: "elsalamapp",
+            storageBucket: "elsalamapp.appspot.com",
+            messagingSenderId: "844700117021",
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        const messaging = firebase.messaging();
+        messaging
+            .requestPermission()
+            .then(function () {
+                // get the token in the form of promise
+                return messaging.getToken()
+            })
+            .then(function(token) {
+                    console.log("token is : " + token);  
+                if(token){
+                    $.ajax({
+                        url: "<?php echo url('/')?>/token/"+token,
+                        success: data => {
+                        }
+                    })
+                }
+            })
+            .catch(function (err) {
+                console.log("Unable to get permission to notify.", err);
             });
-        }, 5000);
-        $.get( "{{route('MarkAllSeen') }}" , function(){});
-    });
-</script> 
-@yield('script')
+            messaging.onMessage(function(payload) {
+                var jsonObj = $.parseJSON('[' + payload.data.message + ']');
+                {{-- var jsonObj1 = $.parseJSON('[' + payload.data + ']'); --}}
+                {{--  console.log("Message received. ", payload);  --}}
+                c = parseInt(count.html());
+                count.html(c+1);
+                console.log(jsonObj);
+                console.log(payload.data);
+                @if($lang == 'ar')
+                    ShowDiv.prepend(`<li>
+                                        <a href="javascript:void(0);"  class="unread">
+                                            <div class="media">
+                                                <img class="media-object notificationimage" src="{{ asset('assets/images/logo.png') }}" alt="">
+                                                <div class="media-body">
+                                                    <span class="name"> <span class="time">30min ago</span></span>
+                                                    <span class="message">'+jsonObj['0']['ar']+' </span>                                        
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li> `);
+                @else
+                    ShowDiv.prepend(`<li>
+                                        <a href="javascript:void(0);"  class="unread">
+                                            <div class="media">
+                                                <img class="media-object notificationimage" src="{{ asset('assets/images/logo.png') }}" alt="">
+                                                <div class="media-body">
+                                                    <span class="name"> <span class="time">30min ago</span></span>
+                                                    <span class="message">'+jsonObj['0']['ar']+' </span>                                        
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li> `);
+                @endif
 
-<script>
-       table =  $('.js-exportable-ar').DataTable({
+            });
+
+    </script>
+    <script>
+        table =  $('.js-exportable-ar').DataTable({
             "language": {
                 "url": "{{asset('datatablelang.json')}}"
             },
@@ -559,79 +630,6 @@ body, html {
                 'copy', 'csv', 'excel', 'pdf', 'print'
             ],   
         });
-</script>
-<script src="https://www.gstatic.com/firebasejs/5.5.5/firebase.js"></script>
-<script>
-
-    // Initialize Firebase
-    // TODO: Replace with your project's customized code snippet
-    var config = {
-        apiKey: "AIzaSyAPA5a0FBYt87i0AJMitg0fC3T3C4Vj_qs",
-        authDomain: "joud-129d5.firebaseapp.com",
-        databaseURL: "https://joud-129d5.firebaseio.com",
-        projectId: "joud-129d5",
-        storageBucket: "joud-129d5.appspot.com",
-        messagingSenderId: "324063917940"
-    };
-    firebase.initializeApp(config);
-    const messaging = firebase.messaging();
-    messaging
-        .requestPermission()
-        .then(function () {
-            // get the token in the form of promise
-            return messaging.getToken()
-        })
-        .then(function(token) {
-                console.log("token is : " + token);  
-            if(token){
-                $.ajax({
-                    url: "<?php echo url('/')?>/token/"+token,
-                    success: data => {
-                    }
-                })
-            }
-        })
-        .catch(function (err) {
-            console.log("Unable to get permission to notify.", err);
-        });
-    messaging.onMessage(function(payload) {
-        var jsonObj = $.parseJSON('[' + payload.data.message + ']');
-        {{-- var jsonObj1 = $.parseJSON('[' + payload.data + ']'); --}}
-        {{--  console.log("Message received. ", payload);  --}}
-        c = parseInt(count.html());
-        count.html(c+1);
-        console.log(jsonObj);
-        console.log(payload.data);
-        @if($lang == 'ar')
-            ShowDiv.prepend('<li>
-                                <a href="javascript:void(0);"  class="unread">
-                                    <div class="media">
-                                        <img class="media-object notificationimage" src="{{ asset('assets/images/logo.png') }}" alt="">
-                                        <div class="media-body">
-                                            <span class="name"> <span class="time">30min ago</span></span>
-                                            <span class="message">'+jsonObj['0']['ar']+' </span>                                        
-                                        </div>
-                                    </div>
-                                </a>
-                            </li> ');
-        @else
-            ShowDiv.prepend('<li>
-                                <a href="javascript:void(0);"  class="unread">
-                                    <div class="media">
-                                        <img class="media-object notificationimage" src="{{ asset('assets/images/logo.png') }}" alt="">
-                                        <div class="media-body">
-                                            <span class="name"> <span class="time">30min ago</span></span>
-                                            <span class="message">'+jsonObj['0']['ar']+' </span>                                        
-                                        </div>
-                                    </div>
-                                </a>
-                            </li> ');
-        @endif
-
-
-    });
-
-</script>
-
+     </script>
 </body>
 </html>

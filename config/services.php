@@ -35,12 +35,14 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
     'firebase' => [
-        'api_key' =>  "AIzaSyAPA5a0FBYt87i0AJMitg0fC3T3C4Vj_qs",
-        'auth_domain' => "joud-129d5.firebaseapp.com",
-        'database_url' => "https://joud-129d5.firebaseio.com",
-         'secret' =>  "joud-129d5",
-        'storage_bucket' => "joud-129d5.appspot.com",
-        'messagingSenderId'=> "324063917940"
+        'api_key' => "AIzaSyB7plMdLEI9IkHEYQIYHI_btxj5sYElhn8",
+        'auth_domain' =>  "elsalamapp.firebaseapp.com",
+        'database_url' =>"https://elsalamapp.firebaseio.com",
+         'secret' =>  "elsalamapp",
+        'storage_bucket' => "elsalamapp.appspot.com",
+        'messagingSenderId'=>  "844700117021",
     ],
+
+
 
 ];

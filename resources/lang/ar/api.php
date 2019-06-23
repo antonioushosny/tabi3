@@ -48,5 +48,6 @@ return [
     'delivered'   =>  'تم التوصيل',
     'canceled'   =>  'ألغيت',
 
-    'notfoundcenter' => 'There are no distribution centers for this container',
+    'notfoundcenter' => 'لا توجد مراكز توزيع لهذا الخزان ',
+    'activate_account'  => 'برجاء تفعيل الحساب',
 ];
