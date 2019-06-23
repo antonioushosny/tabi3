@@ -69,15 +69,9 @@ return [
 
     //sidebar  
         'adminsm'                       => 'Admins Management ',  
-        'teachersm'                     => 'Teachers Management' ,
-        'studentsm'                     => 'Students Management',
-        'departmentsm'                  => 'Departments Management',
-        'coursesm'                       => 'Courses Management',
-        'lessonsm'                      => 'Lessons Management',
-        'schedulesm'                    => 'Schedule Management',
-        'assignmentsm'                  => 'Assignments Management',
         'contactsm'                     => 'Connect us' ,
         'messages'                      => 'Messages' ,
+        'salesreports'                  => 'Sales Reports',
 
     //end sidebar
  
@@ -114,13 +108,7 @@ return [
         'desc_ar'                       =>'Arabic Discription ',
         'desc_en'                       =>'English Discription ',
         'date'                          => 'Date',
-        'stage'                         => 'Stage' ,
-        'level'                         => 'Level' ,
-        'classe'                        => 'Class',
-        'teacher'                       => 'Teacher',
-        'section'                       => 'Section',
         'number'                        => 'Number',
-        'student_id'                    => 'Student',
 
     //end inputs
     
@@ -150,13 +138,6 @@ return [
         'placeholder_desc_ar'           => 'Enter Arabic Discription ' ,
         'placeholder_desc_en'           => 'Enter English Discription ' ,
         'placeholder_address'           => ' Enter Address ',
-        'placeholder_stage'             => ' Choose Stage ',
-        'placeholder_level'             => ' Enter Level ',
-        'placeholder_subject'           => 'Enter Subject Name ',
-        'placeholder_classe'            => 'Enter Subject Class ',
-        'placeholder_section'           => 'Enter Subject Section ',
-        'placeholder_number'            => 'Enter Schedule No ',
-        'placeholder_day'               => 'Enter Day ',
         'placeholder_day'               => 'Enter Day ',
         'placeholder_title'             => 'Enter Title ',
         'placeholder_message'           => 'Enter Message ',

@@ -361,7 +361,7 @@ body, html {
 
                     <li <?php echo ($page == 'reports') ? "class='active open'" : ""; ?> > <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-apps"></i><span>{{trans('admin.reports')}}</span> </a>
                         <ul class="ml-menu">
-                            <li <?php echo ($page == 'reports') ? "class='active open'" : ""; ?> ><a href="{{ route('reports') }}"  > <span> {{trans('admin.reports')}}</span></a></li>
+                            <li <?php echo ($page == 'reports') ? "class='active open'" : ""; ?> ><a href="{{ route('reports') }}"  > <span> {{trans('admin.salesreports')}}</span></a></li>
                         </ul>
                     </li> 
                     
@@ -393,10 +393,10 @@ body, html {
                         </div>
                     </li>
                     <li>
-                        <small class="text-muted">{{__('admin.Email_address')}}: </small>
+                        <small class="text-muted">{{__('admin.email')}}: </small>
                         <p>{{Auth::user()->email}}</p>
                         <hr>
-                        <small class="text-muted">{{__('admin.Phone')}}: </small>
+                        <small class="text-muted">{{__('admin.mobile')}}: </small>
                         <p>{{Auth::user()->mobile}}</p>
                         <hr>
                         <ul class="list-unstyled">

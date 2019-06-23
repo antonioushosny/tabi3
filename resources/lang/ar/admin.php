@@ -72,16 +72,10 @@ return [
     //sidebar  
         'adminsm'                       => 'إدارة المشرفين',   
         'usersm'                        => 'إدارة  المستخدمين',
-        'citiesm'                      => 'إدارة المدن',
-        'areasm'                        => 'إدارة المناطق',
-        'subcategoriesm'                  => ' الأقسام الفرعية',
-        'countriesm'                      => 'ادارة الدول ',
-        'dealsm'                    => ' الصفقات القادمة ',
-        'last_dealsm'                    => ' الصفقات المنتهية ',
         'advertisementsm'                  => 'إدارة  الاعلانات',
         'contactsm'                     => 'تواصل معنا' ,
         'messages'                      => 'ارسال رسائل\نقاط' , 
-        'last_deals'                    => ' الصفقات المنتهية ',
+        'salesreports'  => 'تقارير المبيعات',
         
     //end sidebar
 
@@ -107,7 +101,7 @@ return [
         'user_name'                     => 'اسم المستخدم',
         'first_name'                    => 'الأسم الأول',
         'last_name'                     => 'الأسم الأخير',
-        'email'                         => 'الإيميل',
+        'email'                         => 'البريد الإلكتروني',
         'address'                       => 'العنوان',
         'mobile'                        => 'رقم الموبايل',
         'location'                      => 'الموقع',
@@ -157,17 +151,10 @@ return [
         'placeholder_desc_ar'           =>'ادخل الوصف باللغة بالعربية ' ,
         'placeholder_desc_en'           =>'ادخل الوصف باللغة الانجليزية ' ,
         'placeholder_address'           =>'ادخل العنوان ',
-        'placeholder_stage'             => ' اختر  المرحلة',
-        'placeholder_level'             => 'ادخل المستوي  ',
-        'placeholder_subject'           => 'ادخل اسم المادة ',
-        'placeholder_classe'            => 'ادخل اسم الفصل ',
-        'placeholder_section'           => 'ادخل اسم المجموعة ',
-        'placeholder_number'            => 'ادخل رقم الحصة  ',
         'placeholder_day'               => 'ادخل اليوم   ',
         'placeholder_title'             => ' ادخل العنوان ',
         'placeholder_message'           => ' ادخل الرسالة ',
         'placeholder_cost'              => ' ادخل التكلفة  ',
-        'placeholder_coupons'              => ' ادخل عدد القسائم  ',
         'placeholder_price'              => ' ادخل السعر  ',
         'placeholder_sale'              => ' ادخل سعر المنتج بعد التخفيض ',
         'placeholder_national_id'       => ' ادخل الرقم القومي   ',
@@ -191,6 +178,7 @@ return [
         'add_user'          => ' أضافة مستخدم ',
         'edit_user'         => ' تعديل مستخدم ',
         'delete_user'       => '  حذف مستخدم',
+        
     //end users page
 
      //statics page 
@@ -397,7 +385,7 @@ return [
 
     //settings and static pages  
         'AboutUs'  =>' من نحن' ,
-        'Terms'  =>' البنود ' ,
+        'Terms'  =>' شروط واحكام ' ,
         'Policy'  =>' سياسة الخصوصية' ,
         'add_setting'  => 'الاضافة ',
         'edit_setting'  => 'التعديل   ',

@@ -72,7 +72,7 @@
                                 </div>
                                 <!-- for mobile -->
                                 <div class="form-group form-float">
-                                    <input type="text" value="{{$provider->mobile}}" class="form-control" placeholder="{{__('admin.mobile')}}" name="mobile" >
+                                    <input type="text" value="{{$provider->mobile}}" class="form-control" placeholder="{{__('admin.mobile')}}" name="mobile" onkeypress="isNumber(event); ">
                                     <label id="mobile-error" class="error" for="mobile" style="">  </label>
                                 </div>
                    

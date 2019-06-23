@@ -105,7 +105,11 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="header">
-                        <h2><strong>Sales</strong> Report</h2>
+                        @if($lang == 'ar')
+                            <h2>{{ __('admin.report') }} <strong> {{ __('admin.sales') }}</strong> </h2>
+                        @else 
+                            <h2><strong>{{ __('admin.sales') }}</strong> {{ __('admin.report') }}  </h2>
+                        @endif
                         <ul class="header-dropdown">
 
                         </ul>
@@ -138,7 +142,7 @@
             <div class="col-lg-6 col-md-12">
                 <div class="card">
                     <div class="header">
-                        <h2><strong>Line</strong> Chart</h2>
+                        <h2><strong>{{ __('admin.This_Week_Sales') }}</strong> </h2>
                         <ul class="header-dropdown">
                             
                         </ul>
@@ -151,7 +155,7 @@
             <div class="col-lg-6 col-md-12">
                 <div class="card">
                     <div class="header">
-                        <h2><strong>Bar</strong> Chart</h2>
+                        <h2><strong>{{ __('admin.This_Year_Sales') }}</strong> </h2>
                         <ul class="header-dropdown">
                            
                         </ul>
