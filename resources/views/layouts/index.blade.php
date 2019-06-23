@@ -135,11 +135,7 @@ body, html {
                     <ul class="menu list-unstyled " id="showNofication">
                         @if(sizeof(Auth()->user()->notifications) > 0)
                             @foreach(Auth()->user()->notifications as $note)
-                                {{--  <li>
-                                    <a href=" {{ route('home') }}" class="{{ $note->read_at == null ? 'unread' : '' }}">
-                                            {!! $note->data['data'] !!}
-                                    </a>                                      
-                                </li>  --}}
+                              
                                 <li>
                                     <a href="javascript:void(0);"  class="{{ $note->read_at == null ? 'unread' : '' }}">
                                         <div class="media">
@@ -547,17 +543,16 @@ body, html {
         });
     </script> 
     @yield('script')
-    <script src="https://www.gstatic.com/firebasejs/6.2.2/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.6/firebase.js"></script>
     <script>
-        
+   
         var config = {
-            apiKey: "AIzaSyB7plMdLEI9IkHEYQIYHI_btxj5sYElhn8",
-            authDomain: "elsalamapp.firebaseapp.com",
-            databaseURL: "https://elsalamapp.firebaseio.com",
-            projectId: "elsalamapp",
-            storageBucket: "elsalamapp.appspot.com",
-            messagingSenderId: "844700117021",
-            appId: "1:844700117021:web:afdaf9090454799d"
+            apiKey: "AIzaSyD83xxX-cru4gFdm6SeIhtG_G1WSbRgyl0",
+            authDomain: "eduappschool2019.firebaseapp.com",
+            databaseURL: "https://eduappschool2019.firebaseio.com",
+            projectId: "eduappschool2019",
+            storageBucket: "eduappschool2019.appspot.com",
+            messagingSenderId: "363642461621"
         };
         firebase.initializeApp(config);
         const messaging = firebase.messaging();
@@ -569,7 +564,7 @@ body, html {
                 return messaging.getToken()
             })
             .then(function(token) {
-                {{--  console.log("token is : " + token);  --}}
+                console.log("token is : " + token);
                 if(token){
                     $.ajax({
                         url: "<?php echo url('/')?>/token/"+token,
@@ -585,36 +580,28 @@ body, html {
             messaging.onMessage(function(payload) {
                 var jsonObj = $.parseJSON('[' + payload.data.message + ']');
                 {{-- var jsonObj1 = $.parseJSON('[' + payload.data + ']'); --}}
-                {{--  console.log("Message received. ", payload);  --}}
+                console.log("Message received. ", payload);
                 c = parseInt(count.html());
                 count.html(c+1);
                 console.log(jsonObj);
                 console.log(payload.data);
                 @if($lang == 'ar')
-                    ShowDiv.prepend(`<li>
-                                        <a href="javascript:void(0);"  class="unread">
-                                            <div class="media">
-                                                <img class="media-object notificationimage" src="{{ asset('assets/images/logo.png') }}" alt="">
-                                                <div class="media-body">
-                                                    <span class="name"> <span class="time">30min ago</span></span>
-                                                    <span class="message">'+jsonObj['0']['ar']+' </span>                                        
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li> `);
+                    msggg = jsonObj['0']['ar'] ;
                 @else
-                    ShowDiv.prepend(`<li>
-                                        <a href="javascript:void(0);"  class="unread">
-                                            <div class="media">
-                                                <img class="media-object notificationimage" src="{{ asset('assets/images/logo.png') }}" alt="">
-                                                <div class="media-body">
-                                                    <span class="name"> <span class="time">30min ago</span></span>
-                                                    <span class="message">'+jsonObj['0']['ar']+' </span>                                        
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li> `);
+                    msggg = jsonObj['0']['en'] ;
                 @endif
+                    ShowDiv.prepend(`<li>
+                            <a href="javascript:void(0);"  class="unread">
+                                <div class="media">
+                                    <img class="media-object notificationimage" src="{{ asset('assets/images/logo.png') }}" alt="">
+                                    <div class="media-body">
+                                        <span class="name"> <span class="time"> '+payload.data.created_at+'  </span></span><br>
+                                        <span class="message"> '+msggg+'  </span>                                        
+                                    </div>
+                                </div>
+                            </a>
+                        </li> `);
+             
 
             });
 

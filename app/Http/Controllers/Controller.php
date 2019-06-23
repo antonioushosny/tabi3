@@ -84,7 +84,7 @@ class Controller extends BaseController
         date_default_timezone_set('Africa/Cairo');
         $path_to_fcm='https://fcm.googleapis.com/fcm/send';
 
-        $server_key="AAAAxKwM6B0:APA91bE32WyTg62kem1QQsu0wU0IqqCZmFR5oBjVy2IC4KYr1pgb02oTuXEg0JcKBeLAccBxa2M7U_MtBvNTI1SUkiEUa60Vzos6hDc-lLzuEc4HGeui_yfZOnsbvkmHqt90dz5nfiqX";
+        $server_key="AAAAnoHniOk:APA91bETw9yW-3Zisy3obLchdKYqDQQUsEyaj4A4mqxqulLk3kuEKv6YsrM6J4WUnlYA-yD_4dtJxZrv5WKJOtsCLkkpXYYO1fwpUOyzsCaMjDNAUqZDaH-RKJuaEmb1tc_kvtAntEyBEcqZbexAycDSJEkA3tVD0g";
 
         $key = $device_id; 
         $message = $msg;
@@ -123,7 +123,7 @@ class Controller extends BaseController
 
        curl_close($curl_session);
 
-            //   dd($result) ;
+        dd($result) ;
     }
     // end send notification 
     public function AllSeen(){
