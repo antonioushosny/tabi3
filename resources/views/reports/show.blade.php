@@ -61,18 +61,20 @@
             padding: 4px;
             padding-right: 25px;
             box-shadow: 2px 3px #6b6464;
+            font-size: 15px;
         }
         h6{
             color: #1e2967;
             padding: 4px;
             padding-right: 25px;
-            font-size: 25px;
+            font-size: 16px;
             border-radius: 30px;
             text-align: center;
             box-shadow: 2px 3px #6b6464;
             background-color: #8c99e01f;
             margin-right: 10rem;
             margin-left: 10rem;
+            
         }
         .hidden{
             display: none;
