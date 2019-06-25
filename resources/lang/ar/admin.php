@@ -200,7 +200,7 @@ return [
         'cities'                       => ' المدن', 
         'city'                       => ' المدينة', 
         'city_id'                       => ' المدينة', 
-        'add_city'                    => ' اضافة مدينة'  ,
+        'add_citie'                    => ' اضافة مدينة'  ,
         'edit_citie'                   => ' تعديل مدينة'  ,
         'delete_citie'                 =>  ' حذف مدينة',
     //end cities page

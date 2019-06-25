@@ -84,7 +84,7 @@
                                     <div class="col-md-10">
                                        
                                         @if($admin->image)
-                                            <img id="changeimage" src="{{asset('img/'.$admin->image)}}" width="100px" height="100px" alt=" {{trans('admin.image')}}" />>
+                                            <img id="changeimage" src="{{asset('img/'.$admin->image)}}" width="100px" height="100px" alt=" {{trans('admin.image')}}" />
                                         @else 
                                             <img id="changeimage" src="{{asset('images/default.png')}}" width="100px" height="100px" alt=" {{trans('admin.image')}}" />
                                         @endif

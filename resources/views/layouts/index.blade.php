@@ -97,7 +97,7 @@ body, html {
 <link rel="stylesheet" href="{{ asset('assets/plugins/jquery-datatable/dataTables.bootstrap4.min.css') }}">
 </head>
 
-<body class="theme-purple rtl"">
+<body class="theme-purple rtl">
 <!-- Page Loader -->
 <div class="page-loader-wrapper">
     <div class="loader">
