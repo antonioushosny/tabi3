@@ -141,7 +141,12 @@ body, html {
                                             <img class="media-object notificationimage" src="{{ asset('assets/images/logo.png') }}" alt="">
                                             <div class="media-body">
                                                 <span class="name"> <span class="time"> {!! $note->created_at  !!} </span></span><br>
-                                                <span class="message"> {!! $note->data['data']  !!}   </span>                                        
+                                                <span class="message">
+                                                    @if($lang == 'ar')
+                                                    {!! $note->data['data']['ar']  !!}  
+                                                    @else 
+                                                    {!! $note->data['data']['en']  !!}  
+                                                    @endif  </span>                                        
                                             </div>
                                         </div>
                                     </a>

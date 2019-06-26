@@ -446,7 +446,7 @@ class ApiController extends Controller
                 $device_token = $admin->device_token ;
                 if($device_token){
                     $this->notification($device_token,$title,$msg);
-                    $this->webnotifications($device_token,$title,$msg,$type);
+                    $this->webnotification($device_token,$title,$msg,$type);
                 }
             }
             /////// this for verify email addreess/////////
@@ -1028,7 +1028,7 @@ class ApiController extends Controller
                     $device_token = $center->device_token ;
                     if($device_token){
                         $this->notification($device_token,$title,$msg);
-                        $this->webnotifications($device_token,$title,$msg,$type);
+                        $this->webnotification($device_token,$title,$msg,$type);
                     }
                     
                     $order = Order::where('id',$order->id)->with('center')->with('container')->first();

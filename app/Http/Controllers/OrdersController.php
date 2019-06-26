@@ -329,7 +329,7 @@ class OrdersController  extends Controller
             $device_token = $driver->device_token ;
             if($device_token){
                 $this->notification($device_token,$msg,$msg);
-                $this->webnotifications($device_token,$title,$msg,$type);
+                $this->webnotification($device_token,$title,$msg,$type);
             }
  
             // $msg = "  تم  قبول طلبك "  ;
@@ -441,7 +441,7 @@ class OrdersController  extends Controller
                         $device_token = $user->device_token ;
                         if($device_token){
                             $this->notification($device_token,$msg,$msg);
-                            $this->webnotifications($device_token,$title,$msg,$type);
+                            $this->webnotification($device_token,$title,$msg,$type);
                         }
                     }
                     return \Response::json('canceled') ;
@@ -513,7 +513,7 @@ class OrdersController  extends Controller
             $device_token = $driver->device_token ;
             if($device_token){
                 $this->notification($device_token,$title,$msg);
-                $this->webnotifications($device_token,$title,$msg,$type);
+                $this->webnotification($device_token,$title,$msg,$type);
             }
         }else{
             $order->driver_id =  null ; 
@@ -585,7 +585,7 @@ class OrdersController  extends Controller
                     $device_token = $center->device_token ;
                     if($device_token){
                         $this->notification($device_token,$title,$msg);
-                        $this->webnotifications($device_token,$title,$msg,$type);
+                        $this->webnotification($device_token,$title,$msg,$type);
                     }
                     return \Response::json('canceled') ;
                 }else{
@@ -613,7 +613,7 @@ class OrdersController  extends Controller
                         $device_token = $user->device_token ;
                         if($device_token){
                             $this->notification($device_token,$title,$msg);
-                            $this->webnotifications($device_token,$title,$msg,$type);
+                            $this->webnotification($device_token,$title,$msg,$type);
                         }
                     }
                     return \Response::json('canceled') ;
