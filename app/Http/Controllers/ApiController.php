@@ -342,8 +342,13 @@ class ApiController extends Controller
                     $users['lat'] = $user->lat ;
                     $users['lng'] = $user->lng ;
                     $users['role'] = $user->role ;
-                    $users['image'] = asset('img/').'/'. $user->image;
-                    
+                    if($user->image){
+                        $users['image'] = asset('img/').'/'. $user->image;
+                    }
+                    else {
+                        $users['image'] = null;
+                    }
+
                     $users['remember_token'] = $user->remember_token ;
                     
                 }

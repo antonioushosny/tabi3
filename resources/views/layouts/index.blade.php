@@ -70,7 +70,7 @@
         width: 17px;
     }
     .notificationimage{
-        max-width: 25%;
+        max-width: 15%;
     }
     .unread{
         background-color: #dedede;
