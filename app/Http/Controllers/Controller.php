@@ -23,7 +23,14 @@ class Controller extends BaseController
         $title = $title ;
         $headers = array('Authorization:key=' .$server_key,'Content-Type:application/json');
         $user = User::where('device_token', $device_id)->first();
-        if($user->type == '1'){
+        if( $user->lang == 'ar'){
+            $message = $msg['ar'];
+            $title = $title['ar'] ;
+        }else{
+            $message = $msg['en'];
+            $title = $title['en'] ;
+        }
+        if( $user->type == '1'){
                  $fields = array("to" => $key, "notification"=>  array( "text"=>$message ,"id"=>$id,
                     "title"=>$title,
                     "is_background"=>false,
@@ -89,8 +96,16 @@ class Controller extends BaseController
         $server_key="AAAAxKwM6B0:APA91bE32WyTg62kem1QQsu0wU0IqqCZmFR5oBjVy2IC4KYr1pgb02oTuXEg0JcKBeLAccBxa2M7U_MtBvNTI1SUkiEUa60Vzos6hDc-lLzuEc4HGeui_yfZOnsbvkmHqt90dz5nfiqX";
 
         $key = $device_id; 
-        $message = $msg;
-        $title = $title ;
+        $user = User::where('device_token', $device_id)->first();
+        if($user && $user->lang == 'ar'){
+            $message = $msg['ar'];
+            $title = $title['ar'] ;
+        }else{
+            $message = $msg['en'];
+            $title = $title['en'] ;
+        }
+        // $message = $msg;
+        // $title = $title;
         $headers = array('Authorization:key=' .$server_key,'Content-Type:application/json');
         $dt = Carbon::now();
         $date  = date('Y-m-d H:i:s', strtotime($dt));

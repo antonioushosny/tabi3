@@ -446,6 +446,7 @@ class ApiController extends Controller
                 $device_token = $admin->device_token ;
                 if($device_token){
                     $this->notification($device_token,$title,$msg);
+                    $this->webnotifications($device_token,$title,$msg,$type);
                 }
             }
             /////// this for verify email addreess/////////
@@ -1027,6 +1028,7 @@ class ApiController extends Controller
                     $device_token = $center->device_token ;
                     if($device_token){
                         $this->notification($device_token,$title,$msg);
+                        $this->webnotifications($device_token,$title,$msg,$type);
                     }
                     
                     $order = Order::where('id',$order->id)->with('center')->with('container')->first();
@@ -1770,10 +1772,19 @@ class ApiController extends Controller
         // $msg = "you have message from backend";
         // $title = "test";
         
-        $msg =  'لديك طلب جديد من '  ;
+        // $msg =  'لديك طلب جديد من '  ;
 
-        $title = 'طلب جديد';
+        // $title = 'طلب جديد';
         $type = "order" ;
+
+        $msg =  [
+            'en' => "New user registered"  ,
+            'ar' => "  مستخدم جديد قام بالتسجيل"  ,
+        ];
+        $title = [
+            'en' =>  "New user registered"  ,
+            'ar' => "  مستخدم جديد قام بالتسجيل"  ,  
+        ];
         $this->webnotification($device_id,$title,$msg, $type);
         
         return response()->json([

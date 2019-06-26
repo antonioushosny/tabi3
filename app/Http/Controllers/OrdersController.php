@@ -323,17 +323,15 @@ class OrdersController  extends Controller
                 'en' => " You have been selected to delivery a new order"  ,
                 'ar' =>  "   تم اختيارك لتوصيل طلب جديد " ,
             ];
-            $title = [
-                'en' =>  "  You have a new request from "  ,
-                'ar' =>  "  لديك طلب جديد من " ,  
-            ];
+            
             $driver = User::where('id', $request->driver_id)->first(); 
             $driver->notify(new Notifications($msg,$type ));
             $device_token = $driver->device_token ;
             if($device_token){
-                $this->notification($device_token,$title,$msg);
+                $this->notification($device_token,$msg,$msg);
+                $this->webnotifications($device_token,$title,$msg,$type);
             }
-
+ 
             // $msg = "  تم  قبول طلبك "  ;
             $type = "accepted_order" ;
             // $title = "  تم  قبول طلبك " ;
@@ -404,14 +402,19 @@ class OrdersController  extends Controller
                     $ordercenter->status = 'pending' ;
                     $ordercenter->save();
     
-                    $msg = "  لديك طلب جديد من " . $order->user_name ;
+                    // $msg = "  لديك طلب جديد من " . $order->user_name ;
                     $type = "order";
-                    $title = "  لديك طلب جديد من " . $order->user_name  ;
+                    // $title = "  لديك طلب جديد من " . $order->user_name  ;
+                    $msg =  [
+                        'en' => "  You have a new request from " . $order->user_name ,
+                        'ar' =>   "  لديك طلب جديد من " . $order->user_name  ,
+                    ];
+                    
                     $center = User::where('id', $CenterContainer->center->id)->first(); 
                     $center->notify(new Notifications($msg,$type ));
                     $device_token = $center->device_token ;
                     if($device_token){
-                        $this->notification($device_token,$title,$msg);
+                        $this->notification($device_token,$msg,$msg);
                     }
                     return \Response::json('canceled') ;
                 }else{
@@ -423,15 +426,22 @@ class OrdersController  extends Controller
                     $order->status = 'canceled' ;
                     $order->save();
 
-                    $msg = "  تم  رفض طلبك "  ;
+                    // $msg = "  تم  رفض طلبك "  ;
                     $type = "canceled_order" ;
-                    $title = "  تم  رفض طلبك " ;
+                    // $title = "  تم  رفض طلبك " ;
+
+                    $msg =  [
+                        'en' =>"Your request was declined",
+                        'ar' => "  تم  رفض طلبك "  ,
+                    ];
+                    
                     $user = User::where('id', $order->user_id)->first(); 
                     if($user){
                         $user->notify(new Notifications($msg,$type ));
                         $device_token = $user->device_token ;
                         if($device_token){
-                            $this->notification($device_token,$title,$msg);
+                            $this->notification($device_token,$msg,$msg);
+                            $this->webnotifications($device_token,$title,$msg,$type);
                         }
                     }
                     return \Response::json('canceled') ;
@@ -485,14 +495,25 @@ class OrdersController  extends Controller
             $orderdriver->order_id  =   $ordercenter->order_id ; 
             $orderdriver->driver_id  =   $request->driver_id ; 
             $orderdriver->save();  
-            $msg = "  تم اختيارك لتوصيل طلب جديد "  ;
+            // $msg = "  تم اختيارك لتوصيل طلب جديد "  ;
             $type = "order";
-            $title = "  لديك طلب جديد من " ;
+            // $title = "  لديك طلب جديد من " ;
+            $msg =  [
+                'en' => "  You have been selected to delivery a new order "  ,
+                'ar' =>   " تم اختيارك لتوصيل طلب جديد "   ,
+            ];
+
+            $title =  [
+                
+                'en' => "  You have a new request from " ,
+                'ar' =>   "  لديك طلب جديد من "  ,
+            ];
             $driver = User::where('id', $request->driver_id)->first(); 
             $driver->notify(new Notifications($msg,$type ));
             $device_token = $driver->device_token ;
             if($device_token){
                 $this->notification($device_token,$title,$msg);
+                $this->webnotifications($device_token,$title,$msg,$type);
             }
         }else{
             $order->driver_id =  null ; 
@@ -544,14 +565,27 @@ class OrdersController  extends Controller
                     $ordercenter->status = 'pending' ;
                     $ordercenter->save();
     
-                    $msg = "  لديك طلب جديد من " . $order->user_name ;
+                    // $msg = "  لديك طلب جديد من " . $order->user_name ;
                     $type = "order";
-                    $title = "  لديك طلب جديد من " . $order->user_name  ;
+                    // $title = "  لديك طلب جديد من " . $order->user_name  ;
+
+                    $msg =  [
+                        'en' => "  You have a new request  ". $order->user_name ,
+                        'ar' =>   "  لديك طلب جديد  " . $order->user_name ,
+                    ];
+        
+                    $title =  [
+                        
+                        'en' => "  You have a new request  " ,
+                        'ar' =>   "  لديك طلب جديد  "  ,
+                    ];
+
                     $center = User::where('id', $CenterContainer->center->id)->first(); 
                     $center->notify(new Notifications($msg,$type ));
                     $device_token = $center->device_token ;
                     if($device_token){
                         $this->notification($device_token,$title,$msg);
+                        $this->webnotifications($device_token,$title,$msg,$type);
                     }
                     return \Response::json('canceled') ;
                 }else{
@@ -564,15 +598,22 @@ class OrdersController  extends Controller
                     $order->status = 'canceled' ;
                     $order->save(); 
 
-                    $msg = "  تم  رفض طلبك "  ;
+                    // $msg = "  تم  رفض طلبك "  ;
                     $type = "canceled_order" ;
-                    $title = "  تم  رفض طلبك " ;
+                    // $title = "  تم  رفض طلبك " ;
+     
+                    $title =  [
+                        
+                        'en' =>  "Your request was declined" ,
+                        'ar' =>   "  تم  رفض طلبك " ,
+                    ];
                     $user = User::where('id', $order->user_id)->first(); 
                     if($user){
                         $user->notify(new Notifications($msg,$type ));
                         $device_token = $user->device_token ;
                         if($device_token){
                             $this->notification($device_token,$title,$msg);
+                            $this->webnotifications($device_token,$title,$msg,$type);
                         }
                     }
                     return \Response::json('canceled') ;
