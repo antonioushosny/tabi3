@@ -31,6 +31,7 @@ class CreateUsersTable extends Migration
             $table->enum('status', ['active', 'not_active']);        
             $table->tinyInteger('available')->nullable($value = true);       
             $table->tinyInteger('type')->nullable($value = true);       
+            $table->string('lang')->nullable($value = 'ar');       
             $table->unsignedInteger('country_id')->nullable($value = true);
             $table->unsignedInteger('provider_id')->nullable($value = true);
             $table->unsignedInteger('center_id')->nullable($value = true);

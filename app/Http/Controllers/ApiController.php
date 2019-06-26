@@ -427,9 +427,17 @@ class ApiController extends Controller
             $user->save();
             $user->generateToken();
 
-            $msg = "  مستخدم جديد قام بالتسجيل" ;
+            // $msg1 = "  مستخدم جديد قام بالتسجيل" ;
             $type = "user";
-            $title = "  مستخدم جديد قام بالتسجيل" ;
+            // $title1 = "  مستخدم جديد قام بالتسجيل" ;
+            $msg =  [
+                'en' => "New user registered"  ,
+                'ar' => "  مستخدم جديد قام بالتسجيل"  ,
+            ];
+            $title = [
+                'en' =>  "New user registered"  ,
+                'ar' => "  مستخدم جديد قام بالتسجيل"  ,  
+            ];
             $admins = User::where('role', 'admin')->get(); 
             if(sizeof($admins) > 0){
                 foreach($admins as $admin){
@@ -1002,9 +1010,18 @@ class ApiController extends Controller
                     $ordercenter->status = 'pending' ;
                     $ordercenter->save();
 
-                    $msg = "  لديك طلب جديد من " . $user->name ;
+                    // $msg = "  لديك طلب جديد من " . $user->name ;
                     $type = "order";
-                    $title = "  لديك طلب جديد من " . $user->name ;
+                    // $title = "  لديك طلب جديد من " . $user->name ;
+
+                    $msg =  [
+                        'en' => "  You have a new request from" . $user->name ,
+                        'ar' =>  "  لديك طلب جديد من " . $user->name ,
+                    ];
+                    $title = [
+                        'en' =>  "  You have a new request from " . $user->name ,
+                        'ar' =>  "  لديك طلب جديد من " . $user->name ,  
+                    ];
                     $center = User::where('id', $CenterContainer->center->id)->first(); 
                     $center->notify(new Notifications($msg,$type ));
                     $device_token = $center->device_token ;
@@ -1614,7 +1631,7 @@ class ApiController extends Controller
 ///////////////////////////////////////////////////
 // count_notification function by Antonious hosny
     public function count_notification(Request $request){
-        
+        $lang = $request->header('lang');
         date_default_timezone_set('Africa/Cairo');
         $token = $request->token;
         // return $token ;
@@ -1632,6 +1649,8 @@ class ApiController extends Controller
         // $user->notify(new Notifications());
         // return $user ;
         if($user){
+            $user->lang  = $lang ;
+            $user->save();
             $count = count($user->unreadnotifications) ;
             // return $count ;
             return response()->json([

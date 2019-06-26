@@ -315,9 +315,18 @@ class OrdersController  extends Controller
                 $orderdriver->driver_id  =   $request->driver_id ; 
                 $orderdriver->save();  
             }
-            $msg = "  تم اختيارك لتوصيل طلب جديد "  ;
+            // $msg = "  تم اختيارك لتوصيل طلب جديد "  ;
             $type = "order";
-            $title = "  لديك طلب جديد من " ;
+            // $title = "  لديك طلب جديد من " ;
+
+            $msg =  [
+                'en' => " You have been selected to delivery a new order"  ,
+                'ar' =>  "   تم اختيارك لتوصيل طلب جديد " ,
+            ];
+            $title = [
+                'en' =>  "  You have a new request from "  ,
+                'ar' =>  "  لديك طلب جديد من " ,  
+            ];
             $driver = User::where('id', $request->driver_id)->first(); 
             $driver->notify(new Notifications($msg,$type ));
             $device_token = $driver->device_token ;
@@ -325,14 +334,21 @@ class OrdersController  extends Controller
                 $this->notification($device_token,$title,$msg);
             }
 
-            $msg = "  تم  قبول طلبك "  ;
+            // $msg = "  تم  قبول طلبك "  ;
             $type = "accepted_order" ;
-            $title = "  تم  قبول طلبك " ;
+            // $title = "  تم  قبول طلبك " ;
+
+            $msg =  [
+                'en' => "Your request has been accepted" ,
+                'ar' =>   "  تم  قبول طلبك " ,
+            ];
+            
+
             $user = User::where('id', $order->user_id)->first(); 
             $user->notify(new Notifications($msg,$type ));
             $device_token = $user->device_token ;
             if($device_token){
-                $this->notification($device_token,$title,$msg);
+                $this->notification($device_token,$msg,$msg);
             }
             return \Response::json('accepted') ;
 
