@@ -365,4 +365,8 @@ return [
 
     'You cannot access this page!'  => 'You cannot access this page!' ,
     'Forgot Password Or First Login ?'  => 'Forgot Password Or First Login ?' ,
+    'Enter your e-mail address below to reset your password.'  => 'Enter your e-mail address below to reset your password.',
+    'Send Password Reset Link'  => 'Send Password Reset Link',
+    'Reset Password'            => 'Reset Password',
+
 ];

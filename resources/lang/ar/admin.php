@@ -392,4 +392,8 @@ return [
     //end settings and static pages  
         'You cannot access this page!'  => ' !لا يمكنك الوصول إلى هذه الصفحة ',
         'Forgot Password Or First Login ?'  => 'نسيت كلمة المرور أو أول تسجيل دخول ؟',
-];
+        'Enter your e-mail address below to reset your password.'  => 'ادخل بريدك الإلكتروني لإعادة تعيين كلمة المرور',
+        'Send Password Reset Link'  => 'إرسال رابط إعادة تعيين كلمة المرور',
+        'Reset Password'        => 'إعادة تعيين كلمة المرور' ,
+
+ ];

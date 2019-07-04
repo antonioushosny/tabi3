@@ -63,7 +63,7 @@
 
                 </div>
                 <div class="footer text-center">
-                        <button type="submit" class="btn btn-primary">{{ __('Reset Password') }}</button>
+                        <button type="submit" class="btn btn-primary">{{ __('admin.Reset Password') }}</button>
                 </div>
             </form>
 
