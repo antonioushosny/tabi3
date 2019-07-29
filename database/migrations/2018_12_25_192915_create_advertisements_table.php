@@ -18,7 +18,19 @@ class CreateAdvertisementsTable extends Migration
             $table->string('title')->nullable($value = true);
             $table->string('image')->nullable($value = true);
             $table->string('link')->nullable($value = true);
-            $table->enum('status', ['active', 'not_active'])->default('active');
+            $table->string('type') ->nullable($value = true);
+            $table->string('page') ->nullable($value = true);
+            $table->unsignedInteger('package_id')->nullable($value = true);
+            $table->unsignedInteger('user_id')->nullable($value = true);
+            $table->string('number')->nullable($value = true);
+            $table->string('cost')->nullable($value = true);
+            $table->string('total')->nullable($value = true);
+            $table->string('start_date')->nullable($value = true);
+            $table->string('expiry_date')->nullable($value = true);
+            $table->string('status')->nullable($value = true);
+            $table->foreign('package_id')->references('id')->on('packages')->onDelete('set null'); 
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null'); 
+
             $table->timestamps();
         });
     }

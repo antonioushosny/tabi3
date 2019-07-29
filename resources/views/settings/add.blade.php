@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col-lg-5 col-md-5 col-sm-12">
                 <h2>{{__('admin.dashboard')}}
-                <small>{{__('admin.Welcome to Khazan')}}</small>
+                <small>{{__('admin.Welcome to beitk')}}</small>
                 </h2>
             </div>            
                 @if($lang =='ar')
@@ -61,22 +61,35 @@
                                             <label id="name-en-error" class="error" for="title_en" style="">  </label>
                                         </div>
                                     </div>
-                                    <div class="col-md-1">{{ __('admin.desc_ar') }}</div>
-                                    <div class="col-md-5">
-                                        <!-- for desc_ar -->
-                                        <div class="form-group form-float">
-                                            <textarea rows="4"  name="desc_ar"  class="form-control no-resize"  placeholder="{{__('admin.placeholder_desc_ar')}}" >{{ !isset($data->title_en)?null:$data->title_en }}</textarea>
-        
-                                            <label id="desc-ar-error" class="error" for="desc_ar" style="">  </label>
+                                   
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <div class="card">
+                                            <div class="header">
+                                                <h2> <strong>{{ __('admin.desc_ar') }}</strong>  </h2>
+                                                <ul class="header-dropdown">
+                                                    
+                                                </ul>
+                                            </div>
+                                            <div class="body">
+                                                <textarea id="ckeditor" name="desc_ar" placeholder="{{__('admin.placeholder_desc_ar')}}">
+                                                    {{ !isset($data->disc_ar)?' ':$data->disc_ar }}
+                                                </textarea>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-1">{{ __('admin.desc_en') }}</div>
-                                    <div class="col-md-5">
-                                        <!-- for desc_en -->
-                                        <div class="form-group form-float">
-                                            <textarea rows="4" name="desc_en"  class="form-control no-resize"  placeholder="{{__('admin.placeholder_desc_en')}}" >{{ !isset($data->title_en)?null:$data->title_en }}</textarea>
-        
-                                            <label id="desc-en-error" class="error" for="desc_en" style="">  </label>
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <div class="card">
+                                            <div class="header">
+                                                <h2> <strong>{{ __('admin.desc_en') }}</strong>  </h2>
+                                                <ul class="header-dropdown">
+                                                   
+                                                </ul>
+                                            </div>
+                                            <div class="body">
+                                                <textarea id="ckeditor2" name="desc_en" placeholder="{{__('admin.disc_ar')}}">
+                                                    {{ !isset($data->disc_en)?' ':$data->disc_en }}
+                                                </textarea>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -91,29 +104,6 @@
                                 <div class= "form-group form-float">
                                     {!! Form::hidden('id',!isset($data->id)?null:$data->id ,['class'=>'form-control show-tick']) !!}
                                 </div>
-
-                                <!-- for image  -->
-                                {{--  <div class="form-group form-float row"  >
-                                    <div class= "col-md-2 col-xs-3">
-                                        <div class="form-group form-float  " >
-                                            <div style="position:relative; ">
-                                                <a class='btn btn-primary' href='javascript:;' >
-                                                    {{trans('admin.Choose_Image')}}
-            
-                                                    {!! Form::file('image',['class'=>'form-control','id' => 'image_field', 'accept'=>'image/x-png,image/gif,image/jpeg' ,'style'=>'position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;','size'=> '40' ,'onchange' => 'readURL(this,"changeimage");' ]) !!}
-                                                </a>
-                                                &nbsp;
-                                                <div class='label label-primary' id="upload-file-info" ></div>
-                                                <span style="color: red " class="image text-center hidden"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-10">
-                                        
-                                        <img id="changeimage" src="{{asset('images/default.png')}}" width="100px" height="100px" alt=" {{trans('admin.image')}}" />
-                                    </div>
-                                </div>  --}}
                                 
                                 <div class="form-group">
                                     <div class="radio inlineblock m-r-20">
@@ -142,6 +132,10 @@
 @section('script')
 
 
+<script src="{{ asset('assets/plugins/ckeditor/ckeditor.js') }}"></script>
+<script src="{{ asset('assets/js/pages/forms/editors.js') }}"></script>
+
+
 <script>
 
     //this for add new record
@@ -161,23 +155,53 @@
               success: function(data) {
                   if ((data.errors)) {                        
                         if (data.errors.title_ar) {
-                            $('#name-ar-error').css('display', 'inline-block');
-                            $('#name-ar-error').text(data.errors.title_ar);
+                            $('#title_ar-error').css('display', 'inline-block');
+                            $('#title_ar-error').text(data.errors.title_ar);
                         }
                         if (data.errors.title_en) {
-                            $('#name-en-error').css('display', 'inline-block');
-                            $('#name-en-error').text(data.errors.title_en);
+                            $('#title_en-error').css('display', 'inline-block');
+                            $('#title_en-error').text(data.errors.title_en);
                         }
-                        if (data.errors.city_id) {
-                            $('#city-id-error').css('display', 'inline-block');
-                            $('#city-id-error').text(data.errors.city_id);
+                        if (data.errors.desc_en) {
+                            $('#desc_en-error').css('display', 'inline-block');
+                            $('#desc_en-error').text(data.errors.desc_en);
                         }
-                        if (data.errors.image) {
-                            $('#image-error').css('display', 'inline-block');
-                            $('#image-error').text(data.errors.image);
+                        if (data.errors.desc_ar) {
+                            $('#desc_ar-error').css('display', 'inline-block');
+                            $('#desc_ar-error').text(data.errors.desc_ar);
                         }
                   } else {
-                        window.location.replace("{{route('settings',$type)}}");
+                    $.ajax({
+                        type: 'POST',
+                        url: '{{ URL::route("storesetting") }}',
+                        data:  new FormData($("#form_validation")[0]),
+                        processData: false,
+                        contentType: false,
+                         
+                        success: function(data) {
+                            if ((data.errors)) {                        
+                                  if (data.errors.title_ar) {
+                                      $('#title_ar-error').css('display', 'inline-block');
+                                      $('#title_ar-error').text(data.errors.title_ar);
+                                  }
+                                  if (data.errors.title_en) {
+                                      $('#title_en-error').css('display', 'inline-block');
+                                      $('#title_en-error').text(data.errors.title_en);
+                                  }
+                                  if (data.errors.desc_en) {
+                                      $('#desc_en-error').css('display', 'inline-block');
+                                      $('#desc_en-error').text(data.errors.desc_en);
+                                  }
+                                  if (data.errors.desc_ar) {
+                                      $('#desc_ar-error').css('display', 'inline-block');
+                                      $('#desc_ar-error').text(data.errors.desc_ar);
+                                  }
+                            } else {
+                                  location.reload();
+          
+                               }
+                      },
+                    });
 
                      }
             },

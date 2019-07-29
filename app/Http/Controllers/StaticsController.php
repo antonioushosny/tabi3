@@ -65,8 +65,8 @@ class StaticsController extends Controller
                 'title_en'  =>'required|max:190',           
                 // 'image'  =>'required',            
                 'status'  =>'required',   
-                'disc_ar'  =>'required',   
-                'disc_en'  =>'required',   
+                'desc_ar'  =>'required',   
+                'desc_en'  =>'required',   
                 'type'  =>'required',   
             ];
             
@@ -79,8 +79,8 @@ class StaticsController extends Controller
                 'title_en'  =>'required|max:190',              
                 // 'image'  =>'required',            
                 'status'  =>'required'   ,   
-                'disc_ar'  =>'required',   
-                'disc_en'  =>'required',
+                'desc_ar'  =>'required',   
+                'desc_en'  =>'required',
                 'type'  =>'required'      
             ];
         }
@@ -106,13 +106,13 @@ class StaticsController extends Controller
             $doc = new Doc ;
 
          }
-
-         $doc->title_ar          = $request->title_ar ;
+         return $request->desc_ar ;
+         $doc->title_ar         = $request->title_ar ;
          $doc->title_en         = $request->title_en ;
-         $doc->disc_ar         = $request->disc_ar ;
-         $doc->disc_en         = $request->disc_en ;
-         $doc->status        = $request->status ;
-         $doc->type        = $request->type ;
+         $doc->disc_ar          = $request->desc_ar ;
+         $doc->disc_en          = $request->desc_en ;
+         $doc->status           = $request->status ;
+         $doc->type             = $request->type ;
          $doc->save();
        if ($request->hasFile('image')) {
             $image = $request->file('image');
@@ -123,7 +123,6 @@ class StaticsController extends Controller
         }
 
         $doc->save();
-
         return response()->json($doc);
 
     }

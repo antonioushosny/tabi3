@@ -71,57 +71,8 @@
                             <div class="col-md-2"> </div>
                         </div>
                     
-                        <div class="row">
-                            <div class="col-md-2"> </div>
-                                <div class="form-group col-md-8">
-                                  <span style="color: black ; width:100%"> *
-                                      {!!Form::label('message',trans('admin.message')) !!}
-                                      {!! Form::textarea('message','',['class'=>'form-control','rows'=>'4','id' => 'message_field','placeholder' => trans('admin.placeholder_message')]) !!}
-                                  </span>
-                                  <span style="color: red " class="message text-center hidden"></span>
-                                </div> <br/>
-                            <div class="col-md-2"> </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-2"> </div>
-                                <div class="form-group col-md-8">
-                                  <span style="color: black ; width:100% "> 
-    
-                                        {!!Form::label('send_points',trans('admin.send_points')) !!}
-        
-                                        <input class="form-control" type="checkbox" name="send_points" id="send_points_field"  value="send_points">
-                                    
-                                  </span>
-                                  <span style="color: red " class="send_points text-center hidden"></span>
-                                </div> <br/>
-                            <div class="col-md-2"> </div>
-                        </div>
-
-                        {{--  for  points  --}}
-                        <div class=" points_field hidden" >
-                            <div class="row">
-                                <div class="col-md-2"> </div>
-                                <div class="form-group col-md-8">
-                                    <span style="color: black ; width:100%"> *
-                                        {!!Form::label('points',trans('admin.points')) !!}
-                                        {!! Form::text('points','',['class'=>'form-control ','id' => 'points_field','onkeypress'=>'isNumber(event); ','placeholder' => trans('admin.placeholder_points')]) !!}
-                                    </span>
-                                    <span style="color: red " class="points text-center hidden"></span>
-                                </div>
-                                <div class="col-md-2"> </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-2"> </div>
-                                <div class="form-group col-md-8">
-                                    <span style="color: black ; width:100%"> *
-                                        {!!Form::label('coupons',trans('admin.coupons')) !!}
-                                        {!! Form::text('coupons','',['class'=>'form-control ','id' => 'coupons_field','onkeypress'=>'isNumber(event); ','placeholder' => trans('admin.placeholder_coupons')]) !!}
-                                    </span>
-                                    <span style="color: red " class="coupons text-center hidden"></span>
-                                </div>
-                                <div class="col-md-2"> </div>
-                            </div>
-                        </div>
+                        
+                        
 
                         <div class="row">
                             <div class="col-md-2"> </div>
@@ -134,12 +85,6 @@
                                         
                                         {!!Form::label('for',trans('admin.send_spec')) !!}
                                         <input class="form-control" type="radio" name="for" id="send_field" value="not_all">
-
-                                        {!!Form::label('for',trans('admin.for_country')) !!}
-                                        <input class="form-control" type="radio" name="for" id="for_country" value="for_country">
-
-                                        {!!Form::label('for',trans('admin.for_city')) !!}
-                                        <input class="form-control" type="radio" name="for" id="for_city" value="for_city">
 
 
                                   </span>
@@ -154,38 +99,11 @@
                                   {!! Form::label('ids',trans('admin.choose')) !!}*
                                   {!! Form::select('ids[]',[]
                                       ,'',['class'=>'form-control select2' ,'id' => 'selectmulty','multiple'=>true]) !!}
-
-                                      
                                   </span>
                                   <span style="color: red " class="status1 text-center hidden"></span>
                               </div><br/>  
                         </div>
-                        <div class="row countries hidden" >
-                            <div class="col-md-2"> </div>
-                              <div class="form group col-md-8">
-                                  <span style="color: black "> 
-                                  {!! Form::label('countries',trans('admin.choose')) !!}*
-                                  {!! Form::select('countries[]',[]
-                                      ,'',['class'=>'form-control select2' ,'id' => 'selectcountries','multiple'=>true]) !!}
-
-                                      
-                                  </span>
-                                  <span style="color: red " class="status1 text-center hidden"></span>
-                              </div><br/>  
-                        </div>
-                        <div class="row cities hidden" >
-                            <div class="col-md-2"> </div>
-                              <div class="form group col-md-8">
-                                  <span style="color: black "> 
-                                  {!! Form::label('cities',trans('admin.choose')) !!}*
-                                  {!! Form::select('cities[]',[]
-                                      ,'',['class'=>'form-control select2' ,'id' => 'selectcities','multiple'=>true]) !!}
-
-                                      
-                                  </span>
-                                  <span style="color: red " class="status1 text-center hidden"></span>
-                              </div><br/>  
-                        </div>
+                       
                         <button type="submit" class="btn btn-primary add" >
                                 <span class='glyphicon glyphicon-check'></span> {{trans('admin.send')}}
                         </button>
@@ -263,20 +181,8 @@
                         text: '{{$client->name}}'
                     }));
             @endforeach
-            @foreach($countries as $country)
-
-                $("#selectcountries").append($('<option>', {
-                        value: {{$country->id}},
-                        text: '{{$country->name_ar}}'
-                    }));
-            @endforeach
-            @foreach($cities as $city)
-
-                $("#selectcities").append($('<option>', {
-                        value: {{$city->id}},
-                        text: '{{$city->name_ar}}'
-                    }));
-            @endforeach
+           
+            
             $('#send_field').on('ifChecked', function(event) {
                 $('.clients').removeClass('hidden'); 
             });

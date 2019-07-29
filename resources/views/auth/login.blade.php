@@ -1,20 +1,20 @@
 @extends('layouts.auth')
 @section('content')
-<div class="page-header-image" style="background-image:url(assets/images/login.jpg)"></div>
+<div class="page-header-image" style="background-image:url(images/logo.jpeg); background-size: contain;"></div>
 <div class="container">
     <div class="col-md-12 content-center">
         <div class="card-plain">
                 <form action="{{ route('login') }}" method="POST" class="form" id="loginform" autocomplete="off">
                     @csrf
                         <div class="header">
-
+ 
                             @if (session('status'))
                                 <div class="alert alert-success">
                                     {{ session('status') }}
                                 </div>
                             @endif
                             <div class="logo-container">
-                                <img src="{{ asset('assets/images/logo.png') }}" alt="">
+                                {{--  <img src="{{ asset('images/logo.png') }}" alt="">  --}}
                             </div>
                         <h5>{{__(('admin.sign'))}}</h5>
                         </div>

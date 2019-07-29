@@ -5,12 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Notifications\emailnotify;
 use App\User;
-use App\Country;
-use App\City; 
-use App\Ticket; 
-use App\Deal; 
-use App\Favorite; 
-use App\Charge; 
 
 use Auth;
 use App;
@@ -37,10 +31,6 @@ class UsersController extends Controller
             return view('unauthorized',compact('role','admin'));
         }
         $title = 'users';
-        $allcountries = Country::where('id','<>','1')->get();
-        $countries = array_pluck($allcountries,'name_ar', 'id');
-        $allcities = City::where('id','<>','1')->get();
-        $cities = array_pluck($allcities,'name_ar', 'id');
         $users = User::where('role','user')->orderBy('id', 'DESC')->get();
  
         return view('users.index',compact('users','countries','cities','title','lang'));

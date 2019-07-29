@@ -7,19 +7,19 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Request;
 
-use App\Area ;
 use App\Advertisement ;
-use App\CenterContainer;
-use App\City;
 use App\Contact;
 use App\ContactUs;
-use App\Container;
-use App\Country ; 
+use App\Department ;
 use App\Doc;
-use App\Order;
-use App\OrderCenter ; 
-use App\OrderDriver ; 
+use App\Expense;
+use App\Form;
+use App\Note;
+use App\Package ; 
 use App\PasswordReset ; 
+use App\Payment;
+use App\PaymentDetail ; 
+use App\Sponsor ; 
 use App\User;
 
 use Carbon\Carbon;
@@ -107,74 +107,18 @@ class ApiController extends Controller
 
     }
 //////////////////////////////////////////////
-// Cities function by Antonious hosny
-    public function Cities(Request $request){ 
+// register function by Antonious hosny
+    public function Register(Request $request) {
+        // return $request;
         $lang = $request->header('lang');
-        if($lang == 'ar'){
-            $Cities  = City::where('status','active')->with('areas')->orderBy('name_ar', 'asc')->get();
-        }else{
-            $Cities  = City::where('status','active')->with('areas')->orderBy('name_en', 'asc')->get();
-        }
-            if(sizeof($Cities) > 0){
-                $Citiess =[];
-                $i = 0 ;
-
-                foreach($Cities as $City){
-                    if($City){
-                        $Citiess[$i]['city_id']   = $City->id;
-                        if($lang == 'ar'){
-                            $Citiess[$i]['city_name']   = $City->name_ar;
-                        }else{
-                            $Citiess[$i]['city_name']   =  $City->name_en;
-                        }
-                        $areass = [] ;
-                        $n  = 0 ;
-                        if(sizeOf($City->areas) > 0){
-
-                            foreach($City->areas as $area){
-                                $areass[$n]['area_id']   = $area->id;
-                                if($lang == 'ar'){
-                                    $areass[$n]['area_name']   = $area->name_ar;
-                                }else{
-                                    $areass[$n]['area_name']   =  $area->name_en;
-                                }
-                                $n ++ ;
-                        
-                            }
-                        }
-                        $Citiess[$i]['areas'] = $areass ;
-                        $i ++ ;
-                    
-                    }
-                }
-                return response()->json([
-                    'success' => 'success',
-                    'errors' => null,
-                    'message' => trans('api.fetch'),
-                    'data' => $Citiess
-                ]);
-            }
-            else
-            {
-                $errors=  trans('api.notfound');
-                return response()->json([
-                    'success' => 'failed',
-                    'errors' => $errors,
-                    'message' => trans('api.notfound'),
-                    'data' => null,
-
-                ]);
-            }
-
-    }
-//////////////////////////////////////////////
-// Areas function by Antonious hosny
-    public function Areas(Request $request){ 
-        $lang = $request->header('lang');
-        $rules=array(
-            "city_id"=>"required",
+        // $this->validateLogin($request);
+        $rules=array(   
+            "name"=>"required",
+            "email"=>"required|unique:users,email",
+            "mobile"=>"required|between:8,11|unique:users,mobile", 
+            "password"=>"required|min:6",
+        
         );
-
         //check the validator true or not
         $validator  = \Validator::make($request->all(),$rules);
         if($validator->fails())
@@ -189,55 +133,76 @@ class ApiController extends Controller
             }
             return response()->json([
                 'success' => 'failed',
-                'errors'=>$transformed,
-                'message' => trans('api.failed_login'),
-                'data' => null,
-
+                'errors'  => $transformed,
+                'message' => trans('api.failed_registered'),
+                'data'    => null ,
             ]);
         }
-        if($lang == 'ar'){
-            $areas  = Area::where('status','active')->where('city_id',$request->city_id)->orderBy('name_ar', 'asc')->get();
-        }else{
-            $areas  = Area::where('status','active')->where('city_id',$request->city_id)->orderBy('name_en', 'asc')->get();
-        }
-            if(sizeof($areas) > 0){
-                $areass =[];
-                $i = 0 ;
 
-                foreach($areas as $area){
-                    if($area){
-                        $areass[$i]['area_id']   = $area->id;
-                        if($lang == 'ar'){
-                            $areass[$i]['area_name']   = $area->name_ar;
-                        }else{
-                            $areass[$i]['area_name']   =  $area->name_en;
-                        }
-                        $i ++ ;
-                    
-                    }
+            $user = new User;
+
+            $password            = \Hash::make($request->password);
+            $user->password      = $password ;
+            $user->name          = $request->name ;
+            $user->email         = $request->email ;
+            $user->mobile        = $request->mobile ;
+            $user->status        = 'active';
+            $user->role          = 'user';
+            $user->save();
+            $user->generateToken();
+
+            $type = "user";
+            $msg =  [
+                'en' => "New user registered"  ,
+                'ar' => "  مستخدم جديد قام بالتسجيل"  ,
+            ];
+            $title = [
+                'en' =>  "New user registered"  ,
+                'ar' => "  مستخدم جديد قام بالتسجيل"  ,  
+            ];
+            $admins = User::where('role', 'admin')->get(); 
+            if(sizeof($admins) > 0){
+                foreach($admins as $admin){
+                    $admin->notify(new Notifications($msg,$type ));
                 }
-                return response()->json([
-                    'success' => 'success',
-                    'errors' => null,
-                    'message' => trans('api.fetch'),
-                    'data' => $areass
-                ]);
+                $device_token = $admin->device_token ;
+                if($device_token){
+                    $this->notification($device_token,$title,$msg);
+                    $this->webnotification($device_token,$title,$msg,$type);
+                }
             }
-            else
-            {
-                $errors=  trans('api.notfound');
-                return response()->json([
-                    'success' => 'failed',
-                    'errors' => $errors,
-                    'message' => trans('api.notfound'),
-                    'data' => null,
+            /////// this for verify email addreess/////////
 
-                ]);
+            // $token = rand(100000,999999);
+            // $PasswordReset = PasswordReset::where('email',$user->email)->first();
+            // if(!$PasswordReset){
+            //     $PasswordReset = new PasswordReset ;
+            // }
+            // $PasswordReset->email = $user->email ;
+            // $PasswordReset->token = $token ;
+            // $PasswordReset->save();
+            // User::find($user->id)->notify(new verify_code($token));
+            /////// end verify email addreess/////////
+            $user =  User::where('id',$user->id)->first();
+            if($user){
+                $users = [] ;
+                $users['id'] = $user->id ;
+                $users['user_name'] = $user->name ;
+                $users['email'] = $user->email ;
+                $users['mobile'] = $user->mobile ;
+                $users['role'] = $user->role ;
+                $users['remember_token'] = $user->remember_token ;
+                
             }
-
+            return response()->json([
+                'success' => 'success',
+                'errors'=> null ,
+                'message' => trans('api.success_registered'),
+                'data' => $users ,
+            ]);
+        
     }
 //////////////////////////////////////////////
-
 // login function by Antonious hosny
     public function Login(Request $request){
         // return $request;
@@ -245,7 +210,7 @@ class ApiController extends Controller
         $lang = $request->header('lang');
         // $this->validateLogin($request);
         $rules=array(
-            "email"=>"required",
+            "mobile"=>"required",
             "password"=>"required",
             "device_token"=>"required",
             "device_type" => "required"  // 1 for ios , 0 for android  
@@ -271,15 +236,15 @@ class ApiController extends Controller
 
             ]);
         }
-        $user = User::where('email',$request->email)->first();
+        $user = User::where('mobile',$request->mobile)->first();
         // return $user;
         if(!$user){
 
-            $errors =  trans('admin.email_notfound');
+            $errors =  trans('admin.mobile_notfound');
             return response()->json([
                 'success' => 'failed',
                 'errors' => $errors ,
-                'message' => trans('admin.email_notfound'),
+                'message' => trans('admin.mobile_notfound'),
                 'data' => null,
 
             ]);
@@ -305,42 +270,15 @@ class ApiController extends Controller
                 $user->generateToken();
                 $user->device_token = $request->device_token ;
                 $user->type = $request->device_type ;
+                $user->lang = $lang ;
                 $user->save();
-                $user =  User::where('id',$user->id)->with('City')->with('Area')->first();
+                $user =  User::where('id',$user->id)->first();
                 $users = [] ;
                 if($user){
                     $users['id'] = $user->id ;
-                    $users['name'] = $user->name ;
+                    $users['user_name'] = $user->name ;
                     $users['email'] = $user->email ;
                     $users['mobile'] = $user->mobile ;
-                    if($user->City){
-                        
-                        if($lang == 'ar'){
-                            $users['city_id'] = $user->City->id ;
-                            $users['city_name']   = $user->City->name_ar;
-                        }else{
-                            $users['city_id'] = $user->City->id ;
-                            $users['city_name']   = $user->City->name_en;
-                        }
-                    }else{
-                        $users['city_id'] = null ;
-                        $users['city_name']   =  null;
-                    }
-                    if($user->Area){
-                        
-                        if($lang == 'ar'){
-                            $users['area_id'] = $user->Area->id ;
-                            $users['area_name']   = $user->Area->name_ar;
-                        }else{
-                            $users['area_id'] = $user->Area->id ;
-                            $users['area_name']   = $user->Area->name_en;
-                        }
-                    }else{
-                        $users['area_id'] = null ;
-                        $users['area_name']   =  null;
-                    }
-                    $users['lat'] = $user->lat ;
-                    $users['lng'] = $user->lng ;
                     $users['role'] = $user->role ;
                     if($user->image){
                         $users['image'] = asset('img/').'/'. $user->image;
@@ -376,137 +314,6 @@ class ApiController extends Controller
 
     }
 //////////////////////////////////////////////
-// register function by Antonious hosny
-    public function Register(Request $request) {
-        // return $request;
-        $lang = $request->header('lang');
-        // $this->validateLogin($request);
-        $rules=array(   
-            "name"=>"required",
-            "email"=>"required|unique:users,email",
-            "mobile"=>"required|between:8,11|unique:users,mobile", 
-            "password"=>"required|min:6",
-            // "area_id"=>"required",
-            // "city_id"=>"required",
-            // "lat"=>"required",
-            // "lng"=>"required",
-        );
-        //check the validator true or not
-        $validator  = \Validator::make($request->all(),$rules);
-        if($validator->fails())
-        {
-            $messages = $validator->messages();
-            $transformed = [];
- 
-            foreach ($messages->all() as $field => $message) {
-                $transformed[] = [
-                    'message' => $message
-                ];
-            }
-            return response()->json([
-                'success' => 'failed',
-                'errors'  => $transformed,
-                'message' => trans('api.failed_registered'),
-                'data'    => null ,
-            ]);
-        }
-
-            $user = new User;
-
-            $password            = \Hash::make($request->password);
-            $user->password      = $password ;
-            $user->name          = $request->name ;
-            $user->email         = $request->email ;
-            $user->mobile        = $request->mobile ;
-            $user->area_id        = $request->area_id ;
-            $user->city_id        = $request->city_id ;
-            $user->lat        = $request->lat ;
-            $user->lng        = $request->lng ;
-            $user->status        = 'active';
-            $user->role          = 'user';
-            $user->save();
-            $user->generateToken();
-
-            // $msg1 = "  مستخدم جديد قام بالتسجيل" ;
-            $type = "user";
-            // $title1 = "  مستخدم جديد قام بالتسجيل" ;
-            $msg =  [
-                'en' => "New user registered"  ,
-                'ar' => "  مستخدم جديد قام بالتسجيل"  ,
-            ];
-            $title = [
-                'en' =>  "New user registered"  ,
-                'ar' => "  مستخدم جديد قام بالتسجيل"  ,  
-            ];
-            $admins = User::where('role', 'admin')->get(); 
-            if(sizeof($admins) > 0){
-                foreach($admins as $admin){
-                    $admin->notify(new Notifications($msg,$type ));
-                }
-                $device_token = $admin->device_token ;
-                if($device_token){
-                    $this->notification($device_token,$title,$msg);
-                    $this->webnotification($device_token,$title,$msg,$type);
-                }
-            }
-            /////// this for verify email addreess/////////
-
-            // $token = rand(100000,999999);
-            // $PasswordReset = PasswordReset::where('email',$user->email)->first();
-            // if(!$PasswordReset){
-            //     $PasswordReset = new PasswordReset ;
-            // }
-            // $PasswordReset->email = $user->email ;
-            // $PasswordReset->token = $token ;
-            // $PasswordReset->save();
-            // User::find($user->id)->notify(new verify_code($token));
-            /////// end verify email addreess/////////
-            $user =  User::where('id',$user->id)->with('country')->with('city')->first();
-            if($user){
-                $users = [] ;
-                $users['id'] = $user->id ;
-                $users['name'] = $user->name ;
-                $users['email'] = $user->email ;
-                $users['mobile'] = $user->mobile ;
-                if($user->City){
-                    if($lang == 'ar'){
-                        $users['city_id'] = $user->City->id ;
-                        $users['city_name']   = $user->City->name_ar;
-                    }else{
-                        $users['city_id'] = $user->City->id ;
-                        $users['city_name']   = $user->City->name_en;
-                    }
-                }else{
-                    $users['city_id'] = null ;
-                    $users['city_name']   = null ;
-                }
-                if($user->Area){
-                    if($lang == 'ar'){
-                        $users['area_id'] = $user->Area->id ;
-                        $users['area_name']   = $user->Area->name_ar;
-                    }else{
-                        $users['area_id'] = $user->Area->id ;
-                        $users['area_name']   = $user->Area->name_en;
-                    }
-                }else{
-                    $users['area_id'] = null ;
-                    $users['area_name']   = null ;
-                }
-                $users['lat'] = $user->lat ;
-                $users['lng'] = $user->lng ;
-                $users['role'] = $user->role ;
-                $users['remember_token'] = $user->remember_token ;
-                
-            }
-            return response()->json([
-                'success' => 'success',
-                'errors'=> null ,
-                'message' => trans('api.success_registered'),
-                'data' => $users ,
-            ]);
-        
-    }
-//////////////////////////////////////////////
 // editprofile function by Antonious hosny
     public function EditProfile(Request $request){
         // return $request ;
@@ -525,17 +332,16 @@ class ApiController extends Controller
             ]);
         }  
         $user = User::where('remember_token',$token)->first();
+        // return $request->mobile . '/ ' .  ;
         if($user){      
             $rules=array(  
                 "name"=>"min:3",
-                // 'profile_pic' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-                // "mobile"=>"digits:10",
+                "mobile"=>"between:8,11", 
                 "password" => "min:6",
                 "email"=> 'email'
             );
-            $user = User::where('id',$user->id)->first();
             if($request->mobile){
-                if( $request->mobile != $user->mobile){
+                if($request->mobile != $user->mobile){
                     $rules['mobile'] = 'unique:users,mobile';
                 }
             }
@@ -578,72 +384,31 @@ class ApiController extends Controller
             if($request->mobile){
                 $user->mobile        = $request->mobile ;
             }
-            if($request->city_id){
-                $user->city_id           = $request->city_id ;
-            }
-            if($request->lat){
-                $user->lat           = $request->lat ;
-            }
-            if($request->lng){
-                $user->lng           = $request->lng ;
-            }
-            if($request->area_id){
-                $user->area_id           = $request->area_id ;
-            }
             
-            // if ($request->profile_pic){
-            //     $image = $request->input('profile_pic'); // image base64 encoded
-            //     $image = str_replace('data:image/png;base64,', '', $image);
-            //     $image = str_replace(' ', '+', $image);
-            //     $imageName = str_random(10). time().'.'.'png';
-            //     \File::put(public_path(). '/img/' . $imageName, base64_decode($image));
-            //     $user->image = $imageName;
-            // }
-
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                $name = md5($image->getClientOriginalName() . time()) . "." . $image->getClientOriginalExtension();
-                $destinationPath = public_path('/img');
-                $image->move($destinationPath, $name);
-                $user->image   = $name;  
+            if ($request->profile_pic){
+                $image = $request->input('profile_pic'); // image base64 encoded
+                $image = str_replace('data:image/png;base64,', '', $image);
+                $image = str_replace(' ', '+', $image);
+                $imageName = str_random(10). time().'.'.'png';
+                \File::put(public_path(). '/img/' . $imageName, base64_decode($image));
+                $user->image = $imageName;
             }
+
+            // if ($request->hasFile('image')) {
+            //     $image = $request->file('image');
+            //     $name = md5($image->getClientOriginalName() . time()) . "." . $image->getClientOriginalExtension();
+            //     $destinationPath = public_path('/img');
+            //     $image->move($destinationPath, $name);
+            //     $user->image   = $name;  
+            // }
             $user->save();
-            $user =  User::where('id',$user->id)->with('City')->with('Area')->first();
+            $user =  User::where('id',$user->id)->first();
             $users = [] ;
             if($user){
                 $users['id'] = $user->id ;
-                $users['name'] = $user->name ;
+                $users['user_name'] = $user->name ;
                 $users['email'] = $user->email ;
                 $users['mobile'] = $user->mobile ;
-                if($user->City){
-                    
-                    if($lang == 'ar'){
-                        
-                        $users['city_id'] = $user->City->id ;
-                        $users['city_name']   = $user->City->name_ar;
-                    }else{
-                        $users['city_id'] = $user->City->id ;
-                        $users['city_name']   = $user->City->name_en;
-                    }
-                }else{
-                    $users['city_id'] = null ;
-                    $users['city_name']   =  null;
-                }
-                if($user->Area){
-                    
-                    if($lang == 'ar'){
-                        $users['area_id'] = $user->Area->id ;
-                        $users['area_name']   = $user->Area->name_ar;
-                    }else{
-                        $users['area_id'] = $user->Area->id ;
-                        $users['area_name']   = $user->Area->name_en;
-                    }
-                }else{
-                    $users['area_id'] = null ;
-                    $users['area_name']   =  null;
-                }
-                $users['lat'] = $user->lat ;
-                $users['lng'] = $user->lng ;
                 $users['role'] = $user->role ;
                 $users['remember_token'] = $user->remember_token ;
                 
@@ -812,7 +577,7 @@ class ApiController extends Controller
                     $user->password = $password ;
                     // $user->generateToken();
                     $user->save();
-                    
+                    $PasswordReset->delete();
                     return response()->json([
                         'success' => 'success',
                         'errors'  => null,
@@ -853,96 +618,162 @@ class ApiController extends Controller
         
     }
 /////////////////////////////////////////////////
-// Containers function by Antonious hosny
-    public function Containers(Request $request){
-        if($request->page && $request->page > 0 ){
-            $skip = $request->page.'0' ;
-        }else{
-            $skip = 0 ;
-        }
+// HomePage function by Antonious hosny
+    public function HomePage(Request $request){
         $token = $request->token;
         $lang = $request->header('lang');
         $dt = Carbon::now();
         $date  = date('Y-m-d', strtotime($dt));
-        $time  = date('H:i:s', strtotime($dt));
         if($token){
+
             $user = User::where('remember_token',$token)->first();
             if($user){
-
-                $containers = Container::where('status','active')->orderBy('id', 'desc')->skip($skip)->limit(10)->get();
-                $containers_count = Container::where('status','active')->count('id');
-                // return $containers_count ;
-                $containerss = [] ;
+                $advertisementss = [];
                 $i =0 ;
-                if(sizeof($containers) > 0 ){
-                    foreach($containers as $container){
-                        
-                        $containerss[$i]['container_id'] = $container->id ;    
-                        if($lang == 'ar'){
-                            $containerss[$i]['container_name'] = $container->name_ar ; 
-                            $containerss[$i]['container_desc'] = $container->desc_ar ; 
-                        }else{
-                            $containerss[$i]['container_name'] = $container->name_en ; 
-                            $containerss[$i]['container_desc'] = $container->desc_en ; 
-                        }
-                        if($container->image){
-                            $containerss[$i]['image'] = asset('img/').'/'. $container->image;
-                        }else{
-                            $containerss[$i]['image'] = null ;
-                        }
-                        $containerss[$i]['size'] = $container->size ; 
-
-                        $i ++ ;                    
-                        
+                $advertisements = Advertisement::where('page','home')->where('expiry_date','>',$date)->orderBy('id',"Desc")->get();
+                // return  $advertisements;
+                if(sizeof($advertisements) > 0){
+                    foreach($advertisements as $ads){
+                        $advertisementss[$i]['image'] = asset('img/').'/'. $ads->image;
+                        $advertisementss[$i]['link'] =  $ads->link;
+                        $advertisementss[$i]['title'] =  $ads->title;
+                        $i++;
                     }
                 }
+
+                $sponsorss = [];
+                $i =0 ;
+                $sponsors = Sponsor::where('status','active')->orderBy('id',"Desc")->get();
+                if(sizeof($sponsors) > 0){
+                    foreach($sponsors as $sponsor){
+                        $sponsorss[$i]['image'] = asset('img/').'/'. $sponsor->image;
+                        $sponsorss[$i]['link']  =  $sponsor->link;
+                        $sponsorss[$i]['title'] =  $sponsor->title;
+                        $i++;
+                    }
+                }
+                $user->lang  = $lang ;
+                $user->save();
+                $count = count($user->unreadnotifications)  ; 
+
                 return response()->json([
                     'success' => 'success',
                     'errors' => null ,
                     'message' => trans('api.fetch'),
                     'data' => [
-                        'containers' => $containerss,
-                        'containers_count' => $containers_count,
-                        ],
-    
+                        'advertisements' => $advertisementss,
+                        'sponsors' => $sponsorss,
+                        'count' => $count ,
+                    ]
                 ]);
+
             }else{
                 return response()->json([
                     'success' => 'logged',
                     'errors' => trans('api.logout'),
                     "message"=>trans('api.logout'),
-                ]);
+                    ]);
             }
-            
         }else{
             return response()->json([
                 'success' => 'logged',
                 'errors' => trans('api.logout'),
                 "message"=>trans('api.logout'),
-            ]);
+                ]);
         }
-
-
+        
     }
 //////////////////////////////////////////////////
-// MakeOrder function by Antonious hosny
-    public function MakeOrder(Request $request){
+// Departments function by Antonious hosny
+    public function Departments(Request $request){
         $token = $request->token;
         $lang = $request->header('lang');
         $dt = Carbon::now();
         $date  = date('Y-m-d', strtotime($dt));
-        $time  = date('H:i:s', strtotime($dt));
         if($token){
-
+        
             $user = User::where('remember_token',$token)->first();
             if($user){
+                $user->lang  = $lang ;
+                $user->save();
+                $advertisementss = [];
+                $i =0 ;
+                $advertisements = Advertisement::where('page','companies')->where('expiry_date','>',$date)->orderBy('id',"Desc")->get();
+                // return  $advertisements;
+                if(sizeof($advertisements) > 0){
+                    foreach($advertisements as $ads){
+                        if($ads->image){
+                            $advertisementss[$i]['image'] = asset('img/').'/'. $ads->image;
+                        }else{
+                            $advertisementss[$i]['image'] = null ;
+                        }
+                        $advertisementss[$i]['link'] =  $ads->link;
+                        $advertisementss[$i]['title'] =  $ads->title;
+                        $i++;
+                    }
+                }
+
+                $departmentss = [];
+                $i =0 ;
+                $departments = Department::where('status','active')->orderBy('id',"Desc")->get();
+                if(sizeof($departments) > 0){
+                    foreach($departments as $department){
+                        if($lang == 'ar'){
+                            $departmentss[$i]['title'] =  $department->title_ar;
+                        }else{
+                            $departmentss[$i]['title'] =  $department->title_en;
+                        }
+                        if($department->image){
+                            $departmentss[$i]['image'] = asset('img/').'/'. $department->image;
+                        }else{
+                            $departmentss[$i]['image'] = null ;
+                        }
+                        $i++;
+                    }
+                }
+                
+                return response()->json([
+                    'success' => 'success',
+                    'errors' => null ,
+                    'message' => trans('api.fetch'),
+                    'data' => [
+                        'advertisements' => $advertisementss,
+                        'departments' => $departmentss,
+                    ]
+                ]);
+            
+
+            }else{
+                return response()->json([
+                    'success' => 'logged',
+                    'errors' => trans('api.logout'),
+                    "message"=>trans('api.logout'),
+                    ]);
+            }
+        }else{
+            return response()->json([
+                'success' => 'logged',
+                'errors' => trans('api.logout'),
+                "message"=>trans('api.logout'),
+                ]);
+        }
+        
+    }
+//////////////////////////////////////////////////
+// Companies function by Antonious hosny
+    public function Companies(Request $request){
+        $token = $request->token;
+        $lang = $request->header('lang');
+        $dt = Carbon::now();
+        $date  = date('Y-m-d', strtotime($dt));
+        if($token){
+        
+            $user = User::where('remember_token',$token)->first();
+            if($user){
+                $user->lang  = $lang ;
+                $user->save();
                 $rules=array(
-                    'container_id'      =>'required',
-                    'num_containers'    => 'required',
-                    'lat'    => 'required',
-                    'lng'    => 'required',
-                    'city_id'    => 'required',
-                    'area_id'    => 'required',
+                    'department_id'      =>'required',
                 );
                 $validator  = \Validator::make($request->all(),$rules);
                 if($validator->fails())
@@ -962,105 +793,52 @@ class ApiController extends Controller
                         'data'    => null ,
                     ]);
                 }
-                $container = Container::where('id',$request->container_id)->with('centers')->first();
-                $distancess = [] ;
-                $i = 0;
-                if(sizeof($container->centers) > 0){
 
-                    foreach ($container->centers as $center) {
-                       $distance =  $this->GetDistance($request->lat, $center->lat, $request->lng, $center->lng, 'K');
-                       $distancess[$center->id] = $distance  ;
-                       $i++ ;
-                        // print   $distance.' KM ' .'</br>';
+                $advertisementss = [];
+                $i =0 ;
+                $advertisements = Advertisement::where('page','companies')->where('expiry_date','>',$date)->orderBy('id',"Desc")->get();
+                if(sizeof($advertisements) > 0){
+                    foreach($advertisements as $ads){
+                        $advertisementss[$i]['image'] = asset('img/').'/'. $ads->image;
+                        $advertisementss[$i]['link'] =  $ads->link;
+                        $advertisementss[$i]['title'] =  $ads->title;
+                        $i++;
                     }
-                    asort($distancess)  ;
-                    // reset($distancess);
-                    $first_key = key($distancess);
-
-                    $CenterContainer = CenterContainer::where('center_id',$first_key)->where('container_id',$request->container_id)->with('center')->with('container')->first();
-                    //    return $CenterContainer;
-                    $user->city_id = $request->city_id ;
-                    $user->area_id = $request->area_id ;
-                    $user->save();
-                    $order = new Order ;
-                    $order->user_name = $user->name ;
-                    $order->user_mobile = $user->mobile ;
-                    if($user->City)
-                    $order->city = $user->City->name_ar ;
-                    if($user->Area)
-                    $order->area = $user->Area->name_ar ;
-                    $order->lat = $request->lat ;
-                    $order->lng = $request->lng ;
-                    $order->container_name_ar = $CenterContainer->container->name_ar ;
-                    $order->container_name_en = $CenterContainer->container->name_en ;
-                    $order->container_size = $CenterContainer->container->size ;
-                    $order->no_container = $request->num_containers ;
-                    $order->notes = $request->notes ;
-                    $order->user_id = $user->id ;
-                    $order->center_id = $CenterContainer->center->id ;
-                    $order->provider_id = $CenterContainer->center->provider_id ;
-                    $order->container_id = $CenterContainer->container->id ;
-                    $order->price = $CenterContainer->price ;
-                    $order->total = $CenterContainer->price * $request->num_containers ;
-                    $order->status = 'pending' ;
-                    
-                    $order->save();
-                    $ordercenter = new OrderCenter ;
-                    $ordercenter->order_id = $order->id ;
-                    $ordercenter->center_id = $order->center_id ;
-                    $ordercenter->status = 'pending' ;
-                    $ordercenter->save();
-
-                    // $msg = "  لديك طلب جديد من " . $user->name ;
-                    $type = "order";
-                    // $title = "  لديك طلب جديد من " . $user->name ;
-
-                    $msg =  [
-                        'en' => "  You have a new request from" . $user->name ,
-                        'ar' =>  "  لديك طلب جديد من " . $user->name ,
-                    ];
-                    $title = [
-                        'en' =>  "  You have a new request from " . $user->name ,
-                        'ar' =>  "  لديك طلب جديد من " . $user->name ,  
-                    ];
-                    $center = User::where('id', $CenterContainer->center->id)->first(); 
-                    $center->notify(new Notifications($msg,$type ));
-                    $device_token = $center->device_token ;
-                    if($device_token){
-                        $this->notification($device_token,$title,$msg);
-                        $this->webnotification($device_token,$title,$msg,$type);
-                    }
-                    
-                    $order = Order::where('id',$order->id)->with('center')->with('container')->first();
-                    $orders = [];
-                    if($order){
-                        $orders['container_id'] =   $order->container->id ;
-                        $orders['center_id'] =   $order->center->id ;
-                        $orders['center_name'] =   $order->center->name ;
-                        if($lang == 'ar'){
-                            $orders['container_name'] =   $order->container->name_ar ;
-                        }else{
-                            $orders['container_name'] =   $order->container->name_en ;
-                        }
-                        $orders['container_size'] =   $order->container->size ;
-                        $orders['num_containers'] =   $order->no_container;
-                        $orders['container_price'] =   $order->price ;
-                        $orders['total'] =   $order->total ;
-                        $orders['status'] =   trans('api.'.$order->status) ;
-                    }
-                    return response()->json([
-                        'success' => 'success',
-                        'errors' => null ,
-                        'message' => trans('api.save'),
-                        'data' => $orders ,
-                    ]);
                 }
-                return response()->json([
-                    'success' => 'failed',
-                    'errors' => trans('api.notfoundcenter'),
-                    "message"=>trans('api.notfoundcenter'),
-                    ]);
+
+                $companiess = [];
+                $i =0 ;
+                $companies = User::where('department_id',$request->department_id)->where('role','company')->where('status','active')->orderBy('id',"Desc")->get();
+                if(sizeof($companies) > 0){
+                    foreach($companies as $company){
+                        $companiess[$i]['name'] =  $company->name;
+                        $companiess[$i]['email'] =  $company->email;
+                        $companiess[$i]['mobile'] =  $company->mobile;
+                        $companiess[$i]['address'] =  $company->address;
+                        $companiess[$i]['desc'] =  $company->desc;
+                        $companiess[$i]['fax'] =  $company->fax;
+                        $companiess[$i]['lat'] =  $company->lat;
+                        $companiess[$i]['lng'] =  $company->lng;
+                        if($company->image){
+                            $companiess[$i]['image'] = asset('img/').'/'. $company->image;
+                        }else{
+                            $companiess[$i]['image'] = null ;
+                        }
+                        $i++;
+                    }
+                }
                 
+                return response()->json([
+                    'success' => 'success',
+                    'errors' => null ,
+                    'message' => trans('api.fetch'),
+                    'data' => [
+                        'advertisements' => $advertisementss,
+                        'companies' => $companiess,
+                    ]
+                ]);
+            
+
             }else{
                 return response()->json([
                     'success' => 'logged',
@@ -1075,134 +853,46 @@ class ApiController extends Controller
                 "message"=>trans('api.logout'),
                 ]);
         }
-
-
+        
     }
 //////////////////////////////////////////////////
-// MyOrders function by Antonious hosny
-    public function MyOrders(Request $request){
+//////////////////////////////////////////////////
+    // Offic function by Antonious hosny
+    public function Offic(Request $request){
         $token = $request->token;
         $lang = $request->header('lang');
         $dt = Carbon::now();
         $date  = date('Y-m-d', strtotime($dt));
-        $time  = date('H:i:s', strtotime($dt));
-        if($request->page && $request->page >= 1 ){
-            $skip = $request->page.'0' ;
-            // return $skip ;
-        }else{
-            $skip = 0 ;
-        }
-        
         if($token){
+        
             $user = User::where('remember_token',$token)->first();
-            if($user && $user->role == 'user'){
-                // $orderss = Order::where('user_id',$user->id)->with('center')->where('status','<>','delivered')->Where('status','<>','canceled')->with('container')->get();
-                $orderss = Order::where('user_id',$user->id)->with('center')->with('container')->skip($skip)->limit(10)->get();
-                $count_orders = Order::where('user_id',$user->id)->with('center')->with('container')->count('id');
-                if(sizeof($orderss) > 0){
-                    $orders = [];
-                    $i = 0 ;
-                    foreach($orderss as $order){
-                        $orders[$i]['order_id'] =   $order->id ;
-                        $orders[$i]['container_id'] =   $order->container->id ;
-                        $orders[$i]['center_id'] =   $order->center->id ;
-                        $orders[$i]['center_name'] =   $order->center->name ;
-                        if($lang == 'ar'){
-                            $orders[$i]['container_name'] =   $order->container->name_ar ;
-                        }else{
-                            $orders[$i]['container_name'] =   $order->container->name_en ;
-                        }
-                        $orders[$i]['container_size'] =   $order->container->size ;
-                        $orders[$i]['num_containers'] =   $order->no_container;
-                        $orders[$i]['container_price'] =   $order->price ;
-                        if($order->container){
-                            if($order->container->image){
-                                $orders[$i]['image'] = asset('img/').'/'. $container->image;
-                            }else{
-                                $orders[$i]['image'] = null ;
-                            }
-                        }
-                        $orders[$i]['total'] =   $order->total ;
-                        // $orders[$i]['status'] =   trans('api.'.$order->status) ;
-                        $orders[$i]['status'] =   $order->status;
-                        $orders[$i]['created_at'] =   $order->created_at;
+            if($user){
+                $user->lang  = $lang ;
+                $user->save();
+                $advertisementss = [];
+                $i =0 ;
+                $advertisements = Advertisement::where('page','offic')->where('expiry_date','>',$date)->orderBy('id',"Desc")->get();
+                // return  $advertisements;
+                if(sizeof($advertisements) > 0){
+                    foreach($advertisements as $ads){
+                        $advertisementss[$i]['image'] = asset('img/').'/'. $ads->image;
+                        $advertisementss[$i]['link'] =  $ads->link;
+                        $advertisementss[$i]['title'] =  $ads->title;
                         $i++;
                     }
-                    return response()->json([
-                        'success' => 'success',
-                        'errors' => null ,
-                        'message' => trans('api.fetch'),
-                        'data' => [
-                            'order' => $orders  , 
-                            'count_orders' => $count_orders
-                        ]
-                    ]);
                 }
+
                 return response()->json([
-                    'success' => 'failed',
-                    'errors' => trans('api.notfound'),
-                    "message"=>trans('api.notfound'),
-                    ]);
-                
-            }
-            else if($user && $user->role == 'driver'){
-                // $orderss = Order::where('user_id',$user->id)->with('center')->where('status','<>','delivered')->Where('status','<>','canceled')->with('container')->get();
-                $orderss = Order::where('driver_id',$user->id)->with('center')->with('container')->skip($skip)->limit(10)->get();
-                $count_orders = Order::where('driver_id',$user->id)->with('center')->with('container')->count('id');
-                if(sizeof($orderss) > 0){
-                    $orders = [];
-                    $i = 0 ;
-                    foreach($orderss as $order){
-                        $orders[$i]['order_id'] =   $order->id ;
-                        $orders[$i]['user_id'] =   $order->user_id ;
-                        $orders[$i]['user_name'] =   $order->user_name ;
-                        $orders[$i]['mobile'] =   $order->user_mobile ;
-                        $orders[$i]['lat'] =   $order->lat ;
-                        $orders[$i]['lng'] =   $order->lng ;
-                        $orders[$i]['city'] =   $order->city ;
-                        $orders[$i]['area'] =   $order->area ;
-                        $orders[$i]['container_id'] =   $order->container->id ;
-                        $orders[$i]['center_id'] =   $order->center->id ;
-                        $orders[$i]['center_name'] =   $order->center->name ;
-                        if($lang == 'ar'){
-                            $orders[$i]['container_name'] =   $order->container->name_ar ;
-                        }else{
-                            $orders[$i]['container_name'] =   $order->container->name_en ;
-                        }
-                        $orders[$i]['container_size'] =   $order->container->size ;
-                        $orders[$i]['num_containers'] =   $order->no_container;
-                        $orders[$i]['container_price'] =   $order->price ;
-                        if($order->container){
-                            if($order->container->image){
-                                $orders[$i]['image'] = asset('img/').'/'. $container->image;
-                            }else{
-                                $orders[$i]['image'] = null ;
-                            }
-                        }
-                        $orders[$i]['total'] =   $order->total ;
-                        // $orders[$i]['status'] =   trans('api.'.$order->status) ;
-                        $orders[$i]['status'] =   $order->status;
-                        $orders[$i]['created_at'] =   $order->created_at;
-                        $i++;
-                    }
-                    return response()->json([
-                        'success' => 'success',
-                        'errors' => null ,
-                        'message' => trans('api.fetch'),
-                        'data' => [
-                            'order' => $orders  , 
-                            'count_orders' => $count_orders
-                        ]
-                    ]);
-                }
-                return response()->json([
-                    'success' => 'failed',
-                    'errors' => trans('api.notfound'),
-                    "message"=>trans('api.notfound'),
-                    ]);
-                
-            }
-            else{
+                    'success' => 'success',
+                    'errors' => null ,
+                    'message' => trans('api.fetch'),
+                    'data' => [
+                        'advertisements' => $advertisementss,
+                    ]
+                ]);
+            
+
+            }else{
                 return response()->json([
                     'success' => 'logged',
                     'errors' => trans('api.logout'),
@@ -1216,20 +906,23 @@ class ApiController extends Controller
                 "message"=>trans('api.logout'),
                 ]);
         }
+        
     }
 //////////////////////////////////////////////////
-// CanceledOrders function by Antonious hosny
-    public function CanceleOrder(Request $request){
+// Forms function by Antonious hosny
+    public function Forms(Request $request){
         $token = $request->token;
         $lang = $request->header('lang');
         $dt = Carbon::now();
         $date  = date('Y-m-d', strtotime($dt));
-        $time  = date('H:i:s', strtotime($dt));
         if($token){
+        
             $user = User::where('remember_token',$token)->first();
-            if($user && $user->role == 'user'){
+            if($user){
+                $user->lang  = $lang ;
+                $user->save();
                 $rules=array(
-                    'order_id'      =>'required',
+                    'type'      =>'required',
                 );
                 $validator  = \Validator::make($request->all(),$rules);
                 if($validator->fails())
@@ -1249,83 +942,53 @@ class ApiController extends Controller
                         'data'    => null ,
                     ]);
                 }
-                $order = Order::where('id',$request->order_id)->first();
-                if($order){
-                    $order->status = 'canceled' ;
-                    $order->save();
-                    return response()->json([
-                        'success' => 'success',
-                        'errors' => null ,
-                        'message' => trans('api.canceled'),
-                        'data' => null ,
-                    ]);
-                }
-                return response()->json([
-                    'success' => 'failed',
-                    'errors' => trans('api.notfound'),
-                    "message"=>trans('api.notfound'),
-                    ]);
-                
-            }else{
-                return response()->json([
-                    'success' => 'logged',
-                    'errors' => trans('api.logout'),
-                    "message"=>trans('api.logout'),
-                    ]);
-            }
-        }else{
-            return response()->json([
-                'success' => 'logged',
-                'errors' => trans('api.logout'),
-                "message"=>trans('api.logout'),
-                ]);
-        }
-    }
-//////////////////////////////////////////////////
-// OrdersHistory function by Antonious hosny
-    public function OrdersHistory(Request $request){
-        $token = $request->token;
-        $lang = $request->header('lang');
-        $dt = Carbon::now();
-        $date  = date('Y-m-d', strtotime($dt));
-        $time  = date('H:i:s', strtotime($dt));
-        if($token){
-            $user = User::where('remember_token',$token)->first();
-            if($user && $user->role == 'user'){
-                $orderss = Order::where('user_id',$user->id)->with('center')->where('status','delivered')->Orwhere('status','canceled')->with('container')->get();
-                if(sizeof($orderss) > 0){
-                    $orders = [];
-                    $i = 0 ;
-                    foreach($orderss as $order){
-                        $orders[$i]['order_id'] =   $order->id ;
-                        $orders[$i]['container_id'] =   $order->container->id ;
-                        $orders[$i]['center_id'] =   $order->center->id ;
-                        $orders[$i]['center_name'] =   $order->center->name ;
-                        if($lang == 'ar'){
-                            $orders[$i]['container_name'] =   $order->container->name_ar ;
-                        }else{
-                            $orders[$i]['container_name'] =   $order->container->name_en ;
-                        }
-                        $orders[$i]['container_size'] =   $order->container->size ;
-                        $orders[$i]['num_containers'] =   $order->no_container;
-                        $orders[$i]['container_price'] =   $order->price ;
-                        $orders[$i]['total'] =   $order->total ;
-                        $orders[$i]['status'] =   trans('api.'.$order->status) ;
+
+                $advertisementss = [];
+                $i =0 ;
+                $advertisements = Advertisement::where('page','offic')->where('expiry_date','>',$date)->orderBy('id',"Desc")->get();
+                if(sizeof($advertisements) > 0){
+                    foreach($advertisements as $ads){
+                        $advertisementss[$i]['image'] = asset('img/').'/'. $ads->image;
+                        $advertisementss[$i]['link'] =  $ads->link;
+                        $advertisementss[$i]['title'] =  $ads->title;
                         $i++;
                     }
-                    return response()->json([
-                        'success' => 'success',
-                        'errors' => null ,
-                        'message' => trans('api.fetch'),
-                        'data' => $orders ,
-                    ]);
                 }
-                return response()->json([
-                    'success' => 'failed',
-                    'errors' => trans('api.notfound'),
-                    "message"=>trans('api.notfound'),
-                    ]);
+
+                $formss = [];
+                $i =0 ;
+                $forms = Form::where('type',$request->type)->where('user_id',$user->id)->orderBy('id',"Desc")->get();
+
+                if(sizeof($forms) > 0){
+                    foreach($forms as $form){
+                        $formss[$i]['id'] =  $form->id;
+                        $formss[$i]['title'] =  $form->title;
+                        if($form->image){
+                            $formss[$i]['image'] = asset('img/').'/'. $form->image;
+                        }else{
+                            $formss[$i]['image'] = null ;
+                        }
+                        if($form->file){
+                            $formss[$i]['file'] = asset('img/').'/'. $form->file;
+                        }else{
+                            $formss[$i]['file'] = null ;
+                        }
+                       
+                        $i++;
+                    }
+                }
                 
+                return response()->json([
+                    'success' => 'success',
+                    'errors' => null ,
+                    'message' => trans('api.fetch'),
+                    'data' => [
+                        'advertisements' => $advertisementss,
+                        'forms' => $formss,
+                    ]
+                ]);
+            
+
             }else{
                 return response()->json([
                     'success' => 'logged',
@@ -1340,21 +1003,24 @@ class ApiController extends Controller
                 "message"=>trans('api.logout'),
                 ]);
         }
+        
     }
 //////////////////////////////////////////////////
-// ChangeStatusOrders function by Antonious hosny
-    public function ChangeStatusOrders(Request $request){
+// AddEditForms function by Antonious hosny
+    public function AddEditForms(Request $request){
         $token = $request->token;
         $lang = $request->header('lang');
         $dt = Carbon::now();
         $date  = date('Y-m-d', strtotime($dt));
-        $time  = date('H:i:s', strtotime($dt));
         if($token){
+        
             $user = User::where('remember_token',$token)->first();
-            if($user && $user->role == 'driver'){
+            if($user){
+                $user->lang  = $lang ;
+                $user->save();
                 $rules=array(
-                    'status'      =>'required',
-                    'order_id'      =>'required',
+                    'type'      =>'required',
+                    'title'      =>'required',
                 );
                 $validator  = \Validator::make($request->all(),$rules);
                 if($validator->fails())
@@ -1374,73 +1040,43 @@ class ApiController extends Controller
                         'data'    => null ,
                     ]);
                 }
-                $order = Order::where('id',$request->order_id)->first();
-                $dt = Carbon::now();
-                $date  = date('Y-m-d H:i:s', strtotime($dt));
-                if($order){
-                    if($request->status == 'accept'){
-                        $user->available = 0 ;
-                        $user->save();
-                        $order->status = 'assigned' ;
-                        $order->save();
-                        $orderdriver = OrderDriver::where('order_id',$order->id)->where('driver_id',$user->id)->orderBy('id',"Desc")->first();
-                        if($orderdriver){
-                            $orderdriver->status = 'accept' ;
-                            $orderdriver->accept_date  = $date ;
-                            $orderdriver->save(); 
-                        }
-                        return response()->json([
-                            'success' => 'success',
-                            'errors' => null ,
-                            'message' => trans('api.success'),
-                            'data' => null ,
-                        ]);
-                    }
-                    else if($request->status == 'decline'){
-                        $user->available = 1 ;
-                        $user->save();
-                        $order->status = 'accepted' ;
-                        $order->save();
-                        $orderdriver = OrderDriver::where('order_id',$order->id)->where('driver_id',$user->id)->orderBy('id',"Desc")->first();
-                        if($orderdriver){
-                            $orderdriver->status = 'decline' ;
-                            $orderdriver->reason = $request->reason ;
-                            $orderdriver->decline_date  = $date ;
-                            $orderdriver->save(); 
-                        }
-                        return response()->json([
-                            'success' => 'success',
-                            'errors' => null ,
-                            'message' => trans('api.success'),
-                            'data' => null ,
-                        ]);
-                    }
-                    else if($request->status == 'delivered'){
-                        $user->available = 1 ;
-                        $user->save();
-                        $order->status = 'delivered' ;
-                        $order->save();
-                        return response()->json([
-                            'success' => 'success',
-                            'errors' => null ,
-                            'message' => trans('api.success'),
-                            'data' => null ,
-                        ]);
-                    }
-                    return response()->json([
-                        'success' => 'failed',
-                        'errors' => null ,
-                        'message' => trans('api.notfound'),
-                        'data' => null ,
-                    ]);
-                    
+
+                if($request->id){
+                    $form = Form::find($request->id);
+                }else{
+                    $form = new Form ;
                 }
-                return response()->json([
-                    'success' => 'failed',
-                    'errors' => trans('api.notfound'),
-                    "message"=>trans('api.notfound'),
-                    ]);
+                $form->title  =  $request->title ;
+                $form->type  =  $request->type ;
+                $form->user_id  =  $user->id ;
+                if ($request->image){
+                    $image = $request->input('image'); // image base64 encoded
+                    $image = str_replace('data:image/png;base64,', '', $image);
+                    $image = str_replace(' ', '+', $image);
+                    $imageName = str_random(10). time().'.'.'png';
+                    \File::put(public_path(). '/img/' . $imageName, base64_decode($image));
+                    $form->image = $imageName;
+                }
+
+                if ($request->hasFile('file')) {
+                    $file = $request->file('file');
+                    $name = md5($file->getClientOriginalName() . time()) . "." . $file->getClientOriginalExtension();
+                    $destinationPath = public_path('/img');
+                    $file->move($destinationPath, $name);
+                    $form->file   = $name;  
+                }
+                $form->save();
                 
+                return response()->json([
+                    'success' => 'success',
+                    'errors' => null ,
+                    'message' => trans('api.save'),
+                    'data' => [
+                        'form' => $form,
+                    ]
+                ]);
+            
+
             }else{
                 return response()->json([
                     'success' => 'logged',
@@ -1455,10 +1091,1091 @@ class ApiController extends Controller
                 "message"=>trans('api.logout'),
                 ]);
         }
+        
+    }
+//////////////////////////////////////////////////
+// DeleteForm function by Antonious hosny
+    public function DeleteForm(Request $request){
+        $token = $request->token;
+        $lang = $request->header('lang');
+        $dt = Carbon::now();
+        $date  = date('Y-m-d', strtotime($dt));
+        if($token){
+        
+            $user = User::where('remember_token',$token)->first();
+            if($user){
+                $user->lang  = $lang ;
+                $user->save();
+                $rules=array(
+                    'form_id'      =>'required',
+                );
+                $validator  = \Validator::make($request->all(),$rules);
+                if($validator->fails())
+                {
+                    $messages = $validator->messages();
+                    $transformed = [];
+        
+                    foreach ($messages->all() as $field => $message) {
+                        $transformed[] = [
+                            'message' => $message
+                        ];
+                    }
+                    return response()->json([
+                        'success' => 'failed',
+                        'errors'  => $transformed,
+                        'message' => trans('api.validation_error'),
+                        'data'    => null ,
+                    ]);
+                }
+
+                if($request->form_id){
+                    $form = Form::find($request->form_id);
+                    if($form){
+                        $form->delete();
+                    }
+                }
+                
+                return response()->json([
+                    'success' => 'success',
+                    'errors' => null ,
+                    'message' => trans('api.delete'),
+                    'data' => null
+                    
+                ]);
+            
+
+            }else{
+                return response()->json([
+                    'success' => 'logged',
+                    'errors' => trans('api.logout'),
+                    "message"=>trans('api.logout'),
+                    ]);
+            }
+        }else{
+            return response()->json([
+                'success' => 'logged',
+                'errors' => trans('api.logout'),
+                "message"=>trans('api.logout'),
+                ]);
+        }
+        
+    }
+//////////////////////////////////////////////////
+// Notes function by Antonious hosny
+    public function Notes(Request $request){
+        $token = $request->token;
+        $lang = $request->header('lang');
+        $dt = Carbon::now();
+        $date  = date('Y-m-d', strtotime($dt));
+        if($token){
+        
+            $user = User::where('remember_token',$token)->first();
+            if($user){
+                $user->lang  = $lang ;
+                $user->save();
+
+                $advertisementss = [];
+                $i =0 ;
+                $advertisements = Advertisement::where('page','offic')->where('expiry_date','>',$date)->orderBy('id',"Desc")->get();
+                if(sizeof($advertisements) > 0){
+                    foreach($advertisements as $ads){
+                        $advertisementss[$i]['image'] = asset('img/').'/'. $ads->image;
+                        $advertisementss[$i]['link'] =  $ads->link;
+                        $advertisementss[$i]['title'] =  $ads->title;
+                        $i++;
+                    }
+                }
+
+                $notess = [];
+                $i =0 ;
+                $notes = Note::where('user_id',$user->id)->orderBy('id',"Desc")->get();
+
+                if(sizeof($notes) > 0){
+                    foreach($notes as $note){
+                        $notess[$i]['id'] =  $note->id;
+                        $notess[$i]['title'] =  $note->title;
+                        $notess[$i]['desc'] =  $note->desc;
+          
+                        $i++;
+                    }
+                }
+                
+                return response()->json([
+                    'success' => 'success',
+                    'errors' => null ,
+                    'message' => trans('api.fetch'),
+                    'data' => [
+                        'advertisements' => $advertisementss,
+                        'notes' => $notess,
+                    ]
+                ]);
+            
+
+            }else{
+                return response()->json([
+                    'success' => 'logged',
+                    'errors' => trans('api.logout'),
+                    "message"=>trans('api.logout'),
+                    ]);
+            }
+        }else{
+            return response()->json([
+                'success' => 'logged',
+                'errors' => trans('api.logout'),
+                "message"=>trans('api.logout'),
+                ]);
+        }
+        
+    }
+//////////////////////////////////////////////////
+// AddEditNotes function by Antonious hosny
+    public function AddEditNotes(Request $request){
+        $token = $request->token;
+        $lang = $request->header('lang');
+        $dt = Carbon::now();
+        $date  = date('Y-m-d', strtotime($dt));
+        if($token){
+        
+            $user = User::where('remember_token',$token)->first();
+            if($user){
+                $user->lang  = $lang ;
+                $user->save();
+                $rules=array(
+                    'desc'      =>'required',
+                    'title'      =>'required',
+                );
+                $validator  = \Validator::make($request->all(),$rules);
+                if($validator->fails())
+                {
+                    $messages = $validator->messages();
+                    $transformed = [];
+        
+                    foreach ($messages->all() as $field => $message) {
+                        $transformed[] = [
+                            'message' => $message
+                        ];
+                    }
+                    return response()->json([
+                        'success' => 'failed',
+                        'errors'  => $transformed,
+                        'message' => trans('api.validation_error'),
+                        'data'    => null ,
+                    ]);
+                }
+
+                if($request->id){
+                    $note = Note::find($request->id);
+                }else{
+                    $note = new Note ;
+                }
+                $note->title  =  $request->title ;
+                $note->desc  =  $request->desc ;
+                $note->user_id  =  $user->id ;
+                
+                $note->save();
+                
+                return response()->json([
+                    'success' => 'success',
+                    'errors' => null ,
+                    'message' => trans('api.save'),
+                    'data' => [
+                        'note' => $note,
+                    ]
+                ]);
+            
+
+            }else{
+                return response()->json([
+                    'success' => 'logged',
+                    'errors' => trans('api.logout'),
+                    "message"=>trans('api.logout'),
+                    ]);
+            }
+        }else{
+            return response()->json([
+                'success' => 'logged',
+                'errors' => trans('api.logout'),
+                "message"=>trans('api.logout'),
+                ]);
+        }
+        
+    }
+//////////////////////////////////////////////////
+// DeleteNote function by Antonious hosny
+    public function DeleteNote(Request $request){
+        
+        $token = $request->token;
+        $lang = $request->header('lang');
+        $dt = Carbon::now();
+        $date  = date('Y-m-d', strtotime($dt));
+        if($token){
+            $user = User::where('remember_token',$token)->first();
+            if($user){
+                $user->lang  = $lang ;
+                $user->save();
+                $rules=array(
+                    'note_id'      =>'required',
+                );
+                $validator  = \Validator::make($request->all(),$rules);
+                if($validator->fails())
+                {
+                    $messages = $validator->messages();
+                    $transformed = [];
+        
+                    foreach ($messages->all() as $field => $message) {
+                        $transformed[] = [
+                            'message' => $message
+                        ];
+                    }
+                    return response()->json([
+                        'success' => 'failed',
+                        'errors'  => $transformed,
+                        'message' => trans('api.validation_error'),
+                        'data'    => null ,
+                    ]);
+                }
+
+                if($request->note_id){
+                    $note = Note::find($request->note_id);
+                    if($note){
+                        $note->delete();
+                    }
+                }
+                
+                return response()->json([
+                    'success' => 'success',
+                    'errors' => null ,
+                    'message' => trans('api.delete'),
+                    'data' => null
+                    
+                ]);
+            
+
+            }else{
+                return response()->json([
+                    'success' => 'logged',
+                    'errors' => trans('api.logout'),
+                    "message"=>trans('api.logout'),
+                    ]);
+            }
+        }else{
+            return response()->json([
+                'success' => 'logged',
+                'errors' => trans('api.logout'),
+                "message"=>trans('api.logout'),
+                ]);
+        }
+        
+    }
+//////////////////////////////////////////////////
+//////////////////////////////////////////////////
+// Box function by Antonious hosny
+    public function Box(Request $request){
+        $token = $request->token;
+        $lang = $request->header('lang');
+        $dt = Carbon::now();
+        $date  = date('Y-m-d', strtotime($dt));
+        if($token){
+        
+            $user = User::where('remember_token',$token)->first();
+            if($user){
+                $user->lang  = $lang ;
+                $user->save();
+                $advertisementss = [];
+                $i =0 ;
+                $advertisements = Advertisement::where('page','box')->where('expiry_date','>',$date)->orderBy('id',"Desc")->get();
+                // return  $advertisements;
+                if(sizeof($advertisements) > 0){
+                    foreach($advertisements as $ads){
+                        $advertisementss[$i]['image'] = asset('img/').'/'. $ads->image;
+                        $advertisementss[$i]['link'] =  $ads->link;
+                        $advertisementss[$i]['title'] =  $ads->title;
+                        $i++;
+                    }
+                }
+
+                return response()->json([
+                    'success' => 'success',
+                    'errors' => null ,
+                    'message' => trans('api.fetch'),
+                    'data' => [
+                        'advertisements' => $advertisementss,
+                    ]
+                ]);
+            
+
+            }else{
+                return response()->json([
+                    'success' => 'logged',
+                    'errors' => trans('api.logout'),
+                    "message"=>trans('api.logout'),
+                    ]);
+            }
+        }else{
+            return response()->json([
+                'success' => 'logged',
+                'errors' => trans('api.logout'),
+                "message"=>trans('api.logout'),
+                ]);
+        }
+        
+    }
+//////////////////////////////////////////////////
+// Payments function by Antonious hosny
+    public function Payments(Request $request){
+        $token = $request->token;
+        $lang = $request->header('lang');
+        $dt = Carbon::now();
+        $date  = date('Y-m-d', strtotime($dt));
+        if($token){
+        
+            $user = User::where('remember_token',$token)->first();
+            if($user){
+                $user->lang  = $lang ;
+                $user->save();
+
+                $advertisementss = [];
+                $i =0 ;
+                $advertisements = Advertisement::where('page','box')->where('expiry_date','>',$date)->orderBy('id',"Desc")->get();
+                if(sizeof($advertisements) > 0){
+                    foreach($advertisements as $ads){
+                        $advertisementss[$i]['image'] = asset('img/').'/'. $ads->image;
+                        $advertisementss[$i]['link'] =  $ads->link;
+                        $advertisementss[$i]['title'] =  $ads->title;
+                        $i++;
+                    }
+                }
+
+                $paymentss = [];
+                $i =0 ;
+                $payments = Payment::where('user_id',$user->id)->orderBy('id',"Desc")->get();
+
+                if(sizeof($payments) > 0){
+                    foreach($payments as $payment){
+                        $amount = PaymentDetail::where('payment_id',$payment->id)->sum('amount');
+                        $remaining = $payment->amount - $amount ;
+                        $paymentss[$i]['id'] =  $payment->id;
+                        $paymentss[$i]['title'] =  $payment->title;
+                        $paymentss[$i]['amount'] = $payment->amount;
+                        $paymentss[$i]['amount_paid'] =  $amount;
+                        $paymentss[$i]['remaining'] = $remaining;
+                        $paymentss[$i]['date'] = $payment->date;
+                        $i++;
+                    }
+                }
+                
+                return response()->json([
+                    'success' => 'success',
+                    'errors' => null ,
+                    'message' => trans('api.fetch'),
+                    'data' => [
+                        'advertisements' => $advertisementss,
+                        'payments' => $paymentss,
+                    ]
+                ]);
+            
+
+            }else{
+                return response()->json([
+                    'success' => 'logged',
+                    'errors' => trans('api.logout'),
+                    "message"=>trans('api.logout'),
+                    ]);
+            }
+        }else{
+            return response()->json([
+                'success' => 'logged',
+                'errors' => trans('api.logout'),
+                "message"=>trans('api.logout'),
+                ]);
+        }
+        
+    }
+//////////////////////////////////////////////////
+// AddEditPayments function by Antonious hosny
+    public function AddEditPayments(Request $request){
+        $token = $request->token;
+        $lang = $request->header('lang');
+        $dt = Carbon::now();
+        $date  = date('Y-m-d', strtotime($dt));
+        if($token){
+        
+            $user = User::where('remember_token',$token)->first();
+            if($user){
+                $user->lang  = $lang ;
+                $user->save();
+                $rules=array(
+                    'amount'      =>'required',
+                    'title'      =>'required',
+                );
+                $validator  = \Validator::make($request->all(),$rules);
+                if($validator->fails())
+                {
+                    $messages = $validator->messages();
+                    $transformed = [];
+        
+                    foreach ($messages->all() as $field => $message) {
+                        $transformed[] = [
+                            'message' => $message
+                        ];
+                    }
+                    return response()->json([
+                        'success' => 'failed',
+                        'errors'  => $transformed,
+                        'message' => trans('api.validation_error'),
+                        'data'    => null ,
+                    ]);
+                }
+
+                if($request->id){
+                    $payment = Payment::find($request->id);
+                }else{
+                    $payment = new Payment ;
+                }
+                $payment->title  =  $request->title ;
+                $payment->amount  =  $request->amount ;
+                $payment->date  =  $request->date ;
+                $payment->user_id  =  $user->id ;
+                
+                $payment->save();
+                
+                return response()->json([
+                    'success' => 'success',
+                    'errors' => null ,
+                    'message' => trans('api.save'),
+                    'data' => [
+                        'payment' => $payment,
+                    ]
+                ]);
+            
+
+            }else{
+                return response()->json([
+                    'success' => 'logged',
+                    'errors' => trans('api.logout'),
+                    "message"=>trans('api.logout'),
+                    ]);
+            }
+        }else{
+            return response()->json([
+                'success' => 'logged',
+                'errors' => trans('api.logout'),
+                "message"=>trans('api.logout'),
+                ]);
+        }
+        
+    }
+//////////////////////////////////////////////////
+// DeletePayment function by Antonious hosny
+    public function DeletePayment(Request $request){
+            
+        $token = $request->token;
+        $lang = $request->header('lang');
+        $dt = Carbon::now();
+        $date  = date('Y-m-d', strtotime($dt));
+        if($token){
+            $user = User::where('remember_token',$token)->first();
+            if($user){
+                $user->lang  = $lang ;
+                $user->save();
+                $rules=array(
+                    'payment_id'      =>'required',
+                );
+                $validator  = \Validator::make($request->all(),$rules);
+                if($validator->fails())
+                {
+                    $messages = $validator->messages();
+                    $transformed = [];
+        
+                    foreach ($messages->all() as $field => $message) {
+                        $transformed[] = [
+                            'message' => $message
+                        ];
+                    }
+                    return response()->json([
+                        'success' => 'failed',
+                        'errors'  => $transformed,
+                        'message' => trans('api.validation_error'),
+                        'data'    => null ,
+                    ]);
+                }
+
+                if($request->payment_id){
+                    $payment = Payment::find($request->payment_id);
+                    if($payment){
+                        $payment->delete();
+                    }
+                }
+                
+                return response()->json([
+                    'success' => 'success',
+                    'errors' => null ,
+                    'message' => trans('api.delete'),
+                    'data' => null
+                    
+                ]);
+            
+
+            }else{
+                return response()->json([
+                    'success' => 'logged',
+                    'errors' => trans('api.logout'),
+                    "message"=>trans('api.logout'),
+                    ]);
+            }
+        }else{
+            return response()->json([
+                'success' => 'logged',
+                'errors' => trans('api.logout'),
+                "message"=>trans('api.logout'),
+                ]);
+        }
+        
+    }
+//////////////////////////////////////////////////
+// PaymentDetails function by Antonious hosny
+    public function PaymentDetails(Request $request){
+        $token = $request->token;
+        $lang = $request->header('lang');
+        $dt = Carbon::now();
+        $date  = date('Y-m-d', strtotime($dt));
+        if($token){
+        
+            $user = User::where('remember_token',$token)->first();
+            if($user){
+                $user->lang  = $lang ;
+                $user->save();
+                $rules=array(
+                    'payment_id'      =>'required',
+                );
+                $validator  = \Validator::make($request->all(),$rules);
+                if($validator->fails())
+                {
+                    $messages = $validator->messages();
+                    $transformed = [];
+        
+                    foreach ($messages->all() as $field => $message) {
+                        $transformed[] = [
+                            'message' => $message
+                        ];
+                    }
+                    return response()->json([
+                        'success' => 'failed',
+                        'errors'  => $transformed,
+                        'message' => trans('api.validation_error'),
+                        'data'    => null ,
+                    ]);
+                }
+                $advertisementss = [];
+                $i =0 ;
+                $advertisements = Advertisement::where('page','box')->where('expiry_date','>',$date)->orderBy('id',"Desc")->get();
+                if(sizeof($advertisements) > 0){
+                    foreach($advertisements as $ads){
+                        $advertisementss[$i]['image'] = asset('img/').'/'. $ads->image;
+                        $advertisementss[$i]['link'] =  $ads->link;
+                        $advertisementss[$i]['title'] =  $ads->title;
+                        $i++;
+                    }
+                }
+
+                $paymentdetailss = [];
+                $i =0 ;
+                $paymentdetails = PaymentDetail::where('payment_id',$request->payment_id)->orderBy('id',"Desc")->get();
+
+                if(sizeof($paymentdetails) > 0){
+                    foreach($paymentdetails as $detail){
+                        $paymentdetailss[$i]['id'] =  $detail->id;
+                        $paymentdetailss[$i]['title'] =  $detail->title;
+                        $paymentdetailss[$i]['amount'] = $detail->amount;
+                        $paymentdetailss[$i]['date'] = $detail->date;
+                        if($detail->image){
+                            $paymentdetailss[$i]['image'] = asset('img/').'/'. $detail->image;
+                        }else{
+                            $paymentdetailss[$i]['image'] = null;
+                        }
+                        if($detail->file){
+                            $paymentdetailss[$i]['file'] = asset('img/').'/'. $detail->file;
+                        }else{
+                            $paymentdetailss[$i]['file'] = null;
+                        }
+                        
+                        
+                        $i++;
+                    }
+                }
+                
+                return response()->json([
+                    'success' => 'success',
+                    'errors' => null ,
+                    'message' => trans('api.fetch'),
+                    'data' => [
+                        'advertisements' => $advertisementss,
+                        'payment_details' => $paymentdetailss,
+                    ]
+                ]);
+            
+
+            }else{
+                return response()->json([
+                    'success' => 'logged',
+                    'errors' => trans('api.logout'),
+                    "message"=>trans('api.logout'),
+                    ]);
+            }
+        }else{
+            return response()->json([
+                'success' => 'logged',
+                'errors' => trans('api.logout'),
+                "message"=>trans('api.logout'),
+                ]);
+        }
+        
+    }
+//////////////////////////////////////////////////
+// AddEditPaymentDetails function by Antonious hosny
+    public function AddEditPaymentDetails(Request $request){
+        $token = $request->token;
+        $lang = $request->header('lang');
+        $dt = Carbon::now();
+        $date  = date('Y-m-d', strtotime($dt));
+        if($token){
+        
+            $user = User::where('remember_token',$token)->first();
+            if($user){
+                $user->lang  = $lang ;
+                $user->save();
+                $rules=array(
+                    'amount'      =>'required',
+                    'payment_id'      =>'required',
+                );
+                $validator  = \Validator::make($request->all(),$rules);
+                if($validator->fails())
+                {
+                    $messages = $validator->messages();
+                    $transformed = [];
+        
+                    foreach ($messages->all() as $field => $message) {
+                        $transformed[] = [
+                            'message' => $message
+                        ];
+                    }
+                    return response()->json([
+                        'success' => 'failed',
+                        'errors'  => $transformed,
+                        'message' => trans('api.validation_error'),
+                        'data'    => null ,
+                    ]);
+                }
+
+                if($request->id){
+                    $payment = PaymentDetail::find($request->id);
+                }else{
+                    $payment = new PaymentDetail ;
+                }
+                $payment->title  =  $request->title ;
+                $payment->amount  =  $request->amount ;
+                $payment->date  =  $request->date ;
+                $payment->payment_id  =  $request->payment_id ;
+                $payment->user_id  =  $user->id ;
+                if ($request->image){
+                    $image = $request->input('image'); // image base64 encoded
+                    $image = str_replace('data:image/png;base64,', '', $image);
+                    $image = str_replace(' ', '+', $image);
+                    $imageName = str_random(10). time().'.'.'png';
+                    \File::put(public_path(). '/img/' . $imageName, base64_decode($image));
+                    $payment->image = $imageName;
+                }
+
+                if ($request->hasFile('file')) {
+                    $file = $request->file('file');
+                    $name = md5($file->getClientOriginalName() . time()) . "." . $file->getClientOriginalExtension();
+                    $destinationPath = public_path('/img');
+                    $file->move($destinationPath, $name);
+                    $payment->file   = $name;  
+                }
+                $payment->save();
+                
+                return response()->json([
+                    'success' => 'success',
+                    'errors' => null ,
+                    'message' => trans('api.save'),
+                    'data' => [
+                        'PaymentDetail' => $payment,
+                    ]
+                ]);
+            
+
+            }else{
+                return response()->json([
+                    'success' => 'logged',
+                    'errors' => trans('api.logout'),
+                    "message"=>trans('api.logout'),
+                    ]);
+            }
+        }else{
+            return response()->json([
+                'success' => 'logged',
+                'errors' => trans('api.logout'),
+                "message"=>trans('api.logout'),
+                ]);
+        }
+        
+    }
+//////////////////////////////////////////////////
+// DeletePaymentDetails function by Antonious hosny
+    public function DeletePaymentDetails(Request $request){
+            
+        $token = $request->token;
+        $lang = $request->header('lang');
+        $dt = Carbon::now();
+        $date  = date('Y-m-d', strtotime($dt));
+        if($token){
+            $user = User::where('remember_token',$token)->first();
+            if($user){
+                $user->lang  = $lang ;
+                $user->save();
+                $rules=array(
+                    'paymentdetail_id'      =>'required',
+                );
+                $validator  = \Validator::make($request->all(),$rules);
+                if($validator->fails())
+                {
+                    $messages = $validator->messages();
+                    $transformed = [];
+        
+                    foreach ($messages->all() as $field => $message) {
+                        $transformed[] = [
+                            'message' => $message
+                        ];
+                    }
+                    return response()->json([
+                        'success' => 'failed',
+                        'errors'  => $transformed,
+                        'message' => trans('api.validation_error'),
+                        'data'    => null ,
+                    ]);
+                }
+
+                if($request->paymentdetail_id){
+                    $payment = PaymentDetail::find($request->paymentdetail_id);
+                    if($payment){
+                        $payment->delete();
+                    }
+                }
+                
+                return response()->json([
+                    'success' => 'success',
+                    'errors' => null ,
+                    'message' => trans('api.delete'),
+                    'data' => null
+                    
+                ]);
+            
+
+            }else{
+                return response()->json([
+                    'success' => 'logged',
+                    'errors' => trans('api.logout'),
+                    "message"=>trans('api.logout'),
+                    ]);
+            }
+        }else{
+            return response()->json([
+                'success' => 'logged',
+                'errors' => trans('api.logout'),
+                "message"=>trans('api.logout'),
+                ]);
+        }
+        
     }
 //////////////////////////////////////////////////
 
+// Expenses function by Antonious hosny
+    public function Expenses(Request $request){
+        $token = $request->token;
+        $lang = $request->header('lang');
+        $dt = Carbon::now();
+        $date  = date('Y-m-d', strtotime($dt));
+        if($token){
+        
+            $user = User::where('remember_token',$token)->first();
+            if($user){
+                $user->lang  = $lang ;
+                $user->save();
 
+                $advertisementss = [];
+                $i =0 ;
+                $advertisements = Advertisement::where('page','box')->where('expiry_date','>',$date)->orderBy('id',"Desc")->get();
+                if(sizeof($advertisements) > 0){
+                    foreach($advertisements as $ads){
+                        $advertisementss[$i]['image'] = asset('img/').'/'. $ads->image;
+                        $advertisementss[$i]['link'] =  $ads->link;
+                        $advertisementss[$i]['title'] =  $ads->title;
+                        $i++;
+                    }
+                }
+
+                $expensess = [];
+                $i =0 ;
+                $expenses = Expense::where('user_id',$user->id)->orderBy('id',"Desc")->get();
+
+                if(sizeof($expenses) > 0){
+                    foreach($expenses as $expense){
+                        $expensess[$i]['id'] =  $expense->id;
+                        $expensess[$i]['title'] =  $expense->title;
+                        $expensess[$i]['amount'] = $expense->amount;
+                        if($expense->image){
+                            $expensess[$i]['image'] = asset('img/').'/'. $expense->image;
+                        }else{
+                            $expensess[$i]['image'] = null ;
+                        }
+                        if($expense->file){
+                            $expensess[$i]['file'] = asset('img/').'/'. $expense->file;
+                        }else{
+                            $expensess[$i]['file'] = null ;
+                        }
+                        $i++;
+                    }
+                }
+                
+                return response()->json([
+                    'success' => 'success',
+                    'errors' => null ,
+                    'message' => trans('api.fetch'),
+                    'data' => [
+                        'advertisements' => $advertisementss,
+                        'expenses' => $expensess,
+                    ]
+                ]);
+            
+
+            }else{
+                return response()->json([
+                    'success' => 'logged',
+                    'errors' => trans('api.logout'),
+                    "message"=>trans('api.logout'),
+                    ]);
+            }
+        }else{
+            return response()->json([
+                'success' => 'logged',
+                'errors' => trans('api.logout'),
+                "message"=>trans('api.logout'),
+                ]);
+        }
+        
+    }
+//////////////////////////////////////////////////
+// AddEditExpense function by Antonious hosny
+    public function AddEditExpense(Request $request){
+        $token = $request->token;
+        $lang = $request->header('lang');
+        $dt = Carbon::now();
+        $date  = date('Y-m-d', strtotime($dt));
+        if($token){
+        
+            $user = User::where('remember_token',$token)->first();
+            if($user){
+                $user->lang  = $lang ;
+                $user->save();
+                $rules=array(
+                    'amount'      =>'required',
+                    'title'      =>'required',
+                );
+                $validator  = \Validator::make($request->all(),$rules);
+                if($validator->fails())
+                {
+                    $messages = $validator->messages();
+                    $transformed = [];
+        
+                    foreach ($messages->all() as $field => $message) {
+                        $transformed[] = [
+                            'message' => $message
+                        ];
+                    }
+                    return response()->json([
+                        'success' => 'failed',
+                        'errors'  => $transformed,
+                        'message' => trans('api.validation_error'),
+                        'data'    => null ,
+                    ]);
+                }
+
+                if($request->id){
+                    $expense = Expense::find($request->id);
+                }else{
+                    $expense = new Expense ;
+                }
+                $expense->title  =  $request->title ;
+                $expense->amount  =  $request->amount ;
+                if ($request->image){
+                    $image = $request->input('image'); // image base64 encoded
+                    $image = str_replace('data:image/png;base64,', '', $image);
+                    $image = str_replace(' ', '+', $image);
+                    $imageName = str_random(10). time().'.'.'png';
+                    \File::put(public_path(). '/img/' . $imageName, base64_decode($image));
+                    $expense->image = $imageName;
+                }
+
+                if ($request->hasFile('file')) {
+                    $file = $request->file('file');
+                    $name = md5($file->getClientOriginalName() . time()) . "." . $file->getClientOriginalExtension();
+                    $destinationPath = public_path('/img');
+                    $file->move($destinationPath, $name);
+                    $expense->file   = $name;  
+                }
+                $expense->user_id  =  $user->id ;
+                
+                $expense->save();
+                
+                return response()->json([
+                    'success' => 'success',
+                    'errors' => null ,
+                    'message' => trans('api.save'),
+                    'data' => [
+                        'expense' => $expense,
+                    ]
+                ]);
+            
+
+            }else{
+                return response()->json([
+                    'success' => 'logged',
+                    'errors' => trans('api.logout'),
+                    "message"=>trans('api.logout'),
+                    ]);
+            }
+        }else{
+            return response()->json([
+                'success' => 'logged',
+                'errors' => trans('api.logout'),
+                "message"=>trans('api.logout'),
+                ]);
+        }
+        
+    }
+//////////////////////////////////////////////////
+// DeleteExpense function by Antonious hosny
+    public function DeleteExpense(Request $request){
+            
+        $token = $request->token;
+        $lang = $request->header('lang');
+        $dt = Carbon::now();
+        $date  = date('Y-m-d', strtotime($dt));
+        if($token){
+            $user = User::where('remember_token',$token)->first();
+            if($user){
+                $user->lang  = $lang ;
+                $user->save();
+                $rules=array(
+                    'expense_id'      =>'required',
+                );
+                $validator  = \Validator::make($request->all(),$rules);
+                if($validator->fails())
+                {
+                    $messages = $validator->messages();
+                    $transformed = [];
+        
+                    foreach ($messages->all() as $field => $message) {
+                        $transformed[] = [
+                            'message' => $message
+                        ];
+                    }
+                    return response()->json([
+                        'success' => 'failed',
+                        'errors'  => $transformed,
+                        'message' => trans('api.validation_error'),
+                        'data'    => null ,
+                    ]);
+                }
+
+                if($request->expense_id){
+                    $expense = Expense::find($request->expense_id);
+                    if($expense){
+                        $expense->delete();
+                    }
+                }
+                
+                return response()->json([
+                    'success' => 'success',
+                    'errors' => null ,
+                    'message' => trans('api.delete'),
+                    'data' => null
+                    
+                ]);
+            
+
+            }else{
+                return response()->json([
+                    'success' => 'logged',
+                    'errors' => trans('api.logout'),
+                    "message"=>trans('api.logout'),
+                    ]);
+            }
+        }else{
+            return response()->json([
+                'success' => 'logged',
+                'errors' => trans('api.logout'),
+                "message"=>trans('api.logout'),
+                ]);
+        }
+        
+    }
+//////////////////////////////////////////////////
+// staticPages  function by Antonious hosny
+public function StaticPages(Request $request){
+    $lang = $request->header('lang');
+    $dt = Carbon::now();
+    $date  = date('Y-m-d', strtotime($dt));
+    $rules=array(
+        'type'      =>'required',
+    );
+    $validator  = \Validator::make($request->all(),$rules);
+    if($validator->fails())
+    {
+        $messages = $validator->messages();
+        $transformed = [];
+
+        foreach ($messages->all() as $field => $message) {
+            $transformed[] = [
+                'message' => $message
+            ];
+        }
+        return response()->json([
+            'success' => 'failed',
+            'errors'  => $transformed,
+            'message' => trans('api.validation_error'),
+            'data'    => null ,
+        ]);
+    }
+    $docs = Doc::where('type',$request->type)->first();
+    
+    $advertisementss = [];
+    $i =0 ;
+    $advertisements = Advertisement::where('page','information')->where('expiry_date','>',$date)->orderBy('id',"Desc")->get();
+    if(sizeof($advertisements) > 0){
+        foreach($advertisements as $ads){
+            $advertisementss[$i]['image'] = asset('img/').'/'. $ads->image;
+            $advertisementss[$i]['link'] =  $ads->link;
+            $advertisementss[$i]['title'] =  $ads->title;
+            $i++;
+        }
+    }
+    return response()->json([
+        'success' => 'success',
+        'errors' => null ,
+        'message' => trans('api.fetch'),
+        'data' => [
+            'advertisements' => $advertisementss,
+            'informations' => $docs,
+        ] 
+            
+    ]);
+   
+
+
+}
+///////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////
 // ContactUs function by Antonious hosny
@@ -1738,17 +2455,14 @@ class ApiController extends Controller
         $device_id = $request->device_id;
         // $msg = "you have message from backend";
         // $title = "test";
-         
-            $msg_ar = 'تم تاكيد استلام الطلب ' ;
-            $msg_en = 'Your order has been Receipt confirmed';
         
         $msg =  [
-            'msg_ar' => $msg_ar ,
-            'msg_en' => $msg_en ,
+            'en' => "New user registered"  ,
+            'ar' => "  مستخدم جديد قام بالتسجيل"  ,
         ];
         $title = [
-            'title_ar' => 'تم تحديث حالة طلبك' ,  
-            'title_en' => 'Your order status has been updated' ,   
+            'en' =>  "New user registered"  ,
+            'ar' => "  مستخدم جديد قام بالتسجيل"  ,  
         ];
         $this->notification($device_id,$title,$msg);
         

@@ -21,7 +21,7 @@
 <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
-<title>:: Khazan ::</title>
+<title>:: {{ __('admin.project_name') }} ::</title>
 <!-- <link rel="icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon">  -->
 <link rel="shortcut icon" href="{{ asset('images/logo.png') }}" >
 
@@ -101,7 +101,7 @@ body, html {
 <!-- Page Loader -->
 <div class="page-loader-wrapper">
     <div class="loader">
-        <div class="m-t-30"><img class="zmdi-hc-spin" src="{{ asset('images/logo_0.png') }}" width="48" height="48" alt="Khazan"></div>
+        <div class="m-t-30"><img class="zmdi-hc-spin" src="{{ asset('images/logo_0.png') }}" width="48" height="48" alt="{{ __('admin.project_name') }}"></div>
         <p>{{__('admin.Please_wait')}}...</p>        
     </div>
 </div>
@@ -114,7 +114,7 @@ body, html {
         <li>
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="bars"></a>
-                <a class="navbar-brand" href="{{route('home')}}"><img src="{{ asset('assets/images/logo.png') }}" width="30" alt="Khazan"><span class="m-l-10">Khazan</span></a>
+                <a class="navbar-brand" href="{{route('home')}}"><img src="{{ asset('images/logo.png') }}" width="30" alt="{{ __('admin.project_name') }}"><span class="m-l-10">{{ __('admin.project_name') }}</span></a>
             </div>
         </li>
         <li><a href="javascript:void(0);" class="ls-toggle-btn" data-close="true"><i class="zmdi zmdi-swap"></i></a></li>
@@ -138,7 +138,7 @@ body, html {
                                 <li>
                                     <a href="javascript:void(0);"  class="{{ $note->read_at == null ? 'unread' : '' }}">
                                         <div class="media">
-                                            <img class="media-object notificationimage" src="{{ asset('assets/images/logo.png') }}" alt="">
+                                            <img class="media-object notificationimage" src="{{ asset('images/logo.png') }}" alt="">
                                             <div class="media-body">
                                                 <span class="name"> <span class="time"> {!! $note->created_at  !!} </span></span><br>
                                                 <span class="message">
@@ -157,7 +157,7 @@ body, html {
                             <li>
                                 <a href="javascript:void(0);">
                                     <div class="media">
-                                        <img class="media-object notificationimage" src="{{ asset('assets/images/logo.png') }}" alt="">
+                                        <img class="media-object notificationimage" src="{{ asset('images/logo.png') }}" alt="">
                                         <div class="media-body">
                                             {{--  <span class="name">Sophia <span class="time"> </span></span>  --}}
                                             <span class="message">{{__('admin.no_notification_found')}}</span>                                        
@@ -171,107 +171,7 @@ body, html {
                 {{--  <li class="footer"> <a href="javascript:void(0);">View All</a> </li>  --}}
             </ul>
         </li>
-        <!-- <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button"><i class="zmdi zmdi-flag"></i>
-            <div class="notify">
-                <span class="heartbit"></span>
-                <span class="point"></span>
-            </div>
-            </a>
-            <ul class="dropdown-menu pullDown">
-                <li class="header">Project</li>
-                <li class="body">
-                    <ul class="menu tasks list-unstyled">
-                        <li>
-                            <a href="javascript:void(0);">
-                                <div class="progress-container progress-primary">
-                                    <span class="progress-badge">eCommerce Website</span>
-                                    <div class="progress">
-                                        <div class="progress-bar" role="progressbar" aria-valuenow="86" aria-valuemin="0" aria-valuemax="100" style="width: 86%;">
-                                            <span class="progress-value">86%</span>
-                                        </div>
-                                    </div>                        
-                                    <ul class="list-unstyled team-info">
-                                        <li class="m-r-15"><small class="text-muted">Team</small></li>
-                                        <li>
-                                            <img src="{{ asset('assets/images/xs/avatar2.jpg') }}" alt="Avatar">
-                                        </li>
-                                        <li>
-                                            <img src="{{ asset('assets/images/xs/avatar3.jpg') }}" alt="Avatar">
-                                        </li>
-                                        <li>
-                                            <img src="{{ asset('assets/images/xs/avatar4.jpg') }}" alt="Avatar">
-                                        </li>                            
-                                    </ul>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);">
-                                <div class="progress-container progress-info">
-                                    <span class="progress-badge">iOS Game Dev</span>
-                                    <div class="progress">
-                                        <div class="progress-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%;">
-                                            <span class="progress-value">45%</span>
-                                        </div>
-                                    </div>
-                                    <ul class="list-unstyled team-info">
-                                        <li class="m-r-15"><small class="text-muted">Team</small></li>
-                                        <li>
-                                            <img src="{{ asset('assets/images/xs/avatar10.jpg') }}" alt="Avatar">
-                                        </li>
-                                        <li>
-                                            <img src="{{ asset('assets/images/xs/avatar9.jpg') }}" alt="Avatar">
-                                        </li>
-                                        <li>
-                                            <img src="{{ asset('assets/images/xs/avatar8.jpg') }}" alt="Avatar">
-                                        </li>
-                                        <li>
-                                            <img src="{{ asset('assets/images/xs/avatar7.jpg') }}" alt="Avatar">
-                                        </li>
-                                        <li>
-                                            <img src="{{ asset('assets/images/xs/avatar6.jpg') }}" alt="Avatar">
-                                        </li>
-                                    </ul>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);">
-                                <div class="progress-container progress-warning">
-                                    <span class="progress-badge">Home Development</span>
-                                    <div class="progress">
-                                        <div class="progress-bar" role="progressbar" aria-valuenow="29" aria-valuemin="0" aria-valuemax="100" style="width: 29%;">
-                                            <span class="progress-value">29%</span>
-                                        </div>
-                                    </div>
-                                    <ul class="list-unstyled team-info">
-                                        <li class="m-r-15"><small class="text-muted">Team</small></li>
-                                        <li>
-                                            <img src="{{ asset('assets/images/xs/avatar5.jpg') }}" alt="Avatar">
-                                        </li>
-                                        <li>
-                                            <img src="{{ asset('assets/images/xs/avatar2.jpg') }}" alt="Avatar">
-                                        </li>
-                                        <li>
-                                            <img src="{{ asset('assets/images/xs/avatar7.jpg') }}" alt="Avatar">
-                                        </li>                            
-                                    </ul>
-                                </div>
-                            </a>
-                        </li>                    
-                    </ul>
-                </li>
-                <li class="footer"><a href="javascript:void(0);">View All</a></li>
-            </ul>
-        </li> -->
-        <!-- <li class="hidden-sm-down">
-            <div class="input-group">                
-                <input type="text" class="form-control" placeholder="Search...">
-                <span class="input-group-addon">
-                    <i class="zmdi zmdi-search"></i>
-                </span>
-            </div>
-        </li>  -->
+
         <li class="float-right">
             <!-- <a href="javascript:void(0);" class="fullscreen hidden-sm-down" data-provide="fullscreen" data-close="true"><i class="zmdi zmdi-fullscreen"></i></a> -->
             <!-- <a href="{{route('logout')}}" class="mega-menu" data-close="true"><i class="zmdi zmdi-power"></i></a> -->
@@ -287,7 +187,7 @@ body, html {
 <!-- Left Sidebar -->
 <aside id="leftsidebar" class="sidebar">
     <ul class="nav nav-tabs">
-        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#dashboard"><i class="zmdi zmdi-home m-r-5"></i>{{__('Khazan')}} </a></li>
+        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#dashboard"><i class="zmdi zmdi-home m-r-5"></i>{{ __('admin.project_name') }} </a></li>
         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#user"><i class="zmdi zmdi-account m-r-5"></i> {{Auth::user()->name}} </a></li>
     </ul>
     <div class="tab-content">
@@ -299,76 +199,59 @@ body, html {
                             @if(Auth::user()->image != '' || Auth::user()->image != null)
                                 <div class="image"><a href="javascript:void(0);"><img src="{{ asset('img/'.Auth::user()->image) }}" alt="{{Auth::user()->name}}"></a></div>
                             @else 
-                                <div class="image"><a href="javascript:void(0);"><img src="{{ asset('assets/images/profile_av.jpg') }}" alt="{{Auth::user()->name}}"></a></div>
+                                <div class="image"><a href="javascript:void(0);"><img src="{{ asset('images/logo.png') }}" alt="{{Auth::user()->name}}"></a></div>
                             @endif
                             <div class="detail">
                                 <h4>{{Auth::user()->name}}</h4>
-                                @if(Auth::user()->role == 'provider')
-                                <small>{{Auth::user()->company_name}}</small>  
-                                @endif
                                 <small>{{Auth::user()->email}}</small>  
                             </div>
                         </div>
                     </li>
                     <!-- <li class="header">MAIN</li> -->
+
                     <li <?php echo ($page == 'home') ? "class='active open'" : ""; ?> ><a href="{{ route('home') }}"  ><i class="zmdi zmdi-home"></i> <span> {{trans('admin.dashboard')}}</span></a></li>
                     @if(Auth::user()->role == 'admin')
 
                     <li <?php echo ($page == 'admins') ? "class='active open'" : ""; ?> ><a href="{{ route('admins') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.admins')}}</span></a></li>
 
-                    <li <?php echo ($page == 'cities') ? "class='active open'" : ""; ?> ><a href="{{ route('cities') }}"  ><i class="zmdi zmdi-city"></i> <span> {{trans('admin.cities')}}</span></a></li>
+                    <li <?php echo ($page == 'departments') ? "class='active open'" : ""; ?> ><a href="{{ route('departments') }}"  ><i class="zmdi zmdi-view-list-alt"></i> <span> {{trans('admin.departments')}}</span></a></li>
 
-                    <li <?php echo ($page == 'areas') ? "class='active open'" : ""; ?> ><a href="{{ route('areas') }}"  ><i class="zmdi zmdi-pin"></i> <span> {{trans('admin.areas')}}</span></a></li>
-
-                    <li <?php echo ($page == 'containers') ? "class='active open'" : ""; ?> ><a href="{{ route('containers') }}"  ><i class="zmdi zmdi-local-drink"></i> <span> {{trans('admin.containers')}}</span></a></li>
-
-                    <li <?php echo ($page == 'providers') ? "class='active open'" : ""; ?> ><a href="{{ route('providers') }}"  ><i class="zmdi zmdi-accounts-list"></i> <span> {{trans('admin.providers')}}</span></a></li>
-                    @endif
+                    <li <?php echo ($page == 'companies') ? "class='active open'" : ""; ?> ><a href="{{ route('companies') }}"  ><i class="zmdi zmdi-city"></i> <span> {{trans('admin.companies')}}</span></a></li>
                     
-                    @if(Auth::user()->role == 'admin' || Auth::user()->role == 'provider')
-                    <li <?php echo ($page == 'centers') ? "class='active open'" : ""; ?> ><a href="{{ route('centers') }}"  ><i class="zmdi zmdi-truck"></i> <span> {{trans('admin.centers')}}</span></a></li>
-                    @endif
+                    <li <?php echo ($page == 'packages') ? "class='active open'" : ""; ?> ><a href="{{ route('packages') }}"  ><i class="zmdi zmdi-money-box"></i> <span> {{trans('admin.packages')}}</span></a></li>
 
-                    <li <?php echo ($page == 'drivers') ? "class='active open'" : ""; ?> ><a href="{{ route('drivers') }}"  ><i class="zmdi zmdi-car"></i> <span> {{trans('admin.drivers')}}</span></a></li>
-                    
-                    @if(Auth::user()->role == 'center')
-                   <!--  <li <?php echo ($page == 'orders') ? "class='active open'" : ""; ?> ><a href="{{ route('orders') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.orders')}}</span></a></li>  -->
+                    <li <?php echo ($page == 'advertisements') ? "class='active open'" : ""; ?> ><a href="{{ route('advertisements') }}"  ><i class="zmdi zmdi-aspect-ratio-alt"></i> <span> {{trans('admin.advertisements')}}</span></a></li>
 
-                    <li <?php echo ($page == 'orders' ||$page == 'neworders' ||$page == 'noworders' ||$page == 'lastorders' ) ? "class='active open'" : ""; ?>   > <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-shopping-cart"></i><span>{{trans('admin.orders')}}</span> </a>
-                        <ul class="ml-menu">
-                            <li <?php echo ($page == 'orders') ? "class='active '" : ""; ?>><a href="{{ route('orders') }}">{{trans('admin.allorders')}}</a></li>
-
-                            <li <?php echo ($page == 'neworders') ? "class='active '" : ""; ?>><a href="{{ route('neworders') }}">{{trans('admin.neworders')}}</a></li>
-
-                            <li <?php echo ($page == 'noworders') ? "class='active '" : ""; ?>><a href="{{ route('noworders') }}">{{trans('admin.noworders')}}</a></li>
-
-                            <li <?php echo ($page == 'lastorders') ? "class='active '" : ""; ?>><a href="{{ route('lastorders') }}">{{trans('admin.lastorders')}}</a></li>
-                        </ul>
-                    </li> 
-                    @endif
+                    <li <?php echo ($page == 'sponsors') ? "class='active open'" : ""; ?> ><a href="{{ route('sponsors') }}"  ><i class="zmdi zmdi-accounts-list"></i> <span> {{trans('admin.sponsors')}}</span></a></li>
                    
-                    @if(Auth::user()->role == 'admin')
                     <li <?php echo ($page == 'users') ? "class='active open'" : ""; ?> ><a href="{{ route('users') }}"  ><i class="zmdi zmdi-accounts"></i> <span> {{trans('admin.users')}}</span></a></li>
 
                     <li <?php echo ($page == 'contacts') ? "class='active open'" : ""; ?> ><a href="{{ route('contacts') }}"  ><i class="zmdi zmdi-email"></i> <span> {{trans('admin.contacts')}}</span></a></li>
                    
-                    <li <?php echo ($page == 'AboutUs' || $page == 'Terms' || $page == 'Policy') ? "class='active open'" : ""; ?> > <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-settings"></i><span>{{trans('admin.settings')}}</span> </a>
+                    <li <?php echo ($page == 'AboutUs' || $page == 'Terms' || $page == 'Policy'|| $page == 'informations' || $page == 'messages') ? "class='active open'" : ""; ?> > <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-settings"></i><span>{{trans('admin.settings')}}</span> </a>
                         <ul class="ml-menu">
-                            <li <?php echo ($page == 'AboutUs') ? "class='active open'" : ""; ?> ><a href="{{ route('settings','about') }}"  > <span> {{trans('admin.AboutUs')}}</span></a></li>
+                            <li <?php echo ($page == 'AboutUs') ? "class='active open'" : ""; ?> ><a href="{{ route('editsetting','about') }}"  > <span> {{trans('admin.AboutUs')}}</span></a></li>
 
-                            <li <?php echo ($page == 'Terms') ? "class='active open'" : ""; ?> ><a href="{{ route('settings','term') }}"  > <span> {{trans('admin.Terms')}}</span></a></li>
+                            <li <?php echo ($page == 'Terms') ? "class='active open'" : ""; ?> ><a href="{{ route('editsetting','term') }}"  > <span> {{trans('admin.Terms')}}</span></a></li>
 
-                            <li <?php echo ($page == 'Policy') ? "class='active open'" : ""; ?> ><a href="{{ route('settings','policy') }}"  > <span> {{trans('admin.Policy')}}</span></a></li>
+                            <li <?php echo ($page == 'Policy') ? "class='active open'" : ""; ?> ><a href="{{ route('editsetting','policy') }}"  > <span> {{trans('admin.Policy')}}</span></a></li>
+                            
+                            <li <?php echo ($page == 'informations') ? "class='active open'" : ""; ?> ><a href="{{ route('editsetting','information') }}"  > <span> {{trans('admin.informations')}}</span></a></li>
+
+                            <li <?php echo ($page == 'messages') ? "class='active open'" : ""; ?> ><a href="{{ route('messages') }}"  > <span> {{trans('admin.messages')}}</span></a></li>
                         </ul>
                     </li> 
                     @endif
-
-                    <li <?php echo ($page == 'reports') ? "class='active open'" : ""; ?> > <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-apps"></i><span>{{trans('admin.reports')}}</span> </a>
-                        <ul class="ml-menu">
-                            <li <?php echo ($page == 'reports') ? "class='active open'" : ""; ?> ><a href="{{ route('reports') }}"  > <span> {{trans('admin.salesreports')}}</span></a></li>
-                        </ul>
-                    </li> 
                     
+                    @if(Auth::user()->role == 'company')
+                    <li <?php echo ($page == 'companies') ? "class='active open'" : ""; ?> ><a href="{{ route('editcompanie',Auth::user()->id) }}"  ><i class="zmdi zmdi-city"></i> <span> {{trans('admin.profile')}}</span></a></li>
+                    
+                    <li <?php echo ($page == 'packages') ? "class='active open'" : ""; ?> ><a href="{{ route('packages') }}"  ><i class="zmdi zmdi-money-box"></i> <span> {{trans('admin.packages')}}</span></a></li>
+
+                    <li <?php echo ($page == 'advertisements') ? "class='active open'" : ""; ?> ><a href="{{ route('advertisements') }}"  ><i class="zmdi zmdi-aspect-ratio-alt"></i> <span> {{trans('admin.advertisements')}}</span></a></li>
+
+                    @endif
+                                        
                 </ul>
             </div>
         </div>
@@ -380,7 +263,7 @@ body, html {
                             @if(Auth::user()->image != '' || Auth::user()->image != null)
                                 <div class="image"><a href="javascript:void(0);"><img src="{{ asset('img/'.Auth::user()->image) }}" alt="{{Auth::user()->name}}"></a></div>
                             @else 
-                                <div class="image"><a href="javascript:void(0);"><img src="{{ asset('assets/images/profile_av.jpg') }}" alt="{{Auth::user()->name}}"></a></div>
+                                <div class="image"><a href="javascript:void(0);"><img src="{{ asset('images/logo.png') }}" alt="{{Auth::user()->name}}"></a></div>
                             @endif
                             <div class="detail">
                                 <h4>{{Auth::user()->name}}</h4>
@@ -454,7 +337,7 @@ body, html {
                                         @if(Auth::user()->image)
                                             <img id="changeimages" src="{{asset('img/'.Auth::user()->image)}}" width="100px" height="100px" alt=" {{trans('admin.image')}}" />
                                         @else 
-                                            <img id="changeimage" src="{{asset('images/default.png')}}" width="100px" height="100px" alt=" {{trans('admin.image')}}" />
+                                            <img id="changeimages" src="{{asset('images/default.png')}}" width="100px" height="100px" alt=" {{trans('admin.image')}}" />
                                         @endif
                                     </div>
                                 </div>
@@ -489,7 +372,12 @@ body, html {
 <script src="{{ asset('assets/plugins/jquery-steps/jquery.steps.js') }}"></script> <!-- JQuery Steps Plugin Js --> 
 <script src="{{ asset('assets/js/pages/forms/form-validation.js') }}"></script> 
   <!-- //for  dialogs  -->
-<script src="{{ asset('assets/plugins/sweetalert/sweetalert.min.js') }}"></script> <!-- SweetAlert Plugin Js --> 
+@if($lang=='ar')
+<script src="{{ asset('assets/plugins/sweetalert/sweetalert.min-ar.js') }}"></script> <!-- SweetAlert Plugin Js --> 
+@else 
+<script src="{{ asset('assets/plugins/sweetalert/sweetalert.min.js') }}"></script> <!-- SweetAlert Plugin Js -->
+@endif
+
 <script src="{{ asset('assets/js/pages/ui/dialogs.js') }}"></script>
  
 <script src="{{ asset('assets/plugins/momentjs/moment.js') }}"></script> <!-- Moment Plugin Js --> 
@@ -519,7 +407,6 @@ body, html {
             }
         }
         function readURL(input,imagediv) {
-            
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
                 src = document.getElementById(imagediv).src;    

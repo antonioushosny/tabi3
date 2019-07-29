@@ -17,7 +17,7 @@ class Controller extends BaseController
     {
         $path_to_fcm='https://fcm.googleapis.com/fcm/send';
 
-        $server_key="AAAAxKwM6B0:APA91bE32WyTg62kem1QQsu0wU0IqqCZmFR5oBjVy2IC4KYr1pgb02oTuXEg0JcKBeLAccBxa2M7U_MtBvNTI1SUkiEUa60Vzos6hDc-lLzuEc4HGeui_yfZOnsbvkmHqt90dz5nfiqX";
+        $server_key="AAAAOqEkjhQ:APA91bFYjZKAD2y2fDA7RYZpVehQidSATxZAJY2-VaQqwSIdRlfUkF-JDAmaYxps2YbsQnsgE94PbQVyIWsBULlt2_2u4rG2ZVRke7qe-QN3PiazIcntJrL0PGCU1AlUcBNxv0K32xvo";
         $key = $device_id;
         $message = $msg;
         $title = $title ;
@@ -60,9 +60,6 @@ class Controller extends BaseController
                                 )
         );
         }
-   
-       
-
        $payload =json_encode($fields);
 
        $curl_session =curl_init();
@@ -93,7 +90,7 @@ class Controller extends BaseController
         date_default_timezone_set('Africa/Cairo');
         $path_to_fcm='https://fcm.googleapis.com/fcm/send';
 
-        $server_key="AAAAxKwM6B0:APA91bE32WyTg62kem1QQsu0wU0IqqCZmFR5oBjVy2IC4KYr1pgb02oTuXEg0JcKBeLAccBxa2M7U_MtBvNTI1SUkiEUa60Vzos6hDc-lLzuEc4HGeui_yfZOnsbvkmHqt90dz5nfiqX";
+        $server_key="AAAAOqEkjhQ:APA91bFYjZKAD2y2fDA7RYZpVehQidSATxZAJY2-VaQqwSIdRlfUkF-JDAmaYxps2YbsQnsgE94PbQVyIWsBULlt2_2u4rG2ZVRke7qe-QN3PiazIcntJrL0PGCU1AlUcBNxv0K32xvo";
 
         $key = $device_id; 
         $user = User::where('device_token', $device_id)->first();
@@ -112,9 +109,9 @@ class Controller extends BaseController
         $fields =array('to'=>$key,
             'notification' => array("title" => $title,
             "body" => $type  ,
-            "click_action"=>"khazan/home",
+            "click_action"=>"beitk/home",
             "sound"=>"default",
-            "icon"=>"khazan/public/images/logo.png" ), 'data' => array('type' => $type ,"title" => $title,
+            "icon"=>"beitk/public/images/logo.png" ), 'data' => array('type' => $type ,"title" => $title,
             "message" => $message ,"date" => $date   ),
 
         );

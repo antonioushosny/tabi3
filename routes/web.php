@@ -11,7 +11,7 @@ use App\User;
 |--------------------------------------------------------------------------
 |
 | Here is where you can register web routes for your application. These
-| routes are loaded by the RoutedealProvider within a group which
+| routes are loaded by the Routedealsponsor within a group which
 | contains the "web" middleware group. Now create something great!
 |
 */
@@ -51,68 +51,48 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/admins/delete/{id}', 'AdminsController@destroy')->name('destroyadmin');
     Route::post('/admins/deleteall', 'AdminsController@deleteall')->name('adminsdeleteall');
     
-    // routes for cities management
-    Route::get('/cities', 'CitiesController@index')->name('cities');
-    Route::get('/cities/add/', 'CitiesController@add')->name('addcitie');
-    Route::post('/cities/update/', 'CitiesController@store')->name('storecitie');
-    Route::get('/cities/edit/{id}', 'CitiesController@edit')->name('editcitie');
-    Route::get('/cities/delete/{id}', 'CitiesController@destroy')->name('destroycitie');
-    Route::post('/cities/deleteall', 'CitiesController@deleteall')->name('citiesdeleteall');
-    Route::get('/cities/{id}/areas', 'CitiesController@areas')->name('cityareas');
+    // routes for packages management
+    Route::get('/packages', 'PackagesController@index')->name('packages');
+    Route::get('/packages/add/', 'PackagesController@add')->name('addpackage');
+    Route::post('/packages/update/', 'PackagesController@store')->name('storepackage');
+    Route::get('/packages/edit/{id}', 'PackagesController@edit')->name('editpackage');
+    Route::get('/packages/delete/{id}', 'PackagesController@destroy')->name('destroypackage');
+    Route::post('/packages/deleteall', 'PackagesController@deleteall')->name('packagesdeleteall');
 
-    // routes for areas management
-    Route::get('/areas', 'AreasController@index')->name('areas');
-    Route::get('/areas/add/', 'AreasController@add')->name('addarea');
-    Route::post('/areas/update/', 'AreasController@store')->name('storearea');
-    Route::get('/areas/edit/{id}', 'AreasController@edit')->name('editarea');
-    Route::get('/areas/delete/{id}', 'AreasController@destroy')->name('destroyarea');
-    Route::post('/areas/deleteall', 'AreasController@deleteall')->name('areasdeleteall');
+    // routes for departments management
+    Route::get('/departments', 'DepartmentsController@index')->name('departments');
+    Route::get('/departments/add/', 'DepartmentsController@add')->name('adddepartment');
+    Route::post('/departments/update/', 'DepartmentsController@store')->name('storedepartment');
+    Route::get('/departments/edit/{id}', 'DepartmentsController@edit')->name('editdepartment');
+    Route::get('/departments/delete/{id}', 'DepartmentsController@destroy')->name('destroydepartment');
+    Route::post('/departments/deleteall', 'DepartmentsController@deleteall')->name('departmentsdeleteall');
 
-    // routes for containers management
-    Route::get('/containers', 'ContainersController@index')->name('containers');
-    Route::get('/containers/add/', 'ContainersController@add')->name('addcontainer');
-    Route::post('/containers/update/', 'ContainersController@store')->name('storecontainer');
-    Route::get('/containers/edit/{id}', 'ContainersController@edit')->name('editcontainer');
-    Route::get('/containers/delete/{id}', 'ContainersController@destroy')->name('destroycontainer');
-    Route::post('/containers/deleteall', 'ContainersController@deleteall')->name('containersdeleteall');
+     // routes for companies management
+     Route::get('/companies', 'CompaniesController@index')->name('companies');
+     Route::get('/companies/add/', 'CompaniesController@add')->name('addcompanie');
+     Route::post('/companies/update/', 'CompaniesController@store')->name('storecompanie');
+     Route::get('/companies/edit/{id}', 'CompaniesController@edit')->name('editcompanie');
+     Route::get('/companies/delete/{id}', 'CompaniesController@destroy')->name('destroycompanie');
+     Route::post('/companies/deleteall', 'CompaniesController@deleteall')->name('companiesdeleteall');
+
+    // routes for advertisements management
+    Route::get('/advertisements', 'AdvertisementsController@index')->name('advertisements');
+    Route::get('/advertisements/add/', 'AdvertisementsController@add')->name('addadvertisement');
+    Route::post('/advertisements/update/', 'AdvertisementsController@store')->name('storeadvertisement');
+    Route::get('/advertisements/edit/{id}', 'AdvertisementsController@edit')->name('editadvertisement');
+    Route::get('/packagedetail/{id}', 'AdvertisementsController@packagedetail')->name('packagedetail');
+    Route::get('/advertisements/delete/{id}', 'AdvertisementsController@destroy')->name('destroyadvertisement');
+    Route::post('/advertisements/deleteall', 'AdvertisementsController@deleteall')->name('advertisementsdeleteall');
     
-    // routes for providers management
-    Route::get('/providers', 'ProvidersController@index')->name('providers');
-    Route::get('/providers/add/', 'ProvidersController@add')->name('addprovider');
-    Route::post('/providers/update/', 'ProvidersController@store')->name('storeprovider');
-    Route::get('/providers/edit/{id}', 'ProvidersController@edit')->name('editprovider');
-    Route::get('/providers/delete/{id}', 'ProvidersController@destroy')->name('destroyprovider');
-    Route::post('/providers/deleteall', 'ProvidersController@deleteall')->name('providersdeleteall');
-    Route::get('/providers/{id}/centers', 'ProvidersController@centers')->name('providercenters');
-
-    // routes for centers management
-    Route::get('/centers', 'CentersController@index')->name('centers');
-    Route::get('/centers/add/', 'CentersController@add')->name('addcenter');
-    Route::post('/centers/update/', 'CentersController@store')->name('storecenter');
-    Route::get('/centers/edit/{id}', 'CentersController@edit')->name('editcenter');
-    Route::get('/centers/delete/{id}', 'CentersController@destroy')->name('destroycenter');
-    Route::post('/centers/deleteall', 'CentersController@deleteall')->name('centersdeleteall');
-
-    // routes for drivers management
-    Route::get('/drivers', 'DriversController@index')->name('drivers');
-    Route::get('/drivers/add/', 'DriversController@add')->name('adddriver');
-    Route::post('/drivers/update/', 'DriversController@store')->name('storedriver');
-    Route::get('/drivers/edit/{id}', 'DriversController@edit')->name('editdriver');
-    Route::get('/drivers/delete/{id}', 'DriversController@destroy')->name('destroydriver');
-    Route::post('/drivers/deleteall', 'DriversController@deleteall')->name('driversdeleteall');
+    // routes for sponsors management
+    Route::get('/sponsors', 'SponsorsController@index')->name('sponsors');
+    Route::get('/sponsors/add/', 'SponsorsController@add')->name('addsponsor');
+    Route::post('/sponsors/update/', 'SponsorsController@store')->name('storesponsor');
+    Route::get('/sponsors/edit/{id}', 'SponsorsController@edit')->name('editsponsor');
+    Route::get('/sponsors/delete/{id}', 'SponsorsController@destroy')->name('destroysponsor');
+    Route::post('/sponsors/deleteall', 'SponsorsController@deleteall')->name('sponsorsdeleteall');
 
 
-    // routes for orders management
-    Route::get('/orders', 'OrdersController@index')->name('orders');
-    Route::get('/neworders', 'OrdersController@neworders')->name('neworders');
-    Route::get('/noworders', 'OrdersController@noworders')->name('noworders');
-    Route::get('/lastorders', 'OrdersController@lastorders')->name('lastorders');
-    Route::get('/orders/add/', 'OrdersController@add')->name('addorder');
-    Route::post('/orders/update/', 'OrdersController@actionfororder')->name('actionfororder');
-    Route::post('/orders/assignDriver/', 'OrdersController@assignDriver')->name('assignDriver');
-    Route::get('/orders/edit/{id}', 'OrdersController@edit')->name('editorder');
-    Route::get('/orders/delete/{id}', 'OrdersController@destroy')->name('destroyorder');
-    Route::post('/orders/deleteall', 'OrdersController@deleteall')->name('ordersdeleteall');
     
     // routes for users management
     Route::get('/users', 'UsersController@index')->name('users');
@@ -142,7 +122,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/settings/{type}', 'HomeController@settings')->name('settings');
     Route::get('/settings/add/{type}', 'HomeController@add')->name('addsetting');
     Route::post('/settings/store', 'HomeController@store')->name('storesetting');
-    Route::get('/settings/edit/{type}/{id}', 'HomeController@edit')->name('editsetting');
+    Route::get('/settings/edit/{type}', 'HomeController@edit')->name('editsetting');
     Route::put('/settings/edit/{id}', 'HomeController@editsettings')->name('editsettings');
     Route::get('/settings/delete/{id}', 'HomeController@destroy')->name('destroysetting');
     Route::post('/settings/deleteall', 'HomeController@deleteall')->name('settingsdeleteall');

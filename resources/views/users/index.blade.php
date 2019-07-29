@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col-lg-5 col-md-5 col-sm-12">
                 <h2>{{__('admin.dashboard')}}
-                <small>{{__('admin.Welcome to Khazan')}}</small>
+                <small>{{__('admin.Welcome to beitk')}}</small>
                 </h2>
             </div>            
                 @if($lang =='ar')
@@ -66,8 +66,6 @@
                                         <th>{{trans('admin.name')}}</th>
                                         <th>{{trans('admin.mobile')}}</th>
                                         <th>{{trans('admin.email')}}</th>
-                                        <th>{{trans('admin.city')}}</th>
-                                        <th>{{trans('admin.area')}}</th>
                                         <th>{{trans('admin.image')}}</th>
                                         <th>{{trans('admin.status')}}</th>
                                         <th>{{trans('admin.actions')}}</th>
@@ -83,25 +81,6 @@
                                         <td>{{ $data->name }}</td>
                                         <td>{{ $data->mobile }}</td>
                                         <td>{{ $data->email }}</td>          
-                                        @if($data->City)
-                                            @if($lang == 'ar')
-                                                <td>{{ $data->City->name_ar }}</td> 
-                                            @else 
-                                                <td>{{ $data->City->name_en }}</td> 
-                                            @endif
-                                        @else 
-                                            <td> </td> 
-                                        @endif
-                                        @if($data->Area)
-                                            @if($lang == 'ar')
-                                                <td>{{ $data->Area->name_ar }}</td> 
-                                            @else 
-                                                <td>{{ $data->Area->name_en }}</td> 
-                                            @endif
-                                        @else 
-                                            <td> </td> 
-                                        @endif
-
                                         @if($data->image)
                                             <td><img src="{{asset('img/').'/'.$data->image }}" width="50px" height="50px"></td>
                                         @else 

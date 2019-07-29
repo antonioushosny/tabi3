@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 use App\Order;
 use App\User;
-use App\Country;
-use App\City;
+use App\Department;
+
 use App\Doc;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -40,9 +40,8 @@ class HomeController extends Controller
             $time  = date('H:i:s', strtotime($dt));
             
             $users        = User::where('role','user')->count('id');
-            $providers    = User::where('role','provider')->count('id');
-            $centers      = User::where('role','center')->count('id');
-            $drivers      = User::where('role','driver')->count('id');
+            $companies    = User::where('role','company')->count('id');
+            $departments      = Department::count('id');
 
             $yesterday      = Carbon::now()->subDays(1)->toDateString();
             $one_week_ago   = Carbon::now()->subWeeks(1)->toDateString();
@@ -54,107 +53,107 @@ class HomeController extends Controller
 
             $last_sex_years = [] ;
             $sales_for_year = [] ;
-            if(Auth::user()->role == 'admin'){
+            // if(Auth::user()->role == 'admin'){
               
-                $this_year = Order::where('status','delivered')->whereDate('created_at','>=',$one_year_ago)->whereDate('created_at','<=',$date)->sum('total');
-                $this_month = Order::where('status','delivered')->whereDate('created_at','>=',$one_month_ago)->whereDate('created_at','<=',$date)->sum('total');
-                $this_week = Order::where('status','delivered')->whereDate('created_at','>=',$one_week_ago)->whereDate('created_at','<=',$date)->sum('total');
-                $this_day = Order::where('status','delivered')->whereDate('created_at','=',$date)->sum('total');
+            //     $this_year = Order::where('status','delivered')->whereDate('created_at','>=',$one_year_ago)->whereDate('created_at','<=',$date)->sum('total');
+            //     $this_month = Order::where('status','delivered')->whereDate('created_at','>=',$one_month_ago)->whereDate('created_at','<=',$date)->sum('total');
+            //     $this_week = Order::where('status','delivered')->whereDate('created_at','>=',$one_week_ago)->whereDate('created_at','<=',$date)->sum('total');
+            //     $this_day = Order::where('status','delivered')->whereDate('created_at','=',$date)->sum('total');
 
-                for($i=0 ;$i <=6 ; $i++){
-                    $year = Carbon::now()->subYears($i+1)->toDateString();
-                    $lastyear = Carbon::now()->subYears($i)->toDateString();
-                    $last_sex_years[$i]['period'] = date('Y', strtotime($lastyear));
-                    $last_sex_years[$i]['sales'] = Order::where('status','delivered')->whereDate('created_at','>=',$year)->whereDate('created_at','<=',$lastyear)->sum('total');
-                    $last_sex_years[$i]['orders'] = Order::where('status','delivered')->whereDate('created_at','>=',$year)->whereDate('created_at','<=',$lastyear)->count('id');
-                }
-                for($i=0 ;$i <=11 ; $i++){
-                    $month = Carbon::now()->subMonths($i+1)->toDateString();
-                    $lastmonth = Carbon::now()->subMonths($i)->toDateString();
-                    $sales_for_year[$i]['period'] = date('Y-M-d', strtotime($lastmonth));
-                    $sales_for_year[$i]['sales'] = Order::where('status','delivered')->whereDate('created_at','>=',$month)->whereDate('created_at','<=',$lastmonth)->sum('total');
-                    $sales_for_year[$i]['orders'] = Order::where('status','delivered')->whereDate('created_at','>=',$month)->whereDate('created_at','<=',$lastmonth)->count('id');
-                }
+            //     for($i=0 ;$i <=6 ; $i++){
+            //         $year = Carbon::now()->subYears($i+1)->toDateString();
+            //         $lastyear = Carbon::now()->subYears($i)->toDateString();
+            //         $last_sex_years[$i]['period'] = date('Y', strtotime($lastyear));
+            //         $last_sex_years[$i]['sales'] = Order::where('status','delivered')->whereDate('created_at','>=',$year)->whereDate('created_at','<=',$lastyear)->sum('total');
+            //         $last_sex_years[$i]['orders'] = Order::where('status','delivered')->whereDate('created_at','>=',$year)->whereDate('created_at','<=',$lastyear)->count('id');
+            //     }
+            //     for($i=0 ;$i <=11 ; $i++){
+            //         $month = Carbon::now()->subMonths($i+1)->toDateString();
+            //         $lastmonth = Carbon::now()->subMonths($i)->toDateString();
+            //         $sales_for_year[$i]['period'] = date('Y-M-d', strtotime($lastmonth));
+            //         $sales_for_year[$i]['sales'] = Order::where('status','delivered')->whereDate('created_at','>=',$month)->whereDate('created_at','<=',$lastmonth)->sum('total');
+            //         $sales_for_year[$i]['orders'] = Order::where('status','delivered')->whereDate('created_at','>=',$month)->whereDate('created_at','<=',$lastmonth)->count('id');
+            //     }
     
-                for($i=0 ;$i <=7 ; $i++){
-                    $day = Carbon::now()->subDays($i+1)->toDateString();
-                    $lastday = Carbon::now()->subDays($i)->toDateString();
-                    $sales_for_week[$i]['period'] = date('D', strtotime($lastday));
-                    $sales_for_week[$i]['sales'] = Order::where('status','delivered')->whereDate('created_at','>=',$day)->whereDate('created_at','<=',$lastday)->sum('total');
-                    $sales_for_week[$i]['orders'] = Order::where('status','delivered')->whereDate('created_at','>=',$day)->whereDate('created_at','<=',$lastday)->count('id');
-                }
-            }
-            else if(Auth::user()->role == 'provider'){
+            //     for($i=0 ;$i <=7 ; $i++){
+            //         $day = Carbon::now()->subDays($i+1)->toDateString();
+            //         $lastday = Carbon::now()->subDays($i)->toDateString();
+            //         $sales_for_week[$i]['period'] = date('D', strtotime($lastday));
+            //         $sales_for_week[$i]['sales'] = Order::where('status','delivered')->whereDate('created_at','>=',$day)->whereDate('created_at','<=',$lastday)->sum('total');
+            //         $sales_for_week[$i]['orders'] = Order::where('status','delivered')->whereDate('created_at','>=',$day)->whereDate('created_at','<=',$lastday)->count('id');
+            //     }
+            // }
+            // else if(Auth::user()->role == 'provider'){
 
-                $drivers      = User::where('role','driver')->where('provider_id',Auth::user()->id)->count('id');
-                $orders      = Order::where('provider_id',Auth::user()->id)->count('id');
-                $sales      = Order::where('provider_id',Auth::user()->id)->sum('total');
+            //     $drivers      = User::where('role','driver')->where('provider_id',Auth::user()->id)->count('id');
+            //     $orders      = Order::where('provider_id',Auth::user()->id)->count('id');
+            //     $sales      = Order::where('provider_id',Auth::user()->id)->sum('total');
 
-                $this_year = Order::where('status','delivered')->where('provider_id',Auth::user()->id)->whereDate('created_at','>=',$one_year_ago)->whereDate('created_at','<=',$date)->sum('total');
-                $this_month = Order::where('status','delivered')->where('provider_id',Auth::user()->id)->whereDate('created_at','>=',$one_month_ago)->whereDate('created_at','<=',$date)->sum('total');
-                $this_week = Order::where('status','delivered')->where('provider_id',Auth::user()->id)->whereDate('created_at','>=',$one_week_ago)->whereDate('created_at','<=',$date)->sum('total');
-                $this_day = Order::where('status','delivered')->where('provider_id',Auth::user()->id)->whereDate('created_at','=',$date)->sum('total');
+            //     $this_year = Order::where('status','delivered')->where('provider_id',Auth::user()->id)->whereDate('created_at','>=',$one_year_ago)->whereDate('created_at','<=',$date)->sum('total');
+            //     $this_month = Order::where('status','delivered')->where('provider_id',Auth::user()->id)->whereDate('created_at','>=',$one_month_ago)->whereDate('created_at','<=',$date)->sum('total');
+            //     $this_week = Order::where('status','delivered')->where('provider_id',Auth::user()->id)->whereDate('created_at','>=',$one_week_ago)->whereDate('created_at','<=',$date)->sum('total');
+            //     $this_day = Order::where('status','delivered')->where('provider_id',Auth::user()->id)->whereDate('created_at','=',$date)->sum('total');
 
-                for($i=0 ;$i <=6 ; $i++){
-                    $year = Carbon::now()->subYears($i+1)->toDateString();
-                    $lastyear = Carbon::now()->subYears($i)->toDateString();
-                    $last_sex_years[$i]['period'] = date('Y', strtotime($lastyear));
-                    $last_sex_years[$i]['sales'] = Order::where('status','delivered')->where('provider_id',Auth::user()->id)->whereDate('created_at','>=',$year)->whereDate('created_at','<=',$lastyear)->sum('total');
-                    $last_sex_years[$i]['orders'] = Order::where('status','delivered')->where('provider_id',Auth::user()->id)->whereDate('created_at','>=',$year)->whereDate('created_at','<=',$lastyear)->count('id');
-                }
-                for($i=0 ;$i <=11 ; $i++){
-                    $month = Carbon::now()->subMonths($i+1)->toDateString();
-                    $lastmonth = Carbon::now()->subMonths($i)->toDateString();
-                    $sales_for_year[$i]['period'] = date('Y-M-d', strtotime($lastmonth));
-                    $sales_for_year[$i]['sales'] = Order::where('status','delivered')->where('provider_id',Auth::user()->id)->whereDate('created_at','>=',$month)->whereDate('created_at','<=',$lastmonth)->sum('total');
-                    $sales_for_year[$i]['orders'] = Order::where('status','delivered')->where('provider_id',Auth::user()->id)->whereDate('created_at','>=',$month)->whereDate('created_at','<=',$lastmonth)->count('id');
-                }
+            //     for($i=0 ;$i <=6 ; $i++){
+            //         $year = Carbon::now()->subYears($i+1)->toDateString();
+            //         $lastyear = Carbon::now()->subYears($i)->toDateString();
+            //         $last_sex_years[$i]['period'] = date('Y', strtotime($lastyear));
+            //         $last_sex_years[$i]['sales'] = Order::where('status','delivered')->where('provider_id',Auth::user()->id)->whereDate('created_at','>=',$year)->whereDate('created_at','<=',$lastyear)->sum('total');
+            //         $last_sex_years[$i]['orders'] = Order::where('status','delivered')->where('provider_id',Auth::user()->id)->whereDate('created_at','>=',$year)->whereDate('created_at','<=',$lastyear)->count('id');
+            //     }
+            //     for($i=0 ;$i <=11 ; $i++){
+            //         $month = Carbon::now()->subMonths($i+1)->toDateString();
+            //         $lastmonth = Carbon::now()->subMonths($i)->toDateString();
+            //         $sales_for_year[$i]['period'] = date('Y-M-d', strtotime($lastmonth));
+            //         $sales_for_year[$i]['sales'] = Order::where('status','delivered')->where('provider_id',Auth::user()->id)->whereDate('created_at','>=',$month)->whereDate('created_at','<=',$lastmonth)->sum('total');
+            //         $sales_for_year[$i]['orders'] = Order::where('status','delivered')->where('provider_id',Auth::user()->id)->whereDate('created_at','>=',$month)->whereDate('created_at','<=',$lastmonth)->count('id');
+            //     }
     
-                for($i=0 ;$i <=7 ; $i++){
-                    $day = Carbon::now()->subDays($i+1)->toDateString();
-                    $lastday = Carbon::now()->subDays($i)->toDateString();
-                    $sales_for_week[$i]['period'] = date('D', strtotime($lastday));
-                    $sales_for_week[$i]['sales'] = Order::where('status','delivered')->where('provider_id',Auth::user()->id)->whereDate('created_at','>=',$day)->whereDate('created_at','<=',$lastday)->sum('total');
-                    $sales_for_week[$i]['orders'] = Order::where('status','delivered')->where('provider_id',Auth::user()->id)->whereDate('created_at','>=',$day)->whereDate('created_at','<=',$lastday)->count('id');
-                }
-            }
-            else{
-                $drivers      = User::where('role','driver')->where('center_id',Auth::user()->id)->count('id');
-                $orders      = Order::where('center_id',Auth::user()->id)->count('id');
-                $sales      = Order::where('center_id',Auth::user()->id)->sum('total');
+            //     for($i=0 ;$i <=7 ; $i++){
+            //         $day = Carbon::now()->subDays($i+1)->toDateString();
+            //         $lastday = Carbon::now()->subDays($i)->toDateString();
+            //         $sales_for_week[$i]['period'] = date('D', strtotime($lastday));
+            //         $sales_for_week[$i]['sales'] = Order::where('status','delivered')->where('provider_id',Auth::user()->id)->whereDate('created_at','>=',$day)->whereDate('created_at','<=',$lastday)->sum('total');
+            //         $sales_for_week[$i]['orders'] = Order::where('status','delivered')->where('provider_id',Auth::user()->id)->whereDate('created_at','>=',$day)->whereDate('created_at','<=',$lastday)->count('id');
+            //     }
+            // }
+            // else{
+            //     $drivers      = User::where('role','driver')->where('center_id',Auth::user()->id)->count('id');
+            //     $orders      = Order::where('center_id',Auth::user()->id)->count('id');
+            //     $sales      = Order::where('center_id',Auth::user()->id)->sum('total');
 
-                $this_year = Order::where('status','delivered')->where('center_id',Auth::user()->id)->whereDate('created_at','>=',$one_year_ago)->whereDate('created_at','<=',$date)->sum('total');
-                $this_month = Order::where('status','delivered')->where('center_id',Auth::user()->id)->whereDate('created_at','>=',$one_month_ago)->whereDate('created_at','<=',$date)->sum('total');
-                $this_week = Order::where('status','delivered')->where('center_id',Auth::user()->id)->whereDate('created_at','>=',$one_week_ago)->whereDate('created_at','<=',$date)->sum('total');
-                $this_day = Order::where('status','delivered')->where('center_id',Auth::user()->id)->whereDate('created_at','=',$date)->sum('total');
+            //     $this_year = Order::where('status','delivered')->where('center_id',Auth::user()->id)->whereDate('created_at','>=',$one_year_ago)->whereDate('created_at','<=',$date)->sum('total');
+            //     $this_month = Order::where('status','delivered')->where('center_id',Auth::user()->id)->whereDate('created_at','>=',$one_month_ago)->whereDate('created_at','<=',$date)->sum('total');
+            //     $this_week = Order::where('status','delivered')->where('center_id',Auth::user()->id)->whereDate('created_at','>=',$one_week_ago)->whereDate('created_at','<=',$date)->sum('total');
+            //     $this_day = Order::where('status','delivered')->where('center_id',Auth::user()->id)->whereDate('created_at','=',$date)->sum('total');
 
-                for($i=0 ;$i <=6 ; $i++){
-                    $year = Carbon::now()->subYears($i+1)->toDateString();
-                    $lastyear = Carbon::now()->subYears($i)->toDateString();
-                    $last_sex_years[$i]['period'] = date('Y', strtotime($lastyear));
-                    $last_sex_years[$i]['sales'] = Order::where('status','delivered')->where('center_id',Auth::user()->id)->whereDate('created_at','>=',$year)->whereDate('created_at','<=',$lastyear)->sum('total');
-                    $last_sex_years[$i]['orders'] = Order::where('status','delivered')->where('center_id',Auth::user()->id)->whereDate('created_at','>=',$year)->whereDate('created_at','<=',$lastyear)->count('id');
-                }
-                for($i=0 ;$i <=11 ; $i++){
-                    $month = Carbon::now()->subMonths($i+1)->toDateString();
-                    $lastmonth = Carbon::now()->subMonths($i)->toDateString();
-                    $sales_for_year[$i]['period'] = date('Y-M-d', strtotime($lastmonth));
-                    $sales_for_year[$i]['sales'] = Order::where('status','delivered')->where('center_id',Auth::user()->id)->whereDate('created_at','>=',$month)->whereDate('created_at','<=',$lastmonth)->sum('total');
-                    $sales_for_year[$i]['orders'] = Order::where('status','delivered')->where('center_id',Auth::user()->id)->whereDate('created_at','>=',$month)->whereDate('created_at','<=',$lastmonth)->count('id');
-                }
+            //     for($i=0 ;$i <=6 ; $i++){
+            //         $year = Carbon::now()->subYears($i+1)->toDateString();
+            //         $lastyear = Carbon::now()->subYears($i)->toDateString();
+            //         $last_sex_years[$i]['period'] = date('Y', strtotime($lastyear));
+            //         $last_sex_years[$i]['sales'] = Order::where('status','delivered')->where('center_id',Auth::user()->id)->whereDate('created_at','>=',$year)->whereDate('created_at','<=',$lastyear)->sum('total');
+            //         $last_sex_years[$i]['orders'] = Order::where('status','delivered')->where('center_id',Auth::user()->id)->whereDate('created_at','>=',$year)->whereDate('created_at','<=',$lastyear)->count('id');
+            //     }
+            //     for($i=0 ;$i <=11 ; $i++){
+            //         $month = Carbon::now()->subMonths($i+1)->toDateString();
+            //         $lastmonth = Carbon::now()->subMonths($i)->toDateString();
+            //         $sales_for_year[$i]['period'] = date('Y-M-d', strtotime($lastmonth));
+            //         $sales_for_year[$i]['sales'] = Order::where('status','delivered')->where('center_id',Auth::user()->id)->whereDate('created_at','>=',$month)->whereDate('created_at','<=',$lastmonth)->sum('total');
+            //         $sales_for_year[$i]['orders'] = Order::where('status','delivered')->where('center_id',Auth::user()->id)->whereDate('created_at','>=',$month)->whereDate('created_at','<=',$lastmonth)->count('id');
+            //     }
     
-                for($i=0 ;$i <=7 ; $i++){
-                    $day = Carbon::now()->subDays($i+1)->toDateString();
-                    $lastday = Carbon::now()->subDays($i)->toDateString();
-                    $sales_for_week[$i]['period'] = date('D', strtotime($lastday));
-                    $sales_for_week[$i]['sales'] = Order::where('status','delivered')->where('center_id',Auth::user()->id)->whereDate('created_at','>=',$day)->whereDate('created_at','<=',$lastday)->sum('total');
-                    $sales_for_week[$i]['orders'] = Order::where('status','delivered')->where('center_id',Auth::user()->id)->whereDate('created_at','>=',$day)->whereDate('created_at','<=',$lastday)->count('id');
-                }
-            }
+            //     for($i=0 ;$i <=7 ; $i++){
+            //         $day = Carbon::now()->subDays($i+1)->toDateString();
+            //         $lastday = Carbon::now()->subDays($i)->toDateString();
+            //         $sales_for_week[$i]['period'] = date('D', strtotime($lastday));
+            //         $sales_for_week[$i]['sales'] = Order::where('status','delivered')->where('center_id',Auth::user()->id)->whereDate('created_at','>=',$day)->whereDate('created_at','<=',$lastday)->sum('total');
+            //         $sales_for_week[$i]['orders'] = Order::where('status','delivered')->where('center_id',Auth::user()->id)->whereDate('created_at','>=',$day)->whereDate('created_at','<=',$lastday)->count('id');
+            //     }
+            // }
             
             // return  $sales_for_year ;
             $title = 'home' ;
-            return view('home',compact('lang','title','providers','centers','drivers','users','sales','orders','this_day','this_week','this_month','this_year','last_sex_years','sales_for_year','sales_for_week'));
+            return view('home',compact('lang','title','companies','departments','users'));
         
     }
 
@@ -190,7 +189,7 @@ class HomeController extends Controller
       
         return view('settings.add',compact('title','lang','type')) ;
     }
-    public function edit($type,$id){
+    public function edit($type){
         $lang = App::getlocale();
         if($type == 'about'){
             $title = "AboutUs" ;
@@ -198,12 +197,16 @@ class HomeController extends Controller
         }else if($type == 'policy'){
             $title = "Policy" ;
             $type = "policy" ;
+        }
+        else if($type == 'information'){
+            $title = "informations" ;
+            $type = "information" ;
         }else{
             $title = "Terms" ;
             $type = "terms" ;
         }
       
-        $data = Doc::find($id) ;
+        $data = Doc::where('type',$type)->first() ;
         return view('settings.add',compact('title','lang','type','data')) ;
     }
     public function store(Request $request)
@@ -376,13 +379,14 @@ class HomeController extends Controller
     public function messages()
     {
         $title = 'messages';
+        $lang = App::getlocale();
         // $clients = User::where('role','client')->get();
-        $clients = User::where('role','<>','admin')->get();
-        $countries = Country::where('id','<>','1')->get();
-        $cities = City::where('id','<>','1')->get();
+        $clients = User::where('role','user')->get();
+        // $countries = Country::where('id','<>','1')->get();
+        // $cities = City::where('id','<>','1')->get();
         // $users = User::where('role','user')->get();
 
-        return view('messages.index',compact('clients','cities','countries','title'));
+        return view('settings.messages',compact('clients','title','lang'));
     }
 
     public function send(Request $request)
@@ -401,14 +405,9 @@ class HomeController extends Controller
             }
         
         if($request->for == "all"){
-            $clients =  User::where('role','<>','admin')->get();
+            $clients =  User::where('role','user')->get();
         }
-        else if($request->for == "for_country"){
-            $clients =  User::whereIn('country_id',$request->countries)->get();
-        }
-        else if($request->for == "for_city"){
-            $clients =  User::whereIn('city_id',$request->cities)->get();
-        }
+        
         else{
             $clients =  User::whereIn('id',$request->ids)->get();
         }
@@ -416,32 +415,21 @@ class HomeController extends Controller
 
             foreach($clients as $client){
                 if($client){
-    
+                    $msg =  [
+                        'en' => $request->message ,
+                        'ar' =>$request->message ,
+                    ];
+                    $title = [
+                        'en' =>   $request->title  ,
+                        'ar' => $request->title  ,  
+                    ];
                     $type = "message";
-                    $msg =  $request->message ;
+                    // $msg =  $request->message ;
                     $client->notify(new Notifications($msg,$type ));
                     $device_id = $client->device_token;
-                    $title = $request->title ; 
+                    // $title = $request->title ; 
                     if($device_id){
                         $this->notification($device_id,$title,$msg,$id);
-                    }
-                }
-            }
-        }
-        if($request->send_points){
-            if($request->send_points == 'send_points'){
-                $validatedData = $request->validate([
-                    'points' => 'required',
-                    'coupons' => 'required',
-                ]);
-                if(sizeof($clients) > 0){
-                    foreach($clients as $client){
-                        if($client){
-                            $client->points += $request->points ;
-                            $client->coupons += $request->coupons ;
-                            $client->save();
-                        
-                        }
                     }
                 }
             }
