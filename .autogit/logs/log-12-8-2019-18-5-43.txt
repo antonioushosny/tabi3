@@ -1,0 +1,22 @@
+-------------------- Auto-Git Log --------------------
+		Thu Sep 12 2019 18:05:43 GMT+0200 (Eastern European Standard Time)
+------------------------------------------------------
+
+Modified files:
+* app/SubCategory.php
+* resources/views/departments/add.blade.php
+* resources/views/subcategories/add.blade.php
+* resources/views/subcategories/index.blade.php
+* storage/framework/views/9ae19713f0a8832cb35e3e446cf3e572820d2366.php
+* storage/framework/views/d210556e898d72c9ecd14973a470fcb818665393.php
+* storage/framework/views/f280603dff66ee2f0b2f74a0bbbd6193a77dc292.php
+
+
+Created files:
+* .autogit/logs/log-12-8-2019-17-35-39.txt
+
+
+Deleted files:
+
+
+Renamed files:
