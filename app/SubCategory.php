@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class SubCategory extends Model
 {
     protected $fillable = [
-        'title_ar','title_en','cost','days','image','status','category_id'
+        'title_ar','title_en','cost','days','image','status','category_id','parent_id'
     ];
     public function sons_category()
     {
@@ -16,6 +16,11 @@ class SubCategory extends Model
     public function category()
     {
         return $this->belongsTo('App\Category','category_id') ;
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo('App\SubCategory','parent_id') ;
     }
 }
 

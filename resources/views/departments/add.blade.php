@@ -48,7 +48,7 @@
                             </div>
                             <div class= "form-group form-float"> 
                                 {!! Form::select('category_id',$categories
-                                    ,'',['class'=>'form-control show-tick' ,'placeholder' =>trans('admin.choose_category'),'required']) !!}
+                                    ,!isset($data->category_id)?'':$data->category_id,['class'=>'form-control show-tick' ,'placeholder' =>trans('admin.choose_category'),'required']) !!}
                                     <label id="category_id-error" class="error" for="category_id" style="">  </label>
                             </div>
                             <div class="form-group form-float">

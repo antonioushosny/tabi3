@@ -67,7 +67,7 @@
                                             <input type="checkbox" class="checkbox icheck" id="check-all" />
                                         </th>
                                         
-                                        <th><?php echo e(trans('admin.categorie')); ?></th>                      
+                                        <th><?php echo e(trans('admin.subcategorie')); ?></th>                      
                                         <th><?php echo e(trans('admin.title')); ?></th>                      
                                         <th><?php echo e(trans('admin.image')); ?></th>
                                         <th><?php echo e(trans('admin.status')); ?></th>
@@ -81,11 +81,11 @@
                                         <td> 
                                             <input type="checkbox" name="ids[]" value=<?php echo e($data->id); ?> class="check icheck">
                                         </td>
-                                        <?php if($data->category): ?>
+                                        <?php if($data->parent): ?>
                                             <?php if($lang == 'ar'): ?>
-                                            <td><?php echo e($data->category->title_ar); ?></td>
+                                            <td><?php echo e($data->parent->title_ar); ?></td>
                                             <?php else: ?> 
-                                            <td><?php echo e($data->category->title_en); ?></td>
+                                            <td><?php echo e($data->parent->title_en); ?></td>
                                             <?php endif; ?>
                                         <?php else: ?> 
                                             <td> </td>
