@@ -32,15 +32,31 @@ class AdvertisementsController extends Controller
         }
         $title ='advertisements' ;
         if(Auth::user()->role == 'admin'){
-            $advertisements = Advertisement::orderBy('id', 'DESC')->get();
+            $advertisements = Advertisement::where('type' ,'<>', 'profile')->orderBy('id', 'DESC')->get();
         }else{
-            $advertisements = Advertisement::where('user_id',Auth::user()->id)->orderBy('id', 'DESC')->get();
+            $advertisements = Advertisement::where('user_id',Auth::user()->id)->where('type' ,'<>', 'profile')->orderBy('id', 'DESC')->get();
         }
         
         // return $admins ; 
         return view('advertisements.index',compact('advertisements','title','lang'));
     }
-
+    public function indexprofile()
+    {
+        $lang = App::getlocale();
+        if(Auth::user()->role != 'admin' && Auth::user()->role != 'company' ){
+            $role = 'admin';
+            return view('unauthorized',compact('role','admin'));
+        }
+        $title ='profileadvertisements' ;
+        if(Auth::user()->role == 'admin'){
+            $profileadvertisements = Advertisement::where('type' , 'profile')->orderBy('id', 'DESC')->get();
+        }else{
+            $profileadvertisements = Advertisement::where('user_id',Auth::user()->id)->where('type' , 'profile')->orderBy('id', 'DESC')->get();
+        }
+        
+        // return $admins ; 
+        return view('profileadvertisements.index',compact('profileadvertisements','title','lang'));
+    }
     public function add()
     {
         $lang = App::getlocale();
@@ -60,6 +76,19 @@ class AdvertisementsController extends Controller
             $packages = array_pluck($allpackages,'title_en', 'id');
         }
         return view('advertisements.add',compact('title','packages','companies','lang'));
+    }
+
+    public function addprofile()
+    {
+        $lang = App::getlocale();
+        if(Auth::user()->role != 'admin' && Auth::user()->role != 'company' ){
+            $role = 'admin';
+            return view('unauthorized',compact('role','admin'));
+        }
+        $title = 'profileadvertisements';
+        $allcompanies = User::where('status','active')->where('role','company')->get();
+        $companies = array_pluck($allcompanies,'name', 'id');
+        return view('profileadvertisements.add',compact('title','companies','lang'));
     }
     public function store(Request $request)
     {
@@ -200,7 +229,89 @@ class AdvertisementsController extends Controller
         return response()->json($advertisement);
 
     }
+    public function storeprofile(Request $request)
+    {
+        
+        if($request->id ){
+            $rules =
+            [
+   
+                'status'  =>'required',   
+            ];
+            
+        }     
+    
+        else{
+            $rules =
+            [   
+                'image'  =>'required',   
+                'status'  =>'required',     
+            ];
+        }
+        
+        if($request->link){
+            $rules['link'] = 'url' ;
+        }
+         $validator = \Validator::make($request->all(), $rules);
+         if ($validator->fails()) {
+             return \Response::json(array('errors' => $validator->getMessageBag()->toArray()));
+         }
+         
+        // return $request ;
+        if($request->id ){
+            $advertisement = Advertisement::find( $request->id );
+             if(Auth::user()->role == 'company' ){
 
+                $type = "advertisement";
+                $msg =  [
+                    'en' => Auth::user()->name . ' edit on advertisement in his profile'  ,
+                    'ar' => Auth::user()->name . '    قام بالتعديل علي اعلان في صفحته '  ,
+                ];
+                $title = [
+                    'en' => Auth::user()->name . 'add new advertisement'  ,
+                    'ar' => Auth::user()->name . 'أضاف اعلان جديد'  , 
+                ];
+                $admins = User::where('role', 'admin')->get(); 
+                if(sizeof($admins) > 0){
+                    foreach($admins as $admin){
+                        $admin->notify(new Notifications($msg,$type ));
+                    }
+                    $device_token = $admin->device_token ;
+                    if($device_token){
+                        $this->notification($device_token,$title,$msg);
+                        $this->webnotification($device_token,$title,$msg,$type);
+                    }
+                }
+            }
+        }
+        else{
+            $advertisement = new Advertisement ;
+
+            $advertisement->user_id          = $request->user_id ;
+            
+            $advertisement->type         = $request->type ;
+            
+          
+        }
+        $advertisement->link         = $request->link ;
+        $advertisement->title         = $request->title ;
+
+        $advertisement->status        = $request->status ;
+        
+        $advertisement->save();
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $name = md5($image->getClientOriginalName() . time()) . "." . $image->getClientOriginalExtension();
+            $destinationPath = public_path('/img');
+            $image->move($destinationPath, $name);
+            $advertisement->image   = $name;  
+        }
+        $advertisement->save();
+       
+        return response()->json($advertisement);
+
+    }
 
     public function show($id)
     {
@@ -236,6 +347,21 @@ class AdvertisementsController extends Controller
         }
         // return $admin ; 
         return view('advertisements.add',compact('data','title','packages','companies','lang'));
+    }
+
+    public function editprofile($id)
+    {
+        $lang = App::getlocale();
+        if(Auth::user()->role != 'admin' && Auth::user()->role != 'company' ){
+            $role = 'admin';
+            return view('unauthorized',compact('role','admin'));
+        }
+        $title = 'profileadvertisements';
+        $allcompanies = User::where('status','active')->where('role','company')->get();
+        $companies = array_pluck($allcompanies,'name', 'id');
+        $data = Advertisement::where('id',$id)->orderBy('id', 'DESC')->first();
+        
+        return view('profileadvertisements.add',compact('data','title','companies','lang'));
     }
 
     public function update(Request $request, $id)

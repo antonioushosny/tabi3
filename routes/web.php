@@ -51,6 +51,32 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/admins/delete/{id}', 'AdminsController@destroy')->name('destroyadmin');
     Route::post('/admins/deleteall', 'AdminsController@deleteall')->name('adminsdeleteall');
     
+    // routes for countries management
+    Route::get('/countries', 'CountriesController@index')->name('countries');
+    Route::get('/countries/add/', 'CountriesController@add')->name('addcountrie');
+    Route::post('/countries/update/', 'CountriesController@store')->name('storecountrie');
+    Route::get('/countries/edit/{id}', 'CountriesController@edit')->name('editcountrie');
+    Route::get('/countries/delete/{id}', 'CountriesController@destroy')->name('destroycountrie');
+    Route::post('/countries/deleteall', 'CountriesController@deleteall')->name('countriesdeleteall');
+    Route::get('/countries/{id}/areas', 'CountriesController@areas')->name('countryareas');
+
+    // routes for cities management
+    Route::get('/cities', 'CitiesController@index')->name('cities');
+    Route::get('/cities/add/', 'CitiesController@add')->name('addcitie');
+    Route::post('/cities/update/', 'CitiesController@store')->name('storecitie');
+    Route::get('/cities/edit/{id}', 'CitiesController@edit')->name('editcitie');
+    Route::get('/cities/delete/{id}', 'CitiesController@destroy')->name('destroycitie');
+    Route::post('/cities/deleteall', 'CitiesController@deleteall')->name('citiesdeleteall');
+    Route::get('/cities/{id}/areas', 'CitiesController@areas')->name('cityareas');
+
+    // routes for areas management
+    Route::get('/areas', 'AreasController@index')->name('areas');
+    Route::get('/areas/add/', 'AreasController@add')->name('addarea');
+    Route::post('/areas/update/', 'AreasController@store')->name('storearea');
+    Route::get('/areas/edit/{id}', 'AreasController@edit')->name('editarea');
+    Route::get('/areas/delete/{id}', 'AreasController@destroy')->name('destroyarea');
+    Route::post('/areas/deleteall', 'AreasController@deleteall')->name('areasdeleteall');
+
     // routes for packages management
     Route::get('/packages', 'PackagesController@index')->name('packages');
     Route::get('/packages/add/', 'PackagesController@add')->name('addpackage');
@@ -59,13 +85,21 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/packages/delete/{id}', 'PackagesController@destroy')->name('destroypackage');
     Route::post('/packages/deleteall', 'PackagesController@deleteall')->name('packagesdeleteall');
 
+    // routes for categories management
+    Route::get('/categories', 'CategoriesController@index')->name('categories');
+    Route::get('/categories/add/', 'CategoriesController@add')->name('addcategorie');
+    Route::post('/categories/update/', 'CategoriesController@store')->name('storecategorie');
+    Route::get('/categories/edit/{id}', 'CategoriesController@edit')->name('editcategorie');
+    Route::get('/categories/delete/{id}', 'CategoriesController@destroy')->name('destroycategorie');
+    Route::post('/categories/deleteall', 'CategoriesController@deleteall')->name('categoriesdeleteall');
+
     // routes for departments management
-    Route::get('/departments', 'DepartmentsController@index')->name('departments');
-    Route::get('/departments/add/', 'DepartmentsController@add')->name('adddepartment');
-    Route::post('/departments/update/', 'DepartmentsController@store')->name('storedepartment');
-    Route::get('/departments/edit/{id}', 'DepartmentsController@edit')->name('editdepartment');
-    Route::get('/departments/delete/{id}', 'DepartmentsController@destroy')->name('destroydepartment');
-    Route::post('/departments/deleteall', 'DepartmentsController@deleteall')->name('departmentsdeleteall');
+    Route::get('/departments', 'SubCategoriesController@index')->name('departments');
+    Route::get('/departments/add/', 'SubCategoriesController@add')->name('adddepartment');
+    Route::post('/departments/update/', 'SubCategoriesController@store')->name('storedepartment');
+    Route::get('/departments/edit/{id}', 'SubCategoriesController@edit')->name('editdepartment');
+    Route::get('/departments/delete/{id}', 'SubCategoriesController@destroy')->name('destroydepartment');
+    Route::post('/departments/deleteall', 'SubCategoriesController@deleteall')->name('departmentsdeleteall');
 
      // routes for companies management
      Route::get('/companies', 'CompaniesController@index')->name('companies');
@@ -84,6 +118,15 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/advertisements/delete/{id}', 'AdvertisementsController@destroy')->name('destroyadvertisement');
     Route::post('/advertisements/deleteall', 'AdvertisementsController@deleteall')->name('advertisementsdeleteall');
     
+
+    // routes for profileadvertisements management
+    Route::get('/profileadvertisements', 'AdvertisementsController@indexprofile')->name('profileadvertisements');
+    Route::get('/profileadvertisements/add/', 'AdvertisementsController@addprofile')->name('addprofileadvertisement');
+    Route::post('/profileadvertisements/update/', 'AdvertisementsController@storeprofile')->name('storeprofileadvertisement');
+    Route::get('/profileadvertisements/edit/{id}', 'AdvertisementsController@editprofile')->name('editprofileadvertisement');
+    Route::get('/profileadvertisements/delete/{id}', 'AdvertisementsController@destroy')->name('destroyprofileadvertisement');
+    Route::post('/profileadvertisements/deleteall', 'AdvertisementsController@deleteall')->name('profileadvertisementsdeleteall');
+
     // routes for sponsors management
     Route::get('/sponsors', 'SponsorsController@index')->name('sponsors');
     Route::get('/sponsors/add/', 'SponsorsController@add')->name('addsponsor');

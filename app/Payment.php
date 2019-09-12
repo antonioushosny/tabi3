@@ -11,7 +11,7 @@ class Payment extends Model
     use Notifiable;
 
     protected $fillable = [
-        'title','amount','date','user_id'
+        'title','method','amount','date','user_id','status'
     ];
     public function user()
     {

@@ -54,13 +54,14 @@ class CompaniesController extends Controller
     }
     public function store(Request $request)
     {
+        // return $request ;
         if($request->id ){
             $rules =
             [
                 'name'  =>'required|max:190',
                 'email'  =>'required|email|max:190',            
                 'status'  =>'required',   
-            ];
+             ];
             
         }     
     
@@ -70,11 +71,14 @@ class CompaniesController extends Controller
                 'name'  =>'required|max:190',
                 'email'  =>'required|email|unique:users,email|max:190',            
                 'mobile'  =>'required|unique:users,mobile',            
-                'status'  =>'required',       
+                'status'  =>'required',      
+ 
             ];
         }
         
-        
+        if($request->url){
+            $rules['url'] ='url' ; 
+        }
          $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return \Response::json(array('errors' => $validator->getMessageBag()->toArray()));
@@ -156,12 +160,13 @@ class CompaniesController extends Controller
         }        
         $user->name          = $request->name ;
         $user->email         = $request->email ;
-         $user->mobile        = $request->mobile ;
-         $user->address        = $request->address ;
-         $user->fax        = $request->fax ;
-         $user->lat        = $request->lat ;
-         $user->lng        = $request->lng ;
-         $user->desc        = $request->desc ;
+        $user->mobile        = $request->mobile ;
+        $user->address        = $request->address ;
+        $user->fax        = $request->fax ;
+        $user->url        = $request->url ;
+        $user->lat        = $request->lat ;
+        $user->lng        = $request->lng ;
+        $user->desc        = $request->desc ;
         $user->department_id        = $request->department_id ;
         $user->status        = $request->status ;
         $user->role            = 'company';

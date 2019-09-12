@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use App\Order;
 use App\User;
-use App\Department;
+use App\Category;
 
 use App\Doc;
 use Carbon\Carbon;
@@ -41,7 +41,7 @@ class HomeController extends Controller
             
             $users        = User::where('role','user')->count('id');
             $companies    = User::where('role','company')->count('id');
-            $departments      = Department::count('id');
+            $departments      = Category::count('id');
 
             $yesterday      = Carbon::now()->subDays(1)->toDateString();
             $one_week_ago   = Carbon::now()->subWeeks(1)->toDateString();
@@ -391,11 +391,25 @@ class HomeController extends Controller
 
     public function send(Request $request)
     {
-        $validatedData = $request->validate([
+        // $validatedData = $request->validate([
+        //     'title' => 'required',
+        //     'message' => 'required',
+        //     'for' => 'required',
+        // ]);
+    
+        $rules =
+        [
             'title' => 'required',
             'message' => 'required',
-            'for' => 'required',
-        ]);
+            'for' => 'required',        
+
+        ];
+        
+
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return \Response::json(array('errors' => $validator->getMessageBag()->toArray()));
+        }
         $user = User::where('role','admin')->first();
             if($user){
                 $id = $user->id ;

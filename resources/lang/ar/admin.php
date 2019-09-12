@@ -8,7 +8,7 @@ return [
         'dashboard'                     => 'الرئيسية',   
         'home'                          => 'الرئيسية',   
         'Control_panel'                 => 'لوحة التحكم',     
-        'project_name'                  => 'بيتك',   
+        'project_name'                  => 'تبيع',   
         'profile'                       => 'الصفحة الشخصية',   
         'logout'                        => 'تسجيل خروج',   
         'notification'                  => 'اشعارات',   
@@ -60,7 +60,7 @@ return [
         'your_new_password'             => 'كلمة المرور الجديدة الخاصة بك ',
         'wellcome'                      => 'اهلا ',
         'send_password'                 => 'تم ارسال كلمة المرور لبريدك بنجاح',
-        'Welcome to beitk'             => 'اهلا بك في بيتك  ' ,
+        'Welcome to beitk'             => 'اهلا بك في تبيع  ' ,
         'Close'                         =>'اغلاق',
         'selectall'                     => 'تحديد الكل',
         'operations'                    => 'عمليات', 
@@ -172,6 +172,31 @@ return [
         'edit_admin'                    => 'تعديل مشرف',
         'delete_admin'                  => 'حذف مشرف',
     //end admin page  
+    //countries page 
+      'countries'                       => ' الدول', 
+      'country'                       => ' الدولة', 
+      'choose_country'                       => ' اختر الدولة', 
+      'add_country'                    => ' إضافة دولة'  ,
+      'add_countrie'                    => ' إضافة دولة'  ,
+      'edit_countrie'                   => ' تعديل دولة'  ,
+      'delete_countrie'                 =>  ' حذف دولة',
+    //end countries page
+    //cities page 
+        'cities'                       => ' المدن', 
+        'city'                       => ' المدينة', 
+        'city_id'                       => ' المدينة', 
+        'add_citie'                    => ' إضافة مدينة'  ,
+        'edit_citie'                   => ' تعديل مدينة'  ,
+        'delete_citie'                 =>  ' حذف مدينة',
+    //end cities page
+
+    //areas page 
+        'areas'                       => ' المناطق', 
+        'area'                       => ' المنطقة', 
+        'add_area'                    => ' إضافة منطقة'  ,
+        'edit_area'                   => ' تعديل منطقة'  ,
+        'delete_area'                 =>  ' حذف منطقة',
+    //end areas page
 
     //users page 
         'users'                         => ' المستخدمين ',
@@ -275,6 +300,15 @@ return [
         'informations'                 => 'معلومات تهمك',
     //end packages page
 
+    //categories page 
+        'categories'                       => ' الفئات', 
+        'categorie'                        => ' فئة', 
+        'choose_category'                        => 'اختر الفئة', 
+        'add_categorie'                    => ' اضافة فئة'  ,
+        'edit_categorie'                   => ' تعديل فئة'  ,
+        'delete_categorie'                 =>  ' حذف فئة'  ,
+    //end categories page
+   
     //departments page 
         'departments'                       => ' الأقسام', 
         'department'                        => ' القسم', 
@@ -282,7 +316,6 @@ return [
         'edit_department'                   => ' تعديل قسم'  ,
         'delete_department'                 =>  ' حذف قسم'  ,
     //end departments page
-   
 
     //orders page 
         'orders'                        => ' الطلبات', 
@@ -315,7 +348,7 @@ return [
         'decline'                       => 'رفض',
         'take_action'                   => 'رجاء اخذ اجراء',
         'submit'                        => 'تم',
-        'choose_department'                 => 'اختر قسم ',
+        'choose_categorie'                 => 'اختر قسم ',
         'reason'                        => 'سبب الرفض ' ,
         'decline_date'                  => 'وقت وتاريخ الرفض',
         'accept_date'                   => 'وقت وتاريخ القبول',
@@ -346,7 +379,16 @@ return [
         'time'                          => 'وقت الظهور',
         'placeholder_time'              => 'ادخل وقت الظهور بالثواني',
     // end advertisements page 
+    // profileadvertisements page 
+        'profileadvertisements'                => 'إعلانات خاصة' ,
+        'add_profileadvertisement'             => '  اضافة اعلان'  ,
+        'edit_profileadvertisement'            =>' تعديل اعلان '  ,
+        'delete_profileadvertisement'          => ' حذف اعلان  ',
+        'url'          => 'رابط الكتروني  ',
+        'desc'          => 'وصف    ',
+        'placeholder_url'          => ' ادخل رابط الكتروني  ',
 
+   // end advertisements page 
     //contact_us page
         'delete_contact'                => 'حذف الرسالة',
         'contacts'                      => 'تواصل معنا' ,

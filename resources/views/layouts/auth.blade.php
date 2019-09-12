@@ -9,7 +9,7 @@
     <title>:: {{__('admin.project_name')}} ::</title>
     <!-- Favicon-->
     <!-- <link rel="icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon"> -->
-    <link rel="shortcut icon" href="{{ asset('images/logo.png') }}" >
+    <link rel="shortcut icon" href="{{ asset('images/Logo.PNG') }}" >
     <!-- Custom Css -->
     <link rel="stylesheet" href="{{ asset('assets/plugins/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">

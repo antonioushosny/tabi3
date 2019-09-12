@@ -170,7 +170,7 @@ return [
         'area_id'  =>'المدينة',           
         'device_type'               => 'نوع الجهاز',
         'company_name'                    => 'اسم الشركة ',
-        'responsible_name'                => 'اسم المسئول ',
+        'category_id'                => 'الفئة  ',
         'lat'                 => '   الموقع ',
         'lng'                 => 'الموقع  ',
         'cost'                        => ' التكلفة', 

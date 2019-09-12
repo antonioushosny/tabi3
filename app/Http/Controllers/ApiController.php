@@ -15,7 +15,8 @@ use App\Doc;
 use App\Expense;
 use App\Form;
 use App\Note;
-use App\Package ; 
+use App\SubCategory ; 
+use App\Category ; 
 use App\PasswordReset ; 
 use App\Payment;
 use App\PaymentDetail ; 
@@ -624,78 +625,67 @@ class ApiController extends Controller
         $lang = $request->header('lang');
         $dt = Carbon::now();
         $date  = date('Y-m-d', strtotime($dt));
+        $count = 0 ;
         if($token){
 
             $user = User::where('remember_token',$token)->first();
             if($user){
-                $advertisementss = [];
-                $i =0 ;
-                $advertisements = Advertisement::where('page','home')->where('expiry_date','>',$date)->orderBy('id',"Desc")->get();
-                // return  $advertisements;
-                if(sizeof($advertisements) > 0){
-                    foreach($advertisements as $ads){
-                        $advertisementss[$i]['image'] = asset('img/').'/'. $ads->image;
-                        $advertisementss[$i]['link'] =  $ads->link;
-                        $advertisementss[$i]['title'] =  $ads->title;
-                        $i++;
-                    }
-                }
-
-                $sponsorss = [];
-                $i =0 ;
-                $sponsors = Sponsor::where('status','active')->orderBy('id',"Desc")->get();
-                if(sizeof($sponsors) > 0){
-                    foreach($sponsors as $sponsor){
-                        $sponsorss[$i]['image'] = asset('img/').'/'. $sponsor->image;
-                        $sponsorss[$i]['link']  =  $sponsor->link;
-                        $sponsorss[$i]['title'] =  $sponsor->title;
-                        $i++;
-                    }
-                }
                 $user->lang  = $lang ;
                 $user->save();
                 $count = count($user->unreadnotifications)  ; 
-
-                return response()->json([
-                    'success' => 'success',
-                    'errors' => null ,
-                    'message' => trans('api.fetch'),
-                    'data' => [
-                        'advertisements' => $advertisementss,
-                        'sponsors' => $sponsorss,
-                        'count' => $count ,
-                    ]
-                ]);
-
-            }else{
-                return response()->json([
-                    'success' => 'logged',
-                    'errors' => trans('api.logout'),
-                    "message"=>trans('api.logout'),
-                    ]);
             }
-        }else{
-            return response()->json([
-                'success' => 'logged',
-                'errors' => trans('api.logout'),
-                "message"=>trans('api.logout'),
-                ]);
         }
+        $advertisementss = [];
+        $i =0 ;
+        $advertisements = Advertisement::where('page','home')->where('expiry_date','>',$date)->orderBy('id',"Desc")->get();
+        // return  $advertisements;
+        if(sizeof($advertisements) > 0){
+            foreach($advertisements as $ads){
+                $advertisementss[$i]['image'] = asset('img/').'/'. $ads->image;
+                $advertisementss[$i]['link'] =  $ads->link;
+                $advertisementss[$i]['title'] =  $ads->title;
+                $i++;
+            }
+        }
+
+        $sponsorss = [];
+        $i =0 ;
+        $sponsors = Sponsor::where('status','active')->orderBy('id',"Desc")->get();
+        if(sizeof($sponsors) > 0){
+            foreach($sponsors as $sponsor){
+                $sponsorss[$i]['image'] = asset('img/').'/'. $sponsor->image;
+                $sponsorss[$i]['link']  =  $sponsor->link;
+                $sponsorss[$i]['title'] =  $sponsor->title;
+                $i++;
+            }
+                }
+                
+        return response()->json([
+            'success' => 'success',
+            'errors' => null ,
+            'message' => trans('api.fetch'),
+            'data' => [
+                'advertisements' => $advertisementss,
+                'sponsors' => $sponsorss,
+                'count' => $count ,
+            ]
+        ]);
+
         
     }
 //////////////////////////////////////////////////
 // Departments function by Antonious hosny
     public function Departments(Request $request){
-        $token = $request->token;
-        $lang = $request->header('lang');
-        $dt = Carbon::now();
-        $date  = date('Y-m-d', strtotime($dt));
-        if($token){
+        // $token = $request->token;
+       $lang = $request->header('lang');
+         $dt = Carbon::now();
+         $date  = date('Y-m-d', strtotime($dt));
+        // if($token){
         
-            $user = User::where('remember_token',$token)->first();
-            if($user){
-                $user->lang  = $lang ;
-                $user->save();
+        //     $user = User::where('remember_token',$token)->first();
+        //     if($user){
+        //         $user->lang  = $lang ;
+        //         $user->save();
                 $advertisementss = [];
                 $i =0 ;
                 $advertisements = Advertisement::where('page','companies')->where('expiry_date','>',$date)->orderBy('id',"Desc")->get();
@@ -743,35 +733,53 @@ class ApiController extends Controller
                 ]);
             
 
-            }else{
-                return response()->json([
-                    'success' => 'logged',
-                    'errors' => trans('api.logout'),
-                    "message"=>trans('api.logout'),
-                    ]);
-            }
-        }else{
-            return response()->json([
-                'success' => 'logged',
-                'errors' => trans('api.logout'),
-                "message"=>trans('api.logout'),
-                ]);
-        }
+        //     }else{
+        //         return response()->json([
+        //             'success' => 'logged',
+        //             'errors' => trans('api.logout'),
+        //             "message"=>trans('api.logout'),
+        //             ]);
+        //     }
+        // }else{
+        //     return response()->json([
+        //         'success' => 'logged',
+        //         'errors' => trans('api.logout'),
+        //         "message"=>trans('api.logout'),
+        //         ]);
+        // }
         
     }
 //////////////////////////////////////////////////
-// Companies function by Antonious hosny
-    public function Companies(Request $request){
-        $token = $request->token;
-        $lang = $request->header('lang');
-        $dt = Carbon::now();
-        $date  = date('Y-m-d', strtotime($dt));
-        if($token){
+//  Categories function by Antonious hosny
+    public function Categories(Request $request){ 
+        $categiries  = Category::all() ;
+        $sub_categiries  = SubCategory::where('category_id','1')->with('sons_category')->get() ;
+                
+        return response()->json([
+            'success' => 'success',
+            'errors' => null ,
+            'message' => trans('api.fetch'),
+            'data' => [
+                 'categiries' => $categiries,
+                 'sub_categiries' => $sub_categiries
+            ]
+        ]);
         
-            $user = User::where('remember_token',$token)->first();
-            if($user){
-                $user->lang  = $lang ;
-                $user->save();
+        
+    }
+///////////////////////////////////////////////////
+// / Companies function by Antonious hosny
+    public function Companies(Request $request){
+        // $token = $request->token;
+         $lang = $request->header('lang');
+         $dt = Carbon::now();
+         $date  = date('Y-m-d', strtotime($dt));
+        // if($token){
+        
+        //     $user = User::where('remember_token',$token)->first();
+        //     if($user){
+        //         $user->lang  = $lang ;
+        //         $user->save();
                 $rules=array(
                     'department_id'      =>'required',
                 );
@@ -811,10 +819,22 @@ class ApiController extends Controller
                 $companies = User::where('department_id',$request->department_id)->where('role','company')->where('status','active')->orderBy('id',"Desc")->get();
                 if(sizeof($companies) > 0){
                     foreach($companies as $company){
+                        $profileadvertisements = Advertisement::where('user_id',$company->id)->where('type' , 'profile')->orderBy('id', 'DESC')->get();
+                        $profileadvertisementss =  [] ;
+                        $n =0 ;
+                        if(sizeof($profileadvertisements) > 0){
+                            foreach($profileadvertisements as $profileadvertisement){
+                                $profileadvertisementss[$n]['image'] = asset('img/').'/'. $profileadvertisement->image;
+                                $profileadvertisementss[$n]['link'] =  $profileadvertisement->link;
+                                $profileadvertisementss[$n]['title'] =  $profileadvertisement->title;
+                                $n++;
+                            }
+                        }
                         $companiess[$i]['name'] =  $company->name;
                         $companiess[$i]['email'] =  $company->email;
                         $companiess[$i]['mobile'] =  $company->mobile;
                         $companiess[$i]['address'] =  $company->address;
+                        $companiess[$i]['url'] =  $company->url;
                         $companiess[$i]['desc'] =  $company->desc;
                         $companiess[$i]['fax'] =  $company->fax;
                         $companiess[$i]['lat'] =  $company->lat;
@@ -824,6 +844,8 @@ class ApiController extends Controller
                         }else{
                             $companiess[$i]['image'] = null ;
                         }
+                        $companiess[$i]['profileadvertisement'] =   $profileadvertisementss ;
+
                         $i++;
                     }
                 }
@@ -839,24 +861,23 @@ class ApiController extends Controller
                 ]);
             
 
-            }else{
-                return response()->json([
-                    'success' => 'logged',
-                    'errors' => trans('api.logout'),
-                    "message"=>trans('api.logout'),
-                    ]);
-            }
-        }else{
-            return response()->json([
-                'success' => 'logged',
-                'errors' => trans('api.logout'),
-                "message"=>trans('api.logout'),
-                ]);
-        }
+        //     }else{
+        //         return response()->json([
+        //             'success' => 'logged',
+        //             'errors' => trans('api.logout'),
+        //             "message"=>trans('api.logout'),
+        //             ]);
+        //     }
+        // }else{
+        //     return response()->json([
+        //         'success' => 'logged',
+        //         'errors' => trans('api.logout'),
+        //         "message"=>trans('api.logout'),
+        //         ]);
+        // }
         
     }
-//////////////////////////////////////////////////
-//////////////////////////////////////////////////
+ //////////////////////////////////////////////////
     // Offic function by Antonious hosny
     public function Offic(Request $request){
         $token = $request->token;
@@ -1449,6 +1470,7 @@ class ApiController extends Controller
                 $paymentss = [];
                 $i =0 ;
                 $payments = Payment::where('user_id',$user->id)->orderBy('id',"Desc")->get();
+                $total_amount = Payment::where('user_id',$user->id)->orderBy('id',"Desc")->sum('amount');
 
                 if(sizeof($payments) > 0){
                     foreach($payments as $payment){
@@ -1471,6 +1493,7 @@ class ApiController extends Controller
                     'data' => [
                         'advertisements' => $advertisementss,
                         'payments' => $paymentss,
+                        'total_amount' => $total_amount,
                     ]
                 ]);
             
@@ -1681,6 +1704,7 @@ class ApiController extends Controller
                 $paymentdetailss = [];
                 $i =0 ;
                 $paymentdetails = PaymentDetail::where('payment_id',$request->payment_id)->orderBy('id',"Desc")->get();
+                $total_amount = PaymentDetail::where('payment_id',$request->payment_id)->orderBy('id',"Desc")->sum('amount');
 
                 if(sizeof($paymentdetails) > 0){
                     foreach($paymentdetails as $detail){
@@ -1711,6 +1735,7 @@ class ApiController extends Controller
                     'data' => [
                         'advertisements' => $advertisementss,
                         'payment_details' => $paymentdetailss,
+                        'total_amount'  => $total_amount ,
                     ]
                 ]);
             
@@ -1918,6 +1943,7 @@ class ApiController extends Controller
                 $expensess = [];
                 $i =0 ;
                 $expenses = Expense::where('user_id',$user->id)->orderBy('id',"Desc")->get();
+                $total_amount = Expense::where('user_id',$user->id)->orderBy('id',"Desc")->sum('amount');
 
                 if(sizeof($expenses) > 0){
                     foreach($expenses as $expense){
@@ -1945,6 +1971,7 @@ class ApiController extends Controller
                     'data' => [
                         'advertisements' => $advertisementss,
                         'expenses' => $expensess,
+                        'total_amount' => $total_amount ,
                     ]
                 ]);
             
@@ -2123,58 +2150,58 @@ class ApiController extends Controller
     }
 //////////////////////////////////////////////////
 // staticPages  function by Antonious hosny
-public function StaticPages(Request $request){
-    $lang = $request->header('lang');
-    $dt = Carbon::now();
-    $date  = date('Y-m-d', strtotime($dt));
-    $rules=array(
-        'type'      =>'required',
-    );
-    $validator  = \Validator::make($request->all(),$rules);
-    if($validator->fails())
-    {
-        $messages = $validator->messages();
-        $transformed = [];
+    public function StaticPages(Request $request){
+        $lang = $request->header('lang');
+        $dt = Carbon::now();
+        $date  = date('Y-m-d', strtotime($dt));
+        $rules=array(
+            'type'      =>'required',
+        );
+        $validator  = \Validator::make($request->all(),$rules);
+        if($validator->fails())
+        {
+            $messages = $validator->messages();
+            $transformed = [];
 
-        foreach ($messages->all() as $field => $message) {
-            $transformed[] = [
-                'message' => $message
-            ];
+            foreach ($messages->all() as $field => $message) {
+                $transformed[] = [
+                    'message' => $message
+                ];
+            }
+            return response()->json([
+                'success' => 'failed',
+                'errors'  => $transformed,
+                'message' => trans('api.validation_error'),
+                'data'    => null ,
+            ]);
+        }
+        $docs = Doc::where('type',$request->type)->first();
+        
+        $advertisementss = [];
+        $i =0 ;
+        $advertisements = Advertisement::where('page','information')->where('expiry_date','>',$date)->orderBy('id',"Desc")->get();
+        if(sizeof($advertisements) > 0){
+            foreach($advertisements as $ads){
+                $advertisementss[$i]['image'] = asset('img/').'/'. $ads->image;
+                $advertisementss[$i]['link'] =  $ads->link;
+                $advertisementss[$i]['title'] =  $ads->title;
+                $i++;
+            }
         }
         return response()->json([
-            'success' => 'failed',
-            'errors'  => $transformed,
-            'message' => trans('api.validation_error'),
-            'data'    => null ,
+            'success' => 'success',
+            'errors' => null ,
+            'message' => trans('api.fetch'),
+            'data' => [
+                'advertisements' => $advertisementss,
+                'informations' => $docs,
+            ] 
+                
         ]);
-    }
-    $docs = Doc::where('type',$request->type)->first();
     
-    $advertisementss = [];
-    $i =0 ;
-    $advertisements = Advertisement::where('page','information')->where('expiry_date','>',$date)->orderBy('id',"Desc")->get();
-    if(sizeof($advertisements) > 0){
-        foreach($advertisements as $ads){
-            $advertisementss[$i]['image'] = asset('img/').'/'. $ads->image;
-            $advertisementss[$i]['link'] =  $ads->link;
-            $advertisementss[$i]['title'] =  $ads->title;
-            $i++;
-        }
+
+
     }
-    return response()->json([
-        'success' => 'success',
-        'errors' => null ,
-        'message' => trans('api.fetch'),
-        'data' => [
-            'advertisements' => $advertisementss,
-            'informations' => $docs,
-        ] 
-            
-    ]);
-   
-
-
-}
 ///////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////

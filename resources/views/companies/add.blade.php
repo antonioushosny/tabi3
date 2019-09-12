@@ -81,7 +81,24 @@
                                 <input type="text" value="{{ !isset($data->fax)?'':$data->fax }}" class="form-control" placeholder="{{__('admin.placeholder_fax')}}" name="fax" required>
                                 <label id="fax-error" class="error" for="fax" style="">  </label>
                             </div>
-
+                            <div class="form-group form-float">
+                                <input type="text" value="{{ !isset($data->url)?'':$data->url }}" class="form-control" placeholder="{{__('admin.placeholder_url')}}" name="url"  >
+                                <label id="url-error" class="error" for="url" style="">  </label>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <h2> <strong>{{ __('admin.desc') }}</strong>  </h2>
+                                        <ul class="header-dropdown">
+                                        </ul>
+                                    </div>
+                                    <div class="body">
+                                        <textarea id="ckeditor" name="desc" placeholder="{{__('admin.placeholder_desc')}}">
+                                            {{ !isset($data->desc)?' ':$data->desc }}
+                                        </textarea>
+                                    </div>
+                                </div>
+                            </div>
                             <!-- {{--  for map      --}}  -->
 
                             <div class="form-group form-float">
@@ -161,7 +178,8 @@
 
 @section('script')
 
-
+<script src="{{ asset('assets/plugins/ckeditor/ckeditor.js') }}"></script>
+<script src="{{ asset('assets/js/pages/forms/editors.js') }}"></script>
 <script>
     //this for add new record
     $("#form_validation").submit(function(e){
@@ -187,12 +205,39 @@
                             $('#mobile-error').css('display', 'inline-block');
                             $('#mobile-error').text(data.errors.mobile);
                         }
+                        if (data.errors.url) {
+                            $('#url-error').css('display', 'inline-block');
+                            $('#url-error').text(data.errors.url);
+                        }
+                        
                   } else {
-                        @if(Auth::user()->role == 'admin')
-                        window.location.replace("{{route('companies')}}");
-                        @else 
-                        location.reload();
-                        @endif
+                    $.ajax({
+                        type: 'POST',
+                        url: '{{ URL::route("storecompanie") }}',
+                        data:  new FormData($("#form_validation")[0]),
+                        processData: false,
+                        contentType: false,
+                         
+                        success: function(data) {
+                            if ((data.errors)) {                        
+                                  if (data.errors.name) {
+                                      $('#name-error').css('display', 'inline-block');
+                                      $('#name-error').text(data.errors.name);
+                                  }
+                                  if (data.errors.mobile) {
+                                      $('#mobile-error').css('display', 'inline-block');
+                                      $('#mobile-error').text(data.errors.mobile);
+                                  }
+                            } else {
+                                  @if(Auth::user()->role == 'admin')
+                                  window.location.replace("{{route('companies')}}");
+                                  @else 
+                                  location.reload();
+                                  @endif
+          
+                               }
+                      },
+                    });
 
                      }
             },
