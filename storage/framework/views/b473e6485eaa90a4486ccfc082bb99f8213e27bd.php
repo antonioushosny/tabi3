@@ -220,10 +220,11 @@ body, html {
  
                     <li <?php echo ($page == 'areas') ? "class='active open'" : ""; ?> ><a href="<?php echo e(route('areas')); ?>"  ><i class="zmdi zmdi-pin"></i> <span> <?php echo e(trans('admin.areas')); ?></span></a></li>
  
-
                     <li <?php echo ($page == 'categories') ? "class='active open'" : ""; ?> ><a href="<?php echo e(route('categories')); ?>"  ><i class="zmdi zmdi-view-list-alt"></i> <span> <?php echo e(trans('admin.categories')); ?></span></a></li>
 
                     <li <?php echo ($page == 'departments') ? "class='active open'" : ""; ?> ><a href="<?php echo e(route('departments')); ?>"  ><i class="zmdi zmdi-view-list-alt"></i> <span> <?php echo e(trans('admin.departments')); ?></span></a></li>
+                    
+                    <li <?php echo ($page == 'subcategories') ? "class='active open'" : ""; ?> ><a href="<?php echo e(route('subcategories')); ?>"  ><i class="zmdi zmdi-view-list-alt"></i> <span> <?php echo e(trans('admin.subcategories')); ?></span></a></li>
 
                     <li <?php echo ($page == 'companies') ? "class='active open'" : ""; ?> ><a href="<?php echo e(route('companies')); ?>"  ><i class="zmdi zmdi-city"></i> <span> <?php echo e(trans('admin.companies')); ?></span></a></li>
                     

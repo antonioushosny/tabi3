@@ -220,10 +220,11 @@ body, html {
  
                     <li <?php echo ($page == 'areas') ? "class='active open'" : ""; ?> ><a href="{{ route('areas') }}"  ><i class="zmdi zmdi-pin"></i> <span> {{trans('admin.areas')}}</span></a></li>
  
-
                     <li <?php echo ($page == 'categories') ? "class='active open'" : ""; ?> ><a href="{{ route('categories') }}"  ><i class="zmdi zmdi-view-list-alt"></i> <span> {{trans('admin.categories')}}</span></a></li>
 
                     <li <?php echo ($page == 'departments') ? "class='active open'" : ""; ?> ><a href="{{ route('departments') }}"  ><i class="zmdi zmdi-view-list-alt"></i> <span> {{trans('admin.departments')}}</span></a></li>
+                    
+                    <li <?php echo ($page == 'subcategories') ? "class='active open'" : ""; ?> ><a href="{{ route('subcategories') }}"  ><i class="zmdi zmdi-view-list-alt"></i> <span> {{trans('admin.subcategories')}}</span></a></li>
 
                     <li <?php echo ($page == 'companies') ? "class='active open'" : ""; ?> ><a href="{{ route('companies') }}"  ><i class="zmdi zmdi-city"></i> <span> {{trans('admin.companies')}}</span></a></li>
                     

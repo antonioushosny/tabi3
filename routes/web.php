@@ -101,6 +101,15 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/departments/delete/{id}', 'SubCategoriesController@destroy')->name('destroydepartment');
     Route::post('/departments/deleteall', 'SubCategoriesController@deleteall')->name('departmentsdeleteall');
 
+    // routes for subcategories management
+    Route::get('/subcategories', 'SubCategoriesController@subindex')->name('subcategories');
+    Route::get('/subcategories/add/', 'SubCategoriesController@subadd')->name('addsubcategorie');
+    Route::post('/subcategories/update/', 'SubCategoriesController@substore')->name('storesubcategorie');
+    Route::get('/subcategories/edit/{id}', 'SubCategoriesController@subedit')->name('editsubcategorie');
+    Route::get('/subcategories/delete/{id}', 'SubCategoriesController@destroy')->name('destroysubcategorie');
+    Route::post('/subcategories/deleteall', 'SubCategoriesController@deleteall')->name('subcategoriesdeleteall');
+    
+
      // routes for companies management
      Route::get('/companies', 'CompaniesController@index')->name('companies');
      Route::get('/companies/add/', 'CompaniesController@add')->name('addcompanie');

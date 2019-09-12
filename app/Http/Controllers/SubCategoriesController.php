@@ -36,6 +36,20 @@ class SubCategoriesController extends Controller
 
     }
 
+    public function subindex()
+    {
+        $lang = App::getlocale();
+        if(Auth::user()->role != 'admin' ){
+            $role = 'admin';
+            return view('unauthorized',compact('role','admin'));
+        }
+        $title = 'subcategories';
+        $subcategories = SubCategory::where('category_id',null)->orderBy('id', 'DESC')->get();
+        // return $admins ; 
+        return view('subcategories.index',compact('subcategories','title','lang'));
+
+    }
+
     public function add()
     {
         $lang = App::getlocale();
@@ -51,6 +65,23 @@ class SubCategoriesController extends Controller
         $categories = array_pluck($allcategories,'title_en', 'id');
 
         return view('departments.add',compact('title','categories','lang'));
+    }
+
+    public function subadd()
+    {
+        $lang = App::getlocale();
+        if(Auth::user()->role != 'admin' ){
+            $role = 'admin';
+            return view('unauthorized',compact('role','admin'));
+        }
+        $title = 'subcategories';
+        $allcategories = SubCategory::all();
+        if($lang == 'ar')
+        $categories = array_pluck($allcategories,'title_ar', 'id'); 
+        else
+        $categories = array_pluck($allcategories,'title_en', 'id');
+
+        return view('subcategories.add',compact('title','categories','lang'));
     }
     public function store(Request $request)
     {
@@ -108,7 +139,62 @@ class SubCategoriesController extends Controller
         return response()->json($department);
 
     }
+    public function substore(Request $request)
+    {
+        
+        if($request->id ){
+            $rules =
+            [
+                'title_ar'  =>'required|max:190',           
+                'title_en'  =>'required|max:190',           
+                'category_id'  =>'required',   
+                'status'  =>'required',   
+                
+            ];
+        }     
+        else{
+            $rules =
+            [
+                'title_ar'  =>'required|max:190',           
+                'title_en'  =>'required|max:190',           
+                'category_id'  =>'required',   
+                'status'  =>'required',     
+            ];
+        }
+        
+        
+         $validator = \Validator::make($request->all(), $rules);
+         if ($validator->fails()) {
+             return \Response::json(array('errors' => $validator->getMessageBag()->toArray()));
+         }
+         
+        // return $request ;
 
+        if($request->id ){
+            $SubCategory = SubCategory::find( $request->id );
+        }
+        else{
+            $SubCategory = new SubCategory ;
+
+        }
+
+        $SubCategory->title_ar          = $request->title_ar ;
+        $SubCategory->title_en         = $request->title_en ;
+        $SubCategory->parent_id        = $request->category_id ;
+        $SubCategory->status        = $request->status ;
+        $SubCategory->save();
+        if ($request->hasFile('image')) {
+
+            $image = $request->file('image');
+            $name = md5($image->getClientOriginalName() . time()) . "." . $image->getClientOriginalExtension();
+            $destinationPath = public_path('/img');
+            $image->move($destinationPath, $name);
+            $SubCategory->image   = $name;  
+        }
+        $SubCategory->save();
+        return response()->json($SubCategory);
+
+    }
 
     public function show($id)
     {
@@ -133,6 +219,25 @@ class SubCategoriesController extends Controller
         $data = SubCategory::where('id',$id)->orderBy('id', 'DESC')->first();
         // return $admin ; 
         return view('departments.add',compact('data','categories','title','lang'));
+    }
+
+    public function subedit($id)
+    {
+        $lang = App::getlocale();
+        if(Auth::user()->role != 'admin' ){
+            $role = 'admin';
+            return view('unauthorized',compact('role','admin'));
+        }
+        $title = 'subcategories';
+        $allcategories = SubCategory::all();
+        if($lang == 'ar')
+        $categories = array_pluck($allcategories,'title_ar', 'id'); 
+        else
+        $categories = array_pluck($allcategories,'title_en', 'id');
+
+        $data = SubCategory::where('id',$id)->orderBy('id', 'DESC')->first();
+        // return $admin ; 
+        return view('subcategories.add',compact('data','categories','title','lang'));
     }
 
     public function update(Request $request, $id)
