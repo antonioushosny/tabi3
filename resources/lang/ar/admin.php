@@ -307,6 +307,9 @@ return [
         'add_categorie'                    => ' اضافة فئة'  ,
         'edit_categorie'                   => ' تعديل فئة'  ,
         'delete_categorie'                 =>  ' حذف فئة'  ,
+        'placeholder_days_no'              => "عدد الأيام" ,
+        'days'                              => "عدد الأيام" ,
+
     //end categories page
    
     //departments page 

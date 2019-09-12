@@ -290,6 +290,8 @@ return [
         'add_categorie'                    => ' Add Category'  ,
         'edit_categorie'                   => ' Edit Category'  ,
         'delete_categorie'                 =>  ' Delete Category'  ,
+        'placeholder_days_no'               => 'Number Of days ',
+        'days'               => 'Number Of days ',
     //end categories page
 
     //departments page 

@@ -54,6 +54,8 @@ class CategoriesController extends Controller
                 'title_ar'  =>'required|max:190',           
                 'title_en'  =>'required|max:190',           
                 'status'  =>'required',   
+                'cost'  =>'required',   
+                'days'  =>'required',   
             ];
         }     
         else{
@@ -61,7 +63,9 @@ class CategoriesController extends Controller
             [
                 'title_ar'  =>'required|max:190',           
                 'title_en'  =>'required|max:190',           
-                'status'  =>'required',     
+                'status'  =>'required',   
+                'cost'  =>'required',   
+                'days'  =>'required',   
             ];
         }
         
@@ -83,6 +87,8 @@ class CategoriesController extends Controller
 
         $categorie->title_ar          = $request->title_ar ;
         $categorie->title_en         = $request->title_en ;
+        $categorie->cost         = $request->cost ;
+        $categorie->days         = $request->days ;
         $categorie->status        = $request->status ;
         $categorie->save();
         if ($request->hasFile('image')) {
