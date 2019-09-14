@@ -50,8 +50,8 @@
                                 </div>
                                 <div class="col-lg-4 col-md-3 col-sm-12 text-center">
                                     <div class="body">
-                                        <a href="{{ route('companies') }}"><h2 class="number count-to m-t-0 m-b-5" data-from="0" data-to="{{$companies}}" data-speed="2000" data-fresh-interval="700">{{$companies}}</h2></a>
-                                        <p class="text-muted ">{{trans('admin.companies')}}</p>
+                                        <a href="{{ route('delegates') }}"><h2 class="number count-to m-t-0 m-b-5" data-from="0" data-to="{{$delegates}}" data-speed="2000" data-fresh-interval="700">{{$delegates}}</h2></a>
+                                        <p class="text-muted ">{{trans('admin.delegates')}}</p>
                                         <span id="linecustom2">2,9,5,5,8,5,4,2,6</span>
                                     </div>
                                 </div>

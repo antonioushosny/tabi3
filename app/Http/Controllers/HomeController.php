@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Order;
 use App\User;
 use App\Category;
+use App\Delegate;
 
 use App\Doc;
 use Carbon\Carbon;
@@ -40,7 +41,7 @@ class HomeController extends Controller
             $time  = date('H:i:s', strtotime($dt));
             
             $users        = User::where('role','user')->count('id');
-            $companies    = User::where('role','company')->count('id');
+            $delegates    = Delegate::where('role','company')->count('id');
             $departments      = Category::count('id');
 
             $yesterday      = Carbon::now()->subDays(1)->toDateString();
@@ -153,7 +154,7 @@ class HomeController extends Controller
             
             // return  $sales_for_year ;
             $title = 'home' ;
-            return view('home',compact('lang','title','companies','departments','users'));
+            return view('home',compact('lang','title','delegates','departments','users'));
         
     }
 

@@ -117,6 +117,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/delegates/edit/{id}', 'DelegatesController@edit')->name('editdelegate');
     Route::get('/delegates/delete/{id}', 'DelegatesController@destroy')->name('destroydelegate');
     Route::post('/delegates/deleteall', 'DelegatesController@deleteall')->name('delegatesdeleteall');
+    Route::get('/companies', 'CompaniesController@index')->name('companies');
 
     // routes for advertisements management
     Route::get('/advertisements', 'AdvertisementsController@index')->name('advertisements');
