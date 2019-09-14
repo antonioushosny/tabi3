@@ -317,7 +317,6 @@ return [
         'edit_department'                   => ' تعديل قسم'  ,
         'delete_department'                 =>  ' حذف قسم'  ,
     //end departments page
-
     
     //subcategories page 
         'subcategories'                       => ' الأقسام الفرعية', 
@@ -327,8 +326,6 @@ return [
         'delete_subcategorie'                 =>  ' حذف قسم'  ,
     //end subcategories page
 
-    //orders page 
-        'orders'                        => ' الطلبات', 
         'neworders'                     => ' الطلبات الجديدة', 
         'noworders'                     => ' الطلبات الحالية', 
         'lastorders'                    => ' الطلبات المنتهية', 
