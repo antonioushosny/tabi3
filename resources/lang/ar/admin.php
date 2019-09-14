@@ -8,7 +8,7 @@ return [
         'dashboard'                     => 'الرئيسية',   
         'home'                          => 'الرئيسية',   
         'Control_panel'                 => 'لوحة التحكم',     
-        'project_name'                  => 'بيتك',   
+        'project_name'                  => 'تبيع',   
         'profile'                       => 'الصفحة الشخصية',   
         'logout'                        => 'تسجيل خروج',   
         'notification'                  => 'اشعارات',   
@@ -60,7 +60,7 @@ return [
         'your_new_password'             => 'كلمة المرور الجديدة الخاصة بك ',
         'wellcome'                      => 'اهلا ',
         'send_password'                 => 'تم ارسال كلمة المرور لبريدك بنجاح',
-        'Welcome to beitk'             => 'اهلا بك في بيتك  ' ,
+        'Welcome to beitk'             => 'اهلا بك في تبيع  ' ,
         'Close'                         =>'اغلاق',
         'selectall'                     => 'تحديد الكل',
         'operations'                    => 'عمليات', 
@@ -172,6 +172,31 @@ return [
         'edit_admin'                    => 'تعديل مشرف',
         'delete_admin'                  => 'حذف مشرف',
     //end admin page  
+    //countries page 
+      'countries'                       => ' الدول', 
+      'country'                       => ' الدولة', 
+      'choose_country'                       => ' اختر الدولة', 
+      'add_country'                    => ' إضافة دولة'  ,
+      'add_countrie'                    => ' إضافة دولة'  ,
+      'edit_countrie'                   => ' تعديل دولة'  ,
+      'delete_countrie'                 =>  ' حذف دولة',
+    //end countries page
+    //cities page 
+        'cities'                       => ' المدن', 
+        'city'                       => ' المدينة', 
+        'city_id'                       => ' المدينة', 
+        'add_citie'                    => ' إضافة مدينة'  ,
+        'edit_citie'                   => ' تعديل مدينة'  ,
+        'delete_citie'                 =>  ' حذف مدينة',
+    //end cities page
+
+    //areas page 
+        'areas'                       => ' المناطق', 
+        'area'                       => ' المنطقة', 
+        'add_area'                    => ' إضافة منطقة'  ,
+        'edit_area'                   => ' تعديل منطقة'  ,
+        'delete_area'                 =>  ' حذف منطقة',
+    //end areas page
 
     //users page 
         'users'                         => ' المستخدمين ',
@@ -225,19 +250,17 @@ return [
         'filter'                        => 'تصفية',
     //end containers page
 
-     //companies page 
-        'companies'                     => ' الشركات', 
-        'companie'                      => '  شركة', 
-        'company'                      => '  شركة', 
-        'add_companie'                  => ' اضافة شركة'  ,
-        'edit_companie'                 => ' تعديل شركة'  ,
-        'delete_companie'               =>  ' حذف شركة'  ,
-        'company_name'                  => 'اسم الشركة ',
-        'responsible_name'              => 'اسم المسئول ',
+     //delegates page 
+        'delegates'                     => ' المندوبين', 
+        'delegate'                      => '  مندوب', 
+        'add_delegate'                  => ' اضافة مندوب'  ,
+        'edit_delegate'                 => ' تعديل مندوب'  ,
+        'delete_delegate'               =>  ' حذف مندوب'  ,
+    //end delegates page   
         'description'                   => 'الوصف',
         'address'                       => 'العنوان',
         'join_date'                     => 'ناريخ الانضمام',
-        'placeholder_company_name'      => 'من فضلك ادخل اسم الشركة',
+        'placeholder_company_name'      => 'من فضلك ادخل اسم المندوب',
         'placeholder_responsible_name'  => 'من فضلك ادخل اسم المسئول',
         'placeholder_description'       => 'من فضلك ادخل الوصف',
         'placeholder_address'           => 'من فضلك ادخل  العنوان',
@@ -246,7 +269,7 @@ return [
         'placeholder_page'           => 'من فضلك ادخل  الصفحة',
         'placeholder_total'           => 'من فضلك ادخل  التكلفة الكلية',
         'placeholder_number'           => 'من فضلك ادخل  العدد',
-    //end companies page
+    //end delegates page
 
     //packages page 
         'packages'                       => '  الباقات ', 
@@ -255,8 +278,8 @@ return [
         'add_package'                    => ' اضافة باقة'  ,
         'edit_package'                   => ' تعديل باقة'  ,
         'delete_package'                 =>  ' حذف مركز'  ,
-        'choose_companie'               => 'اختر الشركة',
-        'choose_company'               => 'اختر الشركة',
+        'choose_delegate'               => 'اختر المندوب',
+        'choose_company'               => 'اختر المندوب',
         'choose_package'                 => ' اختر  الباقة   ',
         'choose_page'                 => ' اختر الصفحة   ',
         'choose_type'                 => ' اختر  النوع   ',
@@ -271,10 +294,22 @@ return [
         'annual'                 => 'سنوية',
         'offic'                 => 'مكتب',
         'box'                 => 'صندوق',
-        'comanies'                 => 'الشركات',
+        'comanies'                 => 'المندوبين',
         'informations'                 => 'معلومات تهمك',
     //end packages page
 
+    //categories page 
+        'categories'                       => ' الفئات', 
+        'categorie'                        => ' فئة', 
+        'choose_category'                        => 'اختر الفئة', 
+        'add_categorie'                    => ' اضافة فئة'  ,
+        'edit_categorie'                   => ' تعديل فئة'  ,
+        'delete_categorie'                 =>  ' حذف فئة'  ,
+        'placeholder_days_no'              => "عدد الأيام" ,
+        'days'                              => "عدد الأيام" ,
+
+    //end categories page
+   
     //departments page 
         'departments'                       => ' الأقسام', 
         'department'                        => ' القسم', 
@@ -282,7 +317,15 @@ return [
         'edit_department'                   => ' تعديل قسم'  ,
         'delete_department'                 =>  ' حذف قسم'  ,
     //end departments page
-   
+
+    
+    //subcategories page 
+        'subcategories'                       => ' الأقسام الفرعية', 
+        'subcategorie'                        => ' القسم  ', 
+        'add_subcategorie'                    => ' اضافة قسم'  ,
+        'edit_subcategorie'                   => ' تعديل قسم'  ,
+        'delete_subcategorie'                 =>  ' حذف قسم'  ,
+    //end subcategories page
 
     //orders page 
         'orders'                        => ' الطلبات', 
@@ -315,7 +358,7 @@ return [
         'decline'                       => 'رفض',
         'take_action'                   => 'رجاء اخذ اجراء',
         'submit'                        => 'تم',
-        'choose_department'                 => 'اختر قسم ',
+        'choose_categorie'                 => 'اختر قسم ',
         'reason'                        => 'سبب الرفض ' ,
         'decline_date'                  => 'وقت وتاريخ الرفض',
         'accept_date'                   => 'وقت وتاريخ القبول',
@@ -346,7 +389,16 @@ return [
         'time'                          => 'وقت الظهور',
         'placeholder_time'              => 'ادخل وقت الظهور بالثواني',
     // end advertisements page 
+    // profileadvertisements page 
+        'profileadvertisements'                => 'إعلانات خاصة' ,
+        'add_profileadvertisement'             => '  اضافة اعلان'  ,
+        'edit_profileadvertisement'            =>' تعديل اعلان '  ,
+        'delete_profileadvertisement'          => ' حذف اعلان  ',
+        'url'          => 'رابط الكتروني  ',
+        'desc'          => 'وصف    ',
+        'placeholder_url'          => ' ادخل رابط الكتروني  ',
 
+   // end advertisements page 
     //contact_us page
         'delete_contact'                => 'حذف الرسالة',
         'contacts'                      => 'تواصل معنا' ,

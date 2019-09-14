@@ -91,9 +91,9 @@
                                         @else 
                                         <td>{{ $data->title_en }}</td>
                                         @endif
-                                        <td>{{ $data->type }}</td>
-                                        <td>{{ $data->page }}</td>
-                                        <td>{{ $data->cost }}</td>
+                                        <td>{{ __('admin.'.$data->type) }}</td>
+                                        <td>{{ __('admin.'.$data->page) }}</td>
+                                         <td>{{ $data->cost }}</td>
                                         <td style="text-align:center"><span  class="col-green">{{ trans('admin.'.$data->status)}}</span></td> 
                                     
                                         @if(Auth::user()->role == 'admin')

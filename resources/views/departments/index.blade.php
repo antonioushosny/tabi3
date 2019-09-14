@@ -64,6 +64,7 @@
                                             <input type="checkbox" class="checkbox icheck" id="check-all" />
                                         </th>
                                         
+                                        <th>{{trans('admin.categorie')}}</th>                      
                                         <th>{{trans('admin.title')}}</th>                      
                                         <th>{{trans('admin.image')}}</th>
                                         <th>{{trans('admin.status')}}</th>
@@ -77,6 +78,15 @@
                                         <td> 
                                             <input type="checkbox" name="ids[]" value={{$data->id}} class="check icheck">
                                         </td>
+                                        @if($data->category)
+                                            @if($lang == 'ar')
+                                            <td>{{ $data->category->title_ar }}</td>
+                                            @else 
+                                            <td>{{ $data->category->title_en }}</td>
+                                            @endif
+                                        @else 
+                                            <td> </td>
+                                        @endif
                                         @if($lang == 'ar')
                                         <td>{{ $data->title_ar }}</td>
                                         @else 

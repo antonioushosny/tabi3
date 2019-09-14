@@ -23,7 +23,7 @@
 
 <title>:: {{ __('admin.project_name') }} ::</title>
 <!-- <link rel="icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon">  -->
-<link rel="shortcut icon" href="{{ asset('images/logo.png') }}" >
+<link rel="shortcut icon" href="{{ asset('images/Logo.PNG') }}" >
 
 <link rel="stylesheet" href="{{ asset('assets/plugins/bootstrap/css/bootstrap.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/plugins/jvectormap/jquery-jvectormap-2.0.3.min.css') }}"/>
@@ -101,7 +101,7 @@ body, html {
 <!-- Page Loader -->
 <div class="page-loader-wrapper">
     <div class="loader">
-        <div class="m-t-30"><img class="zmdi-hc-spin" src="{{ asset('images/logo_0.png') }}" width="48" height="48" alt="{{ __('admin.project_name') }}"></div>
+        <div class="m-t-30"><img class="zmdi-hc-spin" src="{{ asset('images/Logo.PNG') }}" width="48" height="48" alt="{{ __('admin.project_name') }}"></div>
         <p>{{__('admin.Please_wait')}}...</p>        
     </div>
 </div>
@@ -114,7 +114,7 @@ body, html {
         <li>
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="bars"></a>
-                <a class="navbar-brand" href="{{route('home')}}"><img src="{{ asset('images/logo.png') }}" width="30" alt="{{ __('admin.project_name') }}"><span class="m-l-10">{{ __('admin.project_name') }}</span></a>
+                <a class="navbar-brand" href="{{route('home')}}"><img src="{{ asset('images/Logo.PNG') }}" width="30" alt="{{ __('admin.project_name') }}"><span class="m-l-10">{{ __('admin.project_name') }}</span></a>
             </div>
         </li>
         <li><a href="javascript:void(0);" class="ls-toggle-btn" data-close="true"><i class="zmdi zmdi-swap"></i></a></li>
@@ -138,7 +138,7 @@ body, html {
                                 <li>
                                     <a href="javascript:void(0);"  class="{{ $note->read_at == null ? 'unread' : '' }}">
                                         <div class="media">
-                                            <img class="media-object notificationimage" src="{{ asset('images/logo.png') }}" alt="">
+                                            <img class="media-object notificationimage" src="{{ asset('images/Logo.PNG') }}" alt="">
                                             <div class="media-body">
                                                 <span class="name"> <span class="time"> {!! $note->created_at  !!} </span></span><br>
                                                 <span class="message">
@@ -157,7 +157,7 @@ body, html {
                             <li>
                                 <a href="javascript:void(0);">
                                     <div class="media">
-                                        <img class="media-object notificationimage" src="{{ asset('images/logo.png') }}" alt="">
+                                        <img class="media-object notificationimage" src="{{ asset('images/Logo.PNG') }}" alt="">
                                         <div class="media-body">
                                             {{--  <span class="name">Sophia <span class="time"> </span></span>  --}}
                                             <span class="message">{{__('admin.no_notification_found')}}</span>                                        
@@ -199,7 +199,7 @@ body, html {
                             @if(Auth::user()->image != '' || Auth::user()->image != null)
                                 <div class="image"><a href="javascript:void(0);"><img src="{{ asset('img/'.Auth::user()->image) }}" alt="{{Auth::user()->name}}"></a></div>
                             @else 
-                                <div class="image"><a href="javascript:void(0);"><img src="{{ asset('images/logo.png') }}" alt="{{Auth::user()->name}}"></a></div>
+                                <div class="image"><a href="javascript:void(0);"><img src="{{ asset('images/Logo.PNG') }}" alt="{{Auth::user()->name}}"></a></div>
                             @endif
                             <div class="detail">
                                 <h4>{{Auth::user()->name}}</h4>
@@ -210,13 +210,23 @@ body, html {
                     <!-- <li class="header">MAIN</li> -->
 
                     <li <?php echo ($page == 'home') ? "class='active open'" : ""; ?> ><a href="{{ route('home') }}"  ><i class="zmdi zmdi-home"></i> <span> {{trans('admin.dashboard')}}</span></a></li>
-                    @if(Auth::user()->role == 'admin')
-
+ 
                     <li <?php echo ($page == 'admins') ? "class='active open'" : ""; ?> ><a href="{{ route('admins') }}"  ><i class="zmdi zmdi-accounts-add"></i> <span> {{trans('admin.admins')}}</span></a></li>
 
-                    <li <?php echo ($page == 'departments') ? "class='active open'" : ""; ?> ><a href="{{ route('departments') }}"  ><i class="zmdi zmdi-view-list-alt"></i> <span> {{trans('admin.departments')}}</span></a></li>
+                    
+                    <li <?php echo ($page == 'countries') ? "class='active open'" : ""; ?> ><a href="{{ route('countries') }}"  ><i class="zmdi zmdi-city"></i> <span> {{trans('admin.countries')}}</span></a></li>
+ 
+                    <li <?php echo ($page == 'cities') ? "class='active open'" : ""; ?> ><a href="{{ route('cities') }}"  ><i class="zmdi zmdi-city"></i> <span> {{trans('admin.cities')}}</span></a></li>
+ 
+                    <li <?php echo ($page == 'areas') ? "class='active open'" : ""; ?> ><a href="{{ route('areas') }}"  ><i class="zmdi zmdi-pin"></i> <span> {{trans('admin.areas')}}</span></a></li>
+ 
+                    <li <?php echo ($page == 'categories') ? "class='active open'" : ""; ?> ><a href="{{ route('categories') }}"  ><i class="zmdi zmdi-view-list-alt"></i> <span> {{trans('admin.categories')}}</span></a></li>
 
-                    <li <?php echo ($page == 'companies') ? "class='active open'" : ""; ?> ><a href="{{ route('companies') }}"  ><i class="zmdi zmdi-city"></i> <span> {{trans('admin.companies')}}</span></a></li>
+                    <li <?php echo ($page == 'departments') ? "class='active open'" : ""; ?> ><a href="{{ route('departments') }}"  ><i class="zmdi zmdi-view-list-alt"></i> <span> {{trans('admin.departments')}}</span></a></li>
+                    
+                    <li <?php echo ($page == 'subcategories') ? "class='active open'" : ""; ?> ><a href="{{ route('subcategories') }}"  ><i class="zmdi zmdi-view-list-alt"></i> <span> {{trans('admin.subcategories')}}</span></a></li>
+
+                    <li <?php echo ($page == 'delegates') ? "class='active open'" : ""; ?> ><a href="{{ route('delegates') }}"  ><i class="zmdi zmdi-city"></i> <span> {{trans('admin.delegates')}}</span></a></li>
                     
                     <li <?php echo ($page == 'packages') ? "class='active open'" : ""; ?> ><a href="{{ route('packages') }}"  ><i class="zmdi zmdi-money-box"></i> <span> {{trans('admin.packages')}}</span></a></li>
 
@@ -227,7 +237,8 @@ body, html {
                     <li <?php echo ($page == 'users') ? "class='active open'" : ""; ?> ><a href="{{ route('users') }}"  ><i class="zmdi zmdi-accounts"></i> <span> {{trans('admin.users')}}</span></a></li>
 
                     <li <?php echo ($page == 'contacts') ? "class='active open'" : ""; ?> ><a href="{{ route('contacts') }}"  ><i class="zmdi zmdi-email"></i> <span> {{trans('admin.contacts')}}</span></a></li>
-                   
+
+ 
                     <li <?php echo ($page == 'AboutUs' || $page == 'Terms' || $page == 'Policy'|| $page == 'informations' || $page == 'messages') ? "class='active open'" : ""; ?> > <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-settings"></i><span>{{trans('admin.settings')}}</span> </a>
                         <ul class="ml-menu">
                             <li <?php echo ($page == 'AboutUs') ? "class='active open'" : ""; ?> ><a href="{{ route('editsetting','about') }}"  > <span> {{trans('admin.AboutUs')}}</span></a></li>
@@ -241,16 +252,6 @@ body, html {
                             <li <?php echo ($page == 'messages') ? "class='active open'" : ""; ?> ><a href="{{ route('messages') }}"  > <span> {{trans('admin.messages')}}</span></a></li>
                         </ul>
                     </li> 
-                    @endif
-                    
-                    @if(Auth::user()->role == 'company')
-                    <li <?php echo ($page == 'companies') ? "class='active open'" : ""; ?> ><a href="{{ route('editcompanie',Auth::user()->id) }}"  ><i class="zmdi zmdi-city"></i> <span> {{trans('admin.profile')}}</span></a></li>
-                    
-                    <li <?php echo ($page == 'packages') ? "class='active open'" : ""; ?> ><a href="{{ route('packages') }}"  ><i class="zmdi zmdi-money-box"></i> <span> {{trans('admin.packages')}}</span></a></li>
-
-                    <li <?php echo ($page == 'advertisements') ? "class='active open'" : ""; ?> ><a href="{{ route('advertisements') }}"  ><i class="zmdi zmdi-aspect-ratio-alt"></i> <span> {{trans('admin.advertisements')}}</span></a></li>
-
-                    @endif
                                         
                 </ul>
             </div>
@@ -263,7 +264,7 @@ body, html {
                             @if(Auth::user()->image != '' || Auth::user()->image != null)
                                 <div class="image"><a href="javascript:void(0);"><img src="{{ asset('img/'.Auth::user()->image) }}" alt="{{Auth::user()->name}}"></a></div>
                             @else 
-                                <div class="image"><a href="javascript:void(0);"><img src="{{ asset('images/logo.png') }}" alt="{{Auth::user()->name}}"></a></div>
+                                <div class="image"><a href="javascript:void(0);"><img src="{{ asset('images/Logo.PNG') }}" alt="{{Auth::user()->name}}"></a></div>
                             @endif
                             <div class="detail">
                                 <h4>{{Auth::user()->name}}</h4>
@@ -481,7 +482,7 @@ body, html {
                     ShowDiv.prepend(`<li>
                             <a href="javascript:void(0);"  class="unread">
                                 <div class="media">
-                                    <img class="media-object notificationimage" src="{{ asset('assets/images/logo.png') }}" alt="">
+                                    <img class="media-object notificationimage" src="{{ asset('assets/images/Logo.PNG') }}" alt="">
                                     <div class="media-body">
                                         <span class="name"> <span class="time"> `+payload.data.date +`  </span></span><br>
                                         <span class="message"> `+payload.data.message +  ` </span>                                        

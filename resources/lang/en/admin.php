@@ -8,7 +8,7 @@ return [
         'dashboard'                     => 'Dashboard',    
         'home'                          =>  'Home',   
         'Control_panel'                 => 'Control Panel',   
-        'project_name'                  => 'Beitk',    
+        'project_name'                  => 'Tabi3',    
         'profile'                       => 'Profile',  
         'logout'                        => 'Logout',   
         'notification'                  => 'Notification',   
@@ -57,7 +57,7 @@ return [
         'your_new_password'             => 'your new password ',
         'wellcome'                      => 'Welcome ',
         'send_password'                 => 'Your password has been successfully sent to your mail  ',
-        'Welcome to beitk'             => 'Welcome to Beitk ' ,
+        'Welcome to beitk'             => 'Welcome to Tabi3 ' ,
         'Close'                         => 'Close',
         'selectall'                     => 'Select All',
         'operations'                    => 'Operations',
@@ -155,6 +155,33 @@ return [
         'edit_admin'                    => 'Edit Admin ',
         'delete_admin'                  => 'Delete admin',
     //end admin page  
+    
+    //countries page 
+        'countries'                       => ' Countries', 
+        'country'                       => ' Country', 
+        'choose_country'                       => ' Choose Country', 
+        'add_country'                    => ' Add country'  ,
+        'add_countrie'                    => ' Add country'  ,
+        'edit_countrie'                   => '  Edit country'  ,
+        'delete_countrie'                 =>  '  Delete country',
+        
+    //end countries page
+    //cities page 
+        'cities'                       => ' Cities', 
+        'city'                       => ' City', 
+        'add_citie'                    =>  ' Add City'  ,
+        'edit_citie'                   => '  Edit City'  ,
+        'delete_citie'                 =>  '  Delete City',
+    //end cities page
+
+    //areas page 
+        'areas'                       => ' Areas', 
+        'area'                        => ' Area', 
+        'add_area'                    => ' Add Area'  ,
+        'edit_area'                   => '  Edit Area'  ,
+        'delete_area'                 =>  '  Delete Area',
+    //end areas page
+
     //users page 
         'users'                         => ' users ',
         'add_user'                      => ' Add User',
@@ -252,10 +279,20 @@ return [
         'annual'                 => 'Annual',
         'offic'                 => 'Offic',
         'box'                 => 'Box',
-        'comanies'                 => 'Comanies',
         'informations'                 => 'Informations',
         
     //end packages page
+
+    //categories page 
+        'categories'                       => ' Categories', 
+        'categorie'                        => ' Category', 
+        'choose_category'                  => ' Choose Category'  ,
+        'add_categorie'                    => ' Add Category'  ,
+        'edit_categorie'                   => ' Edit Category'  ,
+        'delete_categorie'                 =>  ' Delete Category'  ,
+        'placeholder_days_no'               => 'Number Of days ',
+        'days'               => 'Number Of days ',
+    //end categories page
 
     //departments page 
         'departments'                       => ' Departments', 
@@ -265,6 +302,13 @@ return [
         'delete_department'                 =>  ' Delete Department'  ,
     //end departments page
 
+    // subcategories page
+        'subcategories' => 'Sub categories',
+        'subcategorie' => 'Department ',
+        'add_subcategorie' => 'Add Department',
+        'edit_subcategorie' => 'Edit Department',
+        'delete_subcategorie' => 'Delete Department',
+    // end subcategories page
      //orders page 
         'orders'                        => ' Orders', 
         'neworders'                     => 'New Orders', 
@@ -276,8 +320,8 @@ return [
         'edit_order'                    => ' Edit Order'  ,
         'delete_order'                  =>  ' Delete Order'  ,
         'pending'                       => 'Pending',
-        'accepted'                      => 'Accepted, Waiting for assign department',
-        'assigned'                      => 'department assigned to the order, waiting for delivery',
+        'accepted'                      => 'Accepted, Waiting for assign categorie',
+        'assigned'                      => 'categorie assigned to the order, waiting for delivery',
         'delivered'                     => 'Delivered',
         'canceled'                      => 'Canceled',
         'size'                          => 'Size',
@@ -296,11 +340,11 @@ return [
         'decline'                       => 'Decline',
         'take_action'                   => 'Take Action',
         'submit'                        => 'Submit',
-        'choose_department'                 => 'Choose department',
+        'choose_categorie'                 => 'Choose categorie',
         'reason'                        => 'Reason' ,
         'decline_date'                  => 'ٌReject Date/Time',
         'accept_date'                   => 'Accept Date/Time',
-        'reassign'                      => ' Assign Other department ',
+        'reassign'                      => ' Assign Other categorie ',
         'decline_order'                 => 'Reject Order',
         'date_from'                     => 'From Date',
         'date_to'                       => 'To Date',
@@ -325,6 +369,17 @@ return [
         'start_date'                    => 'Start Date',
         'end_date'                      => ' end_date',
  
+    // end advertisements page 
+
+    // profileadvertisements page 
+     'profileadvertisements'                => 'special advertisements', 
+     'add_profileadvertisement'             => '  Add advertisement '  ,
+     'edit_profileadvertisement'            => '  Edit advertisement '  ,
+     'delete_profileadvertisement'          => '  Delete advertisement '  ,
+     'url'          => ' URL  ',
+     'desc'          =>'Describe    ',
+     'placeholder_url'          => 'Enter URL  ',
+
     // end advertisements page 
 
     //contact_us page

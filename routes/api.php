@@ -27,7 +27,7 @@ Route::post('ResetPassword', 'ApiController@ResetPassword')->middleware('localiz
 Route::post('HomePage', 'ApiController@HomePage')->middleware('localization');
 
 Route::post('Departments', 'ApiController@Departments')->middleware('localization');
-Route::post('Companies', 'ApiController@Companies')->middleware('localization');
+Route::post('Categories', 'ApiController@Categories')->middleware('localization');
 
 Route::post('Offic', 'ApiController@Offic')->middleware('localization');
 Route::post('Forms', 'ApiController@Forms')->middleware('localization');

@@ -14,7 +14,7 @@
                                 </div>
                             @endif
                             <div class="logo-container">
-                                {{--  <img src="{{ asset('images/logo.png') }}" alt="">  --}}
+                                 <img src="{{ asset('images/Logo.PNG') }}" alt=""> 
                             </div>
                         <h5>{{__(('admin.sign'))}}</h5>
                         </div>

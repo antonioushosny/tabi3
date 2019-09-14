@@ -46,7 +46,11 @@
                             <div class= "form-group form-float">
                                 {!! Form::hidden('id',!isset($data->id)?null:$data->id ,['class'=>'form-control show-tick']) !!}
                             </div>
-                            
+                            <div class= "form-group form-float"> 
+                                {!! Form::select('category_id',$categories
+                                    ,!isset($data->category_id)?'':$data->category_id,['class'=>'form-control show-tick' ,'placeholder' =>trans('admin.choose_category'),'required']) !!}
+                                    <label id="category_id-error" class="error" for="category_id" style="">  </label>
+                            </div>
                             <div class="form-group form-float">
                                 <input type="text" value="{{ !isset($data->title_ar)?'':$data->title_ar }}" class="form-control" placeholder="{{__('admin.placeholder_title_ar')}}" name="title_ar" required>
                                 <label id="title_ar-error" class="error" for="title_ar" style="">  </label>
@@ -138,6 +142,11 @@
                             $('#title_en-error').css('display', 'inline-block');
                             $('#title_en-error').text(data.errors.title_en);
                         }
+                        if (data.errors.category_id) {
+                            $('#category_id-error').css('display', 'inline-block');
+                            $('#category_id-error').text(data.errors.category_id);
+                        }
+                        
                   } else {
                         window.location.replace("{{route('departments')}}");
 
