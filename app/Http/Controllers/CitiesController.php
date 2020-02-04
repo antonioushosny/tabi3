@@ -178,6 +178,7 @@ class CitiesController extends Controller
             }
             $ids = City::whereIn('id',$request->ids)->delete();
         }
+        
         return response()->json($request->ids);
     }
 }

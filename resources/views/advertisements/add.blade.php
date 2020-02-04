@@ -2,6 +2,7 @@
 @section('style')
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="{{asset('assets/plugins/jquery-spinner/css/bootstrap-spinner.css') }}">
+
 @if($lang == 'ar')
     <style>
 
@@ -12,6 +13,60 @@
             max-width: 97%;
             /* border: 1px solid; */
         }
+        .addproduct-uploadeimages  .dropzone {
+            z-index: 1;
+            box-sizing: border-box;
+            display: table;
+            table-layout: fixed;
+            width: 100%;
+            height: 200px;
+            top: 86px;
+            left: 100px;
+            background-color: #e6e6e6;
+             text-align: center;
+            overflow: hidden;
+        }
+        .addproduct-uploadeimages  .dropzone.is-dragover {
+            border-color: #666;
+            background: #eee;
+        }
+        .addproduct-uploadeimages  .dropzone .content {
+            display: table-cell;
+            vertical-align: middle;
+        }
+        .addproduct-uploadeimages  .dropzone .uploadd {
+            margin: 6px 0 0 2px;
+        }
+        .addproduct-uploadeimages  .dropzone .filename {
+            display: block;
+            color: #676767;
+            font-size: 14px;
+            line-height: 18px;
+        }
+        .addproduct-uploadeimages  .dropzone .input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0;
+        }
+        .addproduct-uploadeimages  .dropzone .content .uploadd{
+            font: Bold 60px/72px Lato;
+            color: #000942;
+        }
+          
+        .addproduct-uploadeimages  .dropzone .content .add-image{
+            font: Bold 16px/19px Lato;
+            color: #000942;
+        }
+        
+        .addproduct-uploadeimages  .dropzone .content .filename{
+            
+            word-wrap: anywhere;
+        }
+                  
+
     </style>
 @endif
 @endsection
@@ -51,7 +106,6 @@
                
                     <div class="header">
                         <h2><strong>{{trans('admin.'.$title)}}</strong> {{trans('admin.add_advertisement')}}  </h2>
-                        
                     </div>
                     <div class="body ">
                         {!! Form::open(['route'=>['storeadvertisement'],'method'=>'post','autocomplete'=>'off', 'id'=>'form_validation', 'enctype'=>'multipart/form-data' ])!!} 
@@ -60,19 +114,15 @@
                                 {!! Form::hidden('id',!isset($data->id)?null:$data->id ,['class'=>'form-control show-tick']) !!}
                             </div>
                         <div class="row">
-                            @if(Auth::user()->role == 'admin')
                             <div class= "form-group form-float col-md-6">
-                                {!! Form::select('user_id',$companies ,!isset($data->user_id)?null:$data->user_id,['class'=>'form-control show-tick select2' ,'placeholder' =>trans('admin.choose_company'),!isset($data->id)?'':'disabled','required']) !!}
+                                {!! Form::select('user_id',$users ,!isset($data->user_id)?null:$data->user_id,['class'=>'form-control show-tick select2' ,'placeholder' =>trans('admin.choose_user'),!isset($data->id)?'':'disabled','required']) !!}
                                
                                     <label id="user_id-error" class="error" for="user_id" style="">  </label>
                             </div>
-                            @else 
-                            {!! Form::hidden('user_id',Auth::user()->id ,['class'=>'form-control show-tick']) !!}
-
-                            @endif
+                           
                             <div class= "form-group form-float col-md-6">
-                                {!! Form::select('package_id',$packages,!isset($data->package_id)?null:$data->package_id,['class'=>'form-control show-tick select2' ,'id'=>'package_id','placeholder' =>trans('admin.choose_package'),'required',!isset($data->id)?'':'disabled']) !!}
-                                <label id="package_id-error" class="error" for="package_id" style="">  </label>
+                                {!! Form::select('category_id',$categories,!isset($data->category_id)?null:$data->category_id,['class'=>'form-control show-tick select2' ,'id'=>'category_id','placeholder' =>trans('admin.choose_category'),'required',!isset($data->id)?'':'disabled']) !!}
+                                <label id="category_id-error" class="error" for="category_id" style="">  </label>
                             </div>
 
                             <div class="form-group form-float col-md-6">
@@ -109,7 +159,6 @@
                                 <input type="text" value="{{ !isset($data->link)?'':$data->link }}" class="form-control" placeholder="{{__('admin.placeholder_link')}}" name="link" >
                                 <label id="link-error" class="error" for="link" style="">  </label>
                             </div>
-                        
 
                             <!-- for image  -->
                             <div class="form-group form-float row col-md-6"  >
@@ -139,7 +188,69 @@
                                 </div>
                             </div>
                         </div>
-                            @if(Auth::user()->role == 'admin')
+
+                        
+			{{-- start product images   --}}
+			<div class="col-md-12 order-md-1">
+                <label for="Category" class="addproduct-label"> {{ __('lang.products_images') }} </label>
+                </div>
+                <div class="col-md-12 order-md-1">
+                    <div class="row">
+                    
+                      <div class="col-md-3 mb-3 addproduct-uploadeimages">
+                      
+                        <div class="dropzone">
+                            <div class="content">
+                                <img src="" class="uploadd " id="imagediv1" width="190px">
+                                <span class="uploadd upload1"> <i class="fa fa-plus"></i></span>
+                                <p class="add-image"> {{ __('lang.add_image') }}   </p>
+                                {{--  <span class="filename filename1"></span>  --}}
+                                <input type="file" class="input"  name="products_images[]" id="productimage1" accept="image/*">
+                            </div>
+                        </div>
+     
+                      </div>
+    
+                      <div class="col-md-3 mb-3 addproduct-uploadeimages">
+                        <div class="dropzone">
+                            <div class="content">
+                                <img src="" class="uploadd " id="imagediv2" width="190px">
+                                <span class="uploadd upload2"> <i class="fa fa-plus"></i></span>
+                                <p class="add-image"> {{ __('lang.add_image') }}</p>
+                                {{--  <span class="filename filename2"></span>  --}}
+                                <input type="file" class="input"  name="products_images[]" id="productimage2" accept="image/*">
+                            </div>
+                        </div>
+     
+                      </div>
+    
+                      <div class="col-md-3 mb-3 addproduct-uploadeimages">
+                         <div class="dropzone">
+                            <div class="content">
+                                <img src="" class="uploadd " id="imagediv3" width="190px">
+                                <span class="uploadd upload3"> <i class="fa fa-plus"></i></span>
+                                <p class="add-image">{{ __('lang.add_image') }}</p>
+                                {{--  <span class="filename filename3"></span>  --}}
+                                <input type="file" class="input"  name="products_images[]" id="productimage3" accept="image/*">
+                            </div>
+                        </div>
+     
+                      </div>
+    
+                      <div class="col-md-3 mb-3 addproduct-uploadeimages" >
+                         <div class="dropzone">
+                            <div class="content">
+                                <img src="" class="uploadd " id="imagediv4" width="190px">
+                                <span class="uploadd upload4"> <i class="fa fa-plus"></i></span>
+                                <p class="add-image"> {{ __('lang.add_image') }}</p>
+                                {{--  <span class="filename filename4"></span>  --}}
+                                <input type="file" class="input" name="products_images[]" id="productimage4" accept="image/*">
+                            </div>
+                        </div>
+     
+                      </div>
+    
+
                             <div class="form-group">
                                 <div class="radio inlineblock m-r-20">
                                     <input type="radio" name="status" id="active" class="with-gap" value="active" checked>
@@ -150,9 +261,7 @@
                                     <label for="not_active">{{__('admin.not_active')}}</label>
                                 </div>
                             </div>
-                            @else 
-                                {!! Form::hidden('status','not_active' ,['class'=>'form-control show-tick']) !!}
-                            @endif
+                   
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                          
                             @if(isset($data->id))
@@ -160,7 +269,7 @@
                             @else
                                 <button class="btn btn-raised btn-primary btn-round waves-effect" type="submit">{{__('admin.add')}}</button>
                             @endif
-                            
+                           
                         </form>
                     </div>
                 </div>
@@ -176,8 +285,130 @@
 @section('script')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
 <script src="{{asset('assets/plugins/jquery-spinner/js/jquery.spinner.js') }}"></script> <!-- Jquery Spinner Plugin Js --> 
+<script type="text/javascript">
+
+    $("#productimage4").change(function (){
+
+        // fileName = $(this)[0].files[0].name;
+        // $('.filename4').html(fileName);
+        {{--  $('.dropzone .upload4').hide();  --}}
+        var reader = new FileReader();
+        
+        reader.onload = function (e) {
+            {{--  console.log(e.target.result)  --}}
+            $('#imagediv4').attr('src', e.target.result);
+            {{--  $('#imagediv4').removeClass('hidden');  --}}
+        }
+
+        reader.readAsDataURL($(this)[0].files[0]);
+
+         
+    });
+
+    $("#productimage3").change(function (){
+
+        // fileName = $(this)[0].files[0].name;
+        // $('.filename3').html(fileName);
+        {{--  $('.dropzone .upload3').hide();  --}}
+        var reader = new FileReader();
+        
+        reader.onload = function (e) {
+            {{--  console.log(e.target.result)  --}}
+            $('#imagediv3').attr('src', e.target.result);
+            {{--  $('#imagediv3').removeClass('hidden');  --}}
+        }
+
+        reader.readAsDataURL($(this)[0].files[0]);
+    });
+    $("#productimage2").change(function (){
+
+        // fileName = $(this)[0].files[0].name;
+        // $('.filename2').html(fileName);
+        $('.dropzone .upload2').hide();
+        var reader = new FileReader();
+        
+        reader.onload = function (e) {
+            {{--  console.log(e.target.result)  --}}
+            $('#imagediv2').attr('src', e.target.result);
+            {{--  $('#imagediv2').removeClass('hidden');  --}}
+        }
+
+        reader.readAsDataURL($(this)[0].files[0]);
+    });
+    $("#productimage1").change(function (){
+
+        // fileName = $(this)[0].files[0].name
+        // $('.filename1').html(fileName);
+        $('.dropzone .upload1').hide();
+        var reader = new FileReader();
+        
+        reader.onload = function (e) {
+            {{--  console.log(e.target.result)  --}}
+            $('#imagediv1').attr('src', e.target.result);
+            {{--  $('#imagediv1').removeClass('hidden');  --}}
+        }
+
+        reader.readAsDataURL($(this)[0].files[0]);
+    });
+     
+</script>
+
 
 <script>
+    
+        var droppedFiles = false;
+        var fileName = '';
+        var $dropzone = $('.dropzone');
+        var $button = $('.upload-btn');
+        var uploading = false;
+        var $syncing = $('.syncing');
+        var $done = $('.done');
+        var $bar = $('.bar');
+        var timeOut;
+        
+        $dropzone.on('drag dragstart dragend dragover dragenter dragleave drop', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        })
+            .on('dragover dragenter', function() {
+            $dropzone.addClass('is-dragover');
+        })
+            .on('dragleave dragend drop', function() {
+            $dropzone.removeClass('is-dragover');
+        })
+            .on('drop', function(e) {
+            droppedFiles = e.originalEvent.dataTransfer.files;
+            fileName = droppedFiles[0]['name'];
+            $('.filename').html(fileName);
+            $('.dropzone .upload').hide();
+        });
+        
+        $button.bind('click', function() {
+            startUpload();
+        });
+        
+        $("input:file").change(function (){
+            fileName = $(this)[0].files[0].name;
+            $('.filename').html(fileName);
+            $('.dropzone .upload').hide();
+        });
+        
+        function startUpload() {
+            if (!uploading && fileName != '' ) {
+                uploading = true;
+                $button.html('Uploading...');
+                $dropzone.fadeOut();
+                $syncing.addClass('active');
+                $done.addClass('active');
+                $bar.addClass('active');
+                timeoutID = window.setTimeout(showDone, 3200);
+            }
+        }
+        
+        function showDone() {
+            $button.html('Done');
+        }
+
     //this for add new record
     $("#form_validation").submit(function(e){
            {{--  $('#addModal').modal('hide');  --}}

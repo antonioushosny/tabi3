@@ -83,7 +83,7 @@
                                 <div class="row  clients hidden">
                                     <div class="col-md-1">{{ __('admin.users') }}</div>
                                     <div class= "form-group form-float col-md-11">
-                                        {!! Form::select('ids[]',[],'',['class'=>'form-control show-tick' ,'placeholder' =>trans('admin.choose'),'id' => 'selectmulty','multiple'=>true]) !!}
+                                        {!! Form::select('ids[]',[],'',['class'=>'form-control show-tick' ,'id' => 'selectmulty','multiple'=>true]) !!}
                                             <label id="ids-error" class="error" for="ids[]" style="">  </label>
                                     </div> 
                                 </div> 
@@ -155,7 +155,7 @@
                         }
                         
                   } else {
-                    location.reload();
+                 console.log(data);
 
                      }
             },

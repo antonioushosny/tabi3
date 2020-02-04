@@ -26,11 +26,15 @@
                 </ul>
             </div>
         </div>
-    </div>
 
+       
+
+    </div>
+  
      
     <div class="container-fluid">
         <!-- Exportable Table -->
+         
         <div class="row clearfix">
             <div class="col-lg-12">
                 <div class="card">
@@ -41,9 +45,9 @@
                             <ul class="header-dropdown">
         
                                 </li>
-                                    <a href="{{route('addadvertisement')}}" class=" add-modal btn btn-success btn-round" title="{{trans('admin.add_advertisement')}}">
+                                    {{--  <a href="{{route('addadvertisement')}}" class=" add-modal btn btn-success btn-round" title="{{trans('admin.add_advertisement')}}">
                                         {{trans('admin.add_advertisement')}}
-                                    </a>
+                                    </a>  --}}
                                 </li>
                                 </li>
                                     <a href="javascript:void(0);" class=" deleteall-modal btn btn-danger btn-round" title="{{trans('admin.deleteall')}}">
@@ -64,15 +68,12 @@
                                             <input type="checkbox" class="checkbox icheck" id="check-all" />
                                         </th>
                                         
-                                        <th>{{trans('admin.company')}}</th>
-                                        {{-- <th>{{trans('admin.title')}}</th> --}}
-                                         <th>{{trans('admin.package')}}</th> 
-                                        {{-- <th>{{trans('admin.type')}}</th> --}}
-                                        {{-- <th>{{trans('admin.page')}}</th> --}}
+                                        <th>{{trans('admin.user')}}</th>
+                                        <th>{{trans('admin.title')}}</th>
                                         <th>{{trans('admin.cost')}}</th>
-                                        <th>{{trans('admin.number')}}</th>
+                                        <th>{{trans('admin.cost_advertising')}}</th>
+                                        <th>{{trans('admin.cost_benefits')}}</th>
                                         <th>{{trans('admin.total')}}</th>
-                                        <th>{{trans('admin.start_date')}}</th>
                                         <th>{{trans('admin.expiry_date')}}</th>
                                         <th>{{trans('admin.status')}}</th>
                                         <th>{{trans('admin.actions')}}</th>
@@ -90,28 +91,19 @@
                                         @else 
                                             <td> </td>
                                         @endif
-                                        {{-- <td>{{ $data->title }}</td> --}}
-                                        @if($data->package)
-                                            @if($lang == 'ar')
-                                                <td>{{ $data->package->title_ar }}</td>
-                                            @else 
-                                                <td>{{ $data->package->title_en }}</td>
-                                            @endif
-                                        @else 
-                                            <td> </td>
-                                        @endif
-                                        {{-- <td>{{ $data->type }}</td> --}}
-                                        {{-- <td>{{ $data->page }}</td> --}}
+                                        <td>{{ $data->title }}</td>
                                         <td>{{ $data->cost }}</td>
-                                        <td>{{ $data->number }}</td>
+                                        <td>{{ $data->cost_advertising }}</td>
+                                        <td>{{ $data->cost_benefits  }}</td>
                                         <td>{{ $data->total }}</td>
-                                        <td>{{ $data->start_date }}</td>
                                         <td>{{ $data->expiry_date }}</td>
-                                        <td style="text-align:center"><span  class="col-green">{{ trans('admin.'.$data->status)}}</span></td> 
+                                        <td style="text-align:center"><a href="{{ route('changeStatusadvertisement',$data->id) }}"  class="btn {{ $data->status == 'active' ? 'btn-success' : 'btn-danger' }} ">{{ trans('admin.'.$data->status)}}</a></td> 
                                     
 
                                         <td>
-                                            <a href="{{route('editadvertisement',$data->id)}}" class="btn btn-info waves-effect waves-float waves-green btn-round " title="{{trans('admin.edit')}}"><i class="zmdi zmdi-edit"></i></a>
+                                            {{--  <a href="{{route('editadvertisement',$data->id)}}" class="btn btn-info waves-effect waves-float waves-green btn-round " title="{{trans('admin.edit')}}"><i class="zmdi zmdi-edit"></i></a>  --}}
+                                            <a href="{{route('showadvertisement',$data->id)}}" class="btn btn-info waves-effect waves-float waves-green btn-round " title="{{trans('admin.show')}}"><i class="zmdi zmdi-eye"></i></a>
+                                            
 
                                             <a href="javascript:void(0);" class=" delete-modal btn btn-danger waves-effect waves-float waves-red btn-round " title="{{trans('admin.delete')}}" data-id="{{$data->id}}" ><i class="zmdi zmdi-delete"></i></a>
                                         </td>

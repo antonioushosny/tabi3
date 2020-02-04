@@ -64,7 +64,7 @@ class StaticsController extends Controller
                 'title_ar'  =>'required|max:190',           
                 'title_en'  =>'required|max:190',           
                 // 'image'  =>'required',            
-                'status'  =>'required',   
+                // 'status'  =>'required',   
                 'desc_ar'  =>'required',   
                 'desc_en'  =>'required',   
                 'type'  =>'required',   
@@ -78,7 +78,7 @@ class StaticsController extends Controller
                 'title_ar'  =>'required|max:190',           
                 'title_en'  =>'required|max:190',              
                 // 'image'  =>'required',            
-                'status'  =>'required'   ,   
+                // 'status'  =>'required'   ,   
                 'desc_ar'  =>'required',   
                 'desc_en'  =>'required',
                 'type'  =>'required'      
@@ -111,7 +111,7 @@ class StaticsController extends Controller
          $doc->title_en         = $request->title_en ;
          $doc->disc_ar          = $request->desc_ar ;
          $doc->disc_en          = $request->desc_en ;
-         $doc->status           = $request->status ;
+         $doc->status           = 'active' ;
          $doc->type             = $request->type ;
          $doc->save();
        if ($request->hasFile('image')) {

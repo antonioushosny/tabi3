@@ -11,7 +11,7 @@ class Area extends Model
     use Notifiable;
 
     protected $fillable = [
-        'name_ar','name_en','image','status','city_id'
+        'title_ar','title_en','image','status','city_id'
     ];
 
     public function city()

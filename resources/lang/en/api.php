@@ -3,12 +3,14 @@
 return [
 
     'failed_login'          => 'failed in login'  ,
-    'mobile_notfound'       => 'mobile or username not found',
+    'mobile_notfound'       => 'mobile not found',
+    'send_code'             => 'A confirmation code has been sent to the mobile number',
     'login'                 => 'login successfully',
     'password_failed'       => 'password not correct',
     'fail_login'            => 'These credentials do not match our records.',
     'save'                  => 'saved successfully',
-    'delete'                  => 'Deleted successfully',
+    'savead'                  => 'Saved successfully. Thank you, the ad will be reviewed',
+    'delete'                => 'Deleted successfully',
     'failed'                => 'an error occurred ',
     'allowed'               => 'you are not allowed',
     'logged_out'            => 'You are logged out',
@@ -27,28 +29,30 @@ return [
     'send_successfully'     => 'send successfully ' ,
 
 
-    'mobile_requird' => 'please enter mobile number',
-    'password_requird' => 'please enter password',
-    'success' => 'Success',
-    'confirm_password' => ' Password does not match the confirm password.',
-    'token_invalid'    => 'devise id is invalid',
+    'mobile_requird'        => 'please enter mobile number',
+    'password_requird'      => 'please enter password',
+    'success'               => 'Success',
+    'confirm_password'      => ' Password does not match the confirm password.',
+    'token_invalid'         => 'devise id is invalid',
     
-    'send_password' => 'Your password has been successfully sent to your mail   ',
-    'failed_code' => 'Failed to send code ',
+    'send_password'         => 'Your password has been successfully sent to your mail   ',
+    'failed_code'           => 'Failed to send code ',
     
-    'user_id_notfound' => 'user id not found',
-    'send_succes'      => 'Message sent successfully' ,
+    'user_id_notfound'      => 'user id not found',
+    'send_succes'           => 'Message sent successfully' ,
     
-    'savecontact'   =>'Message sent successfully',
-    'success'   =>'success',
-    'notfound'  => 'data not found',
+    'savecontact'           =>'Message sent successfully',
+    'success'               =>'success',
+    'notfound'              => 'data not found',
 
-    'pending'   => 'Pending',
-    'accepted'   => 'Accepted, Waiting for assign driver',
-    'assigned'   => 'Driver assigned to the order, waiting for delivery',
-    'delivered'   => 'Delivered',
-    'canceled'   => 'Canceled',
+    'pending'               => 'Pending',
+    'accepted'              => 'Accepted, Waiting for assign driver',
+    'assigned'              => 'Driver assigned to the order, waiting for delivery',
+    'delivered'             => 'Delivered',
+    'canceled'              => 'Canceled',
 
-    'notfoundcenter' => 'There are no distribution centers for this container',
-    'activate_account'  => 'Please activate account',
+    'notfoundcenter'        => 'There are no distribution centers for this container',
+    'activate_account'      => 'Please activate account',
+    'balance_is_not_enough' => 'Your balance is not enough to advertise ',
+    
 ];

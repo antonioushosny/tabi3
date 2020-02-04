@@ -30,6 +30,12 @@ Route::get('lang/{lang}', function ($lang){
 Route::get('/', function () {
     return redirect('/login');
 });
+Route::get('/terms', function () {
+    return view('terms');
+});
+
+ 
+Route::get('/downloadApp', 'HomeController@downloadApp')->name('downloadApp');
 
 
 Auth::routes();
@@ -42,7 +48,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/home', 'HomeController@index')->name('home');
     Route::get('/profile/{id}', 'HomeController@profile')->name('profile');
     Route::post('/profile/editprofile', 'HomeController@editprofile')->name('editprofile');
-
+    
     // routes for admins management
     Route::get('/admins', 'AdminsController@index')->name('admins');
     Route::get('/admins/add/', 'AdminsController@add')->name('addadmin');
@@ -69,6 +75,15 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/cities/deleteall', 'CitiesController@deleteall')->name('citiesdeleteall');
     Route::get('/cities/{id}/areas', 'CitiesController@areas')->name('cityareas');
 
+    // routes for locations management
+    Route::get('/locations', 'LocationsController@index')->name('locations');
+    Route::get('/locations/add/', 'LocationsController@add')->name('addlocation');
+    Route::post('/locations/update/', 'LocationsController@store')->name('storelocation');
+    Route::get('/locations/edit/{id}', 'LocationsController@edit')->name('editlocation');
+    Route::get('/locations/delete/{id}', 'LocationsController@destroy')->name('destroylocation');
+    Route::post('/locations/deleteall', 'LocationsController@deleteall')->name('locationsdeleteall');
+    Route::get('/locations/{id}/areas', 'LocationsController@areas')->name('locationareas');
+
     // routes for areas management
     Route::get('/areas', 'AreasController@index')->name('areas');
     Route::get('/areas/add/', 'AreasController@add')->name('addarea');
@@ -77,13 +92,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/areas/delete/{id}', 'AreasController@destroy')->name('destroyarea');
     Route::post('/areas/deleteall', 'AreasController@deleteall')->name('areasdeleteall');
 
-    // routes for packages management
-    Route::get('/packages', 'PackagesController@index')->name('packages');
-    Route::get('/packages/add/', 'PackagesController@add')->name('addpackage');
-    Route::post('/packages/update/', 'PackagesController@store')->name('storepackage');
-    Route::get('/packages/edit/{id}', 'PackagesController@edit')->name('editpackage');
-    Route::get('/packages/delete/{id}', 'PackagesController@destroy')->name('destroypackage');
-    Route::post('/packages/deleteall', 'PackagesController@deleteall')->name('packagesdeleteall');
+    // routes for payments management
+    Route::get('/payments', 'PaymentsController@index')->name('payments');
+    Route::get('/payments/add/', 'PaymentsController@add')->name('addpayment');
+    Route::post('/payments/update/', 'PaymentsController@store')->name('storepayment');
+    Route::get('/payments/edit/{id}', 'PaymentsController@edit')->name('editpayment');
+    Route::get('/payments/delete/{id}', 'PaymentsController@destroy')->name('destroypayment');
+    Route::post('/payments/deleteall', 'PaymentsController@deleteall')->name('paymentsdeleteall');
 
     // routes for categories management
     Route::get('/categories', 'CategoriesController@index')->name('categories');
@@ -117,15 +132,16 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/delegates/edit/{id}', 'DelegatesController@edit')->name('editdelegate');
     Route::get('/delegates/delete/{id}', 'DelegatesController@destroy')->name('destroydelegate');
     Route::post('/delegates/deleteall', 'DelegatesController@deleteall')->name('delegatesdeleteall');
-    Route::get('/companies', 'CompaniesController@index')->name('companies');
-
+    
     // routes for advertisements management
     Route::get('/advertisements', 'AdvertisementsController@index')->name('advertisements');
     Route::get('/advertisements/add/', 'AdvertisementsController@add')->name('addadvertisement');
     Route::post('/advertisements/update/', 'AdvertisementsController@store')->name('storeadvertisement');
     Route::get('/advertisements/edit/{id}', 'AdvertisementsController@edit')->name('editadvertisement');
+    Route::get('/advertisements/show/{id}', 'AdvertisementsController@show')->name('showadvertisement');
     Route::get('/packagedetail/{id}', 'AdvertisementsController@packagedetail')->name('packagedetail');
     Route::get('/advertisements/delete/{id}', 'AdvertisementsController@destroy')->name('destroyadvertisement');
+    Route::get('/advertisements/changeStatus/{id}', 'AdvertisementsController@changeStatus')->name('changeStatusadvertisement');
     Route::post('/advertisements/deleteall', 'AdvertisementsController@deleteall')->name('advertisementsdeleteall');
     
 
@@ -136,6 +152,15 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/profileadvertisements/edit/{id}', 'AdvertisementsController@editprofile')->name('editprofileadvertisement');
     Route::get('/profileadvertisements/delete/{id}', 'AdvertisementsController@destroy')->name('destroyprofileadvertisement');
     Route::post('/profileadvertisements/deleteall', 'AdvertisementsController@deleteall')->name('profileadvertisementsdeleteall');
+
+    // routes for advertisingAdvertisements management
+    Route::get('/advertisingAdvertisements', 'AdvertisingAdvertisementsController@index')->name('advertisingAdvertisements');
+    Route::get('/advertisingAdvertisements/add/', 'AdvertisingAdvertisementsController@add')->name('addadvertisingAdvertisement');
+    Route::post('/advertisingAdvertisements/update/', 'AdvertisingAdvertisementsController@store')->name('storeadvertisingAdvertisement');
+    Route::get('/advertisingAdvertisements/edit/{id}', 'AdvertisingAdvertisementsController@edit')->name('editadvertisingAdvertisement');
+    Route::get('/advertisingAdvertisements/show/{id}', 'AdvertisingAdvertisementsController@show')->name('showadvertisingAdvertisement');
+    Route::get('/advertisingAdvertisements/delete/{id}', 'AdvertisingAdvertisementsController@destroy')->name('destroyadvertisingAdvertisement');
+    Route::post('/advertisingAdvertisements/deleteall', 'AdvertisingAdvertisementsController@deleteall')->name('advertisingAdvertisementsdeleteall');
 
     // routes for sponsors management
     Route::get('/sponsors', 'SponsorsController@index')->name('sponsors');

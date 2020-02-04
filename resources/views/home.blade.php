@@ -68,6 +68,45 @@
                             
                             @endif
                         </div>
+
+                        <div class="row clearfix">
+                            @if(Auth::user()->role == 'admin')
+                                <div class="col-lg-3 col-md-3 col-sm-12 text-center">
+                                    <div class="body">
+                                        <a href="{{ route('users') }}">
+                                        <h2 class="number count-to m-t-0 m-b-5" data-from="0" data-to="{{$iosusers}}" data-speed="1000" data-fresh-interval="700">{{$iosusers}}</h2></a>
+                                        <p class="text-muted">{{trans('admin.iosusers')}}</p>
+                                        <span id="linecustom4">1,4,2,6,5,2,3,8,5,2</span>
+                                        
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-12 text-center">
+                                    <div class="body">
+                                        <a href="{{ route('users') }}"><h2 class="number count-to m-t-0 m-b-5" data-from="0" data-to="{{$androidusers}}" data-speed="2000" data-fresh-interval="700">{{$androidusers}}</h2></a>
+                                        <p class="text-muted ">{{trans('admin.androidusers')}}</p>
+                                        <span id="linecustom5">2,9,5,5,8,5,4,2,6</span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-12 text-center">
+                                    <div class="body">
+                                        <a href="{{ route('advertisements') }}"><h2 class="number count-to m-t-0 m-b-5" data-from="0" data-to="{{$installAds}}" data-speed="2000" data-fresh-interval="700">{{$installAds}}</h2></a>
+                                        <p class="text-muted">{{trans('admin.installAds')}}</p>
+                                        <span id="linecustom6">1,5,3,6,6,3,6,8,4,2</span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-12 text-center">
+                                    <div class="body">
+                                        <a href="{{ route('advertisements') }}"><h2 class="number count-to m-t-0 m-b-5" data-from="0" data-to="{{$starAds}}" data-speed="2000" data-fresh-interval="700">{{$starAds}}</h2></a>
+                                        <p class="text-muted">{{trans('admin.starAds')}}</p>
+                                        <span id="linecustom7">1,5,3,6,6,3,6,8,4,2</span>
+                                    </div>
+                                </div>
+                                
+                            @else 
+                               
+                            
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>

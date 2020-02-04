@@ -102,9 +102,9 @@
                             </div>
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             @if(isset($data->id))
-                                <button class="btn btn-raised btn-primary btn-round waves-effect" type="submit">{{__('admin.edit')}}</button>
+                                <button class="btn btn-raised btn-primary btn-round waves-effect add" type="submit">{{__('admin.edit')}}</button>
                             @else
-                                <button class="btn btn-raised btn-primary btn-round waves-effect" type="submit">{{__('admin.add')}}</button>
+                                <button class="btn btn-raised btn-primary btn-round waves-effect add" type="submit">{{__('admin.add')}}</button>
                             @endif
                         </form>
                     </div>

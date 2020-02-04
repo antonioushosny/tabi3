@@ -13,5 +13,9 @@ class Delegate extends Model
     protected $fillable = [
         'name','image','mobile','status'
     ];
+    public function locations()
+    {
+        return $this->belongsToMany('App\Location', 'delegate_locations', 'delegate_id', 'location_id');
+    }
 
 }

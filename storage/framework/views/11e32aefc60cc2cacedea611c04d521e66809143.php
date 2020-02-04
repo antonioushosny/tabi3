@@ -29,7 +29,7 @@
 <link rel="stylesheet" href="<?php echo e(asset('assets/plugins/jvectormap/jquery-jvectormap-2.0.3.min.css')); ?>"/>
 <link rel="stylesheet" href="<?php echo e(asset('assets/plugins/morrisjs/morris.min.css')); ?>" />
 <link rel="stylesheet" href="<?php echo e(asset('assets/plugins/sweetalert/sweetalert.css')); ?>"/>
-
+</head>
 <!-- Custom Css -->
 <link rel="stylesheet" href="<?php echo e(asset('assets/css/main.css')); ?>">
 <link rel="stylesheet" href="<?php echo e(asset('assets/css/color_skins.css')); ?>">
@@ -39,15 +39,14 @@
 <!-- Bootstrap Select Css -->
 <link href="<?php echo e(asset('assets/plugins/bootstrap-select/css/bootstrap-select.css')); ?>" rel="stylesheet" />
 
-
+<link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/droid-arabic-kufi" type="text/css"/>
 
 
 <?php echo $__env->yieldContent('style'); ?>  
 <style>
-
+   
     .select2{
         width: 100%  !important ;
-        
     }
     .select2-container--default .select2-selection--single {
         background-color: #fff;
@@ -82,11 +81,19 @@
 <style>
 @import  url(https://fonts.googleapis.com/css?family=Cairo:200,300,400,600,700,900&subset=arabic,latin,latin-ext);
 body, html { 
-    font-family: 'Cairo', sans-serif !important ;
+    
+    font-family: 'DroidArabicKufiRegular' !important ; 
+    
 }
 .sidebar { 
-    font-family: 'Cairo', sans-serif !important ;
+    
+    font-family: 'DroidArabicKufiRegular' !important ; 
     font-weight: bold !important ;
+}
+::placeholder {
+    color: #a19ca3 !important;
+    font-family: 'DroidArabicKufiRegular';
+    text-align: right;
 }
 
 </style>
@@ -187,7 +194,7 @@ body, html {
 <!-- Left Sidebar -->
 <aside id="leftsidebar" class="sidebar">
     <ul class="nav nav-tabs">
-        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#dashboard"><i class="zmdi zmdi-home m-r-5"></i><?php echo e(__('admin.project_name')); ?> </a></li>
+        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#dashboard"><i class="zmdi zmdi-home m-r-5"></i> <?php echo e(__('admin.project_name')); ?> </a></li>
         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#user"><i class="zmdi zmdi-account m-r-5"></i> <?php echo e(Auth::user()->name); ?> </a></li>
     </ul>
     <div class="tab-content">
@@ -214,34 +221,27 @@ body, html {
                     <li <?php echo ($page == 'admins') ? "class='active open'" : ""; ?> ><a href="<?php echo e(route('admins')); ?>"  ><i class="zmdi zmdi-accounts-add"></i> <span> <?php echo e(trans('admin.admins')); ?></span></a></li>
 
                     
-                    <li <?php echo ($page == 'countries') ? "class='active open'" : ""; ?> ><a href="<?php echo e(route('countries')); ?>"  ><i class="zmdi zmdi-city"></i> <span> <?php echo e(trans('admin.countries')); ?></span></a></li>
+                    <li <?php echo ($page == 'countries') ? "class='active open'" : ""; ?> ><a href="<?php echo e(route('countries')); ?>"  ><i class="zmdi zmdi-flag"></i> <span> <?php echo e(trans('admin.countries')); ?></span></a></li>
  
                     <li <?php echo ($page == 'cities') ? "class='active open'" : ""; ?> ><a href="<?php echo e(route('cities')); ?>"  ><i class="zmdi zmdi-city"></i> <span> <?php echo e(trans('admin.cities')); ?></span></a></li>
  
                     <li <?php echo ($page == 'areas') ? "class='active open'" : ""; ?> ><a href="<?php echo e(route('areas')); ?>"  ><i class="zmdi zmdi-pin"></i> <span> <?php echo e(trans('admin.areas')); ?></span></a></li>
- 
-<<<<<<< HEAD
+
+                    <li <?php echo ($page == 'locations') ? "class='active open'" : ""; ?> ><a href="<?php echo e(route('locations')); ?>"  ><i class="zmdi zmdi-pin-drop"></i> <span> <?php echo e(trans('admin.locations')); ?></span></a></li>
+
                     <li <?php echo ($page == 'categories') ? "class='active open'" : ""; ?> ><a href="<?php echo e(route('categories')); ?>"  ><i class="zmdi zmdi-view-list-alt"></i> <span> <?php echo e(trans('admin.categories')); ?></span></a></li>
 
                     <li <?php echo ($page == 'departments') ? "class='active open'" : ""; ?> ><a href="<?php echo e(route('departments')); ?>"  ><i class="zmdi zmdi-view-list-alt"></i> <span> <?php echo e(trans('admin.departments')); ?></span></a></li>
                     
                     <li <?php echo ($page == 'subcategories') ? "class='active open'" : ""; ?> ><a href="<?php echo e(route('subcategories')); ?>"  ><i class="zmdi zmdi-view-list-alt"></i> <span> <?php echo e(trans('admin.subcategories')); ?></span></a></li>
 
-                    <li <?php echo ($page == 'delegates') ? "class='active open'" : ""; ?> ><a href="<?php echo e(route('delegates')); ?>"  ><i class="zmdi zmdi-city"></i> <span> <?php echo e(trans('admin.delegates')); ?></span></a></li>
-=======
-
-                    <li <?php echo ($page == 'categories') ? "class='active open'" : ""; ?> ><a href="<?php echo e(route('categories')); ?>"  ><i class="zmdi zmdi-view-list-alt"></i> <span> <?php echo e(trans('admin.categories')); ?></span></a></li>
-
-                    <li <?php echo ($page == 'departments') ? "class='active open'" : ""; ?> ><a href="<?php echo e(route('departments')); ?>"  ><i class="zmdi zmdi-view-list-alt"></i> <span> <?php echo e(trans('admin.departments')); ?></span></a></li>
-
-                    <li <?php echo ($page == 'companies') ? "class='active open'" : ""; ?> ><a href="<?php echo e(route('companies')); ?>"  ><i class="zmdi zmdi-city"></i> <span> <?php echo e(trans('admin.companies')); ?></span></a></li>
->>>>>>> c6a5e8c3af3c8f50d2f2b61d8a14d12d1e6029b9
+                    <li <?php echo ($page == 'delegates') ? "class='active open'" : ""; ?> ><a href="<?php echo e(route('delegates')); ?>"  ><i class="zmdi zmdi-account"></i> <span> <?php echo e(trans('admin.delegates')); ?></span></a></li>
                     
-                    <li <?php echo ($page == 'packages') ? "class='active open'" : ""; ?> ><a href="<?php echo e(route('packages')); ?>"  ><i class="zmdi zmdi-money-box"></i> <span> <?php echo e(trans('admin.packages')); ?></span></a></li>
+                    <li <?php echo ($page == 'payments') ? "class='active open'" : ""; ?> ><a href="<?php echo e(route('payments')); ?>"  ><i class="zmdi zmdi-money-box"></i> <span> <?php echo e(trans('admin.payments')); ?></span></a></li>
 
                     <li <?php echo ($page == 'advertisements') ? "class='active open'" : ""; ?> ><a href="<?php echo e(route('advertisements')); ?>"  ><i class="zmdi zmdi-aspect-ratio-alt"></i> <span> <?php echo e(trans('admin.advertisements')); ?></span></a></li>
 
-                    <li <?php echo ($page == 'sponsors') ? "class='active open'" : ""; ?> ><a href="<?php echo e(route('sponsors')); ?>"  ><i class="zmdi zmdi-accounts-list"></i> <span> <?php echo e(trans('admin.sponsors')); ?></span></a></li>
+                    <li <?php echo ($page == 'advertisingAdvertisements') ? "class='active open'" : ""; ?> ><a href="<?php echo e(route('advertisingAdvertisements')); ?>"  ><i class="zmdi zmdi-aspect-ratio-alt"></i> <span> <?php echo e(trans('admin.advertisingAdvertisements')); ?></span></a></li>
                    
                     <li <?php echo ($page == 'users') ? "class='active open'" : ""; ?> ><a href="<?php echo e(route('users')); ?>"  ><i class="zmdi zmdi-accounts"></i> <span> <?php echo e(trans('admin.users')); ?></span></a></li>
 
@@ -252,11 +252,12 @@ body, html {
                         <ul class="ml-menu">
                             <li <?php echo ($page == 'AboutUs') ? "class='active open'" : ""; ?> ><a href="<?php echo e(route('editsetting','about')); ?>"  > <span> <?php echo e(trans('admin.AboutUs')); ?></span></a></li>
 
-                            <li <?php echo ($page == 'Terms') ? "class='active open'" : ""; ?> ><a href="<?php echo e(route('editsetting','term')); ?>"  > <span> <?php echo e(trans('admin.Terms')); ?></span></a></li>
-
-                            <li <?php echo ($page == 'Policy') ? "class='active open'" : ""; ?> ><a href="<?php echo e(route('editsetting','policy')); ?>"  > <span> <?php echo e(trans('admin.Policy')); ?></span></a></li>
+                            <li <?php echo ($page == 'Terms') ? "class='active open'" : ""; ?> ><a href="<?php echo e(route('editsetting','term')); ?>"  > <span> <?php echo e(trans('admin.Terms')); ?></span></a></li>                            
                             
-                            <li <?php echo ($page == 'informations') ? "class='active open'" : ""; ?> ><a href="<?php echo e(route('editsetting','information')); ?>"  > <span> <?php echo e(trans('admin.informations')); ?></span></a></li>
+                            <li <?php echo ($page == 'install') ? "class='active open'" : ""; ?> ><a href="<?php echo e(route('editsetting','install')); ?>"  > <span> <?php echo e(trans('admin.install_ads')); ?></span></a></li>                            
+                            
+                            <li <?php echo ($page == 'star') ? "class='active open'" : ""; ?> ><a href="<?php echo e(route('editsetting','star')); ?>"  > <span> <?php echo e(trans('admin.star_ads')); ?></span></a></li>                            
+                            <li <?php echo ($page == 'uploade_video') ? "class='active open'" : ""; ?> ><a href="<?php echo e(route('editsetting','uploade_video')); ?>"  > <span> <?php echo e(trans('admin.uploade_video')); ?></span></a></li>                            
 
                             <li <?php echo ($page == 'messages') ? "class='active open'" : ""; ?> ><a href="<?php echo e(route('messages')); ?>"  > <span> <?php echo e(trans('admin.messages')); ?></span></a></li>
                         </ul>
@@ -293,8 +294,7 @@ body, html {
                         <small class="text-muted"><?php echo e(__('admin.email')); ?>: </small>
                         <p><?php echo e(Auth::user()->email); ?></p>
                         <hr>
-                        <small class="text-muted"><?php echo e(__('admin.mobile')); ?>: </small>
-                        <p><?php echo e(Auth::user()->mobile); ?></p>
+                         
                         <hr>
                         <ul class="list-unstyled">
                             <?php echo Form::open(['route'=>['editprofile'],'method'=>'post','autocomplete'=>'off', 'enctype'=>'multipart/form-data' ]); ?> 
@@ -309,13 +309,7 @@ body, html {
                                     <label id="email-error" class="error" for="email" style=""></label>
                                 </div>
                             </li>
-                            <li>
-                                <div><?php echo e(__('admin.mobile')); ?></div>
-                                <div class="m-t-10 m-b-20">
-                                    <input type="text" value="<?php echo e(Auth::user()->mobile); ?>" class="form-control" placeholder="<?php echo e(__('admin.mobile')); ?>" name="mobile" >
-                                    <label id="mobile-error" class="error" for="mobile" style="">  </label>
-                                </div>
-                            </li>
+                            
                             <li>
                                 <div><?php echo e(__('admin.password')); ?></div>
                                 <div class="m-t-10 m-b-20">

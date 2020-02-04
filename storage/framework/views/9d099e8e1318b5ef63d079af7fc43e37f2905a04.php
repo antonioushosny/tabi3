@@ -41,12 +41,12 @@
                             <h2><strong><?php echo e(trans('admin.'.$title)); ?></strong> </h2>
                             <ul class="header-dropdown">
         
-                                <!-- </li>
+                                </li>
                                     <a href="<?php echo e(route('adduser')); ?>" class=" add-modal btn btn-success btn-round" title="<?php echo e(trans('admin.add_user')); ?>">
                                         <?php echo e(trans('admin.add_user')); ?>
 
                                     </a>
-                                </li> -->
+                                </li>
                                 </li>
                                     <a href="javascript:void(0);" class=" deleteall-modal btn btn-danger btn-round" title="<?php echo e(trans('admin.deleteall')); ?>">
                                         <?php echo e(trans('admin.deleteall')); ?>
@@ -101,7 +101,7 @@
                                             </td> 
                                         <?php endif; ?>
                                         <td>
-                                            <!-- <a href="<?php echo e(route('edituser',$data->id)); ?>" class="btn btn-info waves-effect waves-float waves-green btn-round " title="<?php echo e(trans('admin.edit')); ?>"><i class="zmdi zmdi-edit"></i></a> -->
+                                            <a href="<?php echo e(route('edituser',$data->id)); ?>" class="btn btn-info waves-effect waves-float waves-green btn-round " title="<?php echo e(trans('admin.edit')); ?>"><i class="zmdi zmdi-edit"></i></a> 
 
                                             <a href="javascript:void(0);" class=" delete-modal btn btn-danger waves-effect waves-float waves-red btn-round " title="<?php echo e(trans('admin.delete')); ?>" data-id="<?php echo e($data->id); ?>" ><i class="zmdi zmdi-delete"></i></a>
                                         </td>

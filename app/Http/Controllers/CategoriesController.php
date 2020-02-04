@@ -55,7 +55,7 @@ class CategoriesController extends Controller
                 'title_en'  =>'required|max:190',           
                 'status'  =>'required',   
                 'cost'  =>'required',   
-                'days'  =>'required',   
+                'days'  =>'required',    
             ];
         }     
         else{

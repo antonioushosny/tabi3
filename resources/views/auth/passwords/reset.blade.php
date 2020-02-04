@@ -1,10 +1,79 @@
 @extends('layouts.auth')
+@section('style')
+<style>
+    .page-header-image
+    {
+        background-color: #364150!important;
+    }
+    body
+    {
+        {{-- font-family: 'DroidArabicKufiBold';   --}}
+    }
+    .card-plain
+    {
+        background-color:#eceef1;
+         /* padding: 20px; */
+    }
+    .form-control:active,.form-control:focus {
+        border: 1px solid #c3ccda;
+    }
+    .form-control {
+        background-color: #dde3ec;
+        height: 43px;
+        color: #8290a3;
+        border: 1px solid #dde3ec;
+    }
+    .btn.btn-primary{
+        background-color:#0046B0;
+        color: #FFF;
+        {{-- font-family: 'DroidArabicKufiBold';   --}}
+    }
+    /* .btn.btn-primary:hover{
+        color: #FFF;
+        background-color: #1f858e;
+        border-color: #18666d;
+    } */
+    h5>a.link
+    {
+        color:black!important;
+    }
+    span.input-group-addon
+    {
+        color:#cccccc !important;
+    }
+    .authentication .card-plain.card-plain .form-control,.authentication .card-plain.card-plain .form-control:focus
+    {
+        color: #000;
+    }
+    .invalid-feedback
+    {
+        color: #e73d4a;
+    }
+    body, .page-header{
+        background-color: #364150   !important;
+    }
+    .delete-border{
+        border-radius: 0px !important; 
+    }
+    .authentication .card-plain.card-plain .input-group-addon {
 
+        background-color: #dde3ec !important; 
+        border-color: rgb(255, 255, 255) !important;
+        color: #fff;
+
+    }
+    ::placeholder {
+        color: #a19ca3 !important;
+        {{-- font-family: 'DroidArabicKufiRegular'; --}}
+        text-align: right;
+    }
+</style>
+@endsection
 @section('content')
-<div class="page-header-image" style="background-image:url(../images/logo.jpeg); background-size: contain;"></div>
-<div class="container">
-    <div class="col-md-12 content-center">
-        <div class="card-plain">
+<div class="page-header-image"  ></div>
+<div class="container" style="padding :20px ;">
+    <div class="col-md-12 content-center card-plain" style="top: 50%;">
+        {{-- <div class="card-plain"> --}}
 
             <form action="{{ route('password.request') }}" method="POST" class="form" id="loginform" autocomplete="off">
                 @csrf
@@ -15,16 +84,16 @@
                         </div>
                     @endif
                     <div class="logo-container">
-                        {{-- <img src="{{ asset('images/logo.png') }}" alt=""> --}}
+                        <img src="{{ asset('images/logo.png') }}" alt="">
                     </div>
                     {{--  <h5>Enter Email Address</h5>  --}}
                 </div>
                 <div class="content">                                                
                     <div class="input-group input-lg">
                         <input type="hidden" id="code" name="code"  value="{{ $token }}"  required >
-                        <input type="text" id="email" name="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" placeholder="{{trans('admin.placeholder_email')}}" value="{{ old('email') }}"  required autofocus>
-                        <!-- <input type="text" class="form-control" placeholder="Enter User Name" value="{{ old('email') }}"  autofocus> -->
-                        <span class="input-group-addon">
+                        <input type="text" id="email" name="email" class="delete-border form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" placeholder="{{trans('admin.placeholder_email')}}" value="{{ old('email') }}"  required autofocus>
+                        <!-- <input type="text" class="delete-border form-control" placeholder="Enter User Name" value="{{ old('email') }}"  autofocus> -->
+                        <span class="input-group-addon delete-border">
                             <i class="zmdi zmdi-account-circle"></i>
                         </span>
                     </div>
@@ -35,9 +104,9 @@
                     @endif
 
                     <div class="input-group input-lg">
-                        <input type="password"  placeholder="{{trans('admin.placeholder_password')}}" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" >
+                        <input type="password"  placeholder="{{trans('admin.placeholder_password')}}" class="delete-border form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" >
                         <!-- <input type="password" placeholder="Password" class="form-control" /> -->
-                        <span class="input-group-addon">
+                        <span class="input-group-addon delete-border">
                             <i class="zmdi zmdi-lock"></i>
                         </span>
                         
@@ -49,8 +118,8 @@
                     @endif
                     
                     <div class="input-group input-lg">
-                    <input type="password" id="password-confirm" placeholder="{{trans('admin.placeholder_password_confirmation')}}" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password_confirmation" >
-                    <span class="input-group-addon">
+                    <input type="password" id="password-confirm" placeholder="{{trans('admin.placeholder_password_confirmation')}}" class="delete-border form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password_confirmation" >
+                    <span class="input-group-addon delete-border">
                         <i class="zmdi zmdi-lock"></i>
                     </span>
                     
@@ -72,67 +141,4 @@
 </div>
 
 @endsection
-
-{{--  @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Reset Password') }}</div>
-
-                <div class="card-body">
-                    <form method="POST" action="{{ route('password.request') }}">
-                        @csrf
-
-                        <input type="hidden" name="token" value="{{ $token }}">
-
-                        <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ $email ?? old('email') }}" required autofocus>
-
-                                @if ($errors->has('email'))
-                                    <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
-
-                                @if ($errors->has('password'))
-                                    <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Reset Password') }}
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection  --}}
+ 

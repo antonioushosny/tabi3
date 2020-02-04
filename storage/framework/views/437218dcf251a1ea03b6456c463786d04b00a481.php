@@ -4,17 +4,38 @@
 <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
+    <meta name="description" content="Tabi3 Project.">
 
     <title>:: <?php echo e(__('admin.project_name')); ?> ::</title>
     <!-- Favicon-->
     <!-- <link rel="icon" href="<?php echo e(asset('images/favicon.ico')); ?>" type="image/x-icon"> -->
-    <link rel="shortcut icon" href="<?php echo e(asset('images/Logo.PNG')); ?>" >
+    <link rel="shortcut icon" href="<?php echo e(asset('images/logo.png')); ?>" >
     <!-- Custom Css -->
     <link rel="stylesheet" href="<?php echo e(asset('assets/plugins/bootstrap/css/bootstrap.min.css')); ?>">
     <link rel="stylesheet" href="<?php echo e(asset('assets/css/main.css')); ?>">
     <link rel="stylesheet" href="<?php echo e(asset('assets/css/authentication.css')); ?>">
     <link rel="stylesheet" href="<?php echo e(asset('assets/css/color_skins.css')); ?>">
+    
+    <?php echo $__env->yieldContent('style'); ?>
+    <style>
+        ::-webkit-input-placeholder { /* Edge */
+            color: #a19ca3;
+            
+            text-align: left;
+        }
+
+        :-ms-input-placeholder { /* Internet Explorer 10-11 */
+        color: #a19ca3;
+        
+        text-align: left;  
+        }
+
+        ::placeholder {
+        color: #a19ca3;
+        
+        text-align: left; 
+        }
+    </style>  
 </head>
 
 <body class="theme-purple authentication sidebar-collapse">

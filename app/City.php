@@ -11,7 +11,7 @@ class City extends Model
     use Notifiable;
 
     protected $fillable = [
-        'name_ar','name_en','image','status','country_id'
+        'title_ar','title_en','image','status','country_id'
     ];
 
     public function country()

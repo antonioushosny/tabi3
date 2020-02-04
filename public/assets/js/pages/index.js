@@ -52,6 +52,54 @@ $('#linecustom4').sparkline('html',
     fillColor: '#f3e8f2',
     minSpotColor: true,
     maxSpotColor: true,
+    spotColor: '#e2a8ef',
+    spotRadius: 1
+});
+
+$('#linecustom5').sparkline('html',
+{
+    height: '35px',
+    width: '100%',
+    lineColor: '#e5d1e4',
+    fillColor: '#f3e8f2',
+    minSpotColor: true,
+    maxSpotColor: true,
+    spotColor: '#e228df',
+    spotRadius: 1
+});
+
+$('#linecustom6').sparkline('html',
+{
+    height: '35px',
+    width: '100%',
+    lineColor: '#e5d1e4',
+    fillColor: '#f3e8f2',
+    minSpotColor: true,
+    maxSpotColor: true,
+    spotColor: '#e2a7df',
+    spotRadius: 1
+});
+
+$('#linecustom7').sparkline('html',
+{
+    height: '35px',
+    width: '100%',
+    lineColor: '#e5d1e4',
+    fillColor: '#f3e8f2',
+    minSpotColor: true,
+    maxSpotColor: true,
+    spotColor: '#e2a8df',
+    spotRadius: 1
+});
+
+$('#linecustom8').sparkline('html',
+{
+    height: '35px',
+    width: '100%',
+    lineColor: '#e5d1e4',
+    fillColor: '#f3e8f2',
+    minSpotColor: true,
+    maxSpotColor: true,
     spotColor: '#e2a8df',
     spotRadius: 1
 });

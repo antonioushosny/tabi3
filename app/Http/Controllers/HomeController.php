@@ -5,7 +5,7 @@ use App\Order;
 use App\User;
 use App\Category;
 use App\Delegate;
-
+use App\Advertisement;
 use App\Doc;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -14,6 +14,8 @@ use App ;
 use DB ;
 use App\Notifications\Notifications;
 use Notification;
+use Jenssegers\Agent\Agent;
+use Redirect;
 class HomeController extends Controller
 {
     /**
@@ -23,7 +25,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth', ['except' => 'downloadApp']);
     }
 
     /**
@@ -41,9 +43,16 @@ class HomeController extends Controller
             $time  = date('H:i:s', strtotime($dt));
             
             $users        = User::where('role','user')->count('id');
-            $delegates    = Delegate::where('role','company')->count('id');
+            $iosusers        = User::where('role','user')->where('type',1)->count('id');
+            $androidusers        = User::where('role','user')->where('type','<>',1)->count('id');
+            $delegates    = Delegate::count('id');
             $departments      = Category::count('id');
+            $installAds      = Advertisement::where('install','1')->count('id');
+            $starAds      = Advertisement::where('star','1')->count('id');
 
+            $title = 'home' ;
+            return view('home',compact('lang','title','delegates','departments','users','iosusers','androidusers','installAds','starAds'));
+            
             $yesterday      = Carbon::now()->subDays(1)->toDateString();
             $one_week_ago   = Carbon::now()->subWeeks(1)->toDateString();
             $one_month_ago  = Carbon::now()->subMonths(1)->toDateString();
@@ -51,6 +60,7 @@ class HomeController extends Controller
 
             // return date('Y', strtotime($sex_year_ago)); 
            
+        
 
             $last_sex_years = [] ;
             $sales_for_year = [] ;
@@ -153,9 +163,7 @@ class HomeController extends Controller
             // }
             
             // return  $sales_for_year ;
-            $title = 'home' ;
-            return view('home',compact('lang','title','delegates','departments','users'));
-        
+          
     }
 
     public function settings($type)
@@ -202,11 +210,26 @@ class HomeController extends Controller
         else if($type == 'information'){
             $title = "informations" ;
             $type = "information" ;
+        } else if($type == 'install'){
+            $title = "install" ;
+            $type = "install" ;
+            $data = Doc::where('type',$type)->first() ;
+            return view('settings.ad',compact('title','lang','type','data')) ;
+        } else if($type == 'star'){
+            $title = "star" ;
+            $type = "star" ;
+            $data = Doc::where('type',$type)->first() ;
+            return view('settings.ad',compact('title','lang','type','data')) ;
+        } else if($type == 'uploade_video'){
+            $title = "uploade_video" ;
+            $type = "uploade_video" ;
+            $data = Doc::where('type',$type)->first() ;
+            return view('settings.ad',compact('title','lang','type','data')) ;
         }else{
             $title = "Terms" ;
             $type = "terms" ;
         }
-      
+        
         $data = Doc::where('type',$type)->first() ;
         return view('settings.add',compact('title','lang','type','data')) ;
     }
@@ -219,7 +242,7 @@ class HomeController extends Controller
                 'title_ar'  =>'required|max:190',           
                 'title_en'  =>'required|max:190',           
                 'type'  =>'required',           
-                'status'  =>'required',   
+                // 'status'  =>'required',   
             ];
             
         }     
@@ -231,7 +254,7 @@ class HomeController extends Controller
                 'title_en'  =>'required|max:190', 
                 'type'  =>'required',                
                 // 'country_id'  =>'required',     
-                'status'  =>'required'      
+                // 'status'  =>'required'      
             ];
         }
         
@@ -252,7 +275,7 @@ class HomeController extends Controller
 
         $doc->title_ar          = $request->title_ar ;
         $doc->title_en         = $request->title_en ;
-        $doc->status        = $request->status ;
+        $doc->status        = 'active' ;
         $doc->type        = $request->type ;
         $doc->disc_ar        = $request->desc_ar ;
         $doc->disc_en        = $request->desc_en ;
@@ -300,7 +323,7 @@ class HomeController extends Controller
 
     public function editprofile(Request $request)
     {
-        // return $request;
+        return $request;
         $user = User::where('id',$request->id)->first();
 
         if($request->has('name')){
@@ -339,7 +362,7 @@ class HomeController extends Controller
         }
         if($request->has('mobile')){
             $data=$this->validate(request(),
-            [
+            [ 
                 'mobile'  =>'digits:10',            
             ],[],[
                 'mobile' =>trans('admin.mobile'),
@@ -347,10 +370,7 @@ class HomeController extends Controller
             $user->mobile = $request->mobile;
             
         }
-        if($request->has('national_id')){
-            $user->national_id = $request->national_id;
-            // return $user;
-        }
+        
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $name = md5($image->getClientOriginalName() . time()) . "." . $image->getClientOriginalExtension();
@@ -392,6 +412,7 @@ class HomeController extends Controller
 
     public function send(Request $request)
     {
+        dd( $request) ;
         // $validatedData = $request->validate([
         //     'title' => 'required',
         //     'message' => 'required',
@@ -453,4 +474,32 @@ class HomeController extends Controller
         return redirect()->route('messages');
     }
      
+    public function downloadApp(Request $request)
+    {
+        $agent = new Agent();
+        $androidurl = "https://play.google.com/store/apps/details?id=com.hala.tabe3";
+        $iosurl = "https://apps.apple.com/us/app/t-be3-تبيع/id1485303433?ls=1";
+        if($agent->isMobile() || $agent->isTablet() ){
+            if($agent->isAndroidOS()){
+                return Redirect::to($androidurl);
+            }
+            else if($agent->is('iPhone') ){
+                return Redirect::to($iosurl);
+            }else{
+                return view('downloadApp');
+            }
+        }else{
+            // if( $agent->is('Windows')){
+            //     return Redirect::to($androidurl);
+            // }
+            // else if( $agent->is('OS X')  ){
+            //     return Redirect::to($iosurl);
+            // }
+           
+            return view('downloadApp');
+        }
+       
+    }
+
+    
 }

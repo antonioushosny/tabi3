@@ -5,10 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Delegate;
 use App\User;
+use App\Location;
+use App\DelegateLocation;
+
 use App\Notifications\Notifications;
 
 use Auth;
 use App;
+ 
 class DelegatesController extends Controller
 {
     /**
@@ -42,11 +46,17 @@ class DelegatesController extends Controller
             return view('unauthorized',compact('role','admin'));
         }
         $title = 'delegates';
-        return view('delegates.add',compact('title','lang'));
+        $alllocations = Location::all();
+        if($lang == 'ar'){
+            $locations = array_pluck($alllocations,'title_ar', 'id'); 
+        }else{
+            $locations = array_pluck($alllocations,'title_en', 'id');
+        }
+         return view('delegates.add',compact('title','locations','lang'));
     }
     public function store(Request $request)
     {
-        // return $request ;
+       
         if($request->id ){
             $rules =
             [
@@ -74,10 +84,11 @@ class DelegatesController extends Controller
         }
 
 
-        // return $request ;
+       
         if($request->id ){
             $delegate = Delegate::find( $request->id );
- 
+          
+            $locations = DelegateLocation::where('delegate_id',$request->id )->delete();
             if($request->mobile != $delegate->mobile){
                 $rules =
                 [       
@@ -94,13 +105,11 @@ class DelegatesController extends Controller
                 $imageName =  $delegate->image; 
                 \File::delete(public_path(). '/img/' . $imageName);
             }
-             
+            
         }
         else{
             $delegate = new Delegate ;
-
-             
-          
+        }
             $delegate->name          = $request->name ;
              $delegate->mobile        = $request->mobile ;
     
@@ -116,6 +125,18 @@ class DelegatesController extends Controller
             }
 
             $delegate->save();
+            // return $request ;
+            if($request->locations && sizeof($request->locations) > 0) {
+                //  return $request->locations ;
+                foreach($request->locations as $loc){
+                    $location  = new  DelegateLocation ;
+                    $location->location_id  = $loc ;
+                    $location->delegate_id  = $delegate->id ;
+                    $location->save();
+                }
+               
+            }
+            // return $request ;
             return response()->json($delegate);
 
             $lang = App::getlocale();
@@ -126,7 +147,7 @@ class DelegatesController extends Controller
             return view('delegates.index',compact('admins','title','lang'));
 
             return response()->json($delegate);
-        }
+        
 
     }
 
@@ -145,10 +166,22 @@ class DelegatesController extends Controller
             return view('unauthorized',compact('role','admin'));
         }
         $title = 'delegates';
-        
-        $data = Delegate::where('id',$id)->orderBy('id', 'DESC')->first();
-        // return $admin ; 
-        return view('delegates.add',compact('data','title','lang'));
+        $alllocations = Location::all();
+        if($lang == 'ar'){
+            $locations = array_pluck($alllocations,'title_ar', 'id'); 
+        }else{
+            $locations = array_pluck($alllocations,'title_en', 'id');
+        }
+        $data = Delegate::where('id',$id)->with('locations')->orderBy('id', 'DESC')->first();
+        $delegatelocations = DelegateLocation::where('delegate_id',$id)->select('location_id')->get();
+        $delegatelocationss = [];
+        $i = 0;
+        foreach($delegatelocations as $loc){
+            $delegatelocationss[$i] = $loc->location_id ;
+            $i ++ ;
+        }
+        // return $delegatelocationss ; 
+        return view('delegates.add',compact('data','locations','delegatelocationss','title','lang'));
     }
 
     public function update(Request $request, $id)

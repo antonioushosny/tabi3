@@ -47,7 +47,7 @@
                                 {!! Form::hidden('id',!isset($data->id)?null:$data->id ,['class'=>'form-control show-tick']) !!}
                             </div>
                             
-                            
+                           
                             <div class="form-group form-float">
                                 <input type="text" value="{{ !isset($data->name)?'':$data->name }}" class="form-control" placeholder="{{__('admin.placeholder_name')}}" name="name" required>
                                 <label id="name-error" class="error" for="name" style="">  </label>
@@ -57,7 +57,11 @@
                                 <input type="text" value="{{ !isset($data->mobile)?'':$data->mobile }}" class="form-control" placeholder="{{__('admin.placeholder_mobile')}}" name="mobile" onkeypress="isNumber(event); " required>
                                 <label id="mobile-error" class="error" for="mobile" style="">  </label>
                             </div>
-                           
+                            <div class= "form-group form-float">  
+                                {!! Form::select('locations[]',$locations
+                                    ,!isset($delegatelocationss)?'':$delegatelocationss,['class'=>'form-control show-tick' ,'placeholder' =>trans('admin.locations'),'required','multiple'=>true]) !!}
+                                    <label id="locations-error" class="error" for="locations" style="">  </label>
+                            </div>
                             <!-- for image  -->
                             <div class="form-group form-float row"  >
                                 {{--  for image  --}}

@@ -17,7 +17,7 @@ class Controller extends BaseController
     {
         $path_to_fcm='https://fcm.googleapis.com/fcm/send';
 
-        $server_key="AAAAOqEkjhQ:APA91bFYjZKAD2y2fDA7RYZpVehQidSATxZAJY2-VaQqwSIdRlfUkF-JDAmaYxps2YbsQnsgE94PbQVyIWsBULlt2_2u4rG2ZVRke7qe-QN3PiazIcntJrL0PGCU1AlUcBNxv0K32xvo";
+        $server_key="AAAAVuQoqWk:APA91bEBQsCNDcgVUsRCpAzzmR9_RgK6bq3XKIzeTWZPPMydDr8qps8xV9uoJ1wSw2kt5ZkhbSF10tDjHBVF2q0pZfwWLqoeFFtQskhGZ4NuviNG0SGiBdINOuWx8MYgqLr3Z9shhGZl";
         $key = $device_id;
         $message = $msg;
         $title = $title ;
@@ -90,16 +90,16 @@ class Controller extends BaseController
         date_default_timezone_set('Africa/Cairo');
         $path_to_fcm='https://fcm.googleapis.com/fcm/send';
 
-        $server_key="AAAAOqEkjhQ:APA91bFYjZKAD2y2fDA7RYZpVehQidSATxZAJY2-VaQqwSIdRlfUkF-JDAmaYxps2YbsQnsgE94PbQVyIWsBULlt2_2u4rG2ZVRke7qe-QN3PiazIcntJrL0PGCU1AlUcBNxv0K32xvo";
+        $server_key="AAAAVuQoqWk:APA91bEBQsCNDcgVUsRCpAzzmR9_RgK6bq3XKIzeTWZPPMydDr8qps8xV9uoJ1wSw2kt5ZkhbSF10tDjHBVF2q0pZfwWLqoeFFtQskhGZ4NuviNG0SGiBdINOuWx8MYgqLr3Z9shhGZl";
 
         $key = $device_id; 
         $user = User::where('device_token', $device_id)->first();
-        if($user && $user->lang == 'ar'){
-            $message = $msg['ar'];
-            $title = $title['ar'] ;
-        }else{
+        if($user && $user->lang == 'en'){
             $message = $msg['en'];
             $title = $title['en'] ;
+        }else{
+            $message = $msg['ar'];
+            $title = $title['ar'] ;
         }
         // $message = $msg;
         // $title = $title;
@@ -139,6 +139,29 @@ class Controller extends BaseController
        curl_close($curl_session);
 
         // dd($result) ;
+    }
+
+    protected function sendWhatsappMessage($phone ,$body)
+    {
+        // $phone = "0201207908327";
+        // $body = "WhatsApp API on chat-api.com works good";
+        $url = "https://eu30.chat-api.com/instance95466/sendMessage?token=99tn14ud01z6jsrb";
+        $data = array('phone' => $phone, 'body' => $body,);
+        $options = array(
+            'http' => array(
+                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method'  => 'POST',
+                'content' => http_build_query($data)
+            )
+        );
+        $context  = stream_context_create($options);
+        $result = file_get_contents($url, false, $context);
+        if ($result === FALSE) {
+            return 'error' ;
+        }
+        // return $result ; 
+        // var_dump($result);
+        // return 'done' ;
     }
     // end send notification 
     public function AllSeen(){

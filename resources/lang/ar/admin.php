@@ -76,7 +76,13 @@ return [
         'contactsm'                     => 'تواصل معنا' ,
         'messages'                      => 'ارسال رسائل' , 
         'salesreports'                  => 'تقارير المبيعات',
-        
+        'install_ads'                   => ' اعلانات مثبتة',
+        'star_ads'                      => 'اعلانات مميزة' ,
+        'uploade_video'                 => 'تحميل فيديو',
+        'install'                       => 'اعلانات مثبتة',
+        'star'                          => 'اعلانات مميزة',
+
+
     //end sidebar
 
     //inputs 
@@ -183,13 +189,19 @@ return [
     //end countries page
     //cities page 
         'cities'                       => ' المدن', 
-        'city'                       => ' المدينة', 
-        'city_id'                       => ' المدينة', 
+        'city'                         => ' المدينة', 
+        'city_id'                      => ' المدينة', 
         'add_citie'                    => ' إضافة مدينة'  ,
         'edit_citie'                   => ' تعديل مدينة'  ,
         'delete_citie'                 =>  ' حذف مدينة',
     //end cities page
-
+   //locations page 
+        'locations'                       => ' المواقع ', 
+        'location'                        => ' الموقع', 
+        'add_location'                    =>  ' أضافة موقع '  ,
+        'edit_location'                   => '  تعديل موقع '  ,
+        'delete_location'                 =>  '  حذف موقع ',
+    //end locations page
     //areas page 
         'areas'                       => ' المناطق', 
         'area'                       => ' المنطقة', 
@@ -200,6 +212,7 @@ return [
 
     //users page 
         'users'                         => ' المستخدمين ',
+        'user'                      => '  المستخدم ',
         'add_user'                      => ' أضافة مستخدم ',
         'edit_user'                     => ' تعديل مستخدم ',
         'delete_user'                   => '  حذف مستخدم',
@@ -271,19 +284,16 @@ return [
         'placeholder_number'           => 'من فضلك ادخل  العدد',
     //end delegates page
 
-    //packages page 
-        'packages'                       => '  الباقات ', 
-        'package'                        => '  باقة ', 
-        'package_id'                     => '  باقة ', 
-        'add_package'                    => ' اضافة باقة'  ,
-        'edit_package'                   => ' تعديل باقة'  ,
-        'delete_package'                 =>  ' حذف مركز'  ,
-        'choose_delegate'               => 'اختر المندوب',
-        'choose_company'               => 'اختر المندوب',
-        'choose_package'                 => ' اختر  الباقة   ',
-        'choose_page'                 => ' اختر الصفحة   ',
+    //payments page 
+        'payments'                       => '  المدفوعات ', 
+        'payment'                        => '  عملية دفع ', 
+        'payment_id'                     => '  عملية دفع  ', 
+        'add_payment'                    => ' اضافة عملية دفع '  ,
+        'edit_payment'                   => ' تعديل عملية دفع '  ,
+        'delete_payment'                 =>  ' حذف عملية دفع '  ,
+        'amount'                         => 'المبلغ' ,
+        'method'                         => 'طريقة الدفع' ,
         'choose_type'                 => ' اختر  النوع   ',
-        'page'                 => '  الصفحة   ',
         'start_date'                 => 'تاريخ البدء',
         'expiry_date'                 => 'تاريخ الإنتهاء ',
         'type'                 => '   النوع   ',
@@ -292,11 +302,8 @@ return [
         'weekly'                 => 'اسبوعية',
         'monthly'                 => 'شهرية',
         'annual'                 => 'سنوية',
-        'offic'                 => 'مكتب',
-        'box'                 => 'صندوق',
-        'comanies'                 => 'المندوبين',
-        'informations'                 => 'معلومات تهمك',
-    //end packages page
+       
+    //end payments page
 
     //categories page 
         'categories'                       => ' الفئات', 
@@ -378,14 +385,38 @@ return [
         'add_advertisement'             => '  اضافة اعلان'  ,
         'edit_advertisement'            => ' تعديل اعلان '  ,
         'delete_advertisement'          => ' حذف اعلان  ',
-        'coming'                        => ' القادمة ',
-        'current'                       => ' الحالية ',
-        'previous'                      => ' السابقة ',
-        'start_date'                    => ' تاريخ البداية ',
+        'show_advertisement'            => ' عرض اعلان ',
+        'cost_advertising'              => ' تكلفة الاعلان ',
+        'cost_benefits'                 => ' تكلفة المميزت ',
+         'start_date'                    => ' تاريخ البداية ',
         'end_date'                      => ' تاريخ الانتهاء ',
+
+        'allow_messages'                => 'السماح بالرسائل' ,
+        'numbers'                       => 'الارقام' ,
+        'allow_call'                    => 'السماح بالاتصال' ,
+        'not_disturb'                   => 'عد الازعاج',
+        'category'                      => 'التصنيف',
+        'subcategory'                   => ' التصنيف الفرعي  ',
+        'disc'                          => 'الوصف',
+        'video'                         => 'الفيديو' ,
+        'yes'                           => 'نعم',
+        'no'                            => 'لا',
+        'starAds'                       => 'الاعلانات المميزة',
+        'installAds'                       => 'الاعلانات الثابتة',
+        'iosusers'                       => 'مستخدمين IOS ',
+        'androidusers'                       => 'مستخدمين ANDROID ',
         'time'                          => 'وقت الظهور',
         'placeholder_time'              => 'ادخل وقت الظهور بالثواني',
     // end advertisements page 
+
+     // advertisingAdvertisements page 
+        'advertisingAdvertisements'                => ' الاعلانات الدعائية', 
+        'add_advertisingAdvertisement'             => '  اضافة اعلان'  ,
+        'edit_advertisingAdvertisement'            => ' تعديل اعلان '  ,
+        'delete_advertisingAdvertisement'          => ' حذف اعلان  ',
+        'show_advertisingAdvertisement'            => ' عرض اعلان ',
+      // end advertisingAdvertisements page 
+
     // profileadvertisements page 
         'profileadvertisements'                => 'إعلانات خاصة' ,
         'add_profileadvertisement'             => '  اضافة اعلان'  ,

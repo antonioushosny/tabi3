@@ -71,7 +71,11 @@ return [
         'contactsm'                     => 'Connect us' ,
         'messages'                      => 'Messages' ,
         'salesreports'                  => 'Sales Reports',
-
+        'install_ads'                   => 'Install Ads',
+        'star_ads'                      => 'Star Ads' ,
+        'uploade_video'                 => 'Upload Video',
+        'install'                       => 'Install Ads',
+        'star'                          => 'Star Ads' ,
     //end sidebar
  
     //inputs 
@@ -184,6 +188,7 @@ return [
 
     //users page 
         'users'                         => ' users ',
+        'user'                      => ' User',
         'add_user'                      => ' Add User',
         'edit_user'                     => ' Edit User',
         'delete_user'                   => ' Delete User',
@@ -212,7 +217,13 @@ return [
         'edit_citie'                    => '  Edit City'  ,
         'delete_citie'                  =>  '  Delete City',
     //end cities page
-
+    //locations page 
+        'locations'                       => ' locations', 
+        'location'                       => ' Location', 
+        'add_location'                    =>  ' Add Location'  ,
+        'edit_location'                   => '  Edit Location'  ,
+        'delete_location'                 =>  '  Delete Location',
+    //end locations page
     //areas page 
         'areas'                         => ' Areas', 
         'area'                          => ' Area', 
@@ -257,18 +268,15 @@ return [
         'placeholder_number'           => 'Enter Number  ',
     //end companies page
 
-    //packages page 
-        'packages'                       => '   Packages', 
-        'package'                        => '   Package', 
-        'add_package'                    => ' Add Package'  ,
-        'edit_package'                   => ' Edit Package'  ,
-        'delete_package'                 =>  ' Delete Package'  ,
-        'choose_companie'                => 'Choose company',
-        'choose_company'                => 'Choose company',
-        'choose_package'                 => ' Choose  package ',
-        'choose_page'                   => ' Choose  page ',
-        'choose_type'                   => ' Choose  Type ',
-        'page'                          => 'page ',
+    //payments page 
+        'payments'                       => '   payments', 
+        'payment'                        => '   payment', 
+        'add_payment'                    => ' Add payment'  ,
+        'edit_payment'                   => ' Edit payment'  ,
+        'delete_payment'                 =>  ' Delete payment'  ,
+        'choose_payment'                 => ' Choose  payment ',
+        'amount'                         => 'Amount' ,
+        'method'                         => 'Method' ,
         'start_date'                 => 'start date',
         'expiry_date'                 => 'expiry date ',
         'type'                          => ' Type ',
@@ -277,11 +285,8 @@ return [
         'weekly'                 => 'Weekly',
         'monthly'                 => 'Monthly',
         'annual'                 => 'Annual',
-        'offic'                 => 'Offic',
-        'box'                 => 'Box',
-        'informations'                 => 'Informations',
         
-    //end packages page
+    //end payments page
 
     //categories page 
         'categories'                       => ' Categories', 
@@ -363,13 +368,36 @@ return [
         'add_advertisement'             => '  Add Advertisement '  ,
         'edit_advertisement'            => '  Edit Advertisement '  ,
         'delete_advertisement'          => '  Delete Advertisement '  ,
-        'coming'                        => ' Coming ',
-        'current'                       => ' Current ',
-        'previous'                      => ' Previous ',
+        'show_advertisement'            => '  Show Advertisement '  ,
+
+
+        'cost_advertising' => 'Ad Cost',
+        'cost_benefits' => 'Cost Benefits',
         'start_date'                    => 'Start Date',
         'end_date'                      => ' end_date',
- 
+        'allow_messages'                => 'allow messages' ,
+        'numbers'                       => 'Numbers' ,
+        'allow_call'                    => 'allow Call' ,
+        'not_disturb'                   => 'not Disturb',
+        'category'                      => 'Category',
+        'subcategory'                   => 'sub Category ',
+        'disc'                          => 'Description',
+        'video'                         => 'Video' ,
+        'yes'                           => 'Yes',
+        'no'                            => 'No',
+        'starAds'                       => 'star ads',
+        'installAds'                       => 'install ads',
+        'iosusers'                       => 'IOS users',
+        'androidusers'                       => 'ANDROID users',
     // end advertisements page 
+
+    // advertisingAdvertisements page 
+        'advertisingAdvertisements'                => ' advertising advertisements', 
+        'add_advertisingAdvertisement'             => '  Add advertisement '  ,
+        'edit_advertisingAdvertisement'            => '  Edit advertisement '  ,
+        'delete_advertisingAdvertisement'          => '  Delete advertisement '  ,
+        'show_advertisingAdvertisement'            => '  Show advertisement '  ,
+    // end advertisingAdvertisements page 
 
     // profileadvertisements page 
      'profileadvertisements'                => 'special advertisements', 

@@ -42,5 +42,13 @@ return [
         'storage_bucket' => "elsalamapp.appspot.com",
         'messagingSenderId'=>  "844700117021",
     ],
-
+    'twilio' => [
+        'sid' => env('TWILIO_AUTH_SID'),
+        'token' => env('TWILIO_AUTH_TOKEN'),
+        'whatsapp_from' => env('TWILIO_WHATSAPP_FROM')
+      ],
+      'chatapi' => [
+        'token'          => env('CHATAPI_TOKEN', ''),
+        'api_url'       => env('CHATAPI_URL', ''),
+    ],
 ];

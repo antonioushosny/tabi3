@@ -104,17 +104,7 @@
                                 <div class= "form-group form-float">
                                     {!! Form::hidden('id',!isset($data->id)?null:$data->id ,['class'=>'form-control show-tick']) !!}
                                 </div>
-                                
-                                <div class="form-group">
-                                    <div class="radio inlineblock m-r-20">
-                                        <input type="radio" name="status" id="active" class="with-gap" value="active" checked > 
-                                        <label for="active">{{__('admin.active')}}</label>
-                                    </div>                                 
-                                    <div class="radio inlineblock">
-                                        <input type="radio" name="status" id="not_active" class="with-gap" value="not_active" <?php echo ( isset($data->status) && $data->status == 'not_active') ? "checked=''" : ""; ?> >
-                                        <label for="not_active">{{__('admin.not_active')}}</label>
-                                    </div>
-                                </div>
+                               
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                 <button class="btn btn-raised btn-primary btn-round waves-effect" type="submit">{{__('admin.save')}}</button>
                             </form>

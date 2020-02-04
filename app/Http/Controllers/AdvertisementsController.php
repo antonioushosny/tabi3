@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Notifications\emailnotify;
-use App\Package;
+use App\Category;
 use App\User;
 use App\Advertisement;
 use Carbon\Carbon;
@@ -23,27 +23,37 @@ class AdvertisementsController extends Controller
     {
      
     }
-    public function index()
+
+    public function index(Request $request)
     {
         $lang = App::getlocale();
-        if(Auth::user()->role != 'admin' && Auth::user()->role != 'company' ){
+        if(Auth::user()->role != 'admin'  ){
             $role = 'admin';
             return view('unauthorized',compact('role','admin'));
         }
         $title ='advertisements' ;
-        if(Auth::user()->role == 'admin'){
-            $advertisements = Advertisement::where('type' ,'<>', 'profile')->orderBy('id', 'DESC')->get();
-        }else{
-            $advertisements = Advertisement::where('user_id',Auth::user()->id)->where('type' ,'<>', 'profile')->orderBy('id', 'DESC')->get();
+        $advertisements = Advertisement::with('user')->whereHas('user') ;
+        if($request->user_id){
+            $advertisements->where('user_id',$request->user_id) ;
         }
-        
+        if($request->category_id){
+            $advertisements->where('category_id',$request->category_id) ;
+        }
+        if($request->from){
+            $advertisements->where('expiry_date','>=',$request->from) ;
+        }
+        if($request->to){
+            $advertisements->where('expiry_date','=<',$request->to) ;
+        }
+        $advertisements = $advertisements->orderBy('id', 'DESC')->get();
         // return $admins ; 
         return view('advertisements.index',compact('advertisements','title','lang'));
     }
+
     public function indexprofile()
     {
         $lang = App::getlocale();
-        if(Auth::user()->role != 'admin' && Auth::user()->role != 'company' ){
+        if(Auth::user()->role != 'admin'  ){
             $role = 'admin';
             return view('unauthorized',compact('role','admin'));
         }
@@ -53,35 +63,35 @@ class AdvertisementsController extends Controller
         }else{
             $profileadvertisements = Advertisement::where('user_id',Auth::user()->id)->where('type' , 'profile')->orderBy('id', 'DESC')->get();
         }
-        
         // return $admins ; 
         return view('profileadvertisements.index',compact('profileadvertisements','title','lang'));
     }
+
     public function add()
     {
         $lang = App::getlocale();
-        if(Auth::user()->role != 'admin' && Auth::user()->role != 'company' ){
+        if(Auth::user()->role != 'admin'  ){
             $role = 'admin';
             return view('unauthorized',compact('role','admin'));
         }
         $title = 'advertisements';
-        $allcompanies = User::where('status','active')->where('role','company')->get();
-        $companies = array_pluck($allcompanies,'name', 'id');
-        
-        $allpackages = Package::where('status','active')->get();
+        $allusers = User::where('status','active')->where('role','user')->get();
+        $users = array_pluck($allusers,'name', 'id');
+        $allcategories = Category::where('status','active')->get();
         if($lang == 'ar'){
-            $packages = array_pluck($allpackages,'title_ar', 'id');
+            $categories = array_pluck($allcategories,'title_ar', 'id');
         }
         else{
-            $packages = array_pluck($allpackages,'title_en', 'id');
+            $categories = array_pluck($allcategories,'title_en', 'id');
         }
-        return view('advertisements.add',compact('title','packages','companies','lang'));
+ 
+        return view('advertisements.add',compact('title','categories','users','lang'));
     }
 
     public function addprofile()
     {
         $lang = App::getlocale();
-        if(Auth::user()->role != 'admin' && Auth::user()->role != 'company' ){
+        if(Auth::user()->role != 'admin'   ){
             $role = 'admin';
             return view('unauthorized',compact('role','admin'));
         }
@@ -90,9 +100,10 @@ class AdvertisementsController extends Controller
         $companies = array_pluck($allcompanies,'name', 'id');
         return view('profileadvertisements.add',compact('title','companies','lang'));
     }
+
     public function store(Request $request)
     {
-        
+        // dd($request)  ; 
         if($request->id ){
             $rules =
             [
@@ -229,6 +240,7 @@ class AdvertisementsController extends Controller
         return response()->json($advertisement);
 
     }
+
     public function storeprofile(Request $request)
     {
         
@@ -315,8 +327,16 @@ class AdvertisementsController extends Controller
 
     public function show($id)
     {
-        //
+        $lang = App::getlocale();
+        if(Auth::user()->role != 'admin'  ){
+            $role = 'admin';
+            return view('unauthorized',compact('role','admin'));
+        }
+        $title = 'advertisements';
+        $data = Advertisement::where('id',$id)->orderBy('id', 'DESC')->first();
+        return view('advertisements.show',compact('data','title','lang'));
     }
+
     public function packagedetail(Request $request, $id) {
         // return $id ;
         if ($request->ajax()) {
@@ -329,7 +349,7 @@ class AdvertisementsController extends Controller
     public function edit($id)
     {
         $lang = App::getlocale();
-        if(Auth::user()->role != 'admin' && Auth::user()->role != 'company' ){
+        if(Auth::user()->role != 'admin'  ){
             $role = 'admin';
             return view('unauthorized',compact('role','admin'));
         }
@@ -352,7 +372,7 @@ class AdvertisementsController extends Controller
     public function editprofile($id)
     {
         $lang = App::getlocale();
-        if(Auth::user()->role != 'admin' && Auth::user()->role != 'company' ){
+        if(Auth::user()->role != 'admin'   ){
             $role = 'admin';
             return view('unauthorized',compact('role','admin'));
         }
@@ -370,11 +390,10 @@ class AdvertisementsController extends Controller
       
     }
 
-
     public function destroy($id)
     {
        
-        if(Auth::user()->role != 'admin' && Auth::user()->role != 'company' ){
+        if(Auth::user()->role != 'admin' ){
             $role = 'admin';
             return view('unauthorized',compact('role','admin'));
         }
@@ -395,4 +414,37 @@ class AdvertisementsController extends Controller
         }
         return response()->json($request->ids);
     }
+
+    public function changeStatus($id)
+    {
+       
+        if(Auth::user()->role != 'admin' ){
+            $role = 'admin';
+            return view('unauthorized',compact('role','admin'));
+        }
+        $ad = Advertisement::find( $id );
+        if($ad->status == 'active'){
+            $ad->status = 'not_active';
+        }else{
+            $ad->status = 'active';
+            $client = User::find($ad->user_id) ;
+            if($client){
+                $msg =  [
+                    'en' => " Your ad has been accepted" ,
+                    'ar' => " لقد تم قبول اعلانك" ,
+                ]; 
+                $type = "ads";
+                $client->notify(new Notifications($msg,$type ));
+                $device_id = $client->device_token;
+                if($device_id){
+                    $this->notification($device_id,$msg,$msg,$id);
+                }
+            }
+        }
+        $ad->save();
+        return redirect()->back()->with('success','status changed');
+         
+    }
+
+    
 }

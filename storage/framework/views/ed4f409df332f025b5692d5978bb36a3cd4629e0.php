@@ -50,8 +50,8 @@
                                 </div>
                                 <div class="col-lg-4 col-md-3 col-sm-12 text-center">
                                     <div class="body">
-                                        <a href="<?php echo e(route('companies')); ?>"><h2 class="number count-to m-t-0 m-b-5" data-from="0" data-to="<?php echo e($companies); ?>" data-speed="2000" data-fresh-interval="700"><?php echo e($companies); ?></h2></a>
-                                        <p class="text-muted "><?php echo e(trans('admin.companies')); ?></p>
+                                        <a href="<?php echo e(route('delegates')); ?>"><h2 class="number count-to m-t-0 m-b-5" data-from="0" data-to="<?php echo e($delegates); ?>" data-speed="2000" data-fresh-interval="700"><?php echo e($delegates); ?></h2></a>
+                                        <p class="text-muted "><?php echo e(trans('admin.delegates')); ?></p>
                                         <span id="linecustom2">2,9,5,5,8,5,4,2,6</span>
                                     </div>
                                 </div>
@@ -60,6 +60,45 @@
                                         <a href="<?php echo e(route('departments')); ?>"><h2 class="number count-to m-t-0 m-b-5" data-from="0" data-to="<?php echo e($departments); ?>" data-speed="2000" data-fresh-interval="700"><?php echo e($departments); ?></h2></a>
                                         <p class="text-muted"><?php echo e(trans('admin.departments')); ?></p>
                                         <span id="linecustom3">1,5,3,6,6,3,6,8,4,2</span>
+                                    </div>
+                                </div>
+                                
+                            <?php else: ?> 
+                               
+                            
+                            <?php endif; ?>
+                        </div>
+
+                        <div class="row clearfix">
+                            <?php if(Auth::user()->role == 'admin'): ?>
+                                <div class="col-lg-3 col-md-3 col-sm-12 text-center">
+                                    <div class="body">
+                                        <a href="<?php echo e(route('users')); ?>">
+                                        <h2 class="number count-to m-t-0 m-b-5" data-from="0" data-to="<?php echo e($iosusers); ?>" data-speed="1000" data-fresh-interval="700"><?php echo e($iosusers); ?></h2></a>
+                                        <p class="text-muted"><?php echo e(trans('admin.iosusers')); ?></p>
+                                        <span id="linecustom4">1,4,2,6,5,2,3,8,5,2</span>
+                                        
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-12 text-center">
+                                    <div class="body">
+                                        <a href="<?php echo e(route('users')); ?>"><h2 class="number count-to m-t-0 m-b-5" data-from="0" data-to="<?php echo e($androidusers); ?>" data-speed="2000" data-fresh-interval="700"><?php echo e($androidusers); ?></h2></a>
+                                        <p class="text-muted "><?php echo e(trans('admin.androidusers')); ?></p>
+                                        <span id="linecustom5">2,9,5,5,8,5,4,2,6</span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-12 text-center">
+                                    <div class="body">
+                                        <a href="<?php echo e(route('advertisements')); ?>"><h2 class="number count-to m-t-0 m-b-5" data-from="0" data-to="<?php echo e($installAds); ?>" data-speed="2000" data-fresh-interval="700"><?php echo e($installAds); ?></h2></a>
+                                        <p class="text-muted"><?php echo e(trans('admin.installAds')); ?></p>
+                                        <span id="linecustom6">1,5,3,6,6,3,6,8,4,2</span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-12 text-center">
+                                    <div class="body">
+                                        <a href="<?php echo e(route('advertisements')); ?>"><h2 class="number count-to m-t-0 m-b-5" data-from="0" data-to="<?php echo e($starAds); ?>" data-speed="2000" data-fresh-interval="700"><?php echo e($starAds); ?></h2></a>
+                                        <p class="text-muted"><?php echo e(trans('admin.starAds')); ?></p>
+                                        <span id="linecustom7">1,5,3,6,6,3,6,8,4,2</span>
                                     </div>
                                 </div>
                                 
