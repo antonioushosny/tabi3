@@ -63,6 +63,8 @@ return [
         'operations'                    => 'Operations',
         'resendlink'                    => 'Sorry, you can not complete the task. Try again' ,
         'notfoundarea'                  => 'There are no areas for this city',
+        'images'                        => 'Images',
+        'add_image'                     =>'Add image',
         
     //end public 
 
@@ -464,6 +466,7 @@ return [
         'Policy'                        =>' Policy' ,
         'add_setting'                   => 'Add Form',
         'edit_setting'                  => 'Edit Form',
+        'numberFreeAds'                 => 'Number Free Ads Monthly',
     //end settings and static pages  
 
     'You cannot access this page!'      => 'You cannot access this page!' ,

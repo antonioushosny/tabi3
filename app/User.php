@@ -65,4 +65,11 @@ class User extends Authenticatable
     {
         return $this->belongsTo('App\Country','country_id');
     }
+
+    public function followers()
+    {
+        return $this->hasMany('App\Follower','follower_id');
+    }
+
+    
 }

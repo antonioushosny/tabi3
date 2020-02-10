@@ -200,6 +200,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/settings/{type}', 'HomeController@settings')->name('settings');
     Route::get('/settings/add/{type}', 'HomeController@add')->name('addsetting');
     Route::post('/settings/store', 'HomeController@store')->name('storesetting');
+    Route::post('/settings/ststoreFreeAdsore', 'HomeController@storeFreeAds')->name('storeFreeAds');
     Route::get('/settings/edit/{type}', 'HomeController@edit')->name('editsetting');
     Route::put('/settings/edit/{id}', 'HomeController@editsettings')->name('editsettings');
     Route::get('/settings/delete/{id}', 'HomeController@destroy')->name('destroysetting');

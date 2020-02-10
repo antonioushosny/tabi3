@@ -40,6 +40,8 @@ Route::post('MyFavorites', 'ApiController@MyFavorites')->middleware('localizatio
 Route::post('MyViews', 'ApiController@MyViews')->middleware('localization');
 Route::post('Like', 'ApiController@Like')->middleware('localization');
 Route::post('View', 'ApiController@View')->middleware('localization');
+Route::post('Visit', 'ApiController@Visit')->middleware('localization');
+Route::post('Follow', 'ApiController@Follow')->middleware('localization');
 
 Route::post('EditProfile', 'ApiController@EditProfile')->middleware('localization');
 Route::post('CompleteOrder', 'ApiController@CompleteOrder')->middleware('localization');

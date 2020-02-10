@@ -33,6 +33,7 @@ use App\Service;
 use App\Rate;
 use App\Nationality;
 use App\Reason;
+use App\Follower;
 
 use Carbon\Carbon;
 use App\Notifications\Notifications;
@@ -78,7 +79,6 @@ class ApiController extends Controller
      */
     public function __construct()
     {
-        
         date_default_timezone_set('Asia/Riyadh');
         $this->middleware('guest')->except('logout');
     }
@@ -202,6 +202,7 @@ class ApiController extends Controller
                     // $adds['video'] = asset('img/').'/'. $ad[0]->video ;
                     $adds['id'] = $ad[0]->id ;
                     $adds['title'] = $ad[0]->title ;
+                    $adds['number'] = $ad[0]->numbers ;
                     $adds['views'] = $ad[0]->views ;
                     $adds['favorites'] = $ad[0]->favorites ;
                     $adds['likes'] = $ad[0]->likes ;
@@ -261,6 +262,7 @@ class ApiController extends Controller
                         foreach($star_adds as $ad){
                             $star_addss[$j]['id'] = $ad->id ;
                             $star_addss[$j]['title'] = $ad->title ;
+                            $star_addss[$j]['number'] = $ad->numbers ;
                             $images = json_decode($ad->images) ;
                             // return  $images ;
                             if(sizeof($images) > 0){
@@ -406,7 +408,8 @@ class ApiController extends Controller
             if(sizeof($ads) > 0){
                 foreach($ads as $ad){
                     $adds[$i]['id'] = $ad->id ;
-                    $adds[$i]['title'] = $ad->title ;
+                    $adds[$i]['title'] = $ad->title ; 
+                    $adds[$i]['number'] = $ad->numbers ; 
                     $images = json_decode($ad->images) ;
                     // return  $images ;
                     if(sizeof($images) > 0){
@@ -935,6 +938,9 @@ class ApiController extends Controller
                 $users['mobileCode']= $user->mobile_code ;
                 $users['address']   = $user->address ;
                 $users['gender']   = $user->gender ;
+                $users['visitors']   = $user->visitors ;
+                $users['followers']   = count($user->followers) ;
+                $users['created_at']   = $user->created_at ;
                 if($user->country){
                     $users['country_id']        = $user->country->id ;
                     if($lang == 'ar'){
@@ -1047,6 +1053,9 @@ class ApiController extends Controller
                     $users['mobileCode'] = $user->mobile_code ;
                     $users['address'] = $user->address ;
                     $users['gender']   = $user->gender ;
+                    $users['visitors']   = $user->visitors ;
+                    $users['followers']   = count($user->followers) ;
+                    $users['created_at']   = $user->created_at ;
 
                     if($user->country){
                         $users['country_id'] = $user->country->id ;
@@ -1196,7 +1205,9 @@ class ApiController extends Controller
                 $users['mobileCode'] = $user->mobile_code ;
                 $users['address'] = $user->address ;
                 $users['gender']   = $user->gender ;
-
+                $users['visitors']   = $user->visitors ;
+                $users['followers']   = count($user->followers) ;
+                $users['created_at']   = $user->created_at ;
                 if($user->country){
                     $users['country_id'] = $user->country->id ;
                     if($lang == 'ar'){
@@ -1360,7 +1371,9 @@ class ApiController extends Controller
         );
         $dt = Carbon::now();
         $date  = date('Y-m-d', strtotime($dt));
-        // return $date ;
+        $month  = date('m', strtotime($dt));
+        $year  = date('Y', strtotime($dt));
+        // return $year ;
         //check the validator true or not
         $validator  = \Validator::make($request->all(),$rules);
         if($validator->fails())
@@ -1393,8 +1406,27 @@ class ApiController extends Controller
             $user = User::where('remember_token',$token)->first();
             if($user){
                 // return $user ;
-                if($user->wallet >= $request->total){
-                    $ads = New Advertisement ;
+                $free_ads = Doc::where('type', 'free_ads' )->first();
+                $noAds =  Advertisement::where('user_id',$user->id)->whereYear('created_at',$year)->whereMonth('created_at',$month)->count('id') ;
+                // return $free_ads ;
+                if($user->wallet >= $request->total || $free_ads->disc_ar > $noAds ){
+                    if($request->ads_id){
+                        $ads =  Advertisement::where('id',$request->ads_id)->first() ;
+                        if(!$ads){
+                            $ads = New Advertisement ;
+                        }
+                    }else{
+                        $ads = New Advertisement ;
+                        $ads->expiry_date = $new_date ;
+                        $ads->views = 0 ;
+                        $ads->favorites = 0 ;
+                        $ads->likes = 0 ;
+                       
+                        if($free_ads->disc_ar <= $noAds){
+                            $user->wallet = $user->wallet - $request->total ;
+                        }
+
+                    }
                     $ads->user_id = $user->id ;
                     $ads->title = $request->title ;
                     $ads->cost = $request->cost  ;
@@ -1420,16 +1452,16 @@ class ApiController extends Controller
                     $ads->cost_benefits = $request->cost_benefits ;
                     $ads->total = $request->total ;
                     $ads->disc = $request->disc ;
-                    $ads->expiry_date = $new_date ;
-                    $ads->images = $request->images;
-                    $ads->video = $request->video ;
-                    $ads->views = 0 ;
-                    $ads->favorites = 0 ;
-                    $ads->likes = 0 ;
-                    $ads->status  = 'not_active' ;
-                    $ads->save() ;
-                    $user->wallet = $user->wallet - $request->total ;
+                    if($request->images){
+                        $ads->images = $request->images;
+                    }
+                    if($request->images){
+                        $ads->video = $request->video ;
+                    }
+                     $ads->status  = 'not_active' ;
+                  
                     $user->save();
+                    $ads->save();
                     $type = "ads";
                     // $msg =  [
                     //     'en' => "    new Ad from " . $user->name ." Ad number ". $ads->id  , 
@@ -1499,7 +1531,7 @@ class ApiController extends Controller
             if($user){
                 // return $user ;
                 $data['isFavorite'] = 0;
-                $ad = Advertisement::where('id',$request->ad_id)->first();
+                $ad = Advertisement::findOrFail($request->ad_id);
                 $favorite = Favourite::where('user_id',$user->id)->where('ad_id',$ad->id)->first();
                 if($favorite){
                     $favorite->delete() ;
@@ -1604,125 +1636,236 @@ class ApiController extends Controller
     }
 //////////////////////////////////////////////////
 // Like function by Antonious hosny
-public function Like(Request $request){
+    public function Like(Request $request){
 
-    $rules=array(
-        "ad_id"=>"required"
-    );
-    $dt = Carbon::now();
-    $date  = date('Y-m-d', strtotime($dt));
-    // return $date ;
-    //check the validator true or not
-    $validator  = \Validator::make($request->all(),$rules);
-    if($validator->fails())
-    {
-        $messages = $validator->messages();
-        $transformed = [];
-        foreach ($messages->all() as $field => $message) {
-            $transformed[] = [
-                'message' => $message
-            ];
-        }
-        $message = trans('api.failed') ;
-        return  $this->FailedResponse($message , $transformed) ;
-    }
-
-    $token = $request->header('token');
-    $lang = $request->header('lang');
-
-    if($token){
-        $user = User::where('remember_token',$token)->first();
-        if($user){
-            // return $user ;
-            $data['isLike'] = 0;
-            $ad = Advertisement::where('id',$request->ad_id)->first();
-            // return $ad ;
-            $like = View::where('user_id',$user->id)->where('ad_id',$ad->id)->first();
-            if($like){
-                $like->delete() ;
-                $data['isLike'] = 0 ;
-                $ad->likes -= 1 ;
-                $ad->save();
-
-            }else{
-                $like = new View ;
-                $like->user_id = $user->id ;
-                $like->ad_id = $ad->id ;
-                $like->save() ;
-                $ad->likes += 1 ;
-                $ad->save() ;
-                $data['isLike'] = 1 ;
-
+        $rules=array(
+            "ad_id"=>"required"
+        );
+        $dt = Carbon::now();
+        $date  = date('Y-m-d', strtotime($dt));
+        // return $date ;
+        //check the validator true or not
+        $validator  = \Validator::make($request->all(),$rules);
+        if($validator->fails())
+        {
+            $messages = $validator->messages();
+            $transformed = [];
+            foreach ($messages->all() as $field => $message) {
+                $transformed[] = [
+                    'message' => $message
+                ];
             }
-            $message = trans('api.save') ;
-            return  $this->SuccessResponse($message,$data ) ;
+            $message = trans('api.failed') ;
+            return  $this->FailedResponse($message , $transformed) ;
+        }
+
+        $token = $request->header('token');
+        $lang = $request->header('lang');
+
+        if($token){
+            $user = User::where('remember_token',$token)->first();
+            if($user){
+                // return $user ;
+                $data['isLike'] = 0;
+                $ad = Advertisement::where('id',$request->ad_id)->first();
+                // return $ad ;
+                $like = View::where('user_id',$user->id)->where('ad_id',$ad->id)->first();
+                if($like){
+                    $like->delete() ;
+                    $data['isLike'] = 0 ;
+                    $ad->likes -= 1 ;
+                    $ad->save();
+
+                }else{
+                    $like = new View ;
+                    $like->user_id = $user->id ;
+                    $like->ad_id = $ad->id ;
+                    $like->save() ;
+                    $ad->likes += 1 ;
+                    $ad->save() ;
+                    $data['isLike'] = 1 ;
+
+                }
+                $message = trans('api.save') ;
+                return  $this->SuccessResponse($message,$data ) ;
+                
+            }else{
+                $message = trans('api.logged_out') ;
+                return  $this->LoggedResponse($message ) ;
+            }
             
         }else{
             $message = trans('api.logged_out') ;
             return  $this->LoggedResponse($message ) ;
         }
-        
-    }else{
-        $message = trans('api.logged_out') ;
-        return  $this->LoggedResponse($message ) ;
+
+
     }
-
-
-}
 //////////////////////////////////////////////////
 // Like function by Antonious hosny
-public function View(Request $request){
+    public function View(Request $request){
 
-    $rules=array(
-        "ad_id"=>"required"
-    );
-    $dt = Carbon::now();
-    $date  = date('Y-m-d', strtotime($dt));
-    // return $date ;
-    //check the validator true or not
-    $validator  = \Validator::make($request->all(),$rules);
-    if($validator->fails())
-    {
-        $messages = $validator->messages();
-        $transformed = [];
-        foreach ($messages->all() as $field => $message) {
-            $transformed[] = [
-                'message' => $message
-            ];
+        $rules=array(
+            "ad_id"=>"required"
+        );
+        $dt = Carbon::now();
+        $date  = date('Y-m-d', strtotime($dt));
+        // return $date ;
+        //check the validator true or not
+        $validator  = \Validator::make($request->all(),$rules);
+        if($validator->fails())
+        {
+            $messages = $validator->messages();
+            $transformed = [];
+            foreach ($messages->all() as $field => $message) {
+                $transformed[] = [
+                    'message' => $message
+                ];
+            }
+            $message = trans('api.failed') ;
+            return  $this->FailedResponse($message , $transformed) ;
         }
-        $message = trans('api.failed') ;
-        return  $this->FailedResponse($message , $transformed) ;
-    }
 
-    $token = $request->header('token');
-    $lang = $request->header('lang');
+        $token = $request->header('token');
+        $lang = $request->header('lang');
 
-    // if($token){
-    //     $user = User::where('remember_token',$token)->first();
-    //     if($user){
-            // return $user ;
-            // $data['isLike'] = 0;
-            $ad = Advertisement::where('id',$request->ad_id)->first();
-            $ad->views += 1 ;
-            $ad->save();
-            $data['ad'] =$ad;
-            $message = trans('api.save') ;
-            return  $this->SuccessResponse($message,$data ) ;
+        // if($token){
+        //     $user = User::where('remember_token',$token)->first();
+        //     if($user){
+                // return $user ;
+                // $data['isLike'] = 0;
+                $ad = Advertisement::where('id',$request->ad_id)->first();
+                $ad->views += 1 ;
+                $ad->save();
+                $data['ad'] =$ad;
+                $message = trans('api.save') ;
+                return  $this->SuccessResponse($message,$data ) ;
+                
+        //     }else{
+        //         $message = trans('api.logged_out') ;
+        //         return  $this->LoggedResponse($message ) ;
+        //     }
             
-    //     }else{
-    //         $message = trans('api.logged_out') ;
-    //         return  $this->LoggedResponse($message ) ;
-    //     }
-        
-    // }else{
-    //     $message = trans('api.logged_out') ;
-    //     return  $this->LoggedResponse($message ) ;
-    // }
+        // }else{
+        //     $message = trans('api.logged_out') ;
+        //     return  $this->LoggedResponse($message ) ;
+        // }
 
 
-}
+    }
 //////////////////////////////////////////////////
+// Visit function by Antonious hosny
+    public function Visit(Request $request){
+
+        $rules=array(
+            "user_id"=>"required"
+        );
+        $dt = Carbon::now();
+        $date  = date('Y-m-d', strtotime($dt));
+        $validator  = \Validator::make($request->all(),$rules);
+        if($validator->fails())
+        {
+            $messages = $validator->messages();
+            $transformed = [];
+            foreach ($messages->all() as $field => $message) {
+                $transformed[] = [
+                    'message' => $message
+                ];
+            }
+            $message = trans('api.failed') ;
+            return  $this->FailedResponse($message , $transformed) ;
+        }
+
+        $token = $request->header('token');
+        $lang = $request->header('lang');
+
+        // if($token){
+        //     $user = User::where('remember_token',$token)->first();
+        //     if($user){
+                // return $user ;
+                // $data['isLike'] = 0;
+                $user = User::where('id',$request->user_id)->first();
+                $user->visitors += 1 ;
+                $user->save();
+                $data['user'] =$user;
+                $message = trans('api.save') ;
+                return  $this->SuccessResponse($message,$data) ;
+                
+        //     }else{
+        //         $message = trans('api.logged_out') ;
+        //         return  $this->LoggedResponse($message ) ;
+        //     }
+            
+        // }else{
+        //     $message = trans('api.logged_out') ;
+        //     return  $this->LoggedResponse($message ) ;
+        // }
+
+
+    }
+//////////////////////////////////////////////////
+// Follow function by Antonious hosny
+    public function Follow(Request $request){
+
+        $rules=array(
+            "user_id"=>"required"
+        );
+        $dt = Carbon::now();
+        $date  = date('Y-m-d', strtotime($dt));
+        // return $date ;
+        //check the validator true or not
+        $validator  = \Validator::make($request->all(),$rules);
+        if($validator->fails())
+        {
+            $messages = $validator->messages();
+            $transformed = [];
+            foreach ($messages->all() as $field => $message) {
+                $transformed[] = [
+                    'message' => $message
+                ];
+            }
+            $message = trans('api.failed') ;
+            return  $this->FailedResponse($message , $transformed) ;
+        }
  
+        $token = $request->header('token');
+        $lang = $request->header('lang');
+
+        if($token){
+            $follower = User::where('remember_token',$token)->first();
+            if($follower){
+                // return $user ;
+                $data['isFollower'] = 0;
+                $user = User::where('id',$request->user_id)->first();
+                // return $ad ;
+                $followers = Follower::where('user_id',$user->id)->where('follower_id',$follower->id)->first();
+                if($followers){
+                    $followers->delete() ;
+                }else{
+                    $followers = new Follower ;
+                    $followers->user_id = $user->id ;
+                    $followers->follower_id = $follower->id ;
+                    $followers->save() ;
+                    $data['isFollower'] = 1;
+
+                }
+                $message = trans('api.save') ;
+                return  $this->SuccessResponse($message,$data ) ;
+                
+            }else{
+                $message = trans('api.logged_out') ;
+                return  $this->LoggedResponse($message ) ;
+            }
+            
+        }else{
+            $message = trans('api.logged_out') ;
+            return  $this->LoggedResponse($message ) ;
+        }
+
+
+    }
+//////////////////////////////////////////////////
+
 // MyViews function by Antonious hosny
     public function MyViews(Request $request){
         
@@ -2097,6 +2240,7 @@ public function View(Request $request){
                         // $ad->favorites += 1 ;
                         $ad->save() ;
                         $adds[$i]['id'] = $ad->id ;
+                        $adds[$i]['number'] = $ad->numbers ;
                         $images = json_decode($ad->images) ;
                         // return  $images ;
                         if(sizeof($images) > 0){
@@ -2373,6 +2517,7 @@ public function View(Request $request){
                         foreach($star_adds as $ad){
                             $star_addss[$j]['id'] = $ad->id ;
                             $star_addss[$j]['title'] = $ad->title ;
+                            $star_addss[$j]['number'] = $ad->numbers ;
                             $images = json_decode($ad->images) ;
                             // return  $images ;
                             if(sizeof($images) > 0){
@@ -3031,8 +3176,113 @@ public function View(Request $request){
                 }
             }
         }
-        $data['ads'] = $adds ;
 
+        $ads  = Advertisement::where('user_id',$ad->user->id)->with('country')->with('city')->with('area')->with('category')->with('subcategory')->get()  ;
+        $user_adds = [];
+        $i = 0; 
+        if(sizeof($ads) > 0){
+            foreach($ads as $ad){
+                $user_adds[$i]['id'] = $ad->id ;
+                $images = json_decode($ad->images) ;
+                // return  $images ;
+                if(sizeof($images) > 0){
+                    $imagess  = [] ;
+                    $n = 0; 
+                    foreach($images as $image){
+                        $imagess[$n]['image'] = asset('img/').'/'. $image;
+                        $n ++ ;
+                    }
+                    $user_adds[$i]['images'] =  $imagess ;
+                }else{
+                    $user_adds[$i]['images'] = [] ;
+                }
+                $user_adds[$i]['video'] = asset('img/').'/'. $ad->video ;
+                $user_adds[$i]['title'] = $ad->title ;
+                $user_adds[$i]['cost'] = $ad->cost ;
+                $user_adds[$i]['allow_messages'] = $ad->allow_messages ;
+                $user_adds[$i]['allow_call'] = $ad->allow_call ;
+                $user_adds[$i]['without_number'] = $ad->without_number ;
+
+                $user_adds[$i]['not_disturb'] = $ad->not_disturb ;
+                $user_adds[$i]['numbers'] = json_decode($ad->numbers) ;
+                $user_adds[$i]['lat'] = $ad->lat ;
+                $user_adds[$i]['lng'] = $ad->lng ;
+                $user_adds[$i]['views'] = $ad->views ;
+                $user_adds[$i]['favorites'] = $ad->favorites ;
+                $user_adds[$i]['star'] = $ad->star ;
+                $user_adds[$i]['address'] = $ad->address ;
+                $user_adds[$i]['status'] = $ad->status ;
+                $user_adds[$i]['category_id'] = $ad->category_id ;
+                if($ad->category){
+                    if($lang == 'ar'){
+                        $user_adds[$i]['category_name'] = $ad->category->title_ar ;
+
+                    }else{
+                        $user_adds[$i]['category_name'] = $ad->category->title_en ;
+
+                    }
+                }else{
+                    $user_adds[$i]['category_name'] = '' ; 
+                }
+                $user_adds[$i]['sub_id'] = $ad->sub_id ;
+                if($ad->subcategory){
+                    if($lang == 'ar'){
+                        $user_adds[$i]['subcategory_name'] = $ad->subcategory->title_ar ;
+
+                    }else{
+                        $user_adds[$i]['subcategory_name'] = $ad->subcategory->title_en ;
+
+                    }
+                }else{
+                    $user_adds[$i]['subcategory_name'] = '' ; 
+                }
+                $user_adds[$i]['country_id'] = $ad->country_id ;
+                if($ad->country){
+                    if($lang == 'ar'){
+                        $user_adds[$i]['country_name'] = $ad->country->title_ar ;
+
+                    }else{
+                        $user_adds[$i]['country_name'] = $ad->country->title_en ;
+
+                    }
+                }else{
+                    $user_adds[$i]['country_name'] = '' ; 
+                }
+                $user_adds[$i]['city_id'] = $ad->city_id ;
+                if($ad->city){
+                    if($lang == 'ar'){
+                        $user_adds[$i]['city_name'] = $ad->city->title_ar ;
+
+                    }else{
+                        $user_adds[$i]['city_name'] = $ad->city->title_en ;
+
+                    }
+                }else{
+                    $user_adds[$i]['city_name'] = '' ; 
+                }
+                $user_adds[$i]['area_id'] = $ad->area_id ;
+                if($ad->area){
+                    if($lang == 'ar'){
+                        $user_adds[$i]['area_name'] = $ad->area->title_ar ;
+
+                    }else{
+                        $user_adds[$i]['area_name'] = $ad->area->title_en ;
+
+                    }
+                }else{
+                    $user_adds[$i]['area_name'] = '' ; 
+                }
+                $user_adds[$i]['from'] = $ad->from ;
+                $user_adds[$i]['to'] = $ad->to ;
+                $user_adds[$i]['install'] = $ad->install ;
+                $user_adds[$i]['disc'] = $ad->disc ;
+                $i++ ;
+            }
+        }
+
+        $data['ads'] = $adds ;
+        $data['user_adds'] = $user_adds ;
+        
         $message = trans('api.fetch') ;
         return  $this->SuccessResponse($message,$data ) ;
         

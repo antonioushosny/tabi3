@@ -153,7 +153,7 @@
                         
                         
                         <div class="col-md-12 order-md-1">
-                        <label for="Category" class="addproduct-label"> <?php echo e(__('lang.images')); ?> </label>
+                        <label for="Category" class="addproduct-label"> <?php echo e(__('admin.images')); ?> </label>
                         </div>
                         <div class="col-md-12 order-md-1">
                             <div class="row">
@@ -164,7 +164,7 @@
                                         <div class="content">
                                             <img src="<?php echo e(isset($images) && sizeof($images) > 0 ? asset('img/'.$images[0]): ''); ?>" class="uploadd " id="imagediv1" width="190px" style="max-height: 155px;">
                                             <span class="uploadd upload1"> <i class="fa fa-plus"></i></span>
-                                            <p class="add-image"> <?php echo e(__('lang.add_image')); ?>   </p>
+                                            <p class="add-image"> <?php echo e(__('admin.add_image')); ?>   </p>
                                             
                                             <input type="file" class="input"  name="images[]" id="productimage1" accept="image/*">
                                         </div>
@@ -175,9 +175,9 @@
                                 <div class="col-md-3 mb-3 addproduct-uploadeimages">
                                     <div class="dropzone">
                                         <div class="content">
-                                            <img src="" class="uploadd " id="imagediv2" width="190px" style="max-height: 155px;">
+                                            <img src="<?php echo e(isset($images) && sizeof($images) > 1 ? asset('img/'.$images[1]): ''); ?>" class="uploadd " id="imagediv2" width="190px" style="max-height: 155px;">
                                             <span class="uploadd upload2"> <i class="fa fa-plus"></i></span>
-                                            <p class="add-image"> <?php echo e(__('lang.add_image')); ?></p>
+                                            <p class="add-image"> <?php echo e(__('admin.add_image')); ?></p>
                                             
                                             <input type="file" class="input"  name="images[]" id="productimage2" accept="image/*">
                                         </div>
@@ -188,9 +188,9 @@
                                 <div class="col-md-3 mb-3 addproduct-uploadeimages">
                                     <div class="dropzone">
                                         <div class="content">
-                                            <img src="" class="uploadd " id="imagediv3" width="190px" style="max-height: 155px;">
+                                            <img src="<?php echo e(isset($images) && sizeof($images) > 2 ? asset('img/'.$images[2]): ''); ?>" class="uploadd " id="imagediv3" width="190px" style="max-height: 155px;">
                                             <span class="uploadd upload3"> <i class="fa fa-plus"></i></span>
-                                            <p class="add-image"><?php echo e(__('lang.add_image')); ?></p>
+                                            <p class="add-image"><?php echo e(__('admin.add_image')); ?></p>
                                             
                                             <input type="file" class="input"  name="images[]" id="productimage3" accept="image/*">
                                         </div>
@@ -201,9 +201,9 @@
                                 <div class="col-md-3 mb-3 addproduct-uploadeimages" >
                                     <div class="dropzone">
                                         <div class="content">
-                                            <img src="" class="uploadd " id="imagediv4" width="190px" style="max-height: 155px;">
+                                            <img src="<?php echo e(isset($images) && sizeof($images) > 3 ? asset('img/'.$images[3]): ''); ?>" class="uploadd " id="imagediv4" width="190px" style="max-height: 155px;">
                                             <span class="uploadd upload4"> <i class="fa fa-plus"></i></span>
-                                            <p class="add-image"> <?php echo e(__('lang.add_image')); ?></p>
+                                            <p class="add-image"> <?php echo e(__('admin.add_image')); ?></p>
                                             
                                             <input type="file" class="input" name="images[]" id="productimage4" accept="image/*">
                                         </div>

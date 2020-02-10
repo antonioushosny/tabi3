@@ -407,6 +407,8 @@ return [
         'androidusers'                       => 'مستخدمين ANDROID ',
         'time'                          => 'وقت الظهور',
         'placeholder_time'              => 'ادخل وقت الظهور بالثواني',
+        'images'                        => 'الصور',
+        'add_image'                     =>'اضافة صورة',
     // end advertisements page 
 
      // advertisingAdvertisements page 
@@ -487,6 +489,8 @@ return [
         'Policy'                        =>' سياسة الخصوصية' ,
         'add_setting'                   => 'الاضافة ',
         'edit_setting'                  => 'التعديل   ',
+        'numberFreeAds'                 =>"عدد الإعلانات المجانية شهريًا",
+
     //end settings and static pages  
         'You cannot access this page!'      => ' !لا يمكنك الوصول إلى هذه الصفحة ',
         'Forgot Password Or First Login ?'  => 'نسيت كلمة المرور أو أول تسجيل دخول ؟',

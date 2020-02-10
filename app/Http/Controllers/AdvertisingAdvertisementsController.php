@@ -72,7 +72,7 @@ class AdvertisingAdvertisementsController extends Controller
     {
         //  return $request ; 
     
-        // return $request->images[0] ; 
+        // return $request->images ; 
         if($request->id ){
             $rules =
             [
@@ -131,7 +131,7 @@ class AdvertisingAdvertisementsController extends Controller
         // $advertisement->city_id        = $request->city_id ;
         // $advertisement->area_id        = $request->area_id ;
         $advertisement->expiry_date    = $request->expiry_date ;
-        // $advertisement->install        = $request->install ;
+        $advertisement->numbers        = $request->number ;
         // $advertisement->disc           = $request->disc ;
         // $advertisement->star           = $request->star ;
         $advertisement->status         = $request->status ;
@@ -147,8 +147,9 @@ class AdvertisingAdvertisementsController extends Controller
                 $images[$i] = $name ;
                 $i++ ;
             }
+            $advertisement->images = json_encode($images) ;
         }
-        $advertisement->images = json_encode($images) ;
+        
         // if ($request->hasFile('image')) {
         //     $image = $request->file('image');
         //     $name = md5($image->getClientOriginalName() . time()) . "." . $image->getClientOriginalExtension();

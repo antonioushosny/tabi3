@@ -111,7 +111,44 @@
                 </div>
             </div>
         </div>
-        
+
+  <!-- Exportable Table -->
+        <div class="row clearfix">
+            <div class="col-lg-12">
+                <div class="card">
+  
+                        <div class="body">
+                            {!! Form::open(['route'=>['storeFreeAds'],'method'=>'post','autocomplete'=>'off', 'id'=>'form_validation', 'enctype'=>'multipart/form-data' ])!!} 
+
+                                <div class="row">
+                                    <div class="col-md-2">{{ __('admin.numberFreeAds') }}</div>
+                                    <div class="col-md-10">
+                                        <!-- for cost -->
+                                        <div class="form-group form-float">
+                                            <input type="number" value="{{ !isset($free_ads->disc_ar)?null:$free_ads->disc_ar }}"  class="form-control" step="1" min="0" placeholder="{{__('admin.numberFreeAds')}}" name="desc_ar" required>
+                                            <label id="desc_ar-error" class="error" for="desc_ar" style="">  </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- for type -->
+                                <div class= "form-group form-float">
+                                    {!! Form::hidden('type','free_ads',['class'=>'form-control show-tick']) !!}
+                                    <label id="type-error" class="error" for="type" style="">  </label>
+                                </div>
+
+                                <!-- for id -->
+                                <div class= "form-group form-float">
+                                    {!! Form::hidden('id',!isset($free_ads->id)?null:$free_ads->id ,['class'=>'form-control show-tick']) !!}
+                                </div>
+                               
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                <button class="btn btn-raised btn-primary btn-round waves-effect" type="submit">{{__('admin.save')}}</button>
+                            </form>
+                        </div>
+                </div>
+            </div>
+        </div>
        
     </div>
 

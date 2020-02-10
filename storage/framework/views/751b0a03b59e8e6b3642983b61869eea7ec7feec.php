@@ -1,9 +1,8 @@
-@extends('layouts.index')
-@section('style')
+<?php $__env->startSection('style'); ?>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
-<link rel="stylesheet" href="{{asset('assets/plugins/jquery-spinner/css/bootstrap-spinner.css') }}">
+<link rel="stylesheet" href="<?php echo e(asset('assets/plugins/jquery-spinner/css/bootstrap-spinner.css')); ?>">
 
-@if($lang == 'ar')
+<?php if($lang == 'ar'): ?>
     <style>
 
         .select2-container--default .select2-selection--single {
@@ -14,7 +13,7 @@
             /* border: 1px solid; */
         }
     </style>
-    @endif
+    <?php endif; ?>
     <style>
         .addproduct-uploadeimages  .dropzone {
             z-index: 1;
@@ -72,27 +71,28 @@
 
     </style>
  
-@endsection
- @section('content')
+<?php $__env->stopSection(); ?>
+ <?php $__env->startSection('content'); ?>
 <!-- Main Content -->
 <section class="content home">
     <div class="block-header">
         <div class="row">
             <div class="col-lg-5 col-md-5 col-sm-12">
-                <h2>{{__('admin.dashboard')}}
-                <small>{{__('admin.Welcome to beitk')}}</small>
+                <h2><?php echo e(__('admin.dashboard')); ?>
+
+                <small><?php echo e(__('admin.Welcome to beitk')); ?></small>
                 </h2>
             </div>            
-                @if($lang =='ar')
+                <?php if($lang =='ar'): ?>
                 <div class="col-lg-7 col-md-7 col-sm-12 text-left">
                 <ul class="breadcrumb float-md-left" style=" padding: 0.6rem; direction: ltr; ">
-                @else 
+                <?php else: ?> 
                 <div class="col-lg-7 col-md-7 col-sm-12 text-right">
                 <ul class="breadcrumb float-md-right">
-                @endif
-                    <li class="breadcrumb-item active"><a href="{{route('home')}}"><i class="zmdi zmdi-home"></i>{{__('admin.dashboard')}}</a></li>
-                    <li class="breadcrumb-item"><a href="{{route('advertisingAdvertisements')}}"><i class="zmdi zmdi-accounts-add"></i> {{trans('admin.'.$title)}}</a></li>
-                    <li class="breadcrumb-item "><a href="javascript:void(0);">{{__('admin.add_advertisement')}}</a></li>
+                <?php endif; ?>
+                    <li class="breadcrumb-item active"><a href="<?php echo e(route('home')); ?>"><i class="zmdi zmdi-home"></i><?php echo e(__('admin.dashboard')); ?></a></li>
+                    <li class="breadcrumb-item"><a href="<?php echo e(route('advertisingAdvertisements')); ?>"><i class="zmdi zmdi-accounts-add"></i> <?php echo e(trans('admin.'.$title)); ?></a></li>
+                    <li class="breadcrumb-item "><a href="javascript:void(0);"><?php echo e(__('admin.add_advertisement')); ?></a></li>
                     
                 </ul>
             </div>
@@ -108,43 +108,47 @@
                 <div class="card">
                
                     <div class="header">
-                        <h2><strong>{{trans('admin.'.$title)}}</strong> {{trans('admin.add_advertisement')}}  </h2>
+                        <h2><strong><?php echo e(trans('admin.'.$title)); ?></strong> <?php echo e(trans('admin.add_advertisement')); ?>  </h2>
                     </div>
                     <div class="body ">
-                        {!! Form::open(['route'=>['storeadvertisingAdvertisement'],'method'=>'post','autocomplete'=>'off', 'id'=>'form_validation', 'enctype'=>'multipart/form-data' ])!!} 
+                        <?php echo Form::open(['route'=>['storeadvertisingAdvertisement'],'method'=>'post','autocomplete'=>'off', 'id'=>'form_validation', 'enctype'=>'multipart/form-data' ]); ?> 
                             <!-- for id -->
                             <div class= "form-group form-float">
-                                {!! Form::hidden('id',!isset($data->id)?null:$data->id ,['class'=>'form-control show-tick']) !!}
+                                <?php echo Form::hidden('id',!isset($data->id)?null:$data->id ,['class'=>'form-control show-tick']); ?>
+
                             </div>
                         <div class="row">
                             <div class= "form-group form-float col-md-6 d-none">
-                                {!! Form::select('user_id',$users ,!isset($data->user_id)?null:$data->user_id,['class'=>'form-control show-tick select2' ,'placeholder' =>trans('admin.choose_user'),!isset($data->id)?'':'disabled','required']) !!}
+                                <?php echo Form::select('user_id',$users ,!isset($data->user_id)?null:$data->user_id,['class'=>'form-control show-tick select2' ,'placeholder' =>trans('admin.choose_user'),!isset($data->id)?'':'disabled','required']); ?>
+
                                
                                     <label id="user_id-error" class="error" for="user_id" style="">  </label>
                             </div>
                            
                             <div class= "form-group form-float col-md-6">
-                                {!! Form::select('category_id',$categories,!isset($data->category_id)?null:$data->category_id,['class'=>'form-control show-tick select2' ,'id'=>'category_id','placeholder' =>trans('admin.choose_category'),'required']) !!}
+                                <?php echo Form::select('category_id',$categories,!isset($data->category_id)?null:$data->category_id,['class'=>'form-control show-tick select2' ,'id'=>'category_id','placeholder' =>trans('admin.choose_category'),'required']); ?>
+
                                 <label id="category_id-error" class="error" for="category_id" style="">  </label>
                             </div>
 
                             <div class= "form-group form-float col-md-6">
-                                {!! Form::select('country_id',$countries,!isset($data->country_id)?null:$data->country_id,['class'=>'form-control show-tick select2' ,'id'=>'country_id','placeholder' =>trans('admin.choose_country'),'required' ]) !!}
+                                <?php echo Form::select('country_id',$countries,!isset($data->country_id)?null:$data->country_id,['class'=>'form-control show-tick select2' ,'id'=>'country_id','placeholder' =>trans('admin.choose_country'),'required' ]); ?>
+
                                 <label id="country_id-error" class="error" for="country_id" style="">  </label>
                             </div>
 
                             <div class="form-group form-float col-md-6">
-                                <input type="text" value="{{ !isset($data->numbers)?'':$data->numbers }}" class="form-control" placeholder="{{__('admin.mobile')}}" name="number"  >
+                                <input type="text" value="<?php echo e(!isset($data->numbers)?'':$data->numbers); ?>" class="form-control" placeholder="<?php echo e(__('admin.mobile')); ?>" name="number"  >
                                 <label id="number-error" class="error" for="number" style="">  </label>
                             </div>
 
                              <div class="form-group form-float col-md-6">
-                                <input type="text" value="{{ !isset($data->title)?'':$data->title }}" class="form-control" placeholder="{{__('admin.placeholder_title')}}" name="title"  >
+                                <input type="text" value="<?php echo e(!isset($data->title)?'':$data->title); ?>" class="form-control" placeholder="<?php echo e(__('admin.placeholder_title')); ?>" name="title"  >
                                 <label id="title-error" class="error" for="title" style="">  </label>
                             </div>
 
                             <div class="form-group form-float col-md-6">
-                                <input type="date" value="{{ !isset($data->expiry_date)?'':$data->expiry_date }}" class="form-control" placeholder="{{__('admin.placeholder_expiry_date')}}" name="expiry_date" >
+                                <input type="date" value="<?php echo e(!isset($data->expiry_date)?'':$data->expiry_date); ?>" class="form-control" placeholder="<?php echo e(__('admin.placeholder_expiry_date')); ?>" name="expiry_date" >
                                 <label id="expiry_date-error" class="error" for="expiry_date" style="">  </label>
                             </div>
 
@@ -152,9 +156,9 @@
                         </div>
 
                         
-                        {{-- start product images   --}}
+                        
                         <div class="col-md-12 order-md-1">
-                        <label for="Category" class="addproduct-label"> {{ __('admin.images') }} </label>
+                        <label for="Category" class="addproduct-label"> <?php echo e(__('admin.images')); ?> </label>
                         </div>
                         <div class="col-md-12 order-md-1">
                             <div class="row">
@@ -163,10 +167,10 @@
                                     
                                     <div class="dropzone">
                                         <div class="content">
-                                            <img src="{{  isset($images) && sizeof($images) > 0 ? asset('img/'.$images[0]): '' }}" class="uploadd " id="imagediv1" width="190px" style="max-height: 155px;">
+                                            <img src="<?php echo e(isset($images) && sizeof($images) > 0 ? asset('img/'.$images[0]): ''); ?>" class="uploadd " id="imagediv1" width="190px" style="max-height: 155px;">
                                             <span class="uploadd upload1"> <i class="fa fa-plus"></i></span>
-                                            <p class="add-image"> {{ __('admin.add_image') }}   </p>
-                                            {{--  <span class="filename filename1"></span>  --}}
+                                            <p class="add-image"> <?php echo e(__('admin.add_image')); ?>   </p>
+                                            
                                             <input type="file" class="input"  name="images[]" id="productimage1" accept="image/*">
                                         </div>
                                     </div>
@@ -176,10 +180,10 @@
                                 <div class="col-md-3 mb-3 addproduct-uploadeimages">
                                     <div class="dropzone">
                                         <div class="content">
-                                            <img src="{{  isset($images) && sizeof($images) > 1 ? asset('img/'.$images[1]): '' }}" class="uploadd " id="imagediv2" width="190px" style="max-height: 155px;">
+                                            <img src="<?php echo e(isset($images) && sizeof($images) > 1 ? asset('img/'.$images[1]): ''); ?>" class="uploadd " id="imagediv2" width="190px" style="max-height: 155px;">
                                             <span class="uploadd upload2"> <i class="fa fa-plus"></i></span>
-                                            <p class="add-image"> {{ __('admin.add_image') }}</p>
-                                            {{--  <span class="filename filename2"></span>  --}}
+                                            <p class="add-image"> <?php echo e(__('admin.add_image')); ?></p>
+                                            
                                             <input type="file" class="input"  name="images[]" id="productimage2" accept="image/*">
                                         </div>
                                     </div>
@@ -189,10 +193,10 @@
                                 <div class="col-md-3 mb-3 addproduct-uploadeimages">
                                     <div class="dropzone">
                                         <div class="content">
-                                            <img src="{{  isset($images) && sizeof($images) > 2 ? asset('img/'.$images[2]): '' }}" class="uploadd " id="imagediv3" width="190px" style="max-height: 155px;">
+                                            <img src="<?php echo e(isset($images) && sizeof($images) > 2 ? asset('img/'.$images[2]): ''); ?>" class="uploadd " id="imagediv3" width="190px" style="max-height: 155px;">
                                             <span class="uploadd upload3"> <i class="fa fa-plus"></i></span>
-                                            <p class="add-image">{{ __('admin.add_image') }}</p>
-                                            {{--  <span class="filename filename3"></span>  --}}
+                                            <p class="add-image"><?php echo e(__('admin.add_image')); ?></p>
+                                            
                                             <input type="file" class="input"  name="images[]" id="productimage3" accept="image/*">
                                         </div>
                                     </div>
@@ -202,10 +206,10 @@
                                 <div class="col-md-3 mb-3 addproduct-uploadeimages" >
                                     <div class="dropzone">
                                         <div class="content">
-                                            <img src="{{  isset($images) && sizeof($images) > 3 ? asset('img/'.$images[3]): '' }}" class="uploadd " id="imagediv4" width="190px" style="max-height: 155px;">
+                                            <img src="<?php echo e(isset($images) && sizeof($images) > 3 ? asset('img/'.$images[3]): ''); ?>" class="uploadd " id="imagediv4" width="190px" style="max-height: 155px;">
                                             <span class="uploadd upload4"> <i class="fa fa-plus"></i></span>
-                                            <p class="add-image"> {{ __('admin.add_image') }}</p>
-                                            {{--  <span class="filename filename4"></span>  --}}
+                                            <p class="add-image"> <?php echo e(__('admin.add_image')); ?></p>
+                                            
                                             <input type="file" class="input" name="images[]" id="productimage4" accept="image/*">
                                         </div>
                                     </div>
@@ -218,21 +222,21 @@
                             <div class="form-group">
                                 <div class="radio inlineblock m-r-20">
                                     <input type="radio" name="status" id="active" class="with-gap" value="active" checked>
-                                    <label for="active">{{__('admin.active')}}</label>
+                                    <label for="active"><?php echo e(__('admin.active')); ?></label>
                                 </div>                                
                                 <div class="radio inlineblock">
                                     <input type="radio" name="status" id="not_active" class="with-gap" value="not_active" <?php echo ( isset($data->status) && $data->status == 'not_active') ? "checked=''" : ""; ?>>
-                                    <label for="not_active">{{__('admin.not_active')}}</label>
+                                    <label for="not_active"><?php echo e(__('admin.not_active')); ?></label>
                                 </div>
                             </div>
                    
-                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                            <input type="hidden" name="_token" value="<?php echo e(csrf_token()); ?>">
                          
-                            @if(isset($data->id))
-                                <button class="btn btn-raised btn-primary btn-round waves-effect" type="submit">{{__('admin.edit')}}</button>
-                            @else
-                                <button class="btn btn-raised btn-primary btn-round waves-effect" type="submit">{{__('admin.add')}}</button>
-                            @endif
+                            <?php if(isset($data->id)): ?>
+                                <button class="btn btn-raised btn-primary btn-round waves-effect" type="submit"><?php echo e(__('admin.edit')); ?></button>
+                            <?php else: ?>
+                                <button class="btn btn-raised btn-primary btn-round waves-effect" type="submit"><?php echo e(__('admin.add')); ?></button>
+                            <?php endif; ?>
                            
                         </form>
                     </div>
@@ -244,24 +248,24 @@
 
 </section>
   
-@endsection 
+<?php $__env->stopSection(); ?> 
 
-@section('script')
+<?php $__env->startSection('script'); ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
-<script src="{{asset('assets/plugins/jquery-spinner/js/jquery.spinner.js') }}"></script> <!-- Jquery Spinner Plugin Js --> 
+<script src="<?php echo e(asset('assets/plugins/jquery-spinner/js/jquery.spinner.js')); ?>"></script> <!-- Jquery Spinner Plugin Js --> 
 <script type="text/javascript">
 
     $("#productimage4").change(function (){
 
         // fileName = $(this)[0].files[0].name;
         // $('.filename4').html(fileName);
-        {{--  $('.dropzone .upload4').hide();  --}}
+        
         var reader = new FileReader();
         
         reader.onload = function (e) {
-            {{--  console.log(e.target.result)  --}}
+            
             $('#imagediv4').attr('src', e.target.result);
-            {{--  $('#imagediv4').removeClass('hidden');  --}}
+            
         }
 
         reader.readAsDataURL($(this)[0].files[0]);
@@ -273,13 +277,13 @@
 
         // fileName = $(this)[0].files[0].name;
         // $('.filename3').html(fileName);
-        {{--  $('.dropzone .upload3').hide();  --}}
+        
         var reader = new FileReader();
         
         reader.onload = function (e) {
-            {{--  console.log(e.target.result)  --}}
+            
             $('#imagediv3').attr('src', e.target.result);
-            {{--  $('#imagediv3').removeClass('hidden');  --}}
+            
         }
 
         reader.readAsDataURL($(this)[0].files[0]);
@@ -292,9 +296,9 @@
         var reader = new FileReader();
         
         reader.onload = function (e) {
-            {{--  console.log(e.target.result)  --}}
+            
             $('#imagediv2').attr('src', e.target.result);
-            {{--  $('#imagediv2').removeClass('hidden');  --}}
+            
         }
 
         reader.readAsDataURL($(this)[0].files[0]);
@@ -307,9 +311,9 @@
         var reader = new FileReader();
         
         reader.onload = function (e) {
-            {{--  console.log(e.target.result)  --}}
+            
             $('#imagediv1').attr('src', e.target.result);
-            {{--  $('#imagediv1').removeClass('hidden');  --}}
+            
         }
 
         reader.readAsDataURL($(this)[0].files[0]);
@@ -375,14 +379,14 @@
 
     //this for add new record
     $("#form_validation").submit(function(e){
-           {{--  $('#addModal').modal('hide');  --}}
+           
            $('.add').disabled =true;
           e.preventDefault();
           var form = $(this);
         //    openModal();
           $.ajax({
               type: 'POST',
-              url: '{{ URL::route("storeadvertisingAdvertisement") }}',
+              url: '<?php echo e(URL::route("storeadvertisingAdvertisement")); ?>',
               data:  new FormData($("#form_validation")[0]),
               processData: false,
               contentType: false,
@@ -427,8 +431,8 @@
                         }
  
                   } else {
-                      {{-- console.log(data); --}}
-                        window.location.replace("{{route('advertisingAdvertisements')}}");
+                      
+                        window.location.replace("<?php echo e(route('advertisingAdvertisements')); ?>");
 
                      }
             },
@@ -443,9 +447,9 @@
             type: 'GET',
             url: "<?php echo url('/')?>/packagedetail/"+id,
             success: data => {
-                {{-- console.log(data) --}}
+                
                 if(!data.detail){
-                    alert("{{trans('admin.notfounddetail')}}");
+                    alert("<?php echo e(trans('admin.notfounddetail')); ?>");
                 }
                 $('#page').val(data.detail.page);
                 $('#type').val(data.detail.type);
@@ -471,9 +475,9 @@
                 type: 'GET',
                 url: "<?php echo url('/')?>/packagedetail/"+id,
                 success: data => {
-                    {{-- console.log(data) --}}
+                    
                     if(!data.detail){
-                        alert("{{trans('admin.notfounddetail')}}");
+                        alert("<?php echo e(trans('admin.notfounddetail')); ?>");
                     }
                     $('#page').val(data.detail.page);
                     $('#type').val(data.detail.type);
@@ -511,7 +515,7 @@
                 success: data => {
                     console.log(data)
                     if(!data.detail){
-                        alert("{{trans('admin.notfounddetail')}}");
+                        alert("<?php echo e(trans('admin.notfounddetail')); ?>");
                     }
                     $('#page').val(data.detail.page);
                     $('#type').val(data.detail.type);
@@ -528,4 +532,6 @@
     });
 </script>
     
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.index', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp7\htdocs\tabi3\resources\views/advertisingAdvertisements/add.blade.php ENDPATH**/ ?>

@@ -36,7 +36,7 @@ class HomeController extends Controller
 
     public function index()
     {
-  
+            $free_ads = Doc::where('type', 'free_ads' )->first();
             $lang = App::getlocale();
             $dt = Carbon::now();
             $date = $dt->toDateString();
@@ -51,7 +51,7 @@ class HomeController extends Controller
             $starAds      = Advertisement::where('star','1')->count('id');
 
             $title = 'home' ;
-            return view('home',compact('lang','title','delegates','departments','users','iosusers','androidusers','installAds','starAds'));
+            return view('home',compact('lang','title','delegates','departments','users','iosusers','androidusers','installAds','starAds','free_ads'));
             
             $yesterday      = Carbon::now()->subDays(1)->toDateString();
             $one_week_ago   = Carbon::now()->subWeeks(1)->toDateString();
@@ -289,6 +289,65 @@ class HomeController extends Controller
         }
         $doc->save();
         return response()->json($doc);
+
+    }
+
+    public function storeFreeAds(Request $request)
+    {
+        // return $request;
+        if($request->id ){
+            $rules =
+            [
+                // 'title_ar'  =>'required|max:190',           
+                // 'title_en'  =>'required|max:190',           
+                'type'  =>'required',           
+                // 'desc_'  =>'required',   
+            ];
+            
+        }     
+    
+        else{
+            $rules =
+            [
+                // 'title_ar'  =>'required|max:190',           
+                // 'title_en'  =>'required|max:190', 
+                'type'  =>'required',                
+                // 'country_id'  =>'required',     
+                // 'status'  =>'required'      
+            ];
+        }
+        
+        
+         $validator = \Validator::make($request->all(), $rules);
+         if ($validator->fails()) {
+             return \Response::json(array('errors' => $validator->getMessageBag()->toArray()));
+         }
+         
+        // return $request ;
+        if($request->id ){
+            $doc = Doc::find( $request->id );
+        }
+        else{
+            $doc = new Doc ;
+
+        }
+
+        $doc->title_ar          = $request->title_ar ;
+        $doc->title_en         = $request->title_en ;
+        $doc->status        = 'active' ;
+        $doc->type        = $request->type ;
+        $doc->disc_ar        = $request->desc_ar ;
+        $doc->disc_en        = $request->desc_en ;
+        $doc->save();
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $name = md5($image->getClientOriginalName() . time()) . "." . $image->getClientOriginalExtension();
+            $destinationPath = public_path('/img');
+            $image->move($destinationPath, $name);
+            $doc->image   = $name;  
+        }
+        $doc->save();
+         return redirect()->route('home');
 
     }
 
