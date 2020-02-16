@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Requests\CountriesRequest;
 use Illuminate\Http\Request;
 use App\Notifications\emailnotify;
 use App\City;
@@ -22,16 +22,30 @@ class CountriesController extends Controller
     }
     public function index()
     {
+ 
+        $searchArray = [
+            'title_ar' => [request('title_ar'), 'like'], 
+            'title_en' => [request('title_en'), 'like'], 
+            'status' => [request('status'), '=']
+        ];
+        request()->flash();
+
+        $query = Country::orderBy('id', 'DESC') ;
+
+        
+        $searchQuery = $this->searchIndex($query, $searchArray);
+        $countries = $searchQuery->paginate(env('PerPage'));
+
         $lang = App::getlocale();
         if(Auth::user()->role != 'admin' ){
             $role = 'admin';
             return view('unauthorized',compact('role','admin'));
         }
         $title = 'countries';
-        
-        $countries = Country::orderBy('id', 'DESC')->get();
-        // return $admins ; 
-        return view('countries.index',compact('countries','title','lang'));
+    
+        return view('admin.sections.countries.index',compact('countries','title','lang'));
+
+
 
     }
 
@@ -57,45 +71,17 @@ class CountriesController extends Controller
             return view('unauthorized',compact('role','admin'));
         }
         $title = 'countries';
-        return view('countries.add',compact('title','lang'));
+        return view('admin.sections.countries.create',compact('title','lang'));
     }
-    public function store(Request $request)
+    public function store(CountriesRequest $request)
     {
-        
-        if($request->id ){
-            $rules =
-            [
-                'title_ar'  =>'required|max:190',           
-                'title_en'  =>'required|max:190',           
-                'status'  =>'required',   
-            ];
-            
-        }     
-    
-        else{
-            $rules =
-            [
-                'title_ar'  =>'required|max:190',           
-                'title_en'  =>'required|max:190',              
-                // 'image'  =>'required',           
-                // 'country_id'  =>'required',     
-                'status'  =>'required'      
-            ];
-        }
-        
-        
-         $validator = \Validator::make($request->all(), $rules);
-         if ($validator->fails()) {
-             return \Response::json(array('errors' => $validator->getMessageBag()->toArray()));
-         }
-         
+ 
         // return $request ;
         if($request->id ){
             $country = Country::find( $request->id );
         }
         else{
             $country = new Country ;
-
         }
 
         $country->title_ar          = $request->title_ar ;
@@ -112,7 +98,12 @@ class CountriesController extends Controller
         }
         $country->save();
         $country = Country::where('id',$country->id)->first();
-        return response()->json($country);
+        if($request->id ){
+            return redirect()->route('countries')->with('status', __('lang.updatedDone'));
+        }else{
+            return redirect()->route('countries')->with('status', __('lang.createdDone'));
+        }
+        // return response()->json($country);
 
     }
 
@@ -133,7 +124,7 @@ class CountriesController extends Controller
         $title = 'countries';
         $countrie = Country::where('id',$id)->orderBy('id', 'DESC')->first();
         // return $admin ; 
-        return view('countries.edit',compact('countrie','title','lang'));
+        return view('admin.sections.countries.edit',compact('countrie','title','lang'));
     }
 
     public function update(Request $request, $id)
@@ -152,7 +143,8 @@ class CountriesController extends Controller
         }
         $id = Country::find( $id );
         $id ->delete();
-        return response()->json($id);
+        return back()->with('status', __('lang.deletedDone'));
+        // return response()->json($id);
     }
 
     public function deleteall(Request $request)

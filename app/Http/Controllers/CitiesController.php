@@ -22,22 +22,36 @@ class CitiesController extends Controller
     }
     public function index()
     {
+       
+        // $allcountries = Country::all();
+        // if($lang == 'ar')
+        // $countries = array_pluck($allcountries,'title_ar', 'id'); 
+        // else
+        // $countries = array_pluck($allcountries,'title_en', 'id');
+
+  
+        $searchArray = [
+            'title_ar' => [request('title_ar'), 'like'], 
+            'title_en' => [request('title_en'), 'like'], 
+            'status' => [request('status'), '=']
+        ];
+        request()->flash();
+
+        $query =  City::with('country')->orderBy('id', 'DESC');
+
+        
+        $searchQuery = $this->searchIndex($query, $searchArray);
+        $cities = $searchQuery->paginate(env('PerPage'));
+
         $lang = App::getlocale();
         if(Auth::user()->role != 'admin' ){
             $role = 'admin';
             return view('unauthorized',compact('role','admin'));
         }
         $title = 'cities';
-
-        $allcountries = Country::all();
-        if($lang == 'ar')
-        $countries = array_pluck($allcountries,'title_ar', 'id'); 
-        else
-        $countries = array_pluck($allcountries,'title_en', 'id');
-
-        $cities = City::with('country')->orderBy('id', 'DESC')->get();
-        // return $admins ; 
-        return view('cities.index',compact('cities','countries','title','lang'));
+    
+        return view('admin.sections.cities.index',compact('cities','title','lang'));
+        
 
     }
 

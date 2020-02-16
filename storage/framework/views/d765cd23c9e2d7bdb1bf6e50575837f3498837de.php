@@ -1,149 +1,109 @@
-<?php $__env->startSection('style'); ?>
-<style>
-    .page-header-image
-    {
-        background-color: #364150!important;
-    }
-    body
-    {
-        
-    }
-    .card-plain
-    {
-        background-color:#eceef1;
-         /* padding: 20px; */
-    }
-    .form-control:active,.form-control:focus {
-        border: 1px solid #c3ccda;
-    }
-    .form-control {
-        background-color: #dde3ec;
-        height: 43px;
-        color: #8290a3;
-        border: 1px solid #dde3ec;
-    }
-    .btn.btn-primary{
-        background-color:#0046B0;
-        color: #FFF;
-        
-    }
-    /* .btn.btn-primary:hover{
-        color: #FFF;
-        background-color: #1f858e;
-        border-color: #18666d;
-    } */
-    h5>a.link
-    {
-        color:black!important;
-    }
-    span.input-group-addon
-    {
-        color:#cccccc !important;
-    }
-    .authentication .card-plain.card-plain .form-control,.authentication .card-plain.card-plain .form-control:focus
-    {
-        color: #000;
-    }
-    .invalid-feedback
-    {
-        color: #e73d4a;
-    }
-    body, .page-header{
-        background-color: #364150   !important;
-    }
-    .delete-border{
-        border-radius: 0px !important; 
-    }
-    .authentication .card-plain.card-plain .input-group-addon {
+<!DOCTYPE html>
+<!--
+* CoreUI - Free Bootstrap Admin Template
+* @version  v2.1.12
+* @link  https://coreui.io
+* Copyright (c) 2018 creativeLabs Łukasz Holeczek
+* Licensed under MIT (https://coreui.io/license)
+-->
 
-        background-color: #dde3ec !important; 
-        border-color: rgb(255, 255, 255) !important;
-        color: #fff;
+<html dir="<?php echo e($dir); ?>" lang="<?php echo e($locale); ?>" class="<?php echo e($dir == 'rtl' ? 'fa-dir-flip' : ''); ?>">
+  <head>
+    <base href="./">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" href="<?php echo e(asset('images/logo.png')); ?>" >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="description" content="CoreUI - Open Source Bootstrap Admin Template">
+    <meta name="author" content="Łukasz Holeczek">
+    <meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,jQuery,CSS,HTML,RWD,Dashboard">
+    <title>tabe3</title>
+    <!-- Icons-->
+    <link href="<?php echo e(asset('admin/vendors/@coreui/icons/css/coreui-icons.min.css')); ?>" rel="stylesheet">
+    <link href="<?php echo e(asset('admin/vendors/flag-icon-css/css/flag-icon.min.css')); ?>" rel="stylesheet">
+    <link href="<?php echo e(asset('admin/vendors/font-awesome/css/font-awesome.min.css')); ?>" rel="stylesheet">
+    <link href="<?php echo e(asset('admin/vendors/simple-line-icons/css/simple-line-icons.css')); ?>" rel="stylesheet">
+    <!-- Main styles for this application-->
+    <link href="<?php echo e(asset('admin/css/style.css')); ?>" rel="stylesheet">
+    <link href="<?php echo e(asset('admin/vendors/pace-progress/css/pace.min.css')); ?>" rel="stylesheet">
+    <link href="<?php echo e(asset('admin/css/custom.css')); ?>" rel="stylesheet">
+    <!-- Global site tag (gtag.js) - Google Analytics-->
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-118965717-3"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      // Shared ID
+      gtag('config', 'UA-118965717-3');
+      // Bootstrap ID
+      gtag('config', 'UA-118965717-5');
+    </script>
+  </head>
+  <body class="app flex-row align-items-center">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+          <div class="card-group">
+            <div class="card text-white bg-white">
+              <div class="card-body align-items-center d-flex justify-content-center">
+                <div>
+                  <img class="login-logo" src="<?php echo e(asset($locale == 'ar' ? 'images/logo.png' : 'images/logo.pngimages/logo.png')); ?>">
+                </div>
+              </div> 
+            </div>
+            <div class="card p-4">
+              <div class="card-body">
+                <h1><?php echo e(__('lang.login')); ?></h1>
 
-    }
-    ::placeholder {
-        color: #a19ca3 !important;
-        
-        text-align: right;
-    }
-</style>
-<?php $__env->stopSection(); ?>
-<?php $__env->startSection('content'); ?>
-<div class="page-header-image" ></div>
+                <?php echo $__env->make('admin.layouts.includes.messages', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
-<div class="container" style="padding :20px ;">
-        
-
-    <div class="col-md-12 content-center card-plain"  style="top: 50%;">
-        <!-- <div class="card-plain"> -->
-                <form action="<?php echo e(route('login')); ?>" method="POST" class="form" id="loginform" autocomplete="off">
-                    <?php echo csrf_field(); ?>
-                    
-                        <div class="header" >
-                            <div class="logo-container"   >
-                                <img src="<?php echo e(asset('images/logo.png')); ?>" alt="">
-                            </div>  
-                            <?php if(session('status')): ?>
-                                <div class="alert alert-success">
-                                    <?php echo e(session('status')); ?>
-
-                                </div>
-                            <?php endif; ?>
-                           
-                            <br>
-
-                        <h5 style="color: #0046B0;"><?php echo e(__(('admin.sign'))); ?></h5>
-                        </div>
-                        <?php if(Session::has('error')): ?>
-
-                            <div class="alert alert-danger">
-                                <strong><?php echo e(__('admin.error')); ?>!</strong> <?php echo e(Session::get('error')); ?>.
-                            </div>
-                            
-                        <?php endif; ?>
-                        <div class="content">   
-                                
-                        
-
-                        
-                            <div class="input-group  ">
-                                <input type="text" name="email" class="form-control delete-border" placeholder="<?php echo e(trans('admin.placeholder_email')); ?>" value="<?php echo e(old('email')); ?>"  autofocus>
-                                <!-- <input type="text" class="form-control" placeholder="Enter User Name" value="<?php echo e(old('email')); ?>"  autofocus> -->
-                                <span class="input-group-addon delete-border">
-                                    <i class="zmdi zmdi-account"></i>
-                                </span>
-                                
-                            </div>
-                            <?php if($errors->has('email')): ?>
-                                <span class="invalid-feedback">
-                                    <strong ><?php echo e($errors->first('email')); ?></strong>
-                                </span>
-                            <?php endif; ?>
-                            
-                            <div class="input-group input-lg">
-                                <input type="password"  placeholder="<?php echo e(trans('admin.placeholder_password')); ?>" class="delete-border form-control<?php echo e($errors->has('password') ? ' is-invalid' : ''); ?> " name="password" >
-                                <!-- <input type="password" placeholder="Password" class="form-control" /> -->
-                                <span class="input-group-addon delete-border">
-                                    <i class="zmdi zmdi-lock"></i>
-                                </span>
-                                
-                            </div>
-                            <?php if($errors->has('password')): ?>
-                                <span class="invalid-feedback">
-                                    <strong><?php echo e($errors->first('password')); ?></strong>
-                                </span>
-                            <?php endif; ?>
-                        </div>
-                        <div class="footer text-center">
-                            <!-- <a href="index.html" class="btn btn-primary btn-round btn-lg btn-block ">SIGN IN</a> -->
-                            <button type="submit" class="btn btn-primary  btn-round btn-lg btn-block delete-border"><?php echo e(trans('admin.sign')); ?></button>
-                        <h5><a href="<?php echo e(Url('password/reset')); ?>" class="link"><?php echo e(__('admin.Forgot Password Or First Login ?')); ?></a></h5>
-                        </div>
+                <form action="<?php echo e(route('login')); ?>" method="POST">
+                  <?php echo csrf_field(); ?>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fa fa-user-o"></i>
+                      </span>
+                    </div>
+                    <input class="form-control <?php echo e($errors->first('email') ? 'is-invalid' : ''); ?>" name="email" type="text"
+                     placeholder="<?php echo e(__('lang.email')); ?>" value="<?php echo e(old('email')); ?>">
+                    <?php if($errors->first('email')): ?>
+                      <div class="invalid-feedback"><?php echo e($errors->first('email')); ?></div>
+                    <?php endif; ?>
+                  </div>
+                  <div class="input-group mb-4">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="icon-lock"></i>
+                      </span>
+                    </div>
+                    <input class="form-control <?php echo e($errors->first('password') ? 'is-invalid' : ''); ?>" type="password" name="password"
+                     placeholder="<?php echo e(__('lang.password')); ?>">
+                    <?php if($errors->first('password')): ?>
+                      <div class="invalid-feedback"><?php echo e($errors->first('password')); ?></div>
+                    <?php endif; ?>
+                  </div>
+                  <div class="row">
+                    <div class="col-6">
+                      <button class="btn btn-primary px-4" type="submit"><?php echo e(__('lang.login')); ?></button>
+                    </div>
+                  </div>
                 </form>
-        <!-- </div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-</div>
-<?php $__env->stopSection(); ?> 
-
-
-<?php echo $__env->make('layouts.auth', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp7\htdocs\tabi3\resources\views/auth/login.blade.php ENDPATH**/ ?>
+    <!-- CoreUI and necessary plugins-->
+    <script src="<?php echo e(asset('admin/vendors/jquery/js/jquery.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('admin/vendors/popper.js/js/popper.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('admin/vendors/bootstrap/js/bootstrap.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('admin/vendors/pace-progress/js/pace.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('admin/vendors/perfect-scrollbar/js/perfect-scrollbar.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('admin/vendors/@coreui/coreui/js/coreui.min.js')); ?>"></script>
+  </body>
+</html>
+<?php /**PATH D:\xampp7\htdocs\tabi3\resources\views/auth/login.blade.php ENDPATH**/ ?>

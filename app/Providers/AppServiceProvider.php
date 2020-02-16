@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Providers;
-// use Validator;
+use App;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
@@ -29,6 +29,18 @@ class AppServiceProvider extends ServiceProvider
         Validator::extend('arabic', function ($attribute, $value) {
             return preg_match('/^[\p{Arabic}0-9 .!?"-\/+_)(&*^%$#@~<>\{\}\[\]]+$/u', $value); 
         });
+
+
+        // $locale = app()->getLocale();
+        $locale = App::getlocale();
+        // dd($locale);
+        if($locale == 'en'){
+            $dir = 'rtl';
+        }else{
+            $dir = 'ltr';
+        }
+        view()->share(compact( 'locale', 'dir'));
+
     }
 
     /**

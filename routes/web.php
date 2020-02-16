@@ -22,13 +22,13 @@ Route::get('lang/{lang}', function ($lang){
    session(['lang' => $locale]);
    App::setLocale($lang);
    $lang = App::getlocale();
-
+    // return $lang ;
    return redirect()->back();
 })->name('setlang');
 
-
 Route::get('/', function () {
-    return redirect('/login');
+    return view('admin.sections.auth.login') ;
+    // return redirect('/login');
 });
 Route::get('/terms', function () {
     return view('terms');

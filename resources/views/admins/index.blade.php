@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col-lg-5 col-md-5 col-sm-12">
                 <h2>{{__('admin.dashboard')}}
-                <small>{{__('admin.Welcome to beitk')}}</small>
+                    <small>{{__('admin.Welcome to beitk')}}</small>
                 </h2>
             </div>            
                 @if($lang =='ar')

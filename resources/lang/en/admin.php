@@ -205,7 +205,7 @@ return [
 
     //sponsors page 
         'sponsors'                     => ' sponsors', 
-        'country'                       => ' Sponsor', 
+        'sponsor'                       => ' Sponsor', 
         'add_sponsor'                  => ' Add Sponsor'  ,
         'edit_sponsor'                 => '  Edit Sponsor'  ,
         'delete_sponsor'               => '  Delete Sponsor',
@@ -423,7 +423,13 @@ return [
         'users_not_resolved'            => 'Users not resolved',
         'contacts_users'                => ' Contacts Users',
     //end contact_us page
-    
+    //delegates page 
+        'delegates'                     => ' delegates', 
+        'delegate'                      =>'  Add delegate '  , 
+        'add_delegate'                  => '  Add delegate '  ,
+        'edit_delegate'                 => '  Edit delegate '  ,
+        'delete_delegate'               =>  '  Delete delegate '  ,
+    //end delegates page 
     //messages 
         'send_spec'                     =>'Send to specific people',
         'sendforall'                    => 'Send to all',

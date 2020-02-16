@@ -193,9 +193,9 @@ class Controller extends BaseController
           } else {
               return $miles . ' mi';
           }
-      }
+    }
   
-      protected function GetDrivingDistanceKM($lat1, $lat2, $long1, $long2, $unit = "M") {
+    protected function GetDrivingDistanceKM($lat1, $lat2, $long1, $long2, $unit = "M") {
             //  $lat1 = 24.7509789;
             //  $long1 = 46.6798639;
             //  $lat2 = 24.771487;
@@ -219,6 +219,36 @@ class Controller extends BaseController
         }else {
               return $miles . ' mi';
           }
-      }
+    }
+
+     /**
+     * Search in tables for index page
+     * @param  object $query table's query
+     * @param  array  $arr   search roles
+     * @return query after search
+     */
+    public function searchIndex($query, array $arr)
+    {
+        foreach ($arr as $key => $value) {
+                
+            if (!empty($value[0]) || $value[0] == '0') {
+                if ($value[1] == 'like') {
+                    $query->where($key, $value[1], '%'. trim($value[0]) . '%');
+                } elseif ($value[1] == 'date') {
+                    $query->whereDate($key, '=', $value[0]);
+                } elseif ($value[1] == 'between') {
+                    if (!empty($value[0][0]) && !empty($value[0][1])) {
+                        $query->whereBetween($key, [$value[0][0], $value[0][1]]);
+                    }
+                } elseif ($value[1] == 'in') {
+                    $query->whereIn($key, $value[0]);
+                } else {
+                    $query->where($key, $value[1], $value[0]);
+                }
+            }
+        }
+
+        return $query;
+    }
 }
 
